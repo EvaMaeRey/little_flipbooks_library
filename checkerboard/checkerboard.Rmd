@@ -49,7 +49,7 @@ The sequentail workflow of the Tidyverse makes incremental display of pipelines 
 Okay. Let's load the the `reveal for xaringan` functions for "flipbooking" and the `tidyverse`.
 
 ```{r}
-source(file = "../xaringan_reveal_parenthetical.R")
+source(file = "https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/xaringan_reveal_parenthetical.R")
 library(tidyverse)
 ```
 
@@ -83,7 +83,7 @@ crossing(x = 1:8, y = 1:8) %>%
 
 # How do we get there?
 
-In the next slide, we'll walk through the code that produces this plot, and the output along the way. 
+In the next slide, we'll walk through the code that produces this plot, and the output along the way. We use the code **apply_reveal("checkerboard")** in-line to access the code from the code chunk called *checkerboard*.
  
 ---
 
