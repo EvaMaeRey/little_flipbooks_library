@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>A Minimal Flipbook</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Gina Reynolds, May 2019" />
+    <link href="libs/remark-css-0.0.1/kunoichi.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# A Minimal Flipbook
+### Gina Reynolds, May 2019
+
+---
+
+
+
+
+
+
+
+
+---
+
+# Introduction
+
+This is a minimal example to demonstrate how to create a flipbook that will walk through data wrangling and plots pipelines made with the Tidyverse.  The functions that make this possible are the work of Emi Tanaka, Garrick Aden-Buie and myself, and are built for Xaringan, an Rmarkdown file type for creating presentation slides; the functions make use of the function `knitr:::knit_code$get()`.
+
+Interested in more flipbooks? Check out 
+
+- [the ggplot flipbook](https://evamaerey.github.io/ggplot_flipbook/ggplot_flipbook_xaringan.html)
+- [The Tidyverse in Action](https://evamaerey.github.io/tidyverse_in_action/tidyverse_in_action.html)
+
+For more about Xaringan:
+
+- [Xaringan presentation slides](https://slides.yihui.name/xaringan/)
+
+The sequentail workflow of the Tidyverse makes incremental display of pipelines ideal:  
+
+- [www.tidyverse.org](https://www.tidyverse.org/)
+
+---
+
+# Set up
+
+Okay. Let's load the the `reveal for xaringan` functions for "flipbooking" and the `tidyverse`.
+
+
+```r
+source(file = "../xaringan_reveal_parenthetical.R")
+library(tidyverse)
+```
+
+
+
+---
+
+# Where we are going: 
+
+We'll create this checkerboard (something Andrew Heiss was recently working on).  I have **echo** set to FALSE in the code chunk options here so that you don't see the code, and **eval** to TRUE so that the plot output is produced.  The code chunk is given the name "checkerboard", and this is used in the in apply_reveal function, which will break down the code by wrangling and plot statements. 
+
+![](checkerboard_files/figure-html/checkerboard-1.png)&lt;!-- --&gt;
+ 
+
+ 
+---
+
+# How do we get there?
+
+In the next slide, we'll walk through the code that produces this plot, and the output along the way. 
+ 
+---
+
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+*crossing(x = 1:8, y = 1:8)
+```
+]]
+.column[.content.center[
+
+```
+# A tibble: 64 x 2
+       x     y
+   &lt;int&gt; &lt;int&gt;
+ 1     1     1
+ 2     1     2
+ 3     1     3
+ 4     1     4
+ 5     1     5
+ 6     1     6
+ 7     1     7
+ 8     1     8
+ 9     2     1
+10     2     2
+11     2     3
+12     2     4
+13     2     5
+14     2     6
+15     2     7
+16     2     8
+17     3     1
+18     3     2
+19     3     3
+20     3     4
+21     3     5
+22     3     6
+23     3     7
+24     3     8
+25     4     1
+26     4     2
+27     4     3
+28     4     4
+29     4     5
+30     4     6
+31     4     7
+32     4     8
+33     5     1
+34     5     2
+35     5     3
+36     5     4
+37     5     5
+38     5     6
+39     5     7
+40     5     8
+41     6     1
+42     6     2
+43     6     3
+44     6     4
+45     6     5
+46     6     6
+47     6     7
+48     6     8
+49     7     1
+50     7     2
+51     7     3
+52     7     4
+53     7     5
+54     7     6
+55     7     7
+56     7     8
+57     8     1
+58     8     2
+59     8     3
+60     8     4
+61     8     5
+62     8     6
+63     8     7
+64     8     8
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+crossing(x = 1:8, y = 1:8) %&gt;%
+* mutate(value = (x + y) %% 2)
+```
+]]
+.column[.content.center[
+
+```
+# A tibble: 64 x 3
+       x     y value
+   &lt;int&gt; &lt;int&gt; &lt;dbl&gt;
+ 1     1     1     0
+ 2     1     2     1
+ 3     1     3     0
+ 4     1     4     1
+ 5     1     5     0
+ 6     1     6     1
+ 7     1     7     0
+ 8     1     8     1
+ 9     2     1     1
+10     2     2     0
+11     2     3     1
+12     2     4     0
+13     2     5     1
+14     2     6     0
+15     2     7     1
+16     2     8     0
+17     3     1     0
+18     3     2     1
+19     3     3     0
+20     3     4     1
+21     3     5     0
+22     3     6     1
+23     3     7     0
+24     3     8     1
+25     4     1     1
+26     4     2     0
+27     4     3     1
+28     4     4     0
+29     4     5     1
+30     4     6     0
+31     4     7     1
+32     4     8     0
+33     5     1     0
+34     5     2     1
+35     5     3     0
+36     5     4     1
+37     5     5     0
+38     5     6     1
+39     5     7     0
+40     5     8     1
+41     6     1     1
+42     6     2     0
+43     6     3     1
+44     6     4     0
+45     6     5     1
+46     6     6     0
+47     6     7     1
+48     6     8     0
+49     7     1     0
+50     7     2     1
+51     7     3     0
+52     7     4     1
+53     7     5     0
+54     7     6     1
+55     7     7     0
+56     7     8     1
+57     8     1     1
+58     8     2     0
+59     8     3     1
+60     8     4     0
+61     8     5     1
+62     8     6     0
+63     8     7     1
+64     8     8     0
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+crossing(x = 1:8, y = 1:8) %&gt;%
+  mutate(value = (x + y) %% 2) %&gt;% 
+* ggplot()
+```
+]]
+.column[.content.center[
+![](checkerboard_files/figure-html/output_checkerboard_3-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+crossing(x = 1:8, y = 1:8) %&gt;%
+  mutate(value = (x + y) %% 2) %&gt;% 
+  ggplot() + 
+* aes(x = x,
+*     y = y,
+*     fill = factor(value))
+```
+]]
+.column[.content.center[
+![](checkerboard_files/figure-html/output_checkerboard_6-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+crossing(x = 1:8, y = 1:8) %&gt;%
+  mutate(value = (x + y) %% 2) %&gt;% 
+  ggplot() + 
+  aes(x = x, 
+      y = y, 
+      fill = factor(value)) +
+* geom_tile()
+```
+]]
+.column[.content.center[
+![](checkerboard_files/figure-html/output_checkerboard_7-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+crossing(x = 1:8, y = 1:8) %&gt;%
+  mutate(value = (x + y) %% 2) %&gt;% 
+  ggplot() + 
+  aes(x = x, 
+      y = y, 
+      fill = factor(value)) +
+  geom_tile() +
+* theme_void()
+```
+]]
+.column[.content.center[
+![](checkerboard_files/figure-html/output_checkerboard_8-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+crossing(x = 1:8, y = 1:8) %&gt;%
+  mutate(value = (x + y) %% 2) %&gt;% 
+  ggplot() + 
+  aes(x = x, 
+      y = y, 
+      fill = factor(value)) +
+  geom_tile() +
+  theme_void() +
+* scale_fill_manual(
+*   values = c("thistle",
+*              "darkgrey"),
+*   guide = F)
+```
+]]
+.column[.content.center[
+![](checkerboard_files/figure-html/output_checkerboard_12-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+crossing(x = 1:8, y = 1:8) %&gt;%
+  mutate(value = (x + y) %% 2) %&gt;% 
+  ggplot() + 
+  aes(x = x, 
+      y = y, 
+      fill = factor(value)) +
+  geom_tile() +
+  theme_void() +
+  scale_fill_manual(
+    values = c("thistle", 
+               "darkgrey"), 
+    guide = F) + 
+* coord_equal()
+```
+]]
+.column[.content.center[
+![](checkerboard_files/figure-html/output_checkerboard_13-1.png)&lt;!-- --&gt;
+]]
+
+
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 100%}
+&lt;/style&gt;
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:10",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script>
+(function() {
+  var i, text, code, codes = document.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+})();
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
