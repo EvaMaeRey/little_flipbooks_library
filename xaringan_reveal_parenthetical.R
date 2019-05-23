@@ -1,3 +1,5 @@
+# Emi Tanaka (@statsgen) and Garrick Aden-Buie (@grrrck) and Evangeline Reynolds (@EvaMaeRey)
+# have contributed to this code
 # reveal lines up to `upto` and highlight lines `highlight`
 reveal <- function(name, upto, highlight = upto) {
   content <- knitr:::knit_code$get(name)
