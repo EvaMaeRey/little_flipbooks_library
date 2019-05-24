@@ -28,7 +28,7 @@ partial_knit_chunks <- function(chunk_name) {
     if (i == 1) {  
       highlight[[i]] <- 1
     } else {
-      highlight[[i]] <- (idx_lines[i-1]+1):idx_lines[i]
+      highlight[[i]] <- (idx_lines[i - 1] + 1):idx_lines[i]
     }
   }
   
