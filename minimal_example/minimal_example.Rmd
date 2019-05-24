@@ -1,0 +1,119 @@
+---
+title: "A Minimal Flipbook"
+author: "Gina Reynolds, May 2019"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: ["kunoichi", "ninjutsu"]
+    nature:
+      ratio: 16:10
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+```{r setup, include=F}
+knitr::opts_chunk$set(fig.width = 6, message = F, warning = F, 
+                      comment = "", cache = T)
+options(tibble.print_max = Inf) 
+```
+
+
+
+
+---
+
+# Introduction
+
+This is a minimal example to demonstrate how to create a flipbook that will walk through data wrangling and plots pipelines made with the Tidyverse.  The functions that make this possible are the work of Emi Tanaka, Garrick Aden-Buie and myself, and are built for Xaringan, an Rmarkdown file type for creating presentation slides; the functions make use of the function `knitr:::knit_code$get()`.
+
+Interested in more flipbooks? Check out 
+
+- [the ggplot flipbook](https://evamaerey.github.io/ggplot_flipbook/ggplot_flipbook_xaringan.html)
+- [The Tidyverse in Action](https://evamaerey.github.io/tidyverse_in_action/tidyverse_in_action.html)
+
+For more about Xaringan:
+
+- [Xaringan presentation slides](https://slides.yihui.name/xaringan/)
+
+The sequential workflow of the Tidyverse makes incremental display of pipelines ideal:  
+
+- [www.tidyverse.org](https://www.tidyverse.org/)
+
+
+---
+
+# Set up
+
+Okay. Let's load the the `reveal for xaringan` functions for "flipbooking" and the `tidyverse`.
+
+```{r}
+source(file = "https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/xaringan_reveal_parenthetical.R")
+library(tidyverse)
+library(gapminder)
+```
+
+```{r}
+gapminder_2007 <- 
+  gapminder %>% 
+  filter(year == 2007)
+```
+
+
+
+
+---
+
+# Where we are going: 
+
+We'll create this plot.  I have **echo** set to FALSE in the code chunk options here so that you don't see the code, and **eval** to TRUE so that the plot output is produced.  The code chunk is given the name "gapminder2007", and this is used in the in apply_reveal function, which breaks down code by wrangling and plot statements. 
+
+```{r gapminder2007, echo = F, eval = T, fig.height=5}
+ggplot(data = gapminder_2007) + 
+  aes(x = gdpPercap) +  
+  aes(y = lifeExp) + 
+  geom_point() +
+  aes(color = continent)
+```
+ 
+
+ 
+---
+
+# How do we get there?
+
+In the next slide, we'll walk through the code that produces this plot, and the output along the way. We use the code `apply_reveal("gapminder2007")` in-line to access the code from the code chunk called *gapminder2007*.
+ 
+---
+
+`r apply_reveal("gapminder2007")`
+
+
+---
+
+# Other pipeline connectors
+
+The reveal functions are also written to recognize the pipe, `%>%`, and reverse assignment operator `->`, at the end of a line as reveal break points.  An example follows. 
+
+```{r gapminder2007pipeline, echo = F, eval = T, fig.height=5}
+gapminder %>% 
+  filter(year == 2007) %>% 
+  ggplot() + 
+  aes(x = gdpPercap) +  
+  aes(y = lifeExp) + 
+  geom_point() +
+  aes(col = continent) ->
+  g
+```
+
+
+---
+
+`r apply_reveal("gapminder2007pipeline")`
+
+```{css, eval = TRUE, echo = F}
+.remark-code{line-height: 1.5; font-size: 100%}
+```
+
+

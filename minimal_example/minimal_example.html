@@ -1,0 +1,2193 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>A Minimal Flipbook</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Gina Reynolds, May 2019" />
+    <link href="libs/remark-css-0.0.1/kunoichi.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# A Minimal Flipbook
+### Gina Reynolds, May 2019
+
+---
+
+
+
+
+
+
+
+
+---
+
+# Introduction
+
+This is a minimal example to demonstrate how to create a flipbook that will walk through data wrangling and plots pipelines made with the Tidyverse.  The functions that make this possible are the work of Emi Tanaka, Garrick Aden-Buie and myself, and are built for Xaringan, an Rmarkdown file type for creating presentation slides; the functions make use of the function `knitr:::knit_code$get()`.
+
+Interested in more flipbooks? Check out 
+
+- [the ggplot flipbook](https://evamaerey.github.io/ggplot_flipbook/ggplot_flipbook_xaringan.html)
+- [The Tidyverse in Action](https://evamaerey.github.io/tidyverse_in_action/tidyverse_in_action.html)
+
+For more about Xaringan:
+
+- [Xaringan presentation slides](https://slides.yihui.name/xaringan/)
+
+The sequential workflow of the Tidyverse makes incremental display of pipelines ideal:  
+
+- [www.tidyverse.org](https://www.tidyverse.org/)
+
+
+---
+
+# Set up
+
+Okay. Let's load the the `reveal for xaringan` functions for "flipbooking" and the `tidyverse`.
+
+
+```r
+source(file = "https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/xaringan_reveal_parenthetical.R")
+library(tidyverse)
+library(gapminder)
+```
+
+
+```r
+gapminder_2007 &lt;- 
+  gapminder %&gt;% 
+  filter(year == 2007)
+```
+
+
+
+
+---
+
+# Where we are going: 
+
+We'll create this plot.  I have **echo** set to FALSE in the code chunk options here so that you don't see the code, and **eval** to TRUE so that the plot output is produced.  The code chunk is given the name "gapminder2007", and this is used in the in apply_reveal function, which breaks down code by wrangling and plot statements. 
+
+![](minimal_example_files/figure-html/gapminder2007-1.png)&lt;!-- --&gt;
+ 
+
+ 
+---
+
+# How do we get there?
+
+In the next slide, we'll walk through the code that produces this plot, and the output along the way. We use the code `apply_reveal("gapminder2007")` in-line to access the code from the code chunk called *gapminder2007*.
+ 
+---
+
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+*ggplot(data = gapminder_2007)
+```
+]]
+.column[.content.center[
+![](minimal_example_files/figure-html/output_gapminder2007_1-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = gapminder_2007) + 
+* aes(x = gdpPercap)
+```
+]]
+.column[.content.center[
+![](minimal_example_files/figure-html/output_gapminder2007_2-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = gapminder_2007) + 
+  aes(x = gdpPercap) +  
+* aes(y = lifeExp)
+```
+]]
+.column[.content.center[
+![](minimal_example_files/figure-html/output_gapminder2007_3-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = gapminder_2007) + 
+  aes(x = gdpPercap) +  
+  aes(y = lifeExp) + 
+* geom_point()
+```
+]]
+.column[.content.center[
+![](minimal_example_files/figure-html/output_gapminder2007_4-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = gapminder_2007) + 
+  aes(x = gdpPercap) +  
+  aes(y = lifeExp) + 
+  geom_point() +
+* aes(color = continent)
+```
+]]
+.column[.content.center[
+![](minimal_example_files/figure-html/output_gapminder2007_5-1.png)&lt;!-- --&gt;
+]]
+
+
+---
+
+# Other pipeline connectors
+
+The reveal functions are also written to recognize the pipe, `%&gt;%`, and reverse assignment operator `-&gt;`, at the end of a line as reveal break points.  An example follows. 
+
+
+
+
+---
+
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+*gapminder
+```
+]]
+.column[.content.center[
+
+```
+# A tibble: 1,704 x 6
+     country                  continent  year lifeExp        pop gdpPercap
+     &lt;fct&gt;                    &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;     &lt;dbl&gt;
+   1 Afghanistan              Asia       1952    28.8    8425333      779.
+   2 Afghanistan              Asia       1957    30.3    9240934      821.
+   3 Afghanistan              Asia       1962    32.0   10267083      853.
+   4 Afghanistan              Asia       1967    34.0   11537966      836.
+   5 Afghanistan              Asia       1972    36.1   13079460      740.
+   6 Afghanistan              Asia       1977    38.4   14880372      786.
+   7 Afghanistan              Asia       1982    39.9   12881816      978.
+   8 Afghanistan              Asia       1987    40.8   13867957      852.
+   9 Afghanistan              Asia       1992    41.7   16317921      649.
+  10 Afghanistan              Asia       1997    41.8   22227415      635.
+  11 Afghanistan              Asia       2002    42.1   25268405      727.
+  12 Afghanistan              Asia       2007    43.8   31889923      975.
+  13 Albania                  Europe     1952    55.2    1282697     1601.
+  14 Albania                  Europe     1957    59.3    1476505     1942.
+  15 Albania                  Europe     1962    64.8    1728137     2313.
+  16 Albania                  Europe     1967    66.2    1984060     2760.
+  17 Albania                  Europe     1972    67.7    2263554     3313.
+  18 Albania                  Europe     1977    68.9    2509048     3533.
+  19 Albania                  Europe     1982    70.4    2780097     3631.
+  20 Albania                  Europe     1987    72      3075321     3739.
+  21 Albania                  Europe     1992    71.6    3326498     2497.
+  22 Albania                  Europe     1997    73.0    3428038     3193.
+  23 Albania                  Europe     2002    75.7    3508512     4604.
+  24 Albania                  Europe     2007    76.4    3600523     5937.
+  25 Algeria                  Africa     1952    43.1    9279525     2449.
+  26 Algeria                  Africa     1957    45.7   10270856     3014.
+  27 Algeria                  Africa     1962    48.3   11000948     2551.
+  28 Algeria                  Africa     1967    51.4   12760499     3247.
+  29 Algeria                  Africa     1972    54.5   14760787     4183.
+  30 Algeria                  Africa     1977    58.0   17152804     4910.
+  31 Algeria                  Africa     1982    61.4   20033753     5745.
+  32 Algeria                  Africa     1987    65.8   23254956     5681.
+  33 Algeria                  Africa     1992    67.7   26298373     5023.
+  34 Algeria                  Africa     1997    69.2   29072015     4797.
+  35 Algeria                  Africa     2002    71.0   31287142     5288.
+  36 Algeria                  Africa     2007    72.3   33333216     6223.
+  37 Angola                   Africa     1952    30.0    4232095     3521.
+  38 Angola                   Africa     1957    32.0    4561361     3828.
+  39 Angola                   Africa     1962    34      4826015     4269.
+  40 Angola                   Africa     1967    36.0    5247469     5523.
+  41 Angola                   Africa     1972    37.9    5894858     5473.
+  42 Angola                   Africa     1977    39.5    6162675     3009.
+  43 Angola                   Africa     1982    39.9    7016384     2757.
+  44 Angola                   Africa     1987    39.9    7874230     2430.
+  45 Angola                   Africa     1992    40.6    8735988     2628.
+  46 Angola                   Africa     1997    41.0    9875024     2277.
+  47 Angola                   Africa     2002    41.0   10866106     2773.
+  48 Angola                   Africa     2007    42.7   12420476     4797.
+  49 Argentina                Americas   1952    62.5   17876956     5911.
+  50 Argentina                Americas   1957    64.4   19610538     6857.
+  51 Argentina                Americas   1962    65.1   21283783     7133.
+  52 Argentina                Americas   1967    65.6   22934225     8053.
+  53 Argentina                Americas   1972    67.1   24779799     9443.
+  54 Argentina                Americas   1977    68.5   26983828    10079.
+  55 Argentina                Americas   1982    69.9   29341374     8998.
+  56 Argentina                Americas   1987    70.8   31620918     9140.
+  57 Argentina                Americas   1992    71.9   33958947     9308.
+  58 Argentina                Americas   1997    73.3   36203463    10967.
+  59 Argentina                Americas   2002    74.3   38331121     8798.
+  60 Argentina                Americas   2007    75.3   40301927    12779.
+  61 Australia                Oceania    1952    69.1    8691212    10040.
+  62 Australia                Oceania    1957    70.3    9712569    10950.
+  63 Australia                Oceania    1962    70.9   10794968    12217.
+  64 Australia                Oceania    1967    71.1   11872264    14526.
+  65 Australia                Oceania    1972    71.9   13177000    16789.
+  66 Australia                Oceania    1977    73.5   14074100    18334.
+  67 Australia                Oceania    1982    74.7   15184200    19477.
+  68 Australia                Oceania    1987    76.3   16257249    21889.
+  69 Australia                Oceania    1992    77.6   17481977    23425.
+  70 Australia                Oceania    1997    78.8   18565243    26998.
+  71 Australia                Oceania    2002    80.4   19546792    30688.
+  72 Australia                Oceania    2007    81.2   20434176    34435.
+  73 Austria                  Europe     1952    66.8    6927772     6137.
+  74 Austria                  Europe     1957    67.5    6965860     8843.
+  75 Austria                  Europe     1962    69.5    7129864    10751.
+  76 Austria                  Europe     1967    70.1    7376998    12835.
+  77 Austria                  Europe     1972    70.6    7544201    16662.
+  78 Austria                  Europe     1977    72.2    7568430    19749.
+  79 Austria                  Europe     1982    73.2    7574613    21597.
+  80 Austria                  Europe     1987    74.9    7578903    23688.
+  81 Austria                  Europe     1992    76.0    7914969    27042.
+  82 Austria                  Europe     1997    77.5    8069876    29096.
+  83 Austria                  Europe     2002    79.0    8148312    32418.
+  84 Austria                  Europe     2007    79.8    8199783    36126.
+  85 Bahrain                  Asia       1952    50.9     120447     9867.
+  86 Bahrain                  Asia       1957    53.8     138655    11636.
+  87 Bahrain                  Asia       1962    56.9     171863    12753.
+  88 Bahrain                  Asia       1967    59.9     202182    14805.
+  89 Bahrain                  Asia       1972    63.3     230800    18269.
+  90 Bahrain                  Asia       1977    65.6     297410    19340.
+  91 Bahrain                  Asia       1982    69.1     377967    19211.
+  92 Bahrain                  Asia       1987    70.8     454612    18524.
+  93 Bahrain                  Asia       1992    72.6     529491    19036.
+  94 Bahrain                  Asia       1997    73.9     598561    20292.
+  95 Bahrain                  Asia       2002    74.8     656397    23404.
+  96 Bahrain                  Asia       2007    75.6     708573    29796.
+  97 Bangladesh               Asia       1952    37.5   46886859      684.
+  98 Bangladesh               Asia       1957    39.3   51365468      662.
+  99 Bangladesh               Asia       1962    41.2   56839289      686.
+ 100 Bangladesh               Asia       1967    43.5   62821884      721.
+ 101 Bangladesh               Asia       1972    45.3   70759295      630.
+ 102 Bangladesh               Asia       1977    46.9   80428306      660.
+ 103 Bangladesh               Asia       1982    50.0   93074406      677.
+ 104 Bangladesh               Asia       1987    52.8  103764241      752.
+ 105 Bangladesh               Asia       1992    56.0  113704579      838.
+ 106 Bangladesh               Asia       1997    59.4  123315288      973.
+ 107 Bangladesh               Asia       2002    62.0  135656790     1136.
+ 108 Bangladesh               Asia       2007    64.1  150448339     1391.
+ 109 Belgium                  Europe     1952    68      8730405     8343.
+ 110 Belgium                  Europe     1957    69.2    8989111     9715.
+ 111 Belgium                  Europe     1962    70.2    9218400    10991.
+ 112 Belgium                  Europe     1967    70.9    9556500    13149.
+ 113 Belgium                  Europe     1972    71.4    9709100    16672.
+ 114 Belgium                  Europe     1977    72.8    9821800    19118.
+ 115 Belgium                  Europe     1982    73.9    9856303    20980.
+ 116 Belgium                  Europe     1987    75.4    9870200    22526.
+ 117 Belgium                  Europe     1992    76.5   10045622    25576.
+ 118 Belgium                  Europe     1997    77.5   10199787    27561.
+ 119 Belgium                  Europe     2002    78.3   10311970    30486.
+ 120 Belgium                  Europe     2007    79.4   10392226    33693.
+ 121 Benin                    Africa     1952    38.2    1738315     1063.
+ 122 Benin                    Africa     1957    40.4    1925173      960.
+ 123 Benin                    Africa     1962    42.6    2151895      949.
+ 124 Benin                    Africa     1967    44.9    2427334     1036.
+ 125 Benin                    Africa     1972    47.0    2761407     1086.
+ 126 Benin                    Africa     1977    49.2    3168267     1029.
+ 127 Benin                    Africa     1982    50.9    3641603     1278.
+ 128 Benin                    Africa     1987    52.3    4243788     1226.
+ 129 Benin                    Africa     1992    53.9    4981671     1191.
+ 130 Benin                    Africa     1997    54.8    6066080     1233.
+ 131 Benin                    Africa     2002    54.4    7026113     1373.
+ 132 Benin                    Africa     2007    56.7    8078314     1441.
+ 133 Bolivia                  Americas   1952    40.4    2883315     2677.
+ 134 Bolivia                  Americas   1957    41.9    3211738     2128.
+ 135 Bolivia                  Americas   1962    43.4    3593918     2181.
+ 136 Bolivia                  Americas   1967    45.0    4040665     2587.
+ 137 Bolivia                  Americas   1972    46.7    4565872     2980.
+ 138 Bolivia                  Americas   1977    50.0    5079716     3548.
+ 139 Bolivia                  Americas   1982    53.9    5642224     3157.
+ 140 Bolivia                  Americas   1987    57.3    6156369     2754.
+ 141 Bolivia                  Americas   1992    60.0    6893451     2962.
+ 142 Bolivia                  Americas   1997    62.0    7693188     3326.
+ 143 Bolivia                  Americas   2002    63.9    8445134     3413.
+ 144 Bolivia                  Americas   2007    65.6    9119152     3822.
+ 145 Bosnia and Herzegovina   Europe     1952    53.8    2791000      974.
+ 146 Bosnia and Herzegovina   Europe     1957    58.4    3076000     1354.
+ 147 Bosnia and Herzegovina   Europe     1962    61.9    3349000     1710.
+ 148 Bosnia and Herzegovina   Europe     1967    64.8    3585000     2172.
+ 149 Bosnia and Herzegovina   Europe     1972    67.4    3819000     2860.
+ 150 Bosnia and Herzegovina   Europe     1977    69.9    4086000     3528.
+ 151 Bosnia and Herzegovina   Europe     1982    70.7    4172693     4127.
+ 152 Bosnia and Herzegovina   Europe     1987    71.1    4338977     4314.
+ 153 Bosnia and Herzegovina   Europe     1992    72.2    4256013     2547.
+ 154 Bosnia and Herzegovina   Europe     1997    73.2    3607000     4766.
+ 155 Bosnia and Herzegovina   Europe     2002    74.1    4165416     6019.
+ 156 Bosnia and Herzegovina   Europe     2007    74.9    4552198     7446.
+ 157 Botswana                 Africa     1952    47.6     442308      851.
+ 158 Botswana                 Africa     1957    49.6     474639      918.
+ 159 Botswana                 Africa     1962    51.5     512764      984.
+ 160 Botswana                 Africa     1967    53.3     553541     1215.
+ 161 Botswana                 Africa     1972    56.0     619351     2264.
+ 162 Botswana                 Africa     1977    59.3     781472     3215.
+ 163 Botswana                 Africa     1982    61.5     970347     4551.
+ 164 Botswana                 Africa     1987    63.6    1151184     6206.
+ 165 Botswana                 Africa     1992    62.7    1342614     7954.
+ 166 Botswana                 Africa     1997    52.6    1536536     8647.
+ 167 Botswana                 Africa     2002    46.6    1630347    11004.
+ 168 Botswana                 Africa     2007    50.7    1639131    12570.
+ 169 Brazil                   Americas   1952    50.9   56602560     2109.
+ 170 Brazil                   Americas   1957    53.3   65551171     2487.
+ 171 Brazil                   Americas   1962    55.7   76039390     3337.
+ 172 Brazil                   Americas   1967    57.6   88049823     3430.
+ 173 Brazil                   Americas   1972    59.5  100840058     4986.
+ 174 Brazil                   Americas   1977    61.5  114313951     6660.
+ 175 Brazil                   Americas   1982    63.3  128962939     7031.
+ 176 Brazil                   Americas   1987    65.2  142938076     7807.
+ 177 Brazil                   Americas   1992    67.1  155975974     6950.
+ 178 Brazil                   Americas   1997    69.4  168546719     7958.
+ 179 Brazil                   Americas   2002    71.0  179914212     8131.
+ 180 Brazil                   Americas   2007    72.4  190010647     9066.
+ 181 Bulgaria                 Europe     1952    59.6    7274900     2444.
+ 182 Bulgaria                 Europe     1957    66.6    7651254     3009.
+ 183 Bulgaria                 Europe     1962    69.5    8012946     4254.
+ 184 Bulgaria                 Europe     1967    70.4    8310226     5577.
+ 185 Bulgaria                 Europe     1972    70.9    8576200     6597.
+ 186 Bulgaria                 Europe     1977    70.8    8797022     7612.
+ 187 Bulgaria                 Europe     1982    71.1    8892098     8224.
+ 188 Bulgaria                 Europe     1987    71.3    8971958     8240.
+ 189 Bulgaria                 Europe     1992    71.2    8658506     6303.
+ 190 Bulgaria                 Europe     1997    70.3    8066057     5970.
+ 191 Bulgaria                 Europe     2002    72.1    7661799     7697.
+ 192 Bulgaria                 Europe     2007    73.0    7322858    10681.
+ 193 Burkina Faso             Africa     1952    32.0    4469979      543.
+ 194 Burkina Faso             Africa     1957    34.9    4713416      617.
+ 195 Burkina Faso             Africa     1962    37.8    4919632      723.
+ 196 Burkina Faso             Africa     1967    40.7    5127935      795.
+ 197 Burkina Faso             Africa     1972    43.6    5433886      855.
+ 198 Burkina Faso             Africa     1977    46.1    5889574      743.
+ 199 Burkina Faso             Africa     1982    48.1    6634596      807.
+ 200 Burkina Faso             Africa     1987    49.6    7586551      912.
+ 201 Burkina Faso             Africa     1992    50.3    8878303      932.
+ 202 Burkina Faso             Africa     1997    50.3   10352843      946.
+ 203 Burkina Faso             Africa     2002    50.6   12251209     1038.
+ 204 Burkina Faso             Africa     2007    52.3   14326203     1217.
+ 205 Burundi                  Africa     1952    39.0    2445618      339.
+ 206 Burundi                  Africa     1957    40.5    2667518      380.
+ 207 Burundi                  Africa     1962    42.0    2961915      355.
+ 208 Burundi                  Africa     1967    43.5    3330989      413.
+ 209 Burundi                  Africa     1972    44.1    3529983      464.
+ 210 Burundi                  Africa     1977    45.9    3834415      556.
+ 211 Burundi                  Africa     1982    47.5    4580410      560.
+ 212 Burundi                  Africa     1987    48.2    5126023      622.
+ 213 Burundi                  Africa     1992    44.7    5809236      632.
+ 214 Burundi                  Africa     1997    45.3    6121610      463.
+ 215 Burundi                  Africa     2002    47.4    7021078      446.
+ 216 Burundi                  Africa     2007    49.6    8390505      430.
+ 217 Cambodia                 Asia       1952    39.4    4693836      368.
+ 218 Cambodia                 Asia       1957    41.4    5322536      434.
+ 219 Cambodia                 Asia       1962    43.4    6083619      497.
+ 220 Cambodia                 Asia       1967    45.4    6960067      523.
+ 221 Cambodia                 Asia       1972    40.3    7450606      422.
+ 222 Cambodia                 Asia       1977    31.2    6978607      525.
+ 223 Cambodia                 Asia       1982    51.0    7272485      624.
+ 224 Cambodia                 Asia       1987    53.9    8371791      684.
+ 225 Cambodia                 Asia       1992    55.8   10150094      682.
+ 226 Cambodia                 Asia       1997    56.5   11782962      734.
+ 227 Cambodia                 Asia       2002    56.8   12926707      896.
+ 228 Cambodia                 Asia       2007    59.7   14131858     1714.
+ 229 Cameroon                 Africa     1952    38.5    5009067     1173.
+ 230 Cameroon                 Africa     1957    40.4    5359923     1313.
+ 231 Cameroon                 Africa     1962    42.6    5793633     1400.
+ 232 Cameroon                 Africa     1967    44.8    6335506     1508.
+ 233 Cameroon                 Africa     1972    47.0    7021028     1684.
+ 234 Cameroon                 Africa     1977    49.4    7959865     1783.
+ 235 Cameroon                 Africa     1982    53.0    9250831     2368.
+ 236 Cameroon                 Africa     1987    55.0   10780667     2603.
+ 237 Cameroon                 Africa     1992    54.3   12467171     1793.
+ 238 Cameroon                 Africa     1997    52.2   14195809     1694.
+ 239 Cameroon                 Africa     2002    49.9   15929988     1934.
+ 240 Cameroon                 Africa     2007    50.4   17696293     2042.
+ 241 Canada                   Americas   1952    68.8   14785584    11367.
+ 242 Canada                   Americas   1957    70.0   17010154    12490.
+ 243 Canada                   Americas   1962    71.3   18985849    13462.
+ 244 Canada                   Americas   1967    72.1   20819767    16077.
+ 245 Canada                   Americas   1972    72.9   22284500    18971.
+ 246 Canada                   Americas   1977    74.2   23796400    22091.
+ 247 Canada                   Americas   1982    75.8   25201900    22899.
+ 248 Canada                   Americas   1987    76.9   26549700    26627.
+ 249 Canada                   Americas   1992    78.0   28523502    26343.
+ 250 Canada                   Americas   1997    78.6   30305843    28955.
+ 251 Canada                   Americas   2002    79.8   31902268    33329.
+ 252 Canada                   Americas   2007    80.7   33390141    36319.
+ 253 Central African Republic Africa     1952    35.5    1291695     1071.
+ 254 Central African Republic Africa     1957    37.5    1392284     1191.
+ 255 Central African Republic Africa     1962    39.5    1523478     1193.
+ 256 Central African Republic Africa     1967    41.5    1733638     1136.
+ 257 Central African Republic Africa     1972    43.5    1927260     1070.
+ 258 Central African Republic Africa     1977    46.8    2167533     1109.
+ 259 Central African Republic Africa     1982    48.3    2476971      957.
+ 260 Central African Republic Africa     1987    50.5    2840009      845.
+ 261 Central African Republic Africa     1992    49.4    3265124      748.
+ 262 Central African Republic Africa     1997    46.1    3696513      741.
+ 263 Central African Republic Africa     2002    43.3    4048013      739.
+ 264 Central African Republic Africa     2007    44.7    4369038      706.
+ 265 Chad                     Africa     1952    38.1    2682462     1179.
+ 266 Chad                     Africa     1957    39.9    2894855     1308.
+ 267 Chad                     Africa     1962    41.7    3150417     1390.
+ 268 Chad                     Africa     1967    43.6    3495967     1197.
+ 269 Chad                     Africa     1972    45.6    3899068     1104.
+ 270 Chad                     Africa     1977    47.4    4388260     1134.
+ 271 Chad                     Africa     1982    49.5    4875118      798.
+ 272 Chad                     Africa     1987    51.1    5498955      952.
+ 273 Chad                     Africa     1992    51.7    6429417     1058.
+ 274 Chad                     Africa     1997    51.6    7562011     1005.
+ 275 Chad                     Africa     2002    50.5    8835739     1156.
+ 276 Chad                     Africa     2007    50.7   10238807     1704.
+ 277 Chile                    Americas   1952    54.7    6377619     3940.
+ 278 Chile                    Americas   1957    56.1    7048426     4316.
+ 279 Chile                    Americas   1962    57.9    7961258     4519.
+ 280 Chile                    Americas   1967    60.5    8858908     5107.
+ 281 Chile                    Americas   1972    63.4    9717524     5494.
+ 282 Chile                    Americas   1977    67.1   10599793     4757.
+ 283 Chile                    Americas   1982    70.6   11487112     5096.
+ 284 Chile                    Americas   1987    72.5   12463354     5547.
+ 285 Chile                    Americas   1992    74.1   13572994     7596.
+ 286 Chile                    Americas   1997    75.8   14599929    10118.
+ 287 Chile                    Americas   2002    77.9   15497046    10779.
+ 288 Chile                    Americas   2007    78.6   16284741    13172.
+ 289 China                    Asia       1952    44    556263527      400.
+ 290 China                    Asia       1957    50.5  637408000      576.
+ 291 China                    Asia       1962    44.5  665770000      488.
+ 292 China                    Asia       1967    58.4  754550000      613.
+ 293 China                    Asia       1972    63.1  862030000      677.
+ 294 China                    Asia       1977    64.0  943455000      741.
+ 295 China                    Asia       1982    65.5 1000281000      962.
+ 296 China                    Asia       1987    67.3 1084035000     1379.
+ 297 China                    Asia       1992    68.7 1164970000     1656.
+ 298 China                    Asia       1997    70.4 1230075000     2289.
+ 299 China                    Asia       2002    72.0 1280400000     3119.
+ 300 China                    Asia       2007    73.0 1318683096     4959.
+ 301 Colombia                 Americas   1952    50.6   12350771     2144.
+ 302 Colombia                 Americas   1957    55.1   14485993     2324.
+ 303 Colombia                 Americas   1962    57.9   17009885     2492.
+ 304 Colombia                 Americas   1967    60.0   19764027     2679.
+ 305 Colombia                 Americas   1972    61.6   22542890     3265.
+ 306 Colombia                 Americas   1977    63.8   25094412     3816.
+ 307 Colombia                 Americas   1982    66.7   27764644     4398.
+ 308 Colombia                 Americas   1987    67.8   30964245     4903.
+ 309 Colombia                 Americas   1992    68.4   34202721     5445.
+ 310 Colombia                 Americas   1997    70.3   37657830     6117.
+ 311 Colombia                 Americas   2002    71.7   41008227     5755.
+ 312 Colombia                 Americas   2007    72.9   44227550     7007.
+ 313 Comoros                  Africa     1952    40.7     153936     1103.
+ 314 Comoros                  Africa     1957    42.5     170928     1211.
+ 315 Comoros                  Africa     1962    44.5     191689     1407.
+ 316 Comoros                  Africa     1967    46.5     217378     1876.
+ 317 Comoros                  Africa     1972    48.9     250027     1938.
+ 318 Comoros                  Africa     1977    50.9     304739     1173.
+ 319 Comoros                  Africa     1982    52.9     348643     1267.
+ 320 Comoros                  Africa     1987    54.9     395114     1316.
+ 321 Comoros                  Africa     1992    57.9     454429     1247.
+ 322 Comoros                  Africa     1997    60.7     527982     1174.
+ 323 Comoros                  Africa     2002    63.0     614382     1076.
+ 324 Comoros                  Africa     2007    65.2     710960      986.
+ 325 Congo, Dem. Rep.         Africa     1952    39.1   14100005      781.
+ 326 Congo, Dem. Rep.         Africa     1957    40.7   15577932      906.
+ 327 Congo, Dem. Rep.         Africa     1962    42.1   17486434      896.
+ 328 Congo, Dem. Rep.         Africa     1967    44.1   19941073      862.
+ 329 Congo, Dem. Rep.         Africa     1972    46.0   23007669      905.
+ 330 Congo, Dem. Rep.         Africa     1977    47.8   26480870      796.
+ 331 Congo, Dem. Rep.         Africa     1982    47.8   30646495      674.
+ 332 Congo, Dem. Rep.         Africa     1987    47.4   35481645      673.
+ 333 Congo, Dem. Rep.         Africa     1992    45.5   41672143      458.
+ 334 Congo, Dem. Rep.         Africa     1997    42.6   47798986      312.
+ 335 Congo, Dem. Rep.         Africa     2002    45.0   55379852      241.
+ 336 Congo, Dem. Rep.         Africa     2007    46.5   64606759      278.
+ 337 Congo, Rep.              Africa     1952    42.1     854885     2126.
+ 338 Congo, Rep.              Africa     1957    45.1     940458     2315.
+ 339 Congo, Rep.              Africa     1962    48.4    1047924     2465.
+ 340 Congo, Rep.              Africa     1967    52.0    1179760     2678.
+ 341 Congo, Rep.              Africa     1972    54.9    1340458     3213.
+ 342 Congo, Rep.              Africa     1977    55.6    1536769     3259.
+ 343 Congo, Rep.              Africa     1982    56.7    1774735     4880.
+ 344 Congo, Rep.              Africa     1987    57.5    2064095     4201.
+ 345 Congo, Rep.              Africa     1992    56.4    2409073     4016.
+ 346 Congo, Rep.              Africa     1997    53.0    2800947     3484.
+ 347 Congo, Rep.              Africa     2002    53.0    3328795     3484.
+ 348 Congo, Rep.              Africa     2007    55.3    3800610     3633.
+ 349 Costa Rica               Americas   1952    57.2     926317     2627.
+ 350 Costa Rica               Americas   1957    60.0    1112300     2990.
+ 351 Costa Rica               Americas   1962    62.8    1345187     3461.
+ 352 Costa Rica               Americas   1967    65.4    1588717     4162.
+ 353 Costa Rica               Americas   1972    67.8    1834796     5118.
+ 354 Costa Rica               Americas   1977    70.8    2108457     5927.
+ 355 Costa Rica               Americas   1982    73.4    2424367     5263.
+ 356 Costa Rica               Americas   1987    74.8    2799811     5630.
+ 357 Costa Rica               Americas   1992    75.7    3173216     6160.
+ 358 Costa Rica               Americas   1997    77.3    3518107     6677.
+ 359 Costa Rica               Americas   2002    78.1    3834934     7723.
+ 360 Costa Rica               Americas   2007    78.8    4133884     9645.
+ 361 Cote d'Ivoire            Africa     1952    40.5    2977019     1389.
+ 362 Cote d'Ivoire            Africa     1957    42.5    3300000     1501.
+ 363 Cote d'Ivoire            Africa     1962    44.9    3832408     1729.
+ 364 Cote d'Ivoire            Africa     1967    47.4    4744870     2052.
+ 365 Cote d'Ivoire            Africa     1972    49.8    6071696     2378.
+ 366 Cote d'Ivoire            Africa     1977    52.4    7459574     2518.
+ 367 Cote d'Ivoire            Africa     1982    54.0    9025951     2603.
+ 368 Cote d'Ivoire            Africa     1987    54.7   10761098     2157.
+ 369 Cote d'Ivoire            Africa     1992    52.0   12772596     1648.
+ 370 Cote d'Ivoire            Africa     1997    48.0   14625967     1786.
+ 371 Cote d'Ivoire            Africa     2002    46.8   16252726     1649.
+ 372 Cote d'Ivoire            Africa     2007    48.3   18013409     1545.
+ 373 Croatia                  Europe     1952    61.2    3882229     3119.
+ 374 Croatia                  Europe     1957    64.8    3991242     4338.
+ 375 Croatia                  Europe     1962    67.1    4076557     5478.
+ 376 Croatia                  Europe     1967    68.5    4174366     6960.
+ 377 Croatia                  Europe     1972    69.6    4225310     9164.
+ 378 Croatia                  Europe     1977    70.6    4318673    11305.
+ 379 Croatia                  Europe     1982    70.5    4413368    13222.
+ 380 Croatia                  Europe     1987    71.5    4484310    13823.
+ 381 Croatia                  Europe     1992    72.5    4494013     8448.
+ 382 Croatia                  Europe     1997    73.7    4444595     9876.
+ 383 Croatia                  Europe     2002    74.9    4481020    11628.
+ 384 Croatia                  Europe     2007    75.7    4493312    14619.
+ 385 Cuba                     Americas   1952    59.4    6007797     5587.
+ 386 Cuba                     Americas   1957    62.3    6640752     6092.
+ 387 Cuba                     Americas   1962    65.2    7254373     5181.
+ 388 Cuba                     Americas   1967    68.3    8139332     5690.
+ 389 Cuba                     Americas   1972    70.7    8831348     5305.
+ 390 Cuba                     Americas   1977    72.6    9537988     6380.
+ 391 Cuba                     Americas   1982    73.7    9789224     7317.
+ 392 Cuba                     Americas   1987    74.2   10239839     7533.
+ 393 Cuba                     Americas   1992    74.4   10723260     5593.
+ 394 Cuba                     Americas   1997    76.2   10983007     5432.
+ 395 Cuba                     Americas   2002    77.2   11226999     6341.
+ 396 Cuba                     Americas   2007    78.3   11416987     8948.
+ 397 Czech Republic           Europe     1952    66.9    9125183     6876.
+ 398 Czech Republic           Europe     1957    69.0    9513758     8256.
+ 399 Czech Republic           Europe     1962    69.9    9620282    10137.
+ 400 Czech Republic           Europe     1967    70.4    9835109    11399.
+ 401 Czech Republic           Europe     1972    70.3    9862158    13108.
+ 402 Czech Republic           Europe     1977    70.7   10161915    14800.
+ 403 Czech Republic           Europe     1982    71.0   10303704    15377.
+ 404 Czech Republic           Europe     1987    71.6   10311597    16310.
+ 405 Czech Republic           Europe     1992    72.4   10315702    14297.
+ 406 Czech Republic           Europe     1997    74.0   10300707    16049.
+ 407 Czech Republic           Europe     2002    75.5   10256295    17596.
+ 408 Czech Republic           Europe     2007    76.5   10228744    22833.
+ 409 Denmark                  Europe     1952    70.8    4334000     9692.
+ 410 Denmark                  Europe     1957    71.8    4487831    11100.
+ 411 Denmark                  Europe     1962    72.4    4646899    13583.
+ 412 Denmark                  Europe     1967    73.0    4838800    15937.
+ 413 Denmark                  Europe     1972    73.5    4991596    18866.
+ 414 Denmark                  Europe     1977    74.7    5088419    20423.
+ 415 Denmark                  Europe     1982    74.6    5117810    21688.
+ 416 Denmark                  Europe     1987    74.8    5127024    25116.
+ 417 Denmark                  Europe     1992    75.3    5171393    26407.
+ 418 Denmark                  Europe     1997    76.1    5283663    29804.
+ 419 Denmark                  Europe     2002    77.2    5374693    32167.
+ 420 Denmark                  Europe     2007    78.3    5468120    35278.
+ 421 Djibouti                 Africa     1952    34.8      63149     2670.
+ 422 Djibouti                 Africa     1957    37.3      71851     2865.
+ 423 Djibouti                 Africa     1962    39.7      89898     3021.
+ 424 Djibouti                 Africa     1967    42.1     127617     3020.
+ 425 Djibouti                 Africa     1972    44.4     178848     3694.
+ 426 Djibouti                 Africa     1977    46.5     228694     3082.
+ 427 Djibouti                 Africa     1982    48.8     305991     2879.
+ 428 Djibouti                 Africa     1987    50.0     311025     2880.
+ 429 Djibouti                 Africa     1992    51.6     384156     2377.
+ 430 Djibouti                 Africa     1997    53.2     417908     1895.
+ 431 Djibouti                 Africa     2002    53.4     447416     1908.
+ 432 Djibouti                 Africa     2007    54.8     496374     2082.
+ 433 Dominican Republic       Americas   1952    45.9    2491346     1398.
+ 434 Dominican Republic       Americas   1957    49.8    2923186     1544.
+ 435 Dominican Republic       Americas   1962    53.5    3453434     1662.
+ 436 Dominican Republic       Americas   1967    56.8    4049146     1654.
+ 437 Dominican Republic       Americas   1972    59.6    4671329     2190.
+ 438 Dominican Republic       Americas   1977    61.8    5302800     2682.
+ 439 Dominican Republic       Americas   1982    63.7    5968349     2861.
+ 440 Dominican Republic       Americas   1987    66.0    6655297     2900.
+ 441 Dominican Republic       Americas   1992    68.5    7351181     3044.
+ 442 Dominican Republic       Americas   1997    70.0    7992357     3614.
+ 443 Dominican Republic       Americas   2002    70.8    8650322     4564.
+ 444 Dominican Republic       Americas   2007    72.2    9319622     6025.
+ 445 Ecuador                  Americas   1952    48.4    3548753     3522.
+ 446 Ecuador                  Americas   1957    51.4    4058385     3781.
+ 447 Ecuador                  Americas   1962    54.6    4681707     4086.
+ 448 Ecuador                  Americas   1967    56.7    5432424     4579.
+ 449 Ecuador                  Americas   1972    58.8    6298651     5281.
+ 450 Ecuador                  Americas   1977    61.3    7278866     6680.
+ 451 Ecuador                  Americas   1982    64.3    8365850     7214.
+ 452 Ecuador                  Americas   1987    67.2    9545158     6482.
+ 453 Ecuador                  Americas   1992    69.6   10748394     7104.
+ 454 Ecuador                  Americas   1997    72.3   11911819     7429.
+ 455 Ecuador                  Americas   2002    74.2   12921234     5773.
+ 456 Ecuador                  Americas   2007    75.0   13755680     6873.
+ 457 Egypt                    Africa     1952    41.9   22223309     1419.
+ 458 Egypt                    Africa     1957    44.4   25009741     1459.
+ 459 Egypt                    Africa     1962    47.0   28173309     1693.
+ 460 Egypt                    Africa     1967    49.3   31681188     1815.
+ 461 Egypt                    Africa     1972    51.1   34807417     2024.
+ 462 Egypt                    Africa     1977    53.3   38783863     2785.
+ 463 Egypt                    Africa     1982    56.0   45681811     3504.
+ 464 Egypt                    Africa     1987    59.8   52799062     3885.
+ 465 Egypt                    Africa     1992    63.7   59402198     3795.
+ 466 Egypt                    Africa     1997    67.2   66134291     4173.
+ 467 Egypt                    Africa     2002    69.8   73312559     4755.
+ 468 Egypt                    Africa     2007    71.3   80264543     5581.
+ 469 El Salvador              Americas   1952    45.3    2042865     3048.
+ 470 El Salvador              Americas   1957    48.6    2355805     3422.
+ 471 El Salvador              Americas   1962    52.3    2747687     3777.
+ 472 El Salvador              Americas   1967    55.9    3232927     4359.
+ 473 El Salvador              Americas   1972    58.2    3790903     4520.
+ 474 El Salvador              Americas   1977    56.7    4282586     5139.
+ 475 El Salvador              Americas   1982    56.6    4474873     4098.
+ 476 El Salvador              Americas   1987    63.2    4842194     4140.
+ 477 El Salvador              Americas   1992    66.8    5274649     4444.
+ 478 El Salvador              Americas   1997    69.5    5783439     5155.
+ 479 El Salvador              Americas   2002    70.7    6353681     5352.
+ 480 El Salvador              Americas   2007    71.9    6939688     5728.
+ 481 Equatorial Guinea        Africa     1952    34.5     216964      376.
+ 482 Equatorial Guinea        Africa     1957    36.0     232922      426.
+ 483 Equatorial Guinea        Africa     1962    37.5     249220      583.
+ 484 Equatorial Guinea        Africa     1967    39.0     259864      916.
+ 485 Equatorial Guinea        Africa     1972    40.5     277603      672.
+ 486 Equatorial Guinea        Africa     1977    42.0     192675      959.
+ 487 Equatorial Guinea        Africa     1982    43.7     285483      928.
+ 488 Equatorial Guinea        Africa     1987    45.7     341244      967.
+ 489 Equatorial Guinea        Africa     1992    47.5     387838     1132.
+ 490 Equatorial Guinea        Africa     1997    48.2     439971     2814.
+ 491 Equatorial Guinea        Africa     2002    49.3     495627     7703.
+ 492 Equatorial Guinea        Africa     2007    51.6     551201    12154.
+ 493 Eritrea                  Africa     1952    35.9    1438760      329.
+ 494 Eritrea                  Africa     1957    38.0    1542611      344.
+ 495 Eritrea                  Africa     1962    40.2    1666618      381.
+ 496 Eritrea                  Africa     1967    42.2    1820319      469.
+ 497 Eritrea                  Africa     1972    44.1    2260187      514.
+ 498 Eritrea                  Africa     1977    44.5    2512642      506.
+ 499 Eritrea                  Africa     1982    43.9    2637297      525.
+ 500 Eritrea                  Africa     1987    46.5    2915959      521.
+ 501 Eritrea                  Africa     1992    50.0    3668440      583.
+ 502 Eritrea                  Africa     1997    53.4    4058319      913.
+ 503 Eritrea                  Africa     2002    55.2    4414865      765.
+ 504 Eritrea                  Africa     2007    58.0    4906585      641.
+ 505 Ethiopia                 Africa     1952    34.1   20860941      362.
+ 506 Ethiopia                 Africa     1957    36.7   22815614      379.
+ 507 Ethiopia                 Africa     1962    40.1   25145372      419.
+ 508 Ethiopia                 Africa     1967    42.1   27860297      516.
+ 509 Ethiopia                 Africa     1972    43.5   30770372      566.
+ 510 Ethiopia                 Africa     1977    44.5   34617799      557.
+ 511 Ethiopia                 Africa     1982    44.9   38111756      578.
+ 512 Ethiopia                 Africa     1987    46.7   42999530      574.
+ 513 Ethiopia                 Africa     1992    48.1   52088559      421.
+ 514 Ethiopia                 Africa     1997    49.4   59861301      516.
+ 515 Ethiopia                 Africa     2002    50.7   67946797      530.
+ 516 Ethiopia                 Africa     2007    52.9   76511887      691.
+ 517 Finland                  Europe     1952    66.6    4090500     6425.
+ 518 Finland                  Europe     1957    67.5    4324000     7545.
+ 519 Finland                  Europe     1962    68.8    4491443     9372.
+ 520 Finland                  Europe     1967    69.8    4605744    10922.
+ 521 Finland                  Europe     1972    70.9    4639657    14359.
+ 522 Finland                  Europe     1977    72.5    4738902    15605.
+ 523 Finland                  Europe     1982    74.6    4826933    18533.
+ 524 Finland                  Europe     1987    74.8    4931729    21141.
+ 525 Finland                  Europe     1992    75.7    5041039    20647.
+ 526 Finland                  Europe     1997    77.1    5134406    23724.
+ 527 Finland                  Europe     2002    78.4    5193039    28205.
+ 528 Finland                  Europe     2007    79.3    5238460    33207.
+ 529 France                   Europe     1952    67.4   42459667     7030.
+ 530 France                   Europe     1957    68.9   44310863     8663.
+ 531 France                   Europe     1962    70.5   47124000    10560.
+ 532 France                   Europe     1967    71.6   49569000    13000.
+ 533 France                   Europe     1972    72.4   51732000    16107.
+ 534 France                   Europe     1977    73.8   53165019    18293.
+ 535 France                   Europe     1982    74.9   54433565    20294.
+ 536 France                   Europe     1987    76.3   55630100    22066.
+ 537 France                   Europe     1992    77.5   57374179    24704.
+ 538 France                   Europe     1997    78.6   58623428    25890.
+ 539 France                   Europe     2002    79.6   59925035    28926.
+ 540 France                   Europe     2007    80.7   61083916    30470.
+ 541 Gabon                    Africa     1952    37.0     420702     4293.
+ 542 Gabon                    Africa     1957    39.0     434904     4976.
+ 543 Gabon                    Africa     1962    40.5     455661     6631.
+ 544 Gabon                    Africa     1967    44.6     489004     8359.
+ 545 Gabon                    Africa     1972    48.7     537977    11402.
+ 546 Gabon                    Africa     1977    52.8     706367    21746.
+ 547 Gabon                    Africa     1982    56.6     753874    15113.
+ 548 Gabon                    Africa     1987    60.2     880397    11864.
+ 549 Gabon                    Africa     1992    61.4     985739    13522.
+ 550 Gabon                    Africa     1997    60.5    1126189    14723.
+ 551 Gabon                    Africa     2002    56.8    1299304    12522.
+ 552 Gabon                    Africa     2007    56.7    1454867    13206.
+ 553 Gambia                   Africa     1952    30       284320      485.
+ 554 Gambia                   Africa     1957    32.1     323150      521.
+ 555 Gambia                   Africa     1962    33.9     374020      600.
+ 556 Gambia                   Africa     1967    35.9     439593      735.
+ 557 Gambia                   Africa     1972    38.3     517101      756.
+ 558 Gambia                   Africa     1977    41.8     608274      885.
+ 559 Gambia                   Africa     1982    45.6     715523      836.
+ 560 Gambia                   Africa     1987    49.3     848406      612.
+ 561 Gambia                   Africa     1992    52.6    1025384      666.
+ 562 Gambia                   Africa     1997    55.9    1235767      654.
+ 563 Gambia                   Africa     2002    58.0    1457766      661.
+ 564 Gambia                   Africa     2007    59.4    1688359      753.
+ 565 Germany                  Europe     1952    67.5   69145952     7144.
+ 566 Germany                  Europe     1957    69.1   71019069    10188.
+ 567 Germany                  Europe     1962    70.3   73739117    12902.
+ 568 Germany                  Europe     1967    70.8   76368453    14746.
+ 569 Germany                  Europe     1972    71     78717088    18016.
+ 570 Germany                  Europe     1977    72.5   78160773    20513.
+ 571 Germany                  Europe     1982    73.8   78335266    22032.
+ 572 Germany                  Europe     1987    74.8   77718298    24639.
+ 573 Germany                  Europe     1992    76.1   80597764    26505.
+ 574 Germany                  Europe     1997    77.3   82011073    27789.
+ 575 Germany                  Europe     2002    78.7   82350671    30036.
+ 576 Germany                  Europe     2007    79.4   82400996    32170.
+ 577 Ghana                    Africa     1952    43.1    5581001      911.
+ 578 Ghana                    Africa     1957    44.8    6391288     1044.
+ 579 Ghana                    Africa     1962    46.5    7355248     1190.
+ 580 Ghana                    Africa     1967    48.1    8490213     1126.
+ 581 Ghana                    Africa     1972    49.9    9354120     1178.
+ 582 Ghana                    Africa     1977    51.8   10538093      993.
+ 583 Ghana                    Africa     1982    53.7   11400338      876.
+ 584 Ghana                    Africa     1987    55.7   14168101      847.
+ 585 Ghana                    Africa     1992    57.5   16278738      925.
+ 586 Ghana                    Africa     1997    58.6   18418288     1005.
+ 587 Ghana                    Africa     2002    58.5   20550751     1112.
+ 588 Ghana                    Africa     2007    60.0   22873338     1328.
+ 589 Greece                   Europe     1952    65.9    7733250     3531.
+ 590 Greece                   Europe     1957    67.9    8096218     4916.
+ 591 Greece                   Europe     1962    69.5    8448233     6017.
+ 592 Greece                   Europe     1967    71      8716441     8513.
+ 593 Greece                   Europe     1972    72.3    8888628    12725.
+ 594 Greece                   Europe     1977    73.7    9308479    14196.
+ 595 Greece                   Europe     1982    75.2    9786480    15268.
+ 596 Greece                   Europe     1987    76.7    9974490    16121.
+ 597 Greece                   Europe     1992    77.0   10325429    17541.
+ 598 Greece                   Europe     1997    77.9   10502372    18748.
+ 599 Greece                   Europe     2002    78.3   10603863    22514.
+ 600 Greece                   Europe     2007    79.5   10706290    27538.
+ 601 Guatemala                Americas   1952    42.0    3146381     2428.
+ 602 Guatemala                Americas   1957    44.1    3640876     2617.
+ 603 Guatemala                Americas   1962    47.0    4208858     2750.
+ 604 Guatemala                Americas   1967    50.0    4690773     3243.
+ 605 Guatemala                Americas   1972    53.7    5149581     4031.
+ 606 Guatemala                Americas   1977    56.0    5703430     4880.
+ 607 Guatemala                Americas   1982    58.1    6395630     4820.
+ 608 Guatemala                Americas   1987    60.8    7326406     4246.
+ 609 Guatemala                Americas   1992    63.4    8486949     4439.
+ 610 Guatemala                Americas   1997    66.3    9803875     4684.
+ 611 Guatemala                Americas   2002    69.0   11178650     4858.
+ 612 Guatemala                Americas   2007    70.3   12572928     5186.
+ 613 Guinea                   Africa     1952    33.6    2664249      510.
+ 614 Guinea                   Africa     1957    34.6    2876726      576.
+ 615 Guinea                   Africa     1962    35.8    3140003      686.
+ 616 Guinea                   Africa     1967    37.2    3451418      709.
+ 617 Guinea                   Africa     1972    38.8    3811387      742.
+ 618 Guinea                   Africa     1977    40.8    4227026      875.
+ 619 Guinea                   Africa     1982    42.9    4710497      857.
+ 620 Guinea                   Africa     1987    45.6    5650262      806.
+ 621 Guinea                   Africa     1992    48.6    6990574      794.
+ 622 Guinea                   Africa     1997    51.5    8048834      869.
+ 623 Guinea                   Africa     2002    53.7    8807818      946.
+ 624 Guinea                   Africa     2007    56.0    9947814      943.
+ 625 Guinea-Bissau            Africa     1952    32.5     580653      300.
+ 626 Guinea-Bissau            Africa     1957    33.5     601095      432.
+ 627 Guinea-Bissau            Africa     1962    34.5     627820      522.
+ 628 Guinea-Bissau            Africa     1967    35.5     601287      716.
+ 629 Guinea-Bissau            Africa     1972    36.5     625361      820.
+ 630 Guinea-Bissau            Africa     1977    37.5     745228      765.
+ 631 Guinea-Bissau            Africa     1982    39.3     825987      838.
+ 632 Guinea-Bissau            Africa     1987    41.2     927524      736.
+ 633 Guinea-Bissau            Africa     1992    43.3    1050938      746.
+ 634 Guinea-Bissau            Africa     1997    44.9    1193708      797.
+ 635 Guinea-Bissau            Africa     2002    45.5    1332459      576.
+ 636 Guinea-Bissau            Africa     2007    46.4    1472041      579.
+ 637 Haiti                    Americas   1952    37.6    3201488     1840.
+ 638 Haiti                    Americas   1957    40.7    3507701     1727.
+ 639 Haiti                    Americas   1962    43.6    3880130     1797.
+ 640 Haiti                    Americas   1967    46.2    4318137     1452.
+ 641 Haiti                    Americas   1972    48.0    4698301     1654.
+ 642 Haiti                    Americas   1977    49.9    4908554     1874.
+ 643 Haiti                    Americas   1982    51.5    5198399     2011.
+ 644 Haiti                    Americas   1987    53.6    5756203     1823.
+ 645 Haiti                    Americas   1992    55.1    6326682     1456.
+ 646 Haiti                    Americas   1997    56.7    6913545     1342.
+ 647 Haiti                    Americas   2002    58.1    7607651     1270.
+ 648 Haiti                    Americas   2007    60.9    8502814     1202.
+ 649 Honduras                 Americas   1952    41.9    1517453     2195.
+ 650 Honduras                 Americas   1957    44.7    1770390     2220.
+ 651 Honduras                 Americas   1962    48.0    2090162     2291.
+ 652 Honduras                 Americas   1967    50.9    2500689     2538.
+ 653 Honduras                 Americas   1972    53.9    2965146     2530.
+ 654 Honduras                 Americas   1977    57.4    3055235     3203.
+ 655 Honduras                 Americas   1982    60.9    3669448     3122.
+ 656 Honduras                 Americas   1987    64.5    4372203     3023.
+ 657 Honduras                 Americas   1992    66.4    5077347     3082.
+ 658 Honduras                 Americas   1997    67.7    5867957     3160.
+ 659 Honduras                 Americas   2002    68.6    6677328     3100.
+ 660 Honduras                 Americas   2007    70.2    7483763     3548.
+ 661 Hong Kong, China         Asia       1952    61.0    2125900     3054.
+ 662 Hong Kong, China         Asia       1957    64.8    2736300     3629.
+ 663 Hong Kong, China         Asia       1962    67.6    3305200     4693.
+ 664 Hong Kong, China         Asia       1967    70      3722800     6198.
+ 665 Hong Kong, China         Asia       1972    72      4115700     8316.
+ 666 Hong Kong, China         Asia       1977    73.6    4583700    11186.
+ 667 Hong Kong, China         Asia       1982    75.4    5264500    14561.
+ 668 Hong Kong, China         Asia       1987    76.2    5584510    20038.
+ 669 Hong Kong, China         Asia       1992    77.6    5829696    24758.
+ 670 Hong Kong, China         Asia       1997    80      6495918    28378.
+ 671 Hong Kong, China         Asia       2002    81.5    6762476    30209.
+ 672 Hong Kong, China         Asia       2007    82.2    6980412    39725.
+ 673 Hungary                  Europe     1952    64.0    9504000     5264.
+ 674 Hungary                  Europe     1957    66.4    9839000     6040.
+ 675 Hungary                  Europe     1962    68.0   10063000     7550.
+ 676 Hungary                  Europe     1967    69.5   10223422     9327.
+ 677 Hungary                  Europe     1972    69.8   10394091    10169.
+ 678 Hungary                  Europe     1977    70.0   10637171    11675.
+ 679 Hungary                  Europe     1982    69.4   10705535    12546.
+ 680 Hungary                  Europe     1987    69.6   10612740    12986.
+ 681 Hungary                  Europe     1992    69.2   10348684    10536.
+ 682 Hungary                  Europe     1997    71.0   10244684    11713.
+ 683 Hungary                  Europe     2002    72.6   10083313    14844.
+ 684 Hungary                  Europe     2007    73.3    9956108    18009.
+ 685 Iceland                  Europe     1952    72.5     147962     7268.
+ 686 Iceland                  Europe     1957    73.5     165110     9244.
+ 687 Iceland                  Europe     1962    73.7     182053    10350.
+ 688 Iceland                  Europe     1967    73.7     198676    13320.
+ 689 Iceland                  Europe     1972    74.5     209275    15798.
+ 690 Iceland                  Europe     1977    76.1     221823    19655.
+ 691 Iceland                  Europe     1982    77.0     233997    23270.
+ 692 Iceland                  Europe     1987    77.2     244676    26923.
+ 693 Iceland                  Europe     1992    78.8     259012    25144.
+ 694 Iceland                  Europe     1997    79.0     271192    28061.
+ 695 Iceland                  Europe     2002    80.5     288030    31163.
+ 696 Iceland                  Europe     2007    81.8     301931    36181.
+ 697 India                    Asia       1952    37.4  372000000      547.
+ 698 India                    Asia       1957    40.2  409000000      590.
+ 699 India                    Asia       1962    43.6  454000000      658.
+ 700 India                    Asia       1967    47.2  506000000      701.
+ 701 India                    Asia       1972    50.7  567000000      724.
+ 702 India                    Asia       1977    54.2  634000000      813.
+ 703 India                    Asia       1982    56.6  708000000      856.
+ 704 India                    Asia       1987    58.6  788000000      977.
+ 705 India                    Asia       1992    60.2  872000000     1164.
+ 706 India                    Asia       1997    61.8  959000000     1459.
+ 707 India                    Asia       2002    62.9 1034172547     1747.
+ 708 India                    Asia       2007    64.7 1110396331     2452.
+ 709 Indonesia                Asia       1952    37.5   82052000      750.
+ 710 Indonesia                Asia       1957    39.9   90124000      859.
+ 711 Indonesia                Asia       1962    42.5   99028000      849.
+ 712 Indonesia                Asia       1967    46.0  109343000      762.
+ 713 Indonesia                Asia       1972    49.2  121282000     1111.
+ 714 Indonesia                Asia       1977    52.7  136725000     1383.
+ 715 Indonesia                Asia       1982    56.2  153343000     1517.
+ 716 Indonesia                Asia       1987    60.1  169276000     1748.
+ 717 Indonesia                Asia       1992    62.7  184816000     2383.
+ 718 Indonesia                Asia       1997    66.0  199278000     3119.
+ 719 Indonesia                Asia       2002    68.6  211060000     2874.
+ 720 Indonesia                Asia       2007    70.6  223547000     3541.
+ 721 Iran                     Asia       1952    44.9   17272000     3035.
+ 722 Iran                     Asia       1957    47.2   19792000     3290.
+ 723 Iran                     Asia       1962    49.3   22874000     4187.
+ 724 Iran                     Asia       1967    52.5   26538000     5907.
+ 725 Iran                     Asia       1972    55.2   30614000     9614.
+ 726 Iran                     Asia       1977    57.7   35480679    11889.
+ 727 Iran                     Asia       1982    59.6   43072751     7608.
+ 728 Iran                     Asia       1987    63.0   51889696     6643.
+ 729 Iran                     Asia       1992    65.7   60397973     7236.
+ 730 Iran                     Asia       1997    68.0   63327987     8264.
+ 731 Iran                     Asia       2002    69.5   66907826     9241.
+ 732 Iran                     Asia       2007    71.0   69453570    11606.
+ 733 Iraq                     Asia       1952    45.3    5441766     4130.
+ 734 Iraq                     Asia       1957    48.4    6248643     6229.
+ 735 Iraq                     Asia       1962    51.5    7240260     8342.
+ 736 Iraq                     Asia       1967    54.5    8519282     8931.
+ 737 Iraq                     Asia       1972    57.0   10061506     9576.
+ 738 Iraq                     Asia       1977    60.4   11882916    14688.
+ 739 Iraq                     Asia       1982    62.0   14173318    14518.
+ 740 Iraq                     Asia       1987    65.0   16543189    11644.
+ 741 Iraq                     Asia       1992    59.5   17861905     3746.
+ 742 Iraq                     Asia       1997    58.8   20775703     3076.
+ 743 Iraq                     Asia       2002    57.0   24001816     4391.
+ 744 Iraq                     Asia       2007    59.5   27499638     4471.
+ 745 Ireland                  Europe     1952    66.9    2952156     5210.
+ 746 Ireland                  Europe     1957    68.9    2878220     5599.
+ 747 Ireland                  Europe     1962    70.3    2830000     6632.
+ 748 Ireland                  Europe     1967    71.1    2900100     7656.
+ 749 Ireland                  Europe     1972    71.3    3024400     9531.
+ 750 Ireland                  Europe     1977    72.0    3271900    11151.
+ 751 Ireland                  Europe     1982    73.1    3480000    12618.
+ 752 Ireland                  Europe     1987    74.4    3539900    13873.
+ 753 Ireland                  Europe     1992    75.5    3557761    17559.
+ 754 Ireland                  Europe     1997    76.1    3667233    24522.
+ 755 Ireland                  Europe     2002    77.8    3879155    34077.
+ 756 Ireland                  Europe     2007    78.9    4109086    40676.
+ 757 Israel                   Asia       1952    65.4    1620914     4087.
+ 758 Israel                   Asia       1957    67.8    1944401     5385.
+ 759 Israel                   Asia       1962    69.4    2310904     7106.
+ 760 Israel                   Asia       1967    70.8    2693585     8394.
+ 761 Israel                   Asia       1972    71.6    3095893    12787.
+ 762 Israel                   Asia       1977    73.1    3495918    13307.
+ 763 Israel                   Asia       1982    74.4    3858421    15367.
+ 764 Israel                   Asia       1987    75.6    4203148    17122.
+ 765 Israel                   Asia       1992    76.9    4936550    18052.
+ 766 Israel                   Asia       1997    78.3    5531387    20897.
+ 767 Israel                   Asia       2002    79.7    6029529    21906.
+ 768 Israel                   Asia       2007    80.7    6426679    25523.
+ 769 Italy                    Europe     1952    65.9   47666000     4931.
+ 770 Italy                    Europe     1957    67.8   49182000     6249.
+ 771 Italy                    Europe     1962    69.2   50843200     8244.
+ 772 Italy                    Europe     1967    71.1   52667100    10022.
+ 773 Italy                    Europe     1972    72.2   54365564    12269.
+ 774 Italy                    Europe     1977    73.5   56059245    14256.
+ 775 Italy                    Europe     1982    75.0   56535636    16537.
+ 776 Italy                    Europe     1987    76.4   56729703    19207.
+ 777 Italy                    Europe     1992    77.4   56840847    22014.
+ 778 Italy                    Europe     1997    78.8   57479469    24675.
+ 779 Italy                    Europe     2002    80.2   57926999    27968.
+ 780 Italy                    Europe     2007    80.5   58147733    28570.
+ 781 Jamaica                  Americas   1952    58.5    1426095     2899.
+ 782 Jamaica                  Americas   1957    62.6    1535090     4757.
+ 783 Jamaica                  Americas   1962    65.6    1665128     5246.
+ 784 Jamaica                  Americas   1967    67.5    1861096     6125.
+ 785 Jamaica                  Americas   1972    69      1997616     7434.
+ 786 Jamaica                  Americas   1977    70.1    2156814     6650.
+ 787 Jamaica                  Americas   1982    71.2    2298309     6068.
+ 788 Jamaica                  Americas   1987    71.8    2326606     6351.
+ 789 Jamaica                  Americas   1992    71.8    2378618     7405.
+ 790 Jamaica                  Americas   1997    72.3    2531311     7122.
+ 791 Jamaica                  Americas   2002    72.0    2664659     6995.
+ 792 Jamaica                  Americas   2007    72.6    2780132     7321.
+ 793 Japan                    Asia       1952    63.0   86459025     3217.
+ 794 Japan                    Asia       1957    65.5   91563009     4318.
+ 795 Japan                    Asia       1962    68.7   95831757     6577.
+ 796 Japan                    Asia       1967    71.4  100825279     9848.
+ 797 Japan                    Asia       1972    73.4  107188273    14779.
+ 798 Japan                    Asia       1977    75.4  113872473    16610.
+ 799 Japan                    Asia       1982    77.1  118454974    19384.
+ 800 Japan                    Asia       1987    78.7  122091325    22376.
+ 801 Japan                    Asia       1992    79.4  124329269    26825.
+ 802 Japan                    Asia       1997    80.7  125956499    28817.
+ 803 Japan                    Asia       2002    82    127065841    28605.
+ 804 Japan                    Asia       2007    82.6  127467972    31656.
+ 805 Jordan                   Asia       1952    43.2     607914     1547.
+ 806 Jordan                   Asia       1957    45.7     746559     1886.
+ 807 Jordan                   Asia       1962    48.1     933559     2348.
+ 808 Jordan                   Asia       1967    51.6    1255058     2742.
+ 809 Jordan                   Asia       1972    56.5    1613551     2111.
+ 810 Jordan                   Asia       1977    61.1    1937652     2852.
+ 811 Jordan                   Asia       1982    63.7    2347031     4161.
+ 812 Jordan                   Asia       1987    65.9    2820042     4449.
+ 813 Jordan                   Asia       1992    68.0    3867409     3432.
+ 814 Jordan                   Asia       1997    69.8    4526235     3645.
+ 815 Jordan                   Asia       2002    71.3    5307470     3845.
+ 816 Jordan                   Asia       2007    72.5    6053193     4519.
+ 817 Kenya                    Africa     1952    42.3    6464046      854.
+ 818 Kenya                    Africa     1957    44.7    7454779      944.
+ 819 Kenya                    Africa     1962    47.9    8678557      897.
+ 820 Kenya                    Africa     1967    50.7   10191512     1057.
+ 821 Kenya                    Africa     1972    53.6   12044785     1222.
+ 822 Kenya                    Africa     1977    56.2   14500404     1268.
+ 823 Kenya                    Africa     1982    58.8   17661452     1348.
+ 824 Kenya                    Africa     1987    59.3   21198082     1362.
+ 825 Kenya                    Africa     1992    59.3   25020539     1342.
+ 826 Kenya                    Africa     1997    54.4   28263827     1360.
+ 827 Kenya                    Africa     2002    51.0   31386842     1288.
+ 828 Kenya                    Africa     2007    54.1   35610177     1463.
+ 829 Korea, Dem. Rep.         Asia       1952    50.1    8865488     1088.
+ 830 Korea, Dem. Rep.         Asia       1957    54.1    9411381     1571.
+ 831 Korea, Dem. Rep.         Asia       1962    56.7   10917494     1622.
+ 832 Korea, Dem. Rep.         Asia       1967    59.9   12617009     2144.
+ 833 Korea, Dem. Rep.         Asia       1972    64.0   14781241     3702.
+ 834 Korea, Dem. Rep.         Asia       1977    67.2   16325320     4106.
+ 835 Korea, Dem. Rep.         Asia       1982    69.1   17647518     4107.
+ 836 Korea, Dem. Rep.         Asia       1987    70.6   19067554     4106.
+ 837 Korea, Dem. Rep.         Asia       1992    70.0   20711375     3726.
+ 838 Korea, Dem. Rep.         Asia       1997    67.7   21585105     1691.
+ 839 Korea, Dem. Rep.         Asia       2002    66.7   22215365     1647.
+ 840 Korea, Dem. Rep.         Asia       2007    67.3   23301725     1593.
+ 841 Korea, Rep.              Asia       1952    47.5   20947571     1031.
+ 842 Korea, Rep.              Asia       1957    52.7   22611552     1488.
+ 843 Korea, Rep.              Asia       1962    55.3   26420307     1536.
+ 844 Korea, Rep.              Asia       1967    57.7   30131000     2029.
+ 845 Korea, Rep.              Asia       1972    62.6   33505000     3031.
+ 846 Korea, Rep.              Asia       1977    64.8   36436000     4657.
+ 847 Korea, Rep.              Asia       1982    67.1   39326000     5623.
+ 848 Korea, Rep.              Asia       1987    69.8   41622000     8533.
+ 849 Korea, Rep.              Asia       1992    72.2   43805450    12104.
+ 850 Korea, Rep.              Asia       1997    74.6   46173816    15994.
+ 851 Korea, Rep.              Asia       2002    77.0   47969150    19234.
+ 852 Korea, Rep.              Asia       2007    78.6   49044790    23348.
+ 853 Kuwait                   Asia       1952    55.6     160000   108382.
+ 854 Kuwait                   Asia       1957    58.0     212846   113523.
+ 855 Kuwait                   Asia       1962    60.5     358266    95458.
+ 856 Kuwait                   Asia       1967    64.6     575003    80895.
+ 857 Kuwait                   Asia       1972    67.7     841934   109348.
+ 858 Kuwait                   Asia       1977    69.3    1140357    59265.
+ 859 Kuwait                   Asia       1982    71.3    1497494    31354.
+ 860 Kuwait                   Asia       1987    74.2    1891487    28118.
+ 861 Kuwait                   Asia       1992    75.2    1418095    34933.
+ 862 Kuwait                   Asia       1997    76.2    1765345    40301.
+ 863 Kuwait                   Asia       2002    76.9    2111561    35110.
+ 864 Kuwait                   Asia       2007    77.6    2505559    47307.
+ 865 Lebanon                  Asia       1952    55.9    1439529     4835.
+ 866 Lebanon                  Asia       1957    59.5    1647412     6090.
+ 867 Lebanon                  Asia       1962    62.1    1886848     5715.
+ 868 Lebanon                  Asia       1967    63.9    2186894     6007.
+ 869 Lebanon                  Asia       1972    65.4    2680018     7486.
+ 870 Lebanon                  Asia       1977    66.1    3115787     8660.
+ 871 Lebanon                  Asia       1982    67.0    3086876     7641.
+ 872 Lebanon                  Asia       1987    67.9    3089353     5377.
+ 873 Lebanon                  Asia       1992    69.3    3219994     6891.
+ 874 Lebanon                  Asia       1997    70.3    3430388     8755.
+ 875 Lebanon                  Asia       2002    71.0    3677780     9314.
+ 876 Lebanon                  Asia       2007    72.0    3921278    10461.
+ 877 Lesotho                  Africa     1952    42.1     748747      299.
+ 878 Lesotho                  Africa     1957    45.0     813338      336.
+ 879 Lesotho                  Africa     1962    47.7     893143      412.
+ 880 Lesotho                  Africa     1967    48.5     996380      499.
+ 881 Lesotho                  Africa     1972    49.8    1116779      497.
+ 882 Lesotho                  Africa     1977    52.2    1251524      745.
+ 883 Lesotho                  Africa     1982    55.1    1411807      797.
+ 884 Lesotho                  Africa     1987    57.2    1599200      774.
+ 885 Lesotho                  Africa     1992    59.7    1803195      977.
+ 886 Lesotho                  Africa     1997    55.6    1982823     1186.
+ 887 Lesotho                  Africa     2002    44.6    2046772     1275.
+ 888 Lesotho                  Africa     2007    42.6    2012649     1569.
+ 889 Liberia                  Africa     1952    38.5     863308      576.
+ 890 Liberia                  Africa     1957    39.5     975950      621.
+ 891 Liberia                  Africa     1962    40.5    1112796      634.
+ 892 Liberia                  Africa     1967    41.5    1279406      714.
+ 893 Liberia                  Africa     1972    42.6    1482628      803.
+ 894 Liberia                  Africa     1977    43.8    1703617      640.
+ 895 Liberia                  Africa     1982    44.9    1956875      572.
+ 896 Liberia                  Africa     1987    46.0    2269414      506.
+ 897 Liberia                  Africa     1992    40.8    1912974      637.
+ 898 Liberia                  Africa     1997    42.2    2200725      609.
+ 899 Liberia                  Africa     2002    43.8    2814651      531.
+ 900 Liberia                  Africa     2007    45.7    3193942      415.
+ 901 Libya                    Africa     1952    42.7    1019729     2388.
+ 902 Libya                    Africa     1957    45.3    1201578     3448.
+ 903 Libya                    Africa     1962    47.8    1441863     6757.
+ 904 Libya                    Africa     1967    50.2    1759224    18773.
+ 905 Libya                    Africa     1972    52.8    2183877    21011.
+ 906 Libya                    Africa     1977    57.4    2721783    21951.
+ 907 Libya                    Africa     1982    62.2    3344074    17364.
+ 908 Libya                    Africa     1987    66.2    3799845    11771.
+ 909 Libya                    Africa     1992    68.8    4364501     9640.
+ 910 Libya                    Africa     1997    71.6    4759670     9467.
+ 911 Libya                    Africa     2002    72.7    5368585     9535.
+ 912 Libya                    Africa     2007    74.0    6036914    12057.
+ 913 Madagascar               Africa     1952    36.7    4762912     1443.
+ 914 Madagascar               Africa     1957    38.9    5181679     1589.
+ 915 Madagascar               Africa     1962    40.8    5703324     1643.
+ 916 Madagascar               Africa     1967    42.9    6334556     1634.
+ 917 Madagascar               Africa     1972    44.9    7082430     1749.
+ 918 Madagascar               Africa     1977    46.9    8007166     1544.
+ 919 Madagascar               Africa     1982    49.0    9171477     1303.
+ 920 Madagascar               Africa     1987    49.4   10568642     1155.
+ 921 Madagascar               Africa     1992    52.2   12210395     1041.
+ 922 Madagascar               Africa     1997    55.0   14165114      986.
+ 923 Madagascar               Africa     2002    57.3   16473477      895.
+ 924 Madagascar               Africa     2007    59.4   19167654     1045.
+ 925 Malawi                   Africa     1952    36.3    2917802      369.
+ 926 Malawi                   Africa     1957    37.2    3221238      416.
+ 927 Malawi                   Africa     1962    38.4    3628608      428.
+ 928 Malawi                   Africa     1967    39.5    4147252      496.
+ 929 Malawi                   Africa     1972    41.8    4730997      585.
+ 930 Malawi                   Africa     1977    43.8    5637246      663.
+ 931 Malawi                   Africa     1982    45.6    6502825      633.
+ 932 Malawi                   Africa     1987    47.5    7824747      636.
+ 933 Malawi                   Africa     1992    49.4   10014249      563.
+ 934 Malawi                   Africa     1997    47.5   10419991      692.
+ 935 Malawi                   Africa     2002    45.0   11824495      665.
+ 936 Malawi                   Africa     2007    48.3   13327079      759.
+ 937 Malaysia                 Asia       1952    48.5    6748378     1831.
+ 938 Malaysia                 Asia       1957    52.1    7739235     1810.
+ 939 Malaysia                 Asia       1962    55.7    8906385     2037.
+ 940 Malaysia                 Asia       1967    59.4   10154878     2278.
+ 941 Malaysia                 Asia       1972    63.0   11441462     2849.
+ 942 Malaysia                 Asia       1977    65.3   12845381     3828.
+ 943 Malaysia                 Asia       1982    68     14441916     4920.
+ 944 Malaysia                 Asia       1987    69.5   16331785     5250.
+ 945 Malaysia                 Asia       1992    70.7   18319502     7278.
+ 946 Malaysia                 Asia       1997    71.9   20476091    10133.
+ 947 Malaysia                 Asia       2002    73.0   22662365    10207.
+ 948 Malaysia                 Asia       2007    74.2   24821286    12452.
+ 949 Mali                     Africa     1952    33.7    3838168      452.
+ 950 Mali                     Africa     1957    35.3    4241884      490.
+ 951 Mali                     Africa     1962    36.9    4690372      496.
+ 952 Mali                     Africa     1967    38.5    5212416      545.
+ 953 Mali                     Africa     1972    40.0    5828158      581.
+ 954 Mali                     Africa     1977    41.7    6491649      686.
+ 955 Mali                     Africa     1982    43.9    6998256      618.
+ 956 Mali                     Africa     1987    46.4    7634008      684.
+ 957 Mali                     Africa     1992    48.4    8416215      739.
+ 958 Mali                     Africa     1997    49.9    9384984      790.
+ 959 Mali                     Africa     2002    51.8   10580176      951.
+ 960 Mali                     Africa     2007    54.5   12031795     1043.
+ 961 Mauritania               Africa     1952    40.5    1022556      743.
+ 962 Mauritania               Africa     1957    42.3    1076852      846.
+ 963 Mauritania               Africa     1962    44.2    1146757     1056.
+ 964 Mauritania               Africa     1967    46.3    1230542     1421.
+ 965 Mauritania               Africa     1972    48.4    1332786     1587.
+ 966 Mauritania               Africa     1977    50.9    1456688     1497.
+ 967 Mauritania               Africa     1982    53.6    1622136     1481.
+ 968 Mauritania               Africa     1987    56.1    1841240     1422.
+ 969 Mauritania               Africa     1992    58.3    2119465     1361.
+ 970 Mauritania               Africa     1997    60.4    2444741     1483.
+ 971 Mauritania               Africa     2002    62.2    2828858     1579.
+ 972 Mauritania               Africa     2007    64.2    3270065     1803.
+ 973 Mauritius                Africa     1952    51.0     516556     1968.
+ 974 Mauritius                Africa     1957    58.1     609816     2034.
+ 975 Mauritius                Africa     1962    60.2     701016     2529.
+ 976 Mauritius                Africa     1967    61.6     789309     2475.
+ 977 Mauritius                Africa     1972    62.9     851334     2575.
+ 978 Mauritius                Africa     1977    64.9     913025     3711.
+ 979 Mauritius                Africa     1982    66.7     992040     3688.
+ 980 Mauritius                Africa     1987    68.7    1042663     4784.
+ 981 Mauritius                Africa     1992    69.7    1096202     6058.
+ 982 Mauritius                Africa     1997    70.7    1149818     7426.
+ 983 Mauritius                Africa     2002    72.0    1200206     9022.
+ 984 Mauritius                Africa     2007    72.8    1250882    10957.
+ 985 Mexico                   Americas   1952    50.8   30144317     3478.
+ 986 Mexico                   Americas   1957    55.2   35015548     4132.
+ 987 Mexico                   Americas   1962    58.3   41121485     4582.
+ 988 Mexico                   Americas   1967    60.1   47995559     5755.
+ 989 Mexico                   Americas   1972    62.4   55984294     6809.
+ 990 Mexico                   Americas   1977    65.0   63759976     7675.
+ 991 Mexico                   Americas   1982    67.4   71640904     9611.
+ 992 Mexico                   Americas   1987    69.5   80122492     8688.
+ 993 Mexico                   Americas   1992    71.5   88111030     9472.
+ 994 Mexico                   Americas   1997    73.7   95895146     9767.
+ 995 Mexico                   Americas   2002    74.9  102479927    10742.
+ 996 Mexico                   Americas   2007    76.2  108700891    11978.
+ 997 Mongolia                 Asia       1952    42.2     800663      787.
+ 998 Mongolia                 Asia       1957    45.2     882134      913.
+ 999 Mongolia                 Asia       1962    48.3    1010280     1056.
+1000 Mongolia                 Asia       1967    51.3    1149500     1226.
+1001 Mongolia                 Asia       1972    53.8    1320500     1422.
+1002 Mongolia                 Asia       1977    55.5    1528000     1648.
+1003 Mongolia                 Asia       1982    57.5    1756032     2001.
+1004 Mongolia                 Asia       1987    60.2    2015133     2338.
+1005 Mongolia                 Asia       1992    61.3    2312802     1785.
+1006 Mongolia                 Asia       1997    63.6    2494803     1902.
+1007 Mongolia                 Asia       2002    65.0    2674234     2141.
+1008 Mongolia                 Asia       2007    66.8    2874127     3096.
+1009 Montenegro               Europe     1952    59.2     413834     2648.
+1010 Montenegro               Europe     1957    61.4     442829     3682.
+1011 Montenegro               Europe     1962    63.7     474528     4650.
+1012 Montenegro               Europe     1967    67.2     501035     5908.
+1013 Montenegro               Europe     1972    70.6     527678     7778.
+1014 Montenegro               Europe     1977    73.1     560073     9596.
+1015 Montenegro               Europe     1982    74.1     562548    11223.
+1016 Montenegro               Europe     1987    74.9     569473    11733.
+1017 Montenegro               Europe     1992    75.4     621621     7003.
+1018 Montenegro               Europe     1997    75.4     692651     6466.
+1019 Montenegro               Europe     2002    74.0     720230     6557.
+1020 Montenegro               Europe     2007    74.5     684736     9254.
+1021 Morocco                  Africa     1952    42.9    9939217     1688.
+1022 Morocco                  Africa     1957    45.4   11406350     1642.
+1023 Morocco                  Africa     1962    47.9   13056604     1566.
+1024 Morocco                  Africa     1967    50.3   14770296     1711.
+1025 Morocco                  Africa     1972    52.9   16660670     1930.
+1026 Morocco                  Africa     1977    55.7   18396941     2371.
+1027 Morocco                  Africa     1982    59.6   20198730     2703.
+1028 Morocco                  Africa     1987    62.7   22987397     2755.
+1029 Morocco                  Africa     1992    65.4   25798239     2948.
+1030 Morocco                  Africa     1997    67.7   28529501     2982.
+1031 Morocco                  Africa     2002    69.6   31167783     3258.
+1032 Morocco                  Africa     2007    71.2   33757175     3820.
+1033 Mozambique               Africa     1952    31.3    6446316      469.
+1034 Mozambique               Africa     1957    33.8    7038035      496.
+1035 Mozambique               Africa     1962    36.2    7788944      557.
+1036 Mozambique               Africa     1967    38.1    8680909      567.
+1037 Mozambique               Africa     1972    40.3    9809596      725.
+1038 Mozambique               Africa     1977    42.5   11127868      502.
+1039 Mozambique               Africa     1982    42.8   12587223      462.
+1040 Mozambique               Africa     1987    42.9   12891952      390.
+1041 Mozambique               Africa     1992    44.3   13160731      411.
+1042 Mozambique               Africa     1997    46.3   16603334      472.
+1043 Mozambique               Africa     2002    44.0   18473780      634.
+1044 Mozambique               Africa     2007    42.1   19951656      824.
+1045 Myanmar                  Asia       1952    36.3   20092996      331 
+1046 Myanmar                  Asia       1957    41.9   21731844      350 
+1047 Myanmar                  Asia       1962    45.1   23634436      388 
+1048 Myanmar                  Asia       1967    49.4   25870271      349 
+1049 Myanmar                  Asia       1972    53.1   28466390      357 
+1050 Myanmar                  Asia       1977    56.1   31528087      371 
+1051 Myanmar                  Asia       1982    58.1   34680442      424 
+1052 Myanmar                  Asia       1987    58.3   38028578      385 
+1053 Myanmar                  Asia       1992    59.3   40546538      347 
+1054 Myanmar                  Asia       1997    60.3   43247867      415 
+1055 Myanmar                  Asia       2002    59.9   45598081      611 
+1056 Myanmar                  Asia       2007    62.1   47761980      944 
+1057 Namibia                  Africa     1952    41.7     485831     2424.
+1058 Namibia                  Africa     1957    45.2     548080     2621.
+1059 Namibia                  Africa     1962    48.4     621392     3173.
+1060 Namibia                  Africa     1967    51.2     706640     3794.
+1061 Namibia                  Africa     1972    53.9     821782     3746.
+1062 Namibia                  Africa     1977    56.4     977026     3876.
+1063 Namibia                  Africa     1982    59.0    1099010     4191.
+1064 Namibia                  Africa     1987    60.8    1278184     3694.
+1065 Namibia                  Africa     1992    62.0    1554253     3805.
+1066 Namibia                  Africa     1997    58.9    1774766     3900.
+1067 Namibia                  Africa     2002    51.5    1972153     4072.
+1068 Namibia                  Africa     2007    52.9    2055080     4811.
+1069 Nepal                    Asia       1952    36.2    9182536      546.
+1070 Nepal                    Asia       1957    37.7    9682338      598.
+1071 Nepal                    Asia       1962    39.4   10332057      652.
+1072 Nepal                    Asia       1967    41.5   11261690      676.
+1073 Nepal                    Asia       1972    44.0   12412593      675.
+1074 Nepal                    Asia       1977    46.7   13933198      694.
+1075 Nepal                    Asia       1982    49.6   15796314      718.
+1076 Nepal                    Asia       1987    52.5   17917180      776.
+1077 Nepal                    Asia       1992    55.7   20326209      898.
+1078 Nepal                    Asia       1997    59.4   23001113     1011.
+1079 Nepal                    Asia       2002    61.3   25873917     1057.
+1080 Nepal                    Asia       2007    63.8   28901790     1091.
+1081 Netherlands              Europe     1952    72.1   10381988     8942.
+1082 Netherlands              Europe     1957    73.0   11026383    11276.
+1083 Netherlands              Europe     1962    73.2   11805689    12791.
+1084 Netherlands              Europe     1967    73.8   12596822    15363.
+1085 Netherlands              Europe     1972    73.8   13329874    18795.
+1086 Netherlands              Europe     1977    75.2   13852989    21209.
+1087 Netherlands              Europe     1982    76.0   14310401    21399.
+1088 Netherlands              Europe     1987    76.8   14665278    23651.
+1089 Netherlands              Europe     1992    77.4   15174244    26791.
+1090 Netherlands              Europe     1997    78.0   15604464    30246.
+1091 Netherlands              Europe     2002    78.5   16122830    33725.
+1092 Netherlands              Europe     2007    79.8   16570613    36798.
+1093 New Zealand              Oceania    1952    69.4    1994794    10557.
+1094 New Zealand              Oceania    1957    70.3    2229407    12247.
+1095 New Zealand              Oceania    1962    71.2    2488550    13176.
+1096 New Zealand              Oceania    1967    71.5    2728150    14464.
+1097 New Zealand              Oceania    1972    71.9    2929100    16046.
+1098 New Zealand              Oceania    1977    72.2    3164900    16234.
+1099 New Zealand              Oceania    1982    73.8    3210650    17632.
+1100 New Zealand              Oceania    1987    74.3    3317166    19007.
+1101 New Zealand              Oceania    1992    76.3    3437674    18363.
+1102 New Zealand              Oceania    1997    77.6    3676187    21050.
+1103 New Zealand              Oceania    2002    79.1    3908037    23190.
+1104 New Zealand              Oceania    2007    80.2    4115771    25185.
+1105 Nicaragua                Americas   1952    42.3    1165790     3112.
+1106 Nicaragua                Americas   1957    45.4    1358828     3457.
+1107 Nicaragua                Americas   1962    48.6    1590597     3634.
+1108 Nicaragua                Americas   1967    51.9    1865490     4643.
+1109 Nicaragua                Americas   1972    55.2    2182908     4689.
+1110 Nicaragua                Americas   1977    57.5    2554598     5486.
+1111 Nicaragua                Americas   1982    59.3    2979423     3470.
+1112 Nicaragua                Americas   1987    62.0    3344353     2956.
+1113 Nicaragua                Americas   1992    65.8    4017939     2170.
+1114 Nicaragua                Americas   1997    68.4    4609572     2253.
+1115 Nicaragua                Americas   2002    70.8    5146848     2475.
+1116 Nicaragua                Americas   2007    72.9    5675356     2749.
+1117 Niger                    Africa     1952    37.4    3379468      762.
+1118 Niger                    Africa     1957    38.6    3692184      836.
+1119 Niger                    Africa     1962    39.5    4076008      998.
+1120 Niger                    Africa     1967    40.1    4534062     1054.
+1121 Niger                    Africa     1972    40.5    5060262      954.
+1122 Niger                    Africa     1977    41.3    5682086      809.
+1123 Niger                    Africa     1982    42.6    6437188      910.
+1124 Niger                    Africa     1987    44.6    7332638      668.
+1125 Niger                    Africa     1992    47.4    8392818      581.
+1126 Niger                    Africa     1997    51.3    9666252      580.
+1127 Niger                    Africa     2002    54.5   11140655      601.
+1128 Niger                    Africa     2007    56.9   12894865      620.
+1129 Nigeria                  Africa     1952    36.3   33119096     1077.
+1130 Nigeria                  Africa     1957    37.8   37173340     1101.
+1131 Nigeria                  Africa     1962    39.4   41871351     1151.
+1132 Nigeria                  Africa     1967    41.0   47287752     1015.
+1133 Nigeria                  Africa     1972    42.8   53740085     1698.
+1134 Nigeria                  Africa     1977    44.5   62209173     1982.
+1135 Nigeria                  Africa     1982    45.8   73039376     1577.
+1136 Nigeria                  Africa     1987    46.9   81551520     1385.
+1137 Nigeria                  Africa     1992    47.5   93364244     1620.
+1138 Nigeria                  Africa     1997    47.5  106207839     1625.
+1139 Nigeria                  Africa     2002    46.6  119901274     1615.
+1140 Nigeria                  Africa     2007    46.9  135031164     2014.
+1141 Norway                   Europe     1952    72.7    3327728    10095.
+1142 Norway                   Europe     1957    73.4    3491938    11654.
+1143 Norway                   Europe     1962    73.5    3638919    13450.
+1144 Norway                   Europe     1967    74.1    3786019    16362.
+1145 Norway                   Europe     1972    74.3    3933004    18965.
+1146 Norway                   Europe     1977    75.4    4043205    23311.
+1147 Norway                   Europe     1982    76.0    4114787    26299.
+1148 Norway                   Europe     1987    75.9    4186147    31541.
+1149 Norway                   Europe     1992    77.3    4286357    33966.
+1150 Norway                   Europe     1997    78.3    4405672    41283.
+1151 Norway                   Europe     2002    79.0    4535591    44684.
+1152 Norway                   Europe     2007    80.2    4627926    49357.
+1153 Oman                     Asia       1952    37.6     507833     1828.
+1154 Oman                     Asia       1957    40.1     561977     2243.
+1155 Oman                     Asia       1962    43.2     628164     2925.
+1156 Oman                     Asia       1967    47.0     714775     4721.
+1157 Oman                     Asia       1972    52.1     829050    10618.
+1158 Oman                     Asia       1977    57.4    1004533    11848.
+1159 Oman                     Asia       1982    62.7    1301048    12955.
+1160 Oman                     Asia       1987    67.7    1593882    18115.
+1161 Oman                     Asia       1992    71.2    1915208    18617.
+1162 Oman                     Asia       1997    72.5    2283635    19702.
+1163 Oman                     Asia       2002    74.2    2713462    19775.
+1164 Oman                     Asia       2007    75.6    3204897    22316.
+1165 Pakistan                 Asia       1952    43.4   41346560      685.
+1166 Pakistan                 Asia       1957    45.6   46679944      747.
+1167 Pakistan                 Asia       1962    47.7   53100671      803.
+1168 Pakistan                 Asia       1967    49.8   60641899      942.
+1169 Pakistan                 Asia       1972    51.9   69325921     1050.
+1170 Pakistan                 Asia       1977    54.0   78152686     1176.
+1171 Pakistan                 Asia       1982    56.2   91462088     1443.
+1172 Pakistan                 Asia       1987    58.2  105186881     1705.
+1173 Pakistan                 Asia       1992    60.8  120065004     1972.
+1174 Pakistan                 Asia       1997    61.8  135564834     2049.
+1175 Pakistan                 Asia       2002    63.6  153403524     2093.
+1176 Pakistan                 Asia       2007    65.5  169270617     2606.
+1177 Panama                   Americas   1952    55.2     940080     2480.
+1178 Panama                   Americas   1957    59.2    1063506     2962.
+1179 Panama                   Americas   1962    61.8    1215725     3537.
+1180 Panama                   Americas   1967    64.1    1405486     4421.
+1181 Panama                   Americas   1972    66.2    1616384     5364.
+1182 Panama                   Americas   1977    68.7    1839782     5352.
+1183 Panama                   Americas   1982    70.5    2036305     7010.
+1184 Panama                   Americas   1987    71.5    2253639     7035.
+1185 Panama                   Americas   1992    72.5    2484997     6619.
+1186 Panama                   Americas   1997    73.7    2734531     7114.
+1187 Panama                   Americas   2002    74.7    2990875     7356.
+1188 Panama                   Americas   2007    75.5    3242173     9809.
+1189 Paraguay                 Americas   1952    62.6    1555876     1952.
+1190 Paraguay                 Americas   1957    63.2    1770902     2046.
+1191 Paraguay                 Americas   1962    64.4    2009813     2148.
+1192 Paraguay                 Americas   1967    65.0    2287985     2299.
+1193 Paraguay                 Americas   1972    65.8    2614104     2523.
+1194 Paraguay                 Americas   1977    66.4    2984494     3248.
+1195 Paraguay                 Americas   1982    66.9    3366439     4259.
+1196 Paraguay                 Americas   1987    67.4    3886512     3999.
+1197 Paraguay                 Americas   1992    68.2    4483945     4196.
+1198 Paraguay                 Americas   1997    69.4    5154123     4247.
+1199 Paraguay                 Americas   2002    70.8    5884491     3784.
+1200 Paraguay                 Americas   2007    71.8    6667147     4173.
+1201 Peru                     Americas   1952    43.9    8025700     3759.
+1202 Peru                     Americas   1957    46.3    9146100     4245.
+1203 Peru                     Americas   1962    49.1   10516500     4957.
+1204 Peru                     Americas   1967    51.4   12132200     5788.
+1205 Peru                     Americas   1972    55.4   13954700     5938.
+1206 Peru                     Americas   1977    58.4   15990099     6281.
+1207 Peru                     Americas   1982    61.4   18125129     6435.
+1208 Peru                     Americas   1987    64.1   20195924     6361.
+1209 Peru                     Americas   1992    66.5   22430449     4446.
+1210 Peru                     Americas   1997    68.4   24748122     5838.
+1211 Peru                     Americas   2002    69.9   26769436     5909.
+1212 Peru                     Americas   2007    71.4   28674757     7409.
+1213 Philippines              Asia       1952    47.8   22438691     1273.
+1214 Philippines              Asia       1957    51.3   26072194     1548.
+1215 Philippines              Asia       1962    54.8   30325264     1650.
+1216 Philippines              Asia       1967    56.4   35356600     1814.
+1217 Philippines              Asia       1972    58.1   40850141     1989.
+1218 Philippines              Asia       1977    60.1   46850962     2373.
+1219 Philippines              Asia       1982    62.1   53456774     2603.
+1220 Philippines              Asia       1987    64.2   60017788     2190.
+1221 Philippines              Asia       1992    66.5   67185766     2279.
+1222 Philippines              Asia       1997    68.6   75012988     2537.
+1223 Philippines              Asia       2002    70.3   82995088     2651.
+1224 Philippines              Asia       2007    71.7   91077287     3190.
+1225 Poland                   Europe     1952    61.3   25730551     4029.
+1226 Poland                   Europe     1957    65.8   28235346     4734.
+1227 Poland                   Europe     1962    67.6   30329617     5339.
+1228 Poland                   Europe     1967    69.6   31785378     6557.
+1229 Poland                   Europe     1972    70.8   33039545     8007.
+1230 Poland                   Europe     1977    70.7   34621254     9508.
+1231 Poland                   Europe     1982    71.3   36227381     8452.
+1232 Poland                   Europe     1987    71.0   37740710     9082.
+1233 Poland                   Europe     1992    71.0   38370697     7739.
+1234 Poland                   Europe     1997    72.8   38654957    10160.
+1235 Poland                   Europe     2002    74.7   38625976    12002.
+1236 Poland                   Europe     2007    75.6   38518241    15390.
+1237 Portugal                 Europe     1952    59.8    8526050     3068.
+1238 Portugal                 Europe     1957    61.5    8817650     3775.
+1239 Portugal                 Europe     1962    64.4    9019800     4728.
+1240 Portugal                 Europe     1967    66.6    9103000     6362.
+1241 Portugal                 Europe     1972    69.3    8970450     9022.
+1242 Portugal                 Europe     1977    70.4    9662600    10172.
+1243 Portugal                 Europe     1982    72.8    9859650    11754.
+1244 Portugal                 Europe     1987    74.1    9915289    13039.
+1245 Portugal                 Europe     1992    74.9    9927680    16207.
+1246 Portugal                 Europe     1997    76.0   10156415    17641.
+1247 Portugal                 Europe     2002    77.3   10433867    19971.
+1248 Portugal                 Europe     2007    78.1   10642836    20510.
+1249 Puerto Rico              Americas   1952    64.3    2227000     3082.
+1250 Puerto Rico              Americas   1957    68.5    2260000     3907.
+1251 Puerto Rico              Americas   1962    69.6    2448046     5108.
+1252 Puerto Rico              Americas   1967    71.1    2648961     6929.
+1253 Puerto Rico              Americas   1972    72.2    2847132     9123.
+1254 Puerto Rico              Americas   1977    73.4    3080828     9771.
+1255 Puerto Rico              Americas   1982    73.8    3279001    10331.
+1256 Puerto Rico              Americas   1987    74.6    3444468    12281.
+1257 Puerto Rico              Americas   1992    73.9    3585176    14642.
+1258 Puerto Rico              Americas   1997    74.9    3759430    16999.
+1259 Puerto Rico              Americas   2002    77.8    3859606    18856.
+1260 Puerto Rico              Americas   2007    78.7    3942491    19329.
+1261 Reunion                  Africa     1952    52.7     257700     2719.
+1262 Reunion                  Africa     1957    55.1     308700     2769.
+1263 Reunion                  Africa     1962    57.7     358900     3174.
+1264 Reunion                  Africa     1967    60.5     414024     4021.
+1265 Reunion                  Africa     1972    64.3     461633     5048.
+1266 Reunion                  Africa     1977    67.1     492095     4320.
+1267 Reunion                  Africa     1982    69.9     517810     5267.
+1268 Reunion                  Africa     1987    71.9     562035     5303.
+1269 Reunion                  Africa     1992    73.6     622191     6101.
+1270 Reunion                  Africa     1997    74.8     684810     6072.
+1271 Reunion                  Africa     2002    75.7     743981     6316.
+1272 Reunion                  Africa     2007    76.4     798094     7670.
+1273 Romania                  Europe     1952    61.0   16630000     3145.
+1274 Romania                  Europe     1957    64.1   17829327     3943.
+1275 Romania                  Europe     1962    66.8   18680721     4735.
+1276 Romania                  Europe     1967    66.8   19284814     6471.
+1277 Romania                  Europe     1972    69.2   20662648     8011.
+1278 Romania                  Europe     1977    69.5   21658597     9356.
+1279 Romania                  Europe     1982    69.7   22356726     9605.
+1280 Romania                  Europe     1987    69.5   22686371     9696.
+1281 Romania                  Europe     1992    69.4   22797027     6598.
+1282 Romania                  Europe     1997    69.7   22562458     7347.
+1283 Romania                  Europe     2002    71.3   22404337     7885.
+1284 Romania                  Europe     2007    72.5   22276056    10808.
+1285 Rwanda                   Africa     1952    40      2534927      493.
+1286 Rwanda                   Africa     1957    41.5    2822082      540.
+1287 Rwanda                   Africa     1962    43      3051242      597.
+1288 Rwanda                   Africa     1967    44.1    3451079      511.
+1289 Rwanda                   Africa     1972    44.6    3992121      591.
+1290 Rwanda                   Africa     1977    45      4657072      670.
+1291 Rwanda                   Africa     1982    46.2    5507565      882.
+1292 Rwanda                   Africa     1987    44.0    6349365      848.
+1293 Rwanda                   Africa     1992    23.6    7290203      737.
+1294 Rwanda                   Africa     1997    36.1    7212583      590.
+1295 Rwanda                   Africa     2002    43.4    7852401      786.
+1296 Rwanda                   Africa     2007    46.2    8860588      863.
+1297 Sao Tome and Principe    Africa     1952    46.5      60011      880.
+1298 Sao Tome and Principe    Africa     1957    48.9      61325      861.
+1299 Sao Tome and Principe    Africa     1962    51.9      65345     1072.
+1300 Sao Tome and Principe    Africa     1967    54.4      70787     1385.
+1301 Sao Tome and Principe    Africa     1972    56.5      76595     1533.
+1302 Sao Tome and Principe    Africa     1977    58.6      86796     1738.
+1303 Sao Tome and Principe    Africa     1982    60.4      98593     1890.
+1304 Sao Tome and Principe    Africa     1987    61.7     110812     1517.
+1305 Sao Tome and Principe    Africa     1992    62.7     125911     1429.
+1306 Sao Tome and Principe    Africa     1997    63.3     145608     1339.
+1307 Sao Tome and Principe    Africa     2002    64.3     170372     1353.
+1308 Sao Tome and Principe    Africa     2007    65.5     199579     1598.
+1309 Saudi Arabia             Asia       1952    39.9    4005677     6460.
+1310 Saudi Arabia             Asia       1957    42.9    4419650     8158.
+1311 Saudi Arabia             Asia       1962    45.9    4943029    11626.
+1312 Saudi Arabia             Asia       1967    49.9    5618198    16903.
+1313 Saudi Arabia             Asia       1972    53.9    6472756    24837.
+1314 Saudi Arabia             Asia       1977    58.7    8128505    34168.
+1315 Saudi Arabia             Asia       1982    63.0   11254672    33693.
+1316 Saudi Arabia             Asia       1987    66.3   14619745    21198.
+1317 Saudi Arabia             Asia       1992    68.8   16945857    24842.
+1318 Saudi Arabia             Asia       1997    70.5   21229759    20587.
+1319 Saudi Arabia             Asia       2002    71.6   24501530    19015.
+1320 Saudi Arabia             Asia       2007    72.8   27601038    21655.
+1321 Senegal                  Africa     1952    37.3    2755589     1450.
+1322 Senegal                  Africa     1957    39.3    3054547     1568.
+1323 Senegal                  Africa     1962    41.5    3430243     1655.
+1324 Senegal                  Africa     1967    43.6    3965841     1612.
+1325 Senegal                  Africa     1972    45.8    4588696     1598.
+1326 Senegal                  Africa     1977    48.9    5260855     1562.
+1327 Senegal                  Africa     1982    52.4    6147783     1518.
+1328 Senegal                  Africa     1987    55.8    7171347     1442.
+1329 Senegal                  Africa     1992    58.2    8307920     1368.
+1330 Senegal                  Africa     1997    60.2    9535314     1392.
+1331 Senegal                  Africa     2002    61.6   10870037     1520.
+1332 Senegal                  Africa     2007    63.1   12267493     1712.
+1333 Serbia                   Europe     1952    58.0    6860147     3581.
+1334 Serbia                   Europe     1957    61.7    7271135     4981.
+1335 Serbia                   Europe     1962    64.5    7616060     6290.
+1336 Serbia                   Europe     1967    66.9    7971222     7992.
+1337 Serbia                   Europe     1972    68.7    8313288    10522.
+1338 Serbia                   Europe     1977    70.3    8686367    12981.
+1339 Serbia                   Europe     1982    70.2    9032824    15181.
+1340 Serbia                   Europe     1987    71.2    9230783    15871.
+1341 Serbia                   Europe     1992    71.7    9826397     9325.
+1342 Serbia                   Europe     1997    72.2   10336594     7914.
+1343 Serbia                   Europe     2002    73.2   10111559     7236.
+1344 Serbia                   Europe     2007    74.0   10150265     9787.
+1345 Sierra Leone             Africa     1952    30.3    2143249      880.
+1346 Sierra Leone             Africa     1957    31.6    2295678     1004.
+1347 Sierra Leone             Africa     1962    32.8    2467895     1117.
+1348 Sierra Leone             Africa     1967    34.1    2662190     1206.
+1349 Sierra Leone             Africa     1972    35.4    2879013     1354.
+1350 Sierra Leone             Africa     1977    36.8    3140897     1348.
+1351 Sierra Leone             Africa     1982    38.4    3464522     1465.
+1352 Sierra Leone             Africa     1987    40.0    3868905     1294.
+1353 Sierra Leone             Africa     1992    38.3    4260884     1069.
+1354 Sierra Leone             Africa     1997    39.9    4578212      575.
+1355 Sierra Leone             Africa     2002    41.0    5359092      699.
+1356 Sierra Leone             Africa     2007    42.6    6144562      863.
+1357 Singapore                Asia       1952    60.4    1127000     2315.
+1358 Singapore                Asia       1957    63.2    1445929     2843.
+1359 Singapore                Asia       1962    65.8    1750200     3675.
+1360 Singapore                Asia       1967    67.9    1977600     4977.
+1361 Singapore                Asia       1972    69.5    2152400     8598.
+1362 Singapore                Asia       1977    70.8    2325300    11210.
+1363 Singapore                Asia       1982    71.8    2651869    15169.
+1364 Singapore                Asia       1987    73.6    2794552    18862.
+1365 Singapore                Asia       1992    75.8    3235865    24770.
+1366 Singapore                Asia       1997    77.2    3802309    33519.
+1367 Singapore                Asia       2002    78.8    4197776    36023.
+1368 Singapore                Asia       2007    80.0    4553009    47143.
+1369 Slovak Republic          Europe     1952    64.4    3558137     5075.
+1370 Slovak Republic          Europe     1957    67.4    3844277     6093.
+1371 Slovak Republic          Europe     1962    70.3    4237384     7481.
+1372 Slovak Republic          Europe     1967    71.0    4442238     8413.
+1373 Slovak Republic          Europe     1972    70.4    4593433     9674.
+1374 Slovak Republic          Europe     1977    70.4    4827803    10923.
+1375 Slovak Republic          Europe     1982    70.8    5048043    11349.
+1376 Slovak Republic          Europe     1987    71.1    5199318    12037.
+1377 Slovak Republic          Europe     1992    71.4    5302888     9498.
+1378 Slovak Republic          Europe     1997    72.7    5383010    12126.
+1379 Slovak Republic          Europe     2002    73.8    5410052    13639.
+1380 Slovak Republic          Europe     2007    74.7    5447502    18678.
+1381 Slovenia                 Europe     1952    65.6    1489518     4215.
+1382 Slovenia                 Europe     1957    67.8    1533070     5862.
+1383 Slovenia                 Europe     1962    69.2    1582962     7402.
+1384 Slovenia                 Europe     1967    69.2    1646912     9405.
+1385 Slovenia                 Europe     1972    69.8    1694510    12383.
+1386 Slovenia                 Europe     1977    71.0    1746919    15277.
+1387 Slovenia                 Europe     1982    71.1    1861252    17867.
+1388 Slovenia                 Europe     1987    72.2    1945870    18679.
+1389 Slovenia                 Europe     1992    73.6    1999210    14215.
+1390 Slovenia                 Europe     1997    75.1    2011612    17161.
+1391 Slovenia                 Europe     2002    76.7    2011497    20660.
+1392 Slovenia                 Europe     2007    77.9    2009245    25768.
+1393 Somalia                  Africa     1952    33.0    2526994     1136.
+1394 Somalia                  Africa     1957    35.0    2780415     1258.
+1395 Somalia                  Africa     1962    37.0    3080153     1369.
+1396 Somalia                  Africa     1967    39.0    3428839     1285.
+1397 Somalia                  Africa     1972    41.0    3840161     1255.
+1398 Somalia                  Africa     1977    42.0    4353666     1451.
+1399 Somalia                  Africa     1982    43.0    5828892     1177.
+1400 Somalia                  Africa     1987    44.5    6921858     1093.
+1401 Somalia                  Africa     1992    39.7    6099799      927.
+1402 Somalia                  Africa     1997    43.8    6633514      931.
+1403 Somalia                  Africa     2002    45.9    7753310      882.
+1404 Somalia                  Africa     2007    48.2    9118773      926.
+1405 South Africa             Africa     1952    45.0   14264935     4725.
+1406 South Africa             Africa     1957    48.0   16151549     5487.
+1407 South Africa             Africa     1962    50.0   18356657     5769.
+1408 South Africa             Africa     1967    51.9   20997321     7114.
+1409 South Africa             Africa     1972    53.7   23935810     7766.
+1410 South Africa             Africa     1977    55.5   27129932     8029.
+1411 South Africa             Africa     1982    58.2   31140029     8568.
+1412 South Africa             Africa     1987    60.8   35933379     7826.
+1413 South Africa             Africa     1992    61.9   39964159     7225.
+1414 South Africa             Africa     1997    60.2   42835005     7479.
+1415 South Africa             Africa     2002    53.4   44433622     7711.
+1416 South Africa             Africa     2007    49.3   43997828     9270.
+1417 Spain                    Europe     1952    64.9   28549870     3834.
+1418 Spain                    Europe     1957    66.7   29841614     4565.
+1419 Spain                    Europe     1962    69.7   31158061     5694.
+1420 Spain                    Europe     1967    71.4   32850275     7994.
+1421 Spain                    Europe     1972    73.1   34513161    10639.
+1422 Spain                    Europe     1977    74.4   36439000    13237.
+1423 Spain                    Europe     1982    76.3   37983310    13926.
+1424 Spain                    Europe     1987    76.9   38880702    15765.
+1425 Spain                    Europe     1992    77.6   39549438    18603.
+1426 Spain                    Europe     1997    78.8   39855442    20445.
+1427 Spain                    Europe     2002    79.8   40152517    24835.
+1428 Spain                    Europe     2007    80.9   40448191    28821.
+1429 Sri Lanka                Asia       1952    57.6    7982342     1084.
+1430 Sri Lanka                Asia       1957    61.5    9128546     1073.
+1431 Sri Lanka                Asia       1962    62.2   10421936     1074.
+1432 Sri Lanka                Asia       1967    64.3   11737396     1136.
+1433 Sri Lanka                Asia       1972    65.0   13016733     1213.
+1434 Sri Lanka                Asia       1977    65.9   14116836     1349.
+1435 Sri Lanka                Asia       1982    68.8   15410151     1648.
+1436 Sri Lanka                Asia       1987    69.0   16495304     1877.
+1437 Sri Lanka                Asia       1992    70.4   17587060     2154.
+1438 Sri Lanka                Asia       1997    70.5   18698655     2664.
+1439 Sri Lanka                Asia       2002    70.8   19576783     3015.
+1440 Sri Lanka                Asia       2007    72.4   20378239     3970.
+1441 Sudan                    Africa     1952    38.6    8504667     1616.
+1442 Sudan                    Africa     1957    39.6    9753392     1770.
+1443 Sudan                    Africa     1962    40.9   11183227     1960.
+1444 Sudan                    Africa     1967    42.9   12716129     1688.
+1445 Sudan                    Africa     1972    45.1   14597019     1660.
+1446 Sudan                    Africa     1977    47.8   17104986     2203.
+1447 Sudan                    Africa     1982    50.3   20367053     1896.
+1448 Sudan                    Africa     1987    51.7   24725960     1508.
+1449 Sudan                    Africa     1992    53.6   28227588     1492.
+1450 Sudan                    Africa     1997    55.4   32160729     1632.
+1451 Sudan                    Africa     2002    56.4   37090298     1993.
+1452 Sudan                    Africa     2007    58.6   42292929     2602.
+1453 Swaziland                Africa     1952    41.4     290243     1148.
+1454 Swaziland                Africa     1957    43.4     326741     1245.
+1455 Swaziland                Africa     1962    45.0     370006     1856.
+1456 Swaziland                Africa     1967    46.6     420690     2613.
+1457 Swaziland                Africa     1972    49.6     480105     3365.
+1458 Swaziland                Africa     1977    52.5     551425     3781.
+1459 Swaziland                Africa     1982    55.6     649901     3895.
+1460 Swaziland                Africa     1987    57.7     779348     3985.
+1461 Swaziland                Africa     1992    58.5     962344     3553.
+1462 Swaziland                Africa     1997    54.3    1054486     3877.
+1463 Swaziland                Africa     2002    43.9    1130269     4128.
+1464 Swaziland                Africa     2007    39.6    1133066     4513.
+1465 Sweden                   Europe     1952    71.9    7124673     8528.
+1466 Sweden                   Europe     1957    72.5    7363802     9912.
+1467 Sweden                   Europe     1962    73.4    7561588    12329.
+1468 Sweden                   Europe     1967    74.2    7867931    15258.
+1469 Sweden                   Europe     1972    74.7    8122293    17832.
+1470 Sweden                   Europe     1977    75.4    8251648    18856.
+1471 Sweden                   Europe     1982    76.4    8325260    20667.
+1472 Sweden                   Europe     1987    77.2    8421403    23587.
+1473 Sweden                   Europe     1992    78.2    8718867    23880.
+1474 Sweden                   Europe     1997    79.4    8897619    25267.
+1475 Sweden                   Europe     2002    80.0    8954175    29342.
+1476 Sweden                   Europe     2007    80.9    9031088    33860.
+1477 Switzerland              Europe     1952    69.6    4815000    14734.
+1478 Switzerland              Europe     1957    70.6    5126000    17909.
+1479 Switzerland              Europe     1962    71.3    5666000    20431.
+1480 Switzerland              Europe     1967    72.8    6063000    22966.
+1481 Switzerland              Europe     1972    73.8    6401400    27195.
+1482 Switzerland              Europe     1977    75.4    6316424    26982.
+1483 Switzerland              Europe     1982    76.2    6468126    28398.
+1484 Switzerland              Europe     1987    77.4    6649942    30282.
+1485 Switzerland              Europe     1992    78.0    6995447    31872.
+1486 Switzerland              Europe     1997    79.4    7193761    32135.
+1487 Switzerland              Europe     2002    80.6    7361757    34481.
+1488 Switzerland              Europe     2007    81.7    7554661    37506.
+1489 Syria                    Asia       1952    45.9    3661549     1643.
+1490 Syria                    Asia       1957    48.3    4149908     2117.
+1491 Syria                    Asia       1962    50.3    4834621     2193.
+1492 Syria                    Asia       1967    53.7    5680812     1882.
+1493 Syria                    Asia       1972    57.3    6701172     2571.
+1494 Syria                    Asia       1977    61.2    7932503     3195.
+1495 Syria                    Asia       1982    64.6    9410494     3762.
+1496 Syria                    Asia       1987    67.0   11242847     3117.
+1497 Syria                    Asia       1992    69.2   13219062     3341.
+1498 Syria                    Asia       1997    71.5   15081016     4014.
+1499 Syria                    Asia       2002    73.1   17155814     4091.
+1500 Syria                    Asia       2007    74.1   19314747     4185.
+1501 Taiwan                   Asia       1952    58.5    8550362     1207.
+1502 Taiwan                   Asia       1957    62.4   10164215     1508.
+1503 Taiwan                   Asia       1962    65.2   11918938     1823.
+1504 Taiwan                   Asia       1967    67.5   13648692     2644.
+1505 Taiwan                   Asia       1972    69.4   15226039     4063.
+1506 Taiwan                   Asia       1977    70.6   16785196     5597.
+1507 Taiwan                   Asia       1982    72.2   18501390     7426.
+1508 Taiwan                   Asia       1987    73.4   19757799    11055.
+1509 Taiwan                   Asia       1992    74.3   20686918    15216.
+1510 Taiwan                   Asia       1997    75.2   21628605    20207.
+1511 Taiwan                   Asia       2002    77.0   22454239    23235.
+1512 Taiwan                   Asia       2007    78.4   23174294    28718.
+1513 Tanzania                 Africa     1952    41.2    8322925      717.
+1514 Tanzania                 Africa     1957    43.0    9452826      699.
+1515 Tanzania                 Africa     1962    44.2   10863958      722.
+1516 Tanzania                 Africa     1967    45.8   12607312      848.
+1517 Tanzania                 Africa     1972    47.6   14706593      916.
+1518 Tanzania                 Africa     1977    49.9   17129565      962.
+1519 Tanzania                 Africa     1982    50.6   19844382      874.
+1520 Tanzania                 Africa     1987    51.5   23040630      832.
+1521 Tanzania                 Africa     1992    50.4   26605473      826.
+1522 Tanzania                 Africa     1997    48.5   30686889      789.
+1523 Tanzania                 Africa     2002    49.7   34593779      899.
+1524 Tanzania                 Africa     2007    52.5   38139640     1107.
+1525 Thailand                 Asia       1952    50.8   21289402      758.
+1526 Thailand                 Asia       1957    53.6   25041917      794.
+1527 Thailand                 Asia       1962    56.1   29263397     1002.
+1528 Thailand                 Asia       1967    58.3   34024249     1295.
+1529 Thailand                 Asia       1972    60.4   39276153     1524.
+1530 Thailand                 Asia       1977    62.5   44148285     1961.
+1531 Thailand                 Asia       1982    64.6   48827160     2393.
+1532 Thailand                 Asia       1987    66.1   52910342     2983.
+1533 Thailand                 Asia       1992    67.3   56667095     4617.
+1534 Thailand                 Asia       1997    67.5   60216677     5853.
+1535 Thailand                 Asia       2002    68.6   62806748     5913.
+1536 Thailand                 Asia       2007    70.6   65068149     7458.
+1537 Togo                     Africa     1952    38.6    1219113      860.
+1538 Togo                     Africa     1957    41.2    1357445      926.
+1539 Togo                     Africa     1962    43.9    1528098     1068.
+1540 Togo                     Africa     1967    46.8    1735550     1478.
+1541 Togo                     Africa     1972    49.8    2056351     1650.
+1542 Togo                     Africa     1977    52.9    2308582     1533.
+1543 Togo                     Africa     1982    55.5    2644765     1345.
+1544 Togo                     Africa     1987    56.9    3154264     1202.
+1545 Togo                     Africa     1992    58.1    3747553     1034.
+1546 Togo                     Africa     1997    58.4    4320890      982.
+1547 Togo                     Africa     2002    57.6    4977378      886.
+1548 Togo                     Africa     2007    58.4    5701579      883.
+1549 Trinidad and Tobago      Americas   1952    59.1     662850     3023.
+1550 Trinidad and Tobago      Americas   1957    61.8     764900     4100.
+1551 Trinidad and Tobago      Americas   1962    64.9     887498     4998.
+1552 Trinidad and Tobago      Americas   1967    65.4     960155     5621.
+1553 Trinidad and Tobago      Americas   1972    65.9     975199     6620.
+1554 Trinidad and Tobago      Americas   1977    68.3    1039009     7900.
+1555 Trinidad and Tobago      Americas   1982    68.8    1116479     9120.
+1556 Trinidad and Tobago      Americas   1987    69.6    1191336     7389.
+1557 Trinidad and Tobago      Americas   1992    69.9    1183669     7371.
+1558 Trinidad and Tobago      Americas   1997    69.5    1138101     8793.
+1559 Trinidad and Tobago      Americas   2002    69.0    1101832    11461.
+1560 Trinidad and Tobago      Americas   2007    69.8    1056608    18009.
+1561 Tunisia                  Africa     1952    44.6    3647735     1468.
+1562 Tunisia                  Africa     1957    47.1    3950849     1395.
+1563 Tunisia                  Africa     1962    49.6    4286552     1660.
+1564 Tunisia                  Africa     1967    52.1    4786986     1932.
+1565 Tunisia                  Africa     1972    55.6    5303507     2753.
+1566 Tunisia                  Africa     1977    59.8    6005061     3121.
+1567 Tunisia                  Africa     1982    64.0    6734098     3560.
+1568 Tunisia                  Africa     1987    66.9    7724976     3810.
+1569 Tunisia                  Africa     1992    70.0    8523077     4333.
+1570 Tunisia                  Africa     1997    72.0    9231669     4877.
+1571 Tunisia                  Africa     2002    73.0    9770575     5723.
+1572 Tunisia                  Africa     2007    73.9   10276158     7093.
+1573 Turkey                   Europe     1952    43.6   22235677     1969.
+1574 Turkey                   Europe     1957    48.1   25670939     2219.
+1575 Turkey                   Europe     1962    52.1   29788695     2323.
+1576 Turkey                   Europe     1967    54.3   33411317     2826.
+1577 Turkey                   Europe     1972    57.0   37492953     3451.
+1578 Turkey                   Europe     1977    59.5   42404033     4269.
+1579 Turkey                   Europe     1982    61.0   47328791     4241.
+1580 Turkey                   Europe     1987    63.1   52881328     5089.
+1581 Turkey                   Europe     1992    66.1   58179144     5678.
+1582 Turkey                   Europe     1997    68.8   63047647     6601.
+1583 Turkey                   Europe     2002    70.8   67308928     6508.
+1584 Turkey                   Europe     2007    71.8   71158647     8458.
+1585 Uganda                   Africa     1952    40.0    5824797      735.
+1586 Uganda                   Africa     1957    42.6    6675501      774.
+1587 Uganda                   Africa     1962    45.3    7688797      767.
+1588 Uganda                   Africa     1967    48.1    8900294      909.
+1589 Uganda                   Africa     1972    51.0   10190285      951.
+1590 Uganda                   Africa     1977    50.4   11457758      844.
+1591 Uganda                   Africa     1982    49.8   12939400      682.
+1592 Uganda                   Africa     1987    51.5   15283050      618.
+1593 Uganda                   Africa     1992    48.8   18252190      644.
+1594 Uganda                   Africa     1997    44.6   21210254      817.
+1595 Uganda                   Africa     2002    47.8   24739869      928.
+1596 Uganda                   Africa     2007    51.5   29170398     1056.
+1597 United Kingdom           Europe     1952    69.2   50430000     9980.
+1598 United Kingdom           Europe     1957    70.4   51430000    11283.
+1599 United Kingdom           Europe     1962    70.8   53292000    12477.
+1600 United Kingdom           Europe     1967    71.4   54959000    14143.
+1601 United Kingdom           Europe     1972    72.0   56079000    15895.
+1602 United Kingdom           Europe     1977    72.8   56179000    17429.
+1603 United Kingdom           Europe     1982    74.0   56339704    18232.
+1604 United Kingdom           Europe     1987    75.0   56981620    21665.
+1605 United Kingdom           Europe     1992    76.4   57866349    22705.
+1606 United Kingdom           Europe     1997    77.2   58808266    26075.
+1607 United Kingdom           Europe     2002    78.5   59912431    29479.
+1608 United Kingdom           Europe     2007    79.4   60776238    33203.
+1609 United States            Americas   1952    68.4  157553000    13990.
+1610 United States            Americas   1957    69.5  171984000    14847.
+1611 United States            Americas   1962    70.2  186538000    16173.
+1612 United States            Americas   1967    70.8  198712000    19530.
+1613 United States            Americas   1972    71.3  209896000    21806.
+1614 United States            Americas   1977    73.4  220239000    24073.
+1615 United States            Americas   1982    74.6  232187835    25010.
+1616 United States            Americas   1987    75.0  242803533    29884.
+1617 United States            Americas   1992    76.1  256894189    32004.
+1618 United States            Americas   1997    76.8  272911760    35767.
+1619 United States            Americas   2002    77.3  287675526    39097.
+1620 United States            Americas   2007    78.2  301139947    42952.
+1621 Uruguay                  Americas   1952    66.1    2252965     5717.
+1622 Uruguay                  Americas   1957    67.0    2424959     6151.
+1623 Uruguay                  Americas   1962    68.3    2598466     5603.
+1624 Uruguay                  Americas   1967    68.5    2748579     5445.
+1625 Uruguay                  Americas   1972    68.7    2829526     5703.
+1626 Uruguay                  Americas   1977    69.5    2873520     6504.
+1627 Uruguay                  Americas   1982    70.8    2953997     6920.
+1628 Uruguay                  Americas   1987    71.9    3045153     7452.
+1629 Uruguay                  Americas   1992    72.8    3149262     8137.
+1630 Uruguay                  Americas   1997    74.2    3262838     9230.
+1631 Uruguay                  Americas   2002    75.3    3363085     7727.
+1632 Uruguay                  Americas   2007    76.4    3447496    10611.
+1633 Venezuela                Americas   1952    55.1    5439568     7690.
+1634 Venezuela                Americas   1957    57.9    6702668     9802.
+1635 Venezuela                Americas   1962    60.8    8143375     8423.
+1636 Venezuela                Americas   1967    63.5    9709552     9541.
+1637 Venezuela                Americas   1972    65.7   11515649    10505.
+1638 Venezuela                Americas   1977    67.5   13503563    13144.
+1639 Venezuela                Americas   1982    68.6   15620766    11152.
+1640 Venezuela                Americas   1987    70.2   17910182     9884.
+1641 Venezuela                Americas   1992    71.2   20265563    10734.
+1642 Venezuela                Americas   1997    72.1   22374398    10165.
+1643 Venezuela                Americas   2002    72.8   24287670     8605.
+1644 Venezuela                Americas   2007    73.7   26084662    11416.
+1645 Vietnam                  Asia       1952    40.4   26246839      605.
+1646 Vietnam                  Asia       1957    42.9   28998543      676.
+1647 Vietnam                  Asia       1962    45.4   33796140      772.
+1648 Vietnam                  Asia       1967    47.8   39463910      637.
+1649 Vietnam                  Asia       1972    50.3   44655014      700.
+1650 Vietnam                  Asia       1977    55.8   50533506      714.
+1651 Vietnam                  Asia       1982    58.8   56142181      707.
+1652 Vietnam                  Asia       1987    62.8   62826491      821.
+1653 Vietnam                  Asia       1992    67.7   69940728      989.
+1654 Vietnam                  Asia       1997    70.7   76048996     1386.
+1655 Vietnam                  Asia       2002    73.0   80908147     1764.
+1656 Vietnam                  Asia       2007    74.2   85262356     2442.
+1657 West Bank and Gaza       Asia       1952    43.2    1030585     1516.
+1658 West Bank and Gaza       Asia       1957    45.7    1070439     1827.
+1659 West Bank and Gaza       Asia       1962    48.1    1133134     2199.
+1660 West Bank and Gaza       Asia       1967    51.6    1142636     2650.
+1661 West Bank and Gaza       Asia       1972    56.5    1089572     3133.
+1662 West Bank and Gaza       Asia       1977    60.8    1261091     3683.
+1663 West Bank and Gaza       Asia       1982    64.4    1425876     4336.
+1664 West Bank and Gaza       Asia       1987    67.0    1691210     5107.
+1665 West Bank and Gaza       Asia       1992    69.7    2104779     6018.
+1666 West Bank and Gaza       Asia       1997    71.1    2826046     7111.
+1667 West Bank and Gaza       Asia       2002    72.4    3389578     4515.
+1668 West Bank and Gaza       Asia       2007    73.4    4018332     3025.
+1669 Yemen, Rep.              Asia       1952    32.5    4963829      782.
+1670 Yemen, Rep.              Asia       1957    34.0    5498090      805.
+1671 Yemen, Rep.              Asia       1962    35.2    6120081      826.
+1672 Yemen, Rep.              Asia       1967    37.0    6740785      862.
+1673 Yemen, Rep.              Asia       1972    39.8    7407075     1265.
+1674 Yemen, Rep.              Asia       1977    44.2    8403990     1830.
+1675 Yemen, Rep.              Asia       1982    49.1    9657618     1978.
+1676 Yemen, Rep.              Asia       1987    52.9   11219340     1972.
+1677 Yemen, Rep.              Asia       1992    55.6   13367997     1879.
+1678 Yemen, Rep.              Asia       1997    58.0   15826497     2117.
+1679 Yemen, Rep.              Asia       2002    60.3   18701257     2235.
+1680 Yemen, Rep.              Asia       2007    62.7   22211743     2281.
+1681 Zambia                   Africa     1952    42.0    2672000     1147.
+1682 Zambia                   Africa     1957    44.1    3016000     1312.
+1683 Zambia                   Africa     1962    46.0    3421000     1453.
+1684 Zambia                   Africa     1967    47.8    3900000     1777.
+1685 Zambia                   Africa     1972    50.1    4506497     1773.
+1686 Zambia                   Africa     1977    51.4    5216550     1589.
+1687 Zambia                   Africa     1982    51.8    6100407     1409.
+1688 Zambia                   Africa     1987    50.8    7272406     1213.
+1689 Zambia                   Africa     1992    46.1    8381163     1211.
+1690 Zambia                   Africa     1997    40.2    9417789     1071.
+1691 Zambia                   Africa     2002    39.2   10595811     1072.
+1692 Zambia                   Africa     2007    42.4   11746035     1271.
+1693 Zimbabwe                 Africa     1952    48.5    3080907      407.
+1694 Zimbabwe                 Africa     1957    50.5    3646340      519.
+1695 Zimbabwe                 Africa     1962    52.4    4277736      527.
+1696 Zimbabwe                 Africa     1967    54.0    4995432      570.
+1697 Zimbabwe                 Africa     1972    55.6    5861135      799.
+1698 Zimbabwe                 Africa     1977    57.7    6642107      686.
+1699 Zimbabwe                 Africa     1982    60.4    7636524      789.
+1700 Zimbabwe                 Africa     1987    62.4    9216418      706.
+1701 Zimbabwe                 Africa     1992    60.4   10704340      693.
+1702 Zimbabwe                 Africa     1997    46.8   11404948      792.
+1703 Zimbabwe                 Africa     2002    40.0   11926563      672.
+1704 Zimbabwe                 Africa     2007    43.5   12311143      470.
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+gapminder %&gt;% 
+* filter(year == 2007)
+```
+]]
+.column[.content.center[
+
+```
+# A tibble: 142 x 6
+    country                  continent  year lifeExp        pop gdpPercap
+    &lt;fct&gt;                    &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;      &lt;int&gt;     &lt;dbl&gt;
+  1 Afghanistan              Asia       2007    43.8   31889923      975.
+  2 Albania                  Europe     2007    76.4    3600523     5937.
+  3 Algeria                  Africa     2007    72.3   33333216     6223.
+  4 Angola                   Africa     2007    42.7   12420476     4797.
+  5 Argentina                Americas   2007    75.3   40301927    12779.
+  6 Australia                Oceania    2007    81.2   20434176    34435.
+  7 Austria                  Europe     2007    79.8    8199783    36126.
+  8 Bahrain                  Asia       2007    75.6     708573    29796.
+  9 Bangladesh               Asia       2007    64.1  150448339     1391.
+ 10 Belgium                  Europe     2007    79.4   10392226    33693.
+ 11 Benin                    Africa     2007    56.7    8078314     1441.
+ 12 Bolivia                  Americas   2007    65.6    9119152     3822.
+ 13 Bosnia and Herzegovina   Europe     2007    74.9    4552198     7446.
+ 14 Botswana                 Africa     2007    50.7    1639131    12570.
+ 15 Brazil                   Americas   2007    72.4  190010647     9066.
+ 16 Bulgaria                 Europe     2007    73.0    7322858    10681.
+ 17 Burkina Faso             Africa     2007    52.3   14326203     1217.
+ 18 Burundi                  Africa     2007    49.6    8390505      430.
+ 19 Cambodia                 Asia       2007    59.7   14131858     1714.
+ 20 Cameroon                 Africa     2007    50.4   17696293     2042.
+ 21 Canada                   Americas   2007    80.7   33390141    36319.
+ 22 Central African Republic Africa     2007    44.7    4369038      706.
+ 23 Chad                     Africa     2007    50.7   10238807     1704.
+ 24 Chile                    Americas   2007    78.6   16284741    13172.
+ 25 China                    Asia       2007    73.0 1318683096     4959.
+ 26 Colombia                 Americas   2007    72.9   44227550     7007.
+ 27 Comoros                  Africa     2007    65.2     710960      986.
+ 28 Congo, Dem. Rep.         Africa     2007    46.5   64606759      278.
+ 29 Congo, Rep.              Africa     2007    55.3    3800610     3633.
+ 30 Costa Rica               Americas   2007    78.8    4133884     9645.
+ 31 Cote d'Ivoire            Africa     2007    48.3   18013409     1545.
+ 32 Croatia                  Europe     2007    75.7    4493312    14619.
+ 33 Cuba                     Americas   2007    78.3   11416987     8948.
+ 34 Czech Republic           Europe     2007    76.5   10228744    22833.
+ 35 Denmark                  Europe     2007    78.3    5468120    35278.
+ 36 Djibouti                 Africa     2007    54.8     496374     2082.
+ 37 Dominican Republic       Americas   2007    72.2    9319622     6025.
+ 38 Ecuador                  Americas   2007    75.0   13755680     6873.
+ 39 Egypt                    Africa     2007    71.3   80264543     5581.
+ 40 El Salvador              Americas   2007    71.9    6939688     5728.
+ 41 Equatorial Guinea        Africa     2007    51.6     551201    12154.
+ 42 Eritrea                  Africa     2007    58.0    4906585      641.
+ 43 Ethiopia                 Africa     2007    52.9   76511887      691.
+ 44 Finland                  Europe     2007    79.3    5238460    33207.
+ 45 France                   Europe     2007    80.7   61083916    30470.
+ 46 Gabon                    Africa     2007    56.7    1454867    13206.
+ 47 Gambia                   Africa     2007    59.4    1688359      753.
+ 48 Germany                  Europe     2007    79.4   82400996    32170.
+ 49 Ghana                    Africa     2007    60.0   22873338     1328.
+ 50 Greece                   Europe     2007    79.5   10706290    27538.
+ 51 Guatemala                Americas   2007    70.3   12572928     5186.
+ 52 Guinea                   Africa     2007    56.0    9947814      943.
+ 53 Guinea-Bissau            Africa     2007    46.4    1472041      579.
+ 54 Haiti                    Americas   2007    60.9    8502814     1202.
+ 55 Honduras                 Americas   2007    70.2    7483763     3548.
+ 56 Hong Kong, China         Asia       2007    82.2    6980412    39725.
+ 57 Hungary                  Europe     2007    73.3    9956108    18009.
+ 58 Iceland                  Europe     2007    81.8     301931    36181.
+ 59 India                    Asia       2007    64.7 1110396331     2452.
+ 60 Indonesia                Asia       2007    70.6  223547000     3541.
+ 61 Iran                     Asia       2007    71.0   69453570    11606.
+ 62 Iraq                     Asia       2007    59.5   27499638     4471.
+ 63 Ireland                  Europe     2007    78.9    4109086    40676.
+ 64 Israel                   Asia       2007    80.7    6426679    25523.
+ 65 Italy                    Europe     2007    80.5   58147733    28570.
+ 66 Jamaica                  Americas   2007    72.6    2780132     7321.
+ 67 Japan                    Asia       2007    82.6  127467972    31656.
+ 68 Jordan                   Asia       2007    72.5    6053193     4519.
+ 69 Kenya                    Africa     2007    54.1   35610177     1463.
+ 70 Korea, Dem. Rep.         Asia       2007    67.3   23301725     1593.
+ 71 Korea, Rep.              Asia       2007    78.6   49044790    23348.
+ 72 Kuwait                   Asia       2007    77.6    2505559    47307.
+ 73 Lebanon                  Asia       2007    72.0    3921278    10461.
+ 74 Lesotho                  Africa     2007    42.6    2012649     1569.
+ 75 Liberia                  Africa     2007    45.7    3193942      415.
+ 76 Libya                    Africa     2007    74.0    6036914    12057.
+ 77 Madagascar               Africa     2007    59.4   19167654     1045.
+ 78 Malawi                   Africa     2007    48.3   13327079      759.
+ 79 Malaysia                 Asia       2007    74.2   24821286    12452.
+ 80 Mali                     Africa     2007    54.5   12031795     1043.
+ 81 Mauritania               Africa     2007    64.2    3270065     1803.
+ 82 Mauritius                Africa     2007    72.8    1250882    10957.
+ 83 Mexico                   Americas   2007    76.2  108700891    11978.
+ 84 Mongolia                 Asia       2007    66.8    2874127     3096.
+ 85 Montenegro               Europe     2007    74.5     684736     9254.
+ 86 Morocco                  Africa     2007    71.2   33757175     3820.
+ 87 Mozambique               Africa     2007    42.1   19951656      824.
+ 88 Myanmar                  Asia       2007    62.1   47761980      944 
+ 89 Namibia                  Africa     2007    52.9    2055080     4811.
+ 90 Nepal                    Asia       2007    63.8   28901790     1091.
+ 91 Netherlands              Europe     2007    79.8   16570613    36798.
+ 92 New Zealand              Oceania    2007    80.2    4115771    25185.
+ 93 Nicaragua                Americas   2007    72.9    5675356     2749.
+ 94 Niger                    Africa     2007    56.9   12894865      620.
+ 95 Nigeria                  Africa     2007    46.9  135031164     2014.
+ 96 Norway                   Europe     2007    80.2    4627926    49357.
+ 97 Oman                     Asia       2007    75.6    3204897    22316.
+ 98 Pakistan                 Asia       2007    65.5  169270617     2606.
+ 99 Panama                   Americas   2007    75.5    3242173     9809.
+100 Paraguay                 Americas   2007    71.8    6667147     4173.
+101 Peru                     Americas   2007    71.4   28674757     7409.
+102 Philippines              Asia       2007    71.7   91077287     3190.
+103 Poland                   Europe     2007    75.6   38518241    15390.
+104 Portugal                 Europe     2007    78.1   10642836    20510.
+105 Puerto Rico              Americas   2007    78.7    3942491    19329.
+106 Reunion                  Africa     2007    76.4     798094     7670.
+107 Romania                  Europe     2007    72.5   22276056    10808.
+108 Rwanda                   Africa     2007    46.2    8860588      863.
+109 Sao Tome and Principe    Africa     2007    65.5     199579     1598.
+110 Saudi Arabia             Asia       2007    72.8   27601038    21655.
+111 Senegal                  Africa     2007    63.1   12267493     1712.
+112 Serbia                   Europe     2007    74.0   10150265     9787.
+113 Sierra Leone             Africa     2007    42.6    6144562      863.
+114 Singapore                Asia       2007    80.0    4553009    47143.
+115 Slovak Republic          Europe     2007    74.7    5447502    18678.
+116 Slovenia                 Europe     2007    77.9    2009245    25768.
+117 Somalia                  Africa     2007    48.2    9118773      926.
+118 South Africa             Africa     2007    49.3   43997828     9270.
+119 Spain                    Europe     2007    80.9   40448191    28821.
+120 Sri Lanka                Asia       2007    72.4   20378239     3970.
+121 Sudan                    Africa     2007    58.6   42292929     2602.
+122 Swaziland                Africa     2007    39.6    1133066     4513.
+123 Sweden                   Europe     2007    80.9    9031088    33860.
+124 Switzerland              Europe     2007    81.7    7554661    37506.
+125 Syria                    Asia       2007    74.1   19314747     4185.
+126 Taiwan                   Asia       2007    78.4   23174294    28718.
+127 Tanzania                 Africa     2007    52.5   38139640     1107.
+128 Thailand                 Asia       2007    70.6   65068149     7458.
+129 Togo                     Africa     2007    58.4    5701579      883.
+130 Trinidad and Tobago      Americas   2007    69.8    1056608    18009.
+131 Tunisia                  Africa     2007    73.9   10276158     7093.
+132 Turkey                   Europe     2007    71.8   71158647     8458.
+133 Uganda                   Africa     2007    51.5   29170398     1056.
+134 United Kingdom           Europe     2007    79.4   60776238    33203.
+135 United States            Americas   2007    78.2  301139947    42952.
+136 Uruguay                  Americas   2007    76.4    3447496    10611.
+137 Venezuela                Americas   2007    73.7   26084662    11416.
+138 Vietnam                  Asia       2007    74.2   85262356     2442.
+139 West Bank and Gaza       Asia       2007    73.4    4018332     3025.
+140 Yemen, Rep.              Asia       2007    62.7   22211743     2281.
+141 Zambia                   Africa     2007    42.4   11746035     1271.
+142 Zimbabwe                 Africa     2007    43.5   12311143      470.
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+gapminder %&gt;% 
+  filter(year == 2007) %&gt;% 
+* ggplot()
+```
+]]
+.column[.content.center[
+![](minimal_example_files/figure-html/output_gapminder2007pipeline_3-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+gapminder %&gt;% 
+  filter(year == 2007) %&gt;% 
+  ggplot() + 
+* aes(x = gdpPercap)
+```
+]]
+.column[.content.center[
+![](minimal_example_files/figure-html/output_gapminder2007pipeline_4-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+gapminder %&gt;% 
+  filter(year == 2007) %&gt;% 
+  ggplot() + 
+  aes(x = gdpPercap) +  
+* aes(y = lifeExp)
+```
+]]
+.column[.content.center[
+![](minimal_example_files/figure-html/output_gapminder2007pipeline_5-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+gapminder %&gt;% 
+  filter(year == 2007) %&gt;% 
+  ggplot() + 
+  aes(x = gdpPercap) +  
+  aes(y = lifeExp) + 
+* geom_point()
+```
+]]
+.column[.content.center[
+![](minimal_example_files/figure-html/output_gapminder2007pipeline_6-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+gapminder %&gt;% 
+  filter(year == 2007) %&gt;% 
+  ggplot() + 
+  aes(x = gdpPercap) +  
+  aes(y = lifeExp) + 
+  geom_point() +
+* aes(col = continent)
+```
+]]
+.column[.content.center[
+![](minimal_example_files/figure-html/output_gapminder2007pipeline_7-1.png)&lt;!-- --&gt;
+]]
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 100%}
+&lt;/style&gt;
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:10",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script>
+(function() {
+  var i, text, code, codes = document.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+})();
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
