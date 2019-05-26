@@ -51,7 +51,7 @@ Okay. Let's load the the `reveal for xaringan` functions for "flipbooking" and t
 
 
 ```r
-source(file = "https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/xaringan_reveal_parenthetical.R")
+source(file = "../xaringan_reveal_parenthetical.R")
 library(tidyverse)
 library(gapminder)
 ```
@@ -59,7 +59,7 @@ library(gapminder)
 
 ```r
 gapminder_2007 &lt;- 
-  gapminder %&gt;% 
+  gapminder %&gt;%
   filter(year == 2007)
 ```
 
@@ -104,7 +104,7 @@ count: false
 
 ```r
 ggplot(data = gapminder_2007) + 
-* aes(x = gdpPercap)
+* aes(x = gdpPercap) # x axis
 ```
 ]]
 .column[.content.center[
@@ -118,8 +118,8 @@ count: false
 
 ```r
 ggplot(data = gapminder_2007) + 
-  aes(x = gdpPercap) +  
-* aes(y = lifeExp)
+  aes(x = gdpPercap) +  # x axis 
+* aes(y = lifeExp) # y axis
 ```
 ]]
 .column[.content.center[
@@ -133,8 +133,8 @@ count: false
 
 ```r
 ggplot(data = gapminder_2007) + 
-  aes(x = gdpPercap) +  
-  aes(y = lifeExp) + 
+  aes(x = gdpPercap) +  # x axis 
+  aes(y = lifeExp) +  # y axis
 * geom_point()
 ```
 ]]
@@ -149,8 +149,8 @@ count: false
 
 ```r
 ggplot(data = gapminder_2007) + 
-  aes(x = gdpPercap) +  
-  aes(y = lifeExp) + 
+  aes(x = gdpPercap) +  # x axis 
+  aes(y = lifeExp) +  # y axis
   geom_point() +
 * aes(color = continent)
 ```
@@ -2066,7 +2066,7 @@ gapminder %&gt;%
 ```
 ]]
 .column[.content.center[
-![](minimal_example_files/figure-html/output_gapminder2007pipeline_3-1.png)&lt;!-- --&gt;
+![](minimal_example_files/figure-html/output_gapminder2007pipe_3-1.png)&lt;!-- --&gt;
 ]]
 ---
 class: split-40
@@ -2082,7 +2082,7 @@ gapminder %&gt;%
 ```
 ]]
 .column[.content.center[
-![](minimal_example_files/figure-html/output_gapminder2007pipeline_4-1.png)&lt;!-- --&gt;
+![](minimal_example_files/figure-html/output_gapminder2007pipe_4-1.png)&lt;!-- --&gt;
 ]]
 ---
 class: split-40
@@ -2094,12 +2094,12 @@ count: false
 gapminder %&gt;% 
   filter(year == 2007) %&gt;% 
   ggplot() + 
-  aes(x = gdpPercap) +  
+  aes(x = gdpPercap) + 
 * aes(y = lifeExp)
 ```
 ]]
 .column[.content.center[
-![](minimal_example_files/figure-html/output_gapminder2007pipeline_5-1.png)&lt;!-- --&gt;
+![](minimal_example_files/figure-html/output_gapminder2007pipe_5-1.png)&lt;!-- --&gt;
 ]]
 ---
 class: split-40
@@ -2111,13 +2111,13 @@ count: false
 gapminder %&gt;% 
   filter(year == 2007) %&gt;% 
   ggplot() + 
-  aes(x = gdpPercap) +  
+  aes(x = gdpPercap) + 
   aes(y = lifeExp) + 
 * geom_point()
 ```
 ]]
 .column[.content.center[
-![](minimal_example_files/figure-html/output_gapminder2007pipeline_6-1.png)&lt;!-- --&gt;
+![](minimal_example_files/figure-html/output_gapminder2007pipe_6-1.png)&lt;!-- --&gt;
 ]]
 ---
 class: split-40
@@ -2129,15 +2129,38 @@ count: false
 gapminder %&gt;% 
   filter(year == 2007) %&gt;% 
   ggplot() + 
-  aes(x = gdpPercap) +  
+  aes(x = gdpPercap) + 
   aes(y = lifeExp) + 
   geom_point() +
 * aes(col = continent)
 ```
 ]]
 .column[.content.center[
-![](minimal_example_files/figure-html/output_gapminder2007pipeline_7-1.png)&lt;!-- --&gt;
+![](minimal_example_files/figure-html/output_gapminder2007pipe_7-1.png)&lt;!-- --&gt;
 ]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+gapminder %&gt;% 
+  filter(year == 2007) %&gt;% 
+  ggplot() + 
+  aes(x = gdpPercap) + 
+  aes(y = lifeExp) + 
+  geom_point() +
+  aes(col = continent) -&gt; 
+* g
+```
+]]
+.column[.content.center[
+
+]]
+
+
+
 
 &lt;style type="text/css"&gt;
 .remark-code{line-height: 1.5; font-size: 100%}

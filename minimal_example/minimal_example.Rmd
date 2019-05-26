@@ -15,7 +15,7 @@ output:
 
 ```{r setup, include=F}
 knitr::opts_chunk$set(fig.width = 6, message = F, warning = F, 
-                      comment = "", cache = T)
+                      comment = "", cache = F)
 options(tibble.print_max = Inf) 
 ```
 
@@ -49,14 +49,14 @@ The sequential workflow of the Tidyverse makes incremental display of pipelines 
 Okay. Let's load the the `reveal for xaringan` functions for "flipbooking" and the `tidyverse`.
 
 ```{r}
-source(file = "https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/xaringan_reveal_parenthetical.R")
+source(file = "../xaringan_reveal_parenthetical.R")
 library(tidyverse)
 library(gapminder)
 ```
 
 ```{r}
 gapminder_2007 <- 
-  gapminder %>% 
+  gapminder %>%
   filter(year == 2007)
 ```
 
@@ -71,8 +71,8 @@ We'll create this plot.  I have **echo** set to FALSE in the code chunk options 
 
 ```{r gapminder2007, echo = F, eval = T, fig.height=5}
 ggplot(data = gapminder_2007) + 
-  aes(x = gdpPercap) +  
-  aes(y = lifeExp) + 
+  aes(x = gdpPercap) +  # x axis 
+  aes(y = lifeExp) +  # y axis
   geom_point() +
   aes(color = continent)
 ```
@@ -96,21 +96,24 @@ In the next slide, we'll walk through the code that produces this plot, and the 
 
 The reveal functions are also written to recognize the pipe, `%>%`, and reverse assignment operator `->`, at the end of a line as reveal break points.  An example follows. 
 
-```{r gapminder2007pipeline, echo = F, eval = T, fig.height=5}
+```{r gapminder2007pipe, echo = F, eval = T, fig.height=5}
 gapminder %>% 
   filter(year == 2007) %>% 
   ggplot() + 
-  aes(x = gdpPercap) +  
+  aes(x = gdpPercap) + 
   aes(y = lifeExp) + 
   geom_point() +
-  aes(col = continent) ->
+  aes(col = continent) -> 
   g
 ```
 
 
 ---
 
-`r apply_reveal("gapminder2007pipeline")`
+`r apply_reveal("gapminder2007pipe")`
+
+
+
 
 ```{css, eval = TRUE, echo = F}
 .remark-code{line-height: 1.5; font-size: 100%}
