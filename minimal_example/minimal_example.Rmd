@@ -49,7 +49,7 @@ The sequential workflow of the Tidyverse makes incremental display of pipelines 
 Okay. Let's load the the `reveal for xaringan` functions for "flipbooking" and the `tidyverse`.
 
 ```{r}
-source(file = "../xaringan_reveal_parenthetical.R")
+source(file = "https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/xaringan_reveal_parenthetical.R")
 library(tidyverse)
 library(gapminder)
 ```
