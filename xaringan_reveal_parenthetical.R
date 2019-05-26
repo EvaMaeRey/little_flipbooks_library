@@ -16,17 +16,30 @@ partial_knit_chunks <- function(chunk_name) {
   
   code_split <- knitr:::knit_code$get(chunk_name)
   
-  idx_lines <- sort(
-    c(grep("\\)\\s?[a-z]|\\+|->|%>%\\s?$", code_split),
-      grep("\\)\\s?$", code_split))
-  )
+  idx_lines <-
+    sort(unique(
+      c(grep("[a-z][\\sa-zA-z#]?$", code_split),  # just text at end
+        grep("\\)\\s?\\+[\\sa-zA-z#]?$", code_split),  # ) + at end
+        grep("\\)\\s?->[\\sa-zA-z#]?$", code_split),  # ) -> at end
+        grep("\\)\\s?%>%[\\sa-zA-z#]?$", code_split),  # ) %>% at end
+        grep("[a-z]\\s?%>%[\\sa-zA-z#]?$", code_split),  # piping object
+        grep("[a-z]\\s?\\+[\\sa-zA-z#]?$", code_split),  # adding to plot object
+        grep("[a-z]\\s?$", code_split),  # just text at end
+        grep("\\)\\s?\\+\\s?$", code_split),  # ) + at end
+        grep("\\)\\s?->\\s?$", code_split),  # ) -> at end
+        grep("\\)\\s?%>%\\s?$", code_split),  # ) %>% at end
+        grep("[a-z]\\s?%>%\\s?$", code_split),  # piping object
+        grep("[a-z]\\s?\\+\\s?$", code_split),  # adding to plot object
+        grep("\\)\\s?$", code_split),  # ) at end - but this should also be last line
+        length(code_split))
+    ))
   
   
   highlight <- list()
   
   for (i in 1:length(idx_lines)) {
     if (i == 1) {  
-      highlight[[i]] <- 1
+      highlight[[i]] <- 1:idx_lines[i]
     } else {
       highlight[[i]] <- (idx_lines[i - 1] + 1):idx_lines[i]
     }
@@ -55,28 +68,48 @@ apply_reveal <- function(chunk_name){
 
 
 
+
+# # Some test code
 # 
-# code = "ggplot(gapminder) +
-#   aes(x = lifeExp,
-#       y = gdpPercap) +
-#   geom_point(col = blue,
-#              alpha = .2)
-# "
+# code <- "ggplot(data = 
+# gapminder_2007) + 
+#   aes(x = gdpPercap) + 
+# aes(y = lifeExp) + 
+# geom_point() +
+# aes(color = continent)"
 # 
 # code_split <- strsplit(code, "\\n")[[1]]
 # 
+# # [\\sa-zA-z#]? allows comment characters
+# 
 # upto_for_wrapped <-
-#   c(grep("\\)\\s?\\+|->|%>%\\s?$", code_split),
-#       grep("\\)\\s?$", code_split))
+#   sort(unique(
+#     c(grep("[a-z][\\sa-zA-z#]?$", code_split),  # just text at end
+#       grep("\\)\\s?\\+[\\sa-zA-z#]?$", code_split),  # ) + at end
+#       grep("\\)\\s?->[\\sa-zA-z#]?$", code_split),  # ) -> at end
+#       grep("\\)\\s?%>%[\\sa-zA-z#]?$", code_split),  # ) %>% at end
+#       grep("[a-z]\\s?%>%[\\sa-zA-z#]?$", code_split),  # piping object
+#       grep("[a-z]\\s?\\+[\\sa-zA-z#]?$", code_split),  # adding to plot object
+#       grep("[a-z]\\s?$", code_split),  # just text at end
+#       grep("\\)\\s?\\+\\s?$", code_split),  # ) + at end
+#       grep("\\)\\s?->\\s?$", code_split),  # ) -> at end
+#       grep("\\)\\s?%>%\\s?$", code_split),  # ) %>% at end
+#       grep("[a-z]\\s?%>%\\s?$", code_split),  # piping object
+#       grep("[a-z]\\s?\\+\\s?$", code_split),  # adding to plot object
+#       grep("\\)\\s?$", code_split),  # ) at end - but this should also be last line
+#       length(code_split))
+#   ))
 # 
 # 
 # highlight <- list()
 # 
 # for (i in 1:length(upto_for_wrapped)) {
-#   if(i == 1){
-#   highlight[[i]] <- 1
+#   if (i == 1) {
+#   highlight[[i]] <- 1:upto_for_wrapped[i]
 #   }else{
-#   highlight[[i]] <- (upto_for_wrapped[i-1]+1):upto_for_wrapped[i]
+#   highlight[[i]] <- (upto_for_wrapped[i - 1] + 1):upto_for_wrapped[i]
 #   }
 # }
 # 
+# highlight
+
