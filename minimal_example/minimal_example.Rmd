@@ -148,7 +148,7 @@ g <- ggplot(gapminder_2007) +
 Then we prep a code chunk so that lines end where we want breaks.  
 
 
-```{r, gapminder2007plotonly}
+```{r, gapminder2007plotonly, eval = F}
 g + aes(x = gdpPercap) + labs(x = "GDP per Capita ($US)") +
   aes(y = lifeExp) + geom_blank() + labs(y = "Life Expectency") +
   geom_point(data = gapminder_2007 %>% filter(country == "Spain")) +
