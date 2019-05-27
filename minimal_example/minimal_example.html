@@ -51,7 +51,17 @@ Okay. Let's load the the `reveal for xaringan` functions for "flipbooking" and t
 
 
 ```r
+if(file.exists("../xaringan_reveal_parenthetical.R")){
+
+  source(file = "../xaringan_reveal_parenthetical.R")
+  
+} else {
+
 source(file = "https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/xaringan_reveal_parenthetical.R")
+  
+}
+
+
 library(tidyverse)
 library(gapminder)
 ```
@@ -2159,6 +2169,54 @@ gapminder %&gt;%
 
 ]]
 
+---
+
+# Hide code
+
+You might be interested in showing the evolution of a plot, without focusing on the code. Let's see an example of this.  
+
+Consider the case where you want to show the x-axis, then add the y-axis, show one data point, and then add the rest of the data.  
+
+Building up plots slowly in presentations has been a technique employed by Hans Rosling and Mona Chalabi.  Matthew Blackwell tweeted this advice in 2018 -- it resonated with a lot of folks!
+
+---
+
+First we prep a lot of the plot.  In a presentation we would set echo to FALSE. 
+
+
+```r
+gapminder_2007 &lt;- gapminder %&gt;% 
+  filter(year == 2007) 
+g &lt;- ggplot(gapminder_2007) + 
+  theme_minimal(base_size = 22)
+```
+
+---
+
+Then we prep a code chunk so that lines end where we want breaks.  
+
+
+
+```r
+g + aes(x = gdpPercap) + labs(x = "GDP per Capita ($US)") +
+  aes(y = lifeExp) + geom_blank() + labs(y = "Life Expectency") +
+  geom_point(data = gapminder_2007 %&gt;% filter(country == "Spain")) +
+  geom_point() 
+```
+
+![](minimal_example_files/figure-html/gapminder2007plotonly-1.png)&lt;!-- --&gt;
+
+Then we'll use the name of this code chunk in a reveal function "partial_knit_chunks".  
+
+---
+
+![](minimal_example_files/figure-html/output_gapminder2007plotonly_1-1.png)&lt;!-- --&gt;
+---
+![](minimal_example_files/figure-html/output_gapminder2007plotonly_2-1.png)&lt;!-- --&gt;
+---
+![](minimal_example_files/figure-html/output_gapminder2007plotonly_3-1.png)&lt;!-- --&gt;
+---
+![](minimal_example_files/figure-html/output_gapminder2007plotonly_4-1.png)&lt;!-- --&gt;
 
 
 

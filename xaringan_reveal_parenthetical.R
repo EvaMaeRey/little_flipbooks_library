@@ -10,7 +10,7 @@ reveal <- function(name, upto, highlight = upto) {
   content[1:upto]
 }
 
-partial_knit_chunks <- function(chunk_name) {
+partial_knit_chunks <- function(chunk_name, show_code = T) {
   # Create slide for lines 1:N for each line N in the given chunk
   # idx_lines <- seq_along(knitr:::knit_code$get(chunk_name))
   
@@ -45,6 +45,7 @@ partial_knit_chunks <- function(chunk_name) {
     }
   }
   
+  if (show_code == T) {
   partial_knit_steps <- glue::glue(
     "class: split-40",
     "count: false",
@@ -60,6 +61,18 @@ partial_knit_chunks <- function(chunk_name) {
     .open = "{{", .close = "}}", .sep = "\n"
   )
   glue::glue_collapse(partial_knit_steps, "\n---\n")
+  } else {
+    
+    partial_knit_steps <- glue::glue("```{r output_{{chunk_name}}_{{idx_lines}}, echo=FALSE, code=reveal('{{chunk_name}}', {{idx_lines}}, {{highlight}})}",
+    "```",
+    .open = "{{", .close = "}}", .sep = "\n"
+    )
+    glue::glue_collapse(partial_knit_steps, "\n---\n")
+    
+  }
+  
+  
+  
 }
 
 apply_reveal <- function(chunk_name){
