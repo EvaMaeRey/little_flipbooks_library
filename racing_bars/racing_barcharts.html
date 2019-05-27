@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Racing Barchart with gganimate</title>
+    <meta charset="utf-8">
+    <meta name="author" content="  Gina Reynolds, April 2019" />
+    <link href="libs/remark-css-0.0.1/kunoichi.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Racing Barchart with gganimate
+## a quick flipbook | made with Xaringan
+### <br><br>Gina Reynolds, April 2019
+### <br>
+
+---
+
+
+
+
+
+# Introduction
+
+This book walks through data prep and plotting a racing barchart with ggplot and gganimate. 
+
+
+
+---
+
+# Set up
+
+
+
+```r
+library(gapminder)
+library(tidyverse)
+```
+
+
+
+
+---
+
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+*gapminder
+```
+]]
+.column[.content.center[
+
+```
+  # A tibble: 1,704 x 6
+     country     continent  year lifeExp      pop gdpPercap
+     &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+   1 Afghanistan Asia       1952    28.8  8425333      779.
+   2 Afghanistan Asia       1957    30.3  9240934      821.
+   3 Afghanistan Asia       1962    32.0 10267083      853.
+   4 Afghanistan Asia       1967    34.0 11537966      836.
+   5 Afghanistan Asia       1972    36.1 13079460      740.
+   6 Afghanistan Asia       1977    38.4 14880372      786.
+   7 Afghanistan Asia       1982    39.9 12881816      978.
+   8 Afghanistan Asia       1987    40.8 13867957      852.
+   9 Afghanistan Asia       1992    41.7 16317921      649.
+  10 Afghanistan Asia       1997    41.8 22227415      635.
+  # … with 1,694 more rows
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+gapminder %&gt;% 
+* select(country, pop, year, continent)
+```
+]]
+.column[.content.center[
+
+```
+  # A tibble: 1,704 x 4
+     country          pop  year continent
+     &lt;fct&gt;          &lt;int&gt; &lt;int&gt; &lt;fct&gt;    
+   1 Afghanistan  8425333  1952 Asia     
+   2 Afghanistan  9240934  1957 Asia     
+   3 Afghanistan 10267083  1962 Asia     
+   4 Afghanistan 11537966  1967 Asia     
+   5 Afghanistan 13079460  1972 Asia     
+   6 Afghanistan 14880372  1977 Asia     
+   7 Afghanistan 12881816  1982 Asia     
+   8 Afghanistan 13867957  1987 Asia     
+   9 Afghanistan 16317921  1992 Asia     
+  10 Afghanistan 22227415  1997 Asia     
+  # … with 1,694 more rows
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+gapminder %&gt;% 
+  select(country, pop, year, continent) %&gt;% 
+* group_by(year) # for each year we assign a rank
+```
+]]
+.column[.content.center[
+
+```
+  # A tibble: 1,704 x 4
+  # Groups:   year [12]
+     country          pop  year continent
+     &lt;fct&gt;          &lt;int&gt; &lt;int&gt; &lt;fct&gt;    
+   1 Afghanistan  8425333  1952 Asia     
+   2 Afghanistan  9240934  1957 Asia     
+   3 Afghanistan 10267083  1962 Asia     
+   4 Afghanistan 11537966  1967 Asia     
+   5 Afghanistan 13079460  1972 Asia     
+   6 Afghanistan 14880372  1977 Asia     
+   7 Afghanistan 12881816  1982 Asia     
+   8 Afghanistan 13867957  1987 Asia     
+   9 Afghanistan 16317921  1992 Asia     
+  10 Afghanistan 22227415  1997 Asia     
+  # … with 1,694 more rows
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+gapminder %&gt;% 
+  select(country, pop, year, continent) %&gt;% 
+  group_by(year) %&gt;% # for each year we assign a rank
+* arrange(year, -pop)
+```
+]]
+.column[.content.center[
+
+```
+  # A tibble: 1,704 x 4
+  # Groups:   year [12]
+     country              pop  year continent
+     &lt;fct&gt;              &lt;int&gt; &lt;int&gt; &lt;fct&gt;    
+   1 China          556263527  1952 Asia     
+   2 India          372000000  1952 Asia     
+   3 United States  157553000  1952 Americas 
+   4 Japan           86459025  1952 Asia     
+   5 Indonesia       82052000  1952 Asia     
+   6 Germany         69145952  1952 Europe   
+   7 Brazil          56602560  1952 Americas 
+   8 United Kingdom  50430000  1952 Europe   
+   9 Italy           47666000  1952 Europe   
+  10 Bangladesh      46886859  1952 Asia     
+  # … with 1,694 more rows
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+gapminder %&gt;% 
+  select(country, pop, year, continent) %&gt;% 
+  group_by(year) %&gt;% # for each year we assign a rank
+  arrange(year, -pop) %&gt;% 
+* mutate(rank = 1:n()) # assign ranking
+```
+]]
+.column[.content.center[
+
+```
+  # A tibble: 1,704 x 5
+  # Groups:   year [12]
+     country              pop  year continent  rank
+     &lt;fct&gt;              &lt;int&gt; &lt;int&gt; &lt;fct&gt;     &lt;int&gt;
+   1 China          556263527  1952 Asia          1
+   2 India          372000000  1952 Asia          2
+   3 United States  157553000  1952 Americas      3
+   4 Japan           86459025  1952 Asia          4
+   5 Indonesia       82052000  1952 Asia          5
+   6 Germany         69145952  1952 Europe        6
+   7 Brazil          56602560  1952 Americas      7
+   8 United Kingdom  50430000  1952 Europe        8
+   9 Italy           47666000  1952 Europe        9
+  10 Bangladesh      46886859  1952 Asia         10
+  # … with 1,694 more rows
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+gapminder %&gt;% 
+  select(country, pop, year, continent) %&gt;% 
+  group_by(year) %&gt;% # for each year we assign a rank
+  arrange(year, -pop) %&gt;% 
+  mutate(rank = 1:n()) %&gt;% # assign ranking
+* filter(rank &lt;= 10)
+```
+]]
+.column[.content.center[
+
+```
+  # A tibble: 120 x 5
+  # Groups:   year [12]
+     country              pop  year continent  rank
+     &lt;fct&gt;              &lt;int&gt; &lt;int&gt; &lt;fct&gt;     &lt;int&gt;
+   1 China          556263527  1952 Asia          1
+   2 India          372000000  1952 Asia          2
+   3 United States  157553000  1952 Americas      3
+   4 Japan           86459025  1952 Asia          4
+   5 Indonesia       82052000  1952 Asia          5
+   6 Germany         69145952  1952 Europe        6
+   7 Brazil          56602560  1952 Americas      7
+   8 United Kingdom  50430000  1952 Europe        8
+   9 Italy           47666000  1952 Europe        9
+  10 Bangladesh      46886859  1952 Asia         10
+  # … with 110 more rows
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+gapminder %&gt;% 
+  select(country, pop, year, continent) %&gt;% 
+  group_by(year) %&gt;% # for each year we assign a rank
+  arrange(year, -pop) %&gt;% 
+  mutate(rank = 1:n()) %&gt;% # assign ranking
+  filter(rank &lt;= 10) -&gt;
+*ranked_by_year
+```
+]]
+.column[.content.center[
+
+]]
+
+---
+
+
+
+
+```r
+my_theme &lt;- theme_classic(base_family = "Times") +
+  theme(axis.text.y = element_blank()) +
+  theme(axis.ticks.y = element_blank()) +
+  theme(axis.line.y = element_blank()) +
+  theme(legend.background = element_rect(fill = "linen")) +
+  theme(plot.background = element_rect(fill = "linen")) +
+  theme(panel.background = element_rect(fill = "linen"))
+```
+  
+---
+# Static plot
+  
+
+
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+*ggplot(data = ranked_by_year)
+```
+]]
+.column[.content.center[
+&lt;img src="racing_barcharts_files/figure-html/output_static_bar_1-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = ranked_by_year) +
+* aes(group = country, fill = continent)
+```
+]]
+.column[.content.center[
+&lt;img src="racing_barcharts_files/figure-html/output_static_bar_2-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = ranked_by_year) +
+  aes(group = country, fill = continent) +
+* aes(xmin = 0 ,
+*     xmax = pop / 1000000)
+```
+]]
+.column[.content.center[
+&lt;img src="racing_barcharts_files/figure-html/output_static_bar_4-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = ranked_by_year) +
+  aes(group = country, fill = continent) +
+  aes(xmin = 0 , 
+      xmax = pop / 1000000) +
+* aes(ymin = rank - .45,
+*     ymax = rank + .45)
+```
+]]
+.column[.content.center[
+&lt;img src="racing_barcharts_files/figure-html/output_static_bar_6-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = ranked_by_year) +
+  aes(group = country, fill = continent) +
+  aes(xmin = 0 , 
+      xmax = pop / 1000000) +
+  aes(ymin = rank - .45, 
+      ymax = rank + .45) +
+* scale_y_reverse()
+```
+]]
+.column[.content.center[
+&lt;img src="racing_barcharts_files/figure-html/output_static_bar_7-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = ranked_by_year) +
+  aes(group = country, fill = continent) +
+  aes(xmin = 0 , 
+      xmax = pop / 1000000) +
+  aes(ymin = rank - .45, 
+      ymax = rank + .45) +
+  scale_y_reverse() +
+* scale_x_continuous(
+*   limits = c(-300, 1400),
+*   breaks = c(0, 400, 800, 1200),
+*   labels = c(0, 400, 800, 1200))
+```
+]]
+.column[.content.center[
+&lt;img src="racing_barcharts_files/figure-html/output_static_bar_11-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = ranked_by_year) +
+  aes(group = country, fill = continent) +
+  aes(xmin = 0 , 
+      xmax = pop / 1000000) +
+  aes(ymin = rank - .45, 
+      ymax = rank + .45) +
+  scale_y_reverse() +
+  scale_x_continuous(
+    limits = c(-300, 1400),
+    breaks = c(0, 400, 800, 1200),
+    labels = c(0, 400, 800, 1200)) +
+* labs(fill = "")
+```
+]]
+.column[.content.center[
+&lt;img src="racing_barcharts_files/figure-html/output_static_bar_12-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = ranked_by_year) +
+  aes(group = country, fill = continent) +
+  aes(xmin = 0 , 
+      xmax = pop / 1000000) +
+  aes(ymin = rank - .45, 
+      ymax = rank + .45) +
+  scale_y_reverse() +
+  scale_x_continuous(
+    limits = c(-300, 1400),
+    breaks = c(0, 400, 800, 1200),
+    labels = c(0, 400, 800, 1200)) +
+  labs(fill = "") +
+* geom_rect(alpha = .7)
+```
+]]
+.column[.content.center[
+&lt;img src="racing_barcharts_files/figure-html/output_static_bar_13-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = ranked_by_year) +
+  aes(group = country, fill = continent) +
+  aes(xmin = 0 , 
+      xmax = pop / 1000000) +
+  aes(ymin = rank - .45, 
+      ymax = rank + .45) +
+  scale_y_reverse() +
+  scale_x_continuous(
+    limits = c(-300, 1400),
+    breaks = c(0, 400, 800, 1200),
+    labels = c(0, 400, 800, 1200)) +
+  labs(fill = "") +
+  geom_rect(alpha = .7) +
+* labs(x = 'Population (millions)')
+```
+]]
+.column[.content.center[
+&lt;img src="racing_barcharts_files/figure-html/output_static_bar_14-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = ranked_by_year) +
+  aes(group = country, fill = continent) +
+  aes(xmin = 0 , 
+      xmax = pop / 1000000) +
+  aes(ymin = rank - .45, 
+      ymax = rank + .45) +
+  scale_y_reverse() +
+  scale_x_continuous(
+    limits = c(-300, 1400),
+    breaks = c(0, 400, 800, 1200),
+    labels = c(0, 400, 800, 1200)) +
+  labs(fill = "") +
+  geom_rect(alpha = .7) +
+  labs(x = 'Population (millions)') +
+* aes(label = country, y = rank)
+```
+]]
+.column[.content.center[
+&lt;img src="racing_barcharts_files/figure-html/output_static_bar_15-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = ranked_by_year) +
+  aes(group = country, fill = continent) +
+  aes(xmin = 0 , 
+      xmax = pop / 1000000) +
+  aes(ymin = rank - .45, 
+      ymax = rank + .45) +
+  scale_y_reverse() +
+  scale_x_continuous(
+    limits = c(-300, 1400),
+    breaks = c(0, 400, 800, 1200),
+    labels = c(0, 400, 800, 1200)) +
+  labs(fill = "") +
+  geom_rect(alpha = .7) +
+  labs(x = 'Population (millions)') +
+  aes(label = country, y = rank) +
+* geom_text(col = "gray13",
+*           hjust = "right",
+*           x = -50)
+```
+]]
+.column[.content.center[
+&lt;img src="racing_barcharts_files/figure-html/output_static_bar_18-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = ranked_by_year) +
+  aes(group = country, fill = continent) +
+  aes(xmin = 0 , 
+      xmax = pop / 1000000) +
+  aes(ymin = rank - .45, 
+      ymax = rank + .45) +
+  scale_y_reverse() +
+  scale_x_continuous(
+    limits = c(-300, 1400),
+    breaks = c(0, 400, 800, 1200),
+    labels = c(0, 400, 800, 1200)) +
+  labs(fill = "") +
+  geom_rect(alpha = .7) +
+  labs(x = 'Population (millions)') +
+  aes(label = country, y = rank) +
+  geom_text(col = "gray13", 
+            hjust = "right", 
+            x = -50) + 
+* labs(y = "")
+```
+]]
+.column[.content.center[
+&lt;img src="racing_barcharts_files/figure-html/output_static_bar_19-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = ranked_by_year) +
+  aes(group = country, fill = continent) +
+  aes(xmin = 0 , 
+      xmax = pop / 1000000) +
+  aes(ymin = rank - .45, 
+      ymax = rank + .45) +
+  scale_y_reverse() +
+  scale_x_continuous(
+    limits = c(-300, 1400),
+    breaks = c(0, 400, 800, 1200),
+    labels = c(0, 400, 800, 1200)) +
+  labs(fill = "") +
+  geom_rect(alpha = .7) +
+  labs(x = 'Population (millions)') +
+  aes(label = country, y = rank) +
+  geom_text(col = "gray13", 
+            hjust = "right", 
+            x = -50) + 
+  labs(y = "") +
+* scale_fill_viridis_d(option = "magma",
+*                      direction = -1)
+```
+]]
+.column[.content.center[
+&lt;img src="racing_barcharts_files/figure-html/output_static_bar_21-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = ranked_by_year) +
+  aes(group = country, fill = continent) +
+  aes(xmin = 0 , 
+      xmax = pop / 1000000) +
+  aes(ymin = rank - .45, 
+      ymax = rank + .45) +
+  scale_y_reverse() +
+  scale_x_continuous(
+    limits = c(-300, 1400),
+    breaks = c(0, 400, 800, 1200),
+    labels = c(0, 400, 800, 1200)) +
+  labs(fill = "") +
+  geom_rect(alpha = .7) +
+  labs(x = 'Population (millions)') +
+  aes(label = country, y = rank) +
+  geom_text(col = "gray13", 
+            hjust = "right", 
+            x = -50) + 
+  labs(y = "") +
+  scale_fill_viridis_d(option = "magma", 
+                       direction = -1) +
+* geom_text(x = 1000 , y = -10,
+*           family = "Times",
+*           aes(label = as.character(year)),
+*           size = 30, col = "grey18")
+```
+]]
+.column[.content.center[
+&lt;img src="racing_barcharts_files/figure-html/output_static_bar_25-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = ranked_by_year) +
+  aes(group = country, fill = continent) +
+  aes(xmin = 0 , 
+      xmax = pop / 1000000) +
+  aes(ymin = rank - .45, 
+      ymax = rank + .45) +
+  scale_y_reverse() +
+  scale_x_continuous(
+    limits = c(-300, 1400),
+    breaks = c(0, 400, 800, 1200),
+    labels = c(0, 400, 800, 1200)) +
+  labs(fill = "") +
+  geom_rect(alpha = .7) +
+  labs(x = 'Population (millions)') +
+  aes(label = country, y = rank) +
+  geom_text(col = "gray13", 
+            hjust = "right", 
+            x = -50) + 
+  labs(y = "") +
+  scale_fill_viridis_d(option = "magma", 
+                       direction = -1) +
+  geom_text(x = 1000 , y = -10, 
+            family = "Times", 
+            aes(label = as.character(year)), 
+            size = 30, col = "grey18") +
+* my_theme -&gt;
+*g 
+```
+]]
+.column[.content.center[
+
+]]
+
+---
+
+# Now set up the animation
+
+Next we add the animation statement, which uses a function from the gganimate package. 
+
+
+```r
+library(gganimate) 
+options(gganimate.nframes = 20)
+```
+
+---
+
+
+
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+*g + gganimate::transition_time(year)
+```
+]]
+.column[.content.center[
+&lt;img src="racing_barcharts_files/figure-html/output_ani_final_1-1.gif" width="100%" /&gt;
+]]
+
+
+---
+
+# A lessons learned about racing barcharts.
+
+My first implementation was with GDP per capita.  This resulted in less visually pleasing because of rank changing beyond adjacent neighbors between time periods.  The version of the data used is only every five years, so such dramatic switching between time periods isn't surprising.  Using population gave a better result. 
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 70%}
+&lt;/style&gt;
+    </textarea>
+<script src="libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightLines": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script>
+(function() {
+  var i, text, code, codes = document.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+})();
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
