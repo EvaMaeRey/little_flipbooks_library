@@ -1,0 +1,3178 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>tuning ggplot themes</title>
+    <meta charset="utf-8">
+    <meta name="author" content="  Gina Reynolds, May 2019" />
+    <link href="libs/remark-css-0.0.1/kunoichi.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# tuning ggplot themes
+## a flipbook | made with Xaringan
+### <br><br>Gina Reynolds, May 2019
+### <br>
+
+---
+
+
+
+
+
+---
+
+# Table of Contents
+
+- [Ugly Theme Choices](#uglyplot)
+
+- [Text Elements](#textelements)
+- [Rectangular Elements](#rectangularelements)
+- [Line Elements](#lineelements)
+
+- [Legends](#legend)
+- [Sundry](#sundry)
+- [Facets](#facet)
+
+- [Preset Themes](#presetthemes)
+
+---
+
+
+# Introduction
+
+This is a focused extension of [the ggplot flipbook](https://evamaerey.github.io/ggplot_flipbook/ggplot_flipbook_xaringan.html).The aim is to illuminate theme statements. 
+
+
+
+
+---
+
+# Base Plot
+
+We'll work with the plot below to apply all the theme adjustments.  In the next slide, we'll build this plot and save it as the plot object `g`.  To this plot object we'll add the theme statements.  You might check out [The Tidyverse in Action](https://evamaerey.github.io/tidyverse_in_action/tidyverse_in_action.html) if you are puzzled about how to build `g`. The [ggplot2 Cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf) is also an excellent resource. 
+
+
+
+&lt;img src="taming_ggplot_themes_files/figure-html/unnamed-chunk-1-1.png" width="50%" /&gt;
+
+
+
+---
+
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+*gapminder
+```
+]]
+.column[.content.center[
+
+```
+  # A tibble: 1,704 x 6
+     country     continent  year lifeExp      pop gdpPercap
+     &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+   1 Afghanistan Asia       1952    28.8  8425333      779.
+   2 Afghanistan Asia       1957    30.3  9240934      821.
+   3 Afghanistan Asia       1962    32.0 10267083      853.
+   4 Afghanistan Asia       1967    34.0 11537966      836.
+   5 Afghanistan Asia       1972    36.1 13079460      740.
+   6 Afghanistan Asia       1977    38.4 14880372      786.
+   7 Afghanistan Asia       1982    39.9 12881816      978.
+   8 Afghanistan Asia       1987    40.8 13867957      852.
+   9 Afghanistan Asia       1992    41.7 16317921      649.
+  10 Afghanistan Asia       1997    41.8 22227415      635.
+  # … with 1,694 more rows
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+gapminder %&gt;%
+* filter(year == 1992)
+```
+]]
+.column[.content.center[
+
+```
+  # A tibble: 142 x 6
+     country     continent  year lifeExp       pop gdpPercap
+     &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;     &lt;int&gt;     &lt;dbl&gt;
+   1 Afghanistan Asia       1992    41.7  16317921      649.
+   2 Albania     Europe     1992    71.6   3326498     2497.
+   3 Algeria     Africa     1992    67.7  26298373     5023.
+   4 Angola      Africa     1992    40.6   8735988     2628.
+   5 Argentina   Americas   1992    71.9  33958947     9308.
+   6 Australia   Oceania    1992    77.6  17481977    23425.
+   7 Austria     Europe     1992    76.0   7914969    27042.
+   8 Bahrain     Asia       1992    72.6    529491    19036.
+   9 Bangladesh  Asia       1992    56.0 113704579      838.
+  10 Belgium     Europe     1992    76.5  10045622    25576.
+  # … with 132 more rows
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+gapminder %&gt;%
+  filter(year == 1992) %&gt;%
+* ggplot()
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_the_plot_3-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+gapminder %&gt;%
+  filter(year == 1992) %&gt;%
+  ggplot() +
+* aes(x = gdpPercap, y = lifeExp)
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_the_plot_4-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+gapminder %&gt;%
+  filter(year == 1992) %&gt;%
+  ggplot() +
+  aes(x = gdpPercap, y = lifeExp) +
+* geom_point(alpha = .8, shape = 21,
+*            fill = "white")
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_the_plot_6-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+gapminder %&gt;%
+  filter(year == 1992) %&gt;%
+  ggplot() +
+  aes(x = gdpPercap, y = lifeExp) +
+  geom_point(alpha = .8, shape = 21, 
+             fill = "white") +
+* aes(col = continent, fill = continent)
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_the_plot_7-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+gapminder %&gt;%
+  filter(year == 1992) %&gt;%
+  ggplot() +
+  aes(x = gdpPercap, y = lifeExp) +
+  geom_point(alpha = .8, shape = 21, 
+             fill = "white") +
+  aes(col = continent, fill = continent) +
+* geom_point(alpha = .3, shape = 21)
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_the_plot_8-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+gapminder %&gt;%
+  filter(year == 1992) %&gt;%
+  ggplot() +
+  aes(x = gdpPercap, y = lifeExp) +
+  geom_point(alpha = .8, shape = 21, 
+             fill = "white") +
+  aes(col = continent, fill = continent) +
+  geom_point(alpha = .3, shape = 21) +
+* aes(size = pop)
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_the_plot_9-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+gapminder %&gt;%
+  filter(year == 1992) %&gt;%
+  ggplot() +
+  aes(x = gdpPercap, y = lifeExp) +
+  geom_point(alpha = .8, shape = 21, 
+             fill = "white") +
+  aes(col = continent, fill = continent) +
+  geom_point(alpha = .3, shape = 21) +
+  aes(size = pop) +
+* scale_size(guide = F)
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_the_plot_10-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+gapminder %&gt;%
+  filter(year == 1992) %&gt;%
+  ggplot() +
+  aes(x = gdpPercap, y = lifeExp) +
+  geom_point(alpha = .8, shape = 21, 
+             fill = "white") +
+  aes(col = continent, fill = continent) +
+  geom_point(alpha = .3, shape = 21) +
+  aes(size = pop) +
+  scale_size(guide = F) +
+* labs(title = "Wealth and expected longevity\n in 1992")
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_the_plot_11-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+gapminder %&gt;%
+  filter(year == 1992) %&gt;%
+  ggplot() +
+  aes(x = gdpPercap, y = lifeExp) +
+  geom_point(alpha = .8, shape = 21, 
+             fill = "white") +
+  aes(col = continent, fill = continent) +
+  geom_point(alpha = .3, shape = 21) +
+  aes(size = pop) +
+  scale_size(guide = F) +
+  labs(title = "Wealth and expected longevity\n in 1992") +
+* labs(subtitle = "Data from gapminder package in R")
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_the_plot_12-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+gapminder %&gt;%
+  filter(year == 1992) %&gt;%
+  ggplot() +
+  aes(x = gdpPercap, y = lifeExp) +
+  geom_point(alpha = .8, shape = 21, 
+             fill = "white") +
+  aes(col = continent, fill = continent) +
+  geom_point(alpha = .3, shape = 21) +
+  aes(size = pop) +
+  scale_size(guide = F) +
+  labs(title = "Wealth and expected longevity\n in 1992") +
+  labs(subtitle = "Data from gapminder package in R") +
+* labs(x = "GDP per Capita")
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_the_plot_13-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+gapminder %&gt;%
+  filter(year == 1992) %&gt;%
+  ggplot() +
+  aes(x = gdpPercap, y = lifeExp) +
+  geom_point(alpha = .8, shape = 21, 
+             fill = "white") +
+  aes(col = continent, fill = continent) +
+  geom_point(alpha = .3, shape = 21) +
+  aes(size = pop) +
+  scale_size(guide = F) +
+  labs(title = "Wealth and expected longevity\n in 1992") +
+  labs(subtitle = "Data from gapminder package in R") +
+  labs(x = "GDP per Capita") +
+* labs(y = "Life Expectency")
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_the_plot_14-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+gapminder %&gt;%
+  filter(year == 1992) %&gt;%
+  ggplot() +
+  aes(x = gdpPercap, y = lifeExp) +
+  geom_point(alpha = .8, shape = 21, 
+             fill = "white") +
+  aes(col = continent, fill = continent) +
+  geom_point(alpha = .3, shape = 21) +
+  aes(size = pop) +
+  scale_size(guide = F) +
+  labs(title = "Wealth and expected longevity\n in 1992") +
+  labs(subtitle = "Data from gapminder package in R") +
+  labs(x = "GDP per Capita") +
+  labs(y = "Life Expectency") +
+* labs(tag = "Plot 1")
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_the_plot_15-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+gapminder %&gt;%
+  filter(year == 1992) %&gt;%
+  ggplot() +
+  aes(x = gdpPercap, y = lifeExp) +
+  geom_point(alpha = .8, shape = 21, 
+             fill = "white") +
+  aes(col = continent, fill = continent) +
+  geom_point(alpha = .3, shape = 21) +
+  aes(size = pop) +
+  scale_size(guide = F) +
+  labs(title = "Wealth and expected longevity\n in 1992") +
+  labs(subtitle = "Data from gapminder package in R") +
+  labs(x = "GDP per Capita") +
+  labs(y = "Life Expectency") +
+  labs(tag = "Plot 1") +
+* labs(col = "Continent", fill = "Continent")
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_the_plot_16-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+gapminder %&gt;%
+  filter(year == 1992) %&gt;%
+  ggplot() +
+  aes(x = gdpPercap, y = lifeExp) +
+  geom_point(alpha = .8, shape = 21, 
+             fill = "white") +
+  aes(col = continent, fill = continent) +
+  geom_point(alpha = .3, shape = 21) +
+  aes(size = pop) +
+  scale_size(guide = F) +
+  labs(title = "Wealth and expected longevity\n in 1992") +
+  labs(subtitle = "Data from gapminder package in R") +
+  labs(x = "GDP per Capita") +
+  labs(y = "Life Expectency") +
+  labs(tag = "Plot 1") +
+  labs(col = "Continent", fill = "Continent") +
+* labs(caption = "Vis: @EvaMaeRey with ggplot")
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_the_plot_17-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+gapminder %&gt;%
+  filter(year == 1992) %&gt;%
+  ggplot() +
+  aes(x = gdpPercap, y = lifeExp) +
+  geom_point(alpha = .8, shape = 21, 
+             fill = "white") +
+  aes(col = continent, fill = continent) +
+  geom_point(alpha = .3, shape = 21) +
+  aes(size = pop) +
+  scale_size(guide = F) +
+  labs(title = "Wealth and expected longevity\n in 1992") +
+  labs(subtitle = "Data from gapminder package in R") +
+  labs(x = "GDP per Capita") +
+  labs(y = "Life Expectency") +
+  labs(tag = "Plot 1") +
+  labs(col = "Continent", fill = "Continent") +
+  labs(caption = "Vis: @EvaMaeRey with ggplot") -&gt;
+*g 
+```
+]]
+.column[.content.center[
+
+]]
+
+
+
+
+
+---
+
+# Thematic adjustment overview
+
+--
+
+## Components
+
+The components in a ggplot graph are usually things you can point to on a plot.  
+
+For example the *legend box*, or the *y axis title*, or the *plot title*.   
+
+
+--
+
+## Elements
+
+These components have a variety of elements.  For example the legend box has the perimeter of the box (the line) and it has the area of the box associated with it.  To "point" to specify the element parts of the components, functions like element_line(), element_rect(), and element_text() are used.  To delete an entire component, element_blank() can be used.
+
+--
+
+## Aesthetics
+
+Aesthetics assignment for theme elements are similar to those available for geometric shapes in the plot. Aesthetics include color, size, line_type, and so on. 
+
+
+---
+
+# Graph Components
+
+So, what components can be adjusted? (there are lots!)
+
+&gt; aspect.ratio
+
+&gt; axis.title, axis.title.x,
+  axis.title.x.top, axis.title.x.bottom, axis.title.y, axis.title.y.left,
+  axis.title.y.right, axis.text, axis.text.x, axis.text.x.top,
+  axis.text.x.bottom, axis.text.y, axis.text.y.left, axis.text.y.right,
+  axis.ticks, axis.ticks.x, axis.ticks.x.top, axis.ticks.x.bottom,
+  axis.ticks.y, axis.ticks.y.left, axis.ticks.y.right, axis.ticks.length,
+  axis.line, axis.line.x, axis.line.x.top, axis.line.x.bottom, axis.line.y,
+  axis.line.y.left, axis.line.y.right
+  
+&gt; legend.background, legend.margin,
+  legend.spacing, legend.spacing.x, legend.spacing.y, legend.key,
+  legend.key.size, legend.key.height, legend.key.width, legend.text,
+  legend.text.align, legend.title, legend.title.align, legend.position,
+  legend.direction, legend.justification, legend.box, legend.box.just,
+  legend.box.margin, legend.box.background, legend.box.spacing
+  
+&gt; panel.background, panel.border, panel.spacing, panel.spacing.x,
+  panel.spacing.y, panel.grid, panel.grid.major, panel.grid.minor,
+  panel.grid.major.x, panel.grid.major.y, panel.grid.minor.x,
+  panel.grid.minor.y, panel.ontop 
+  
+&gt; plot.background, plot.title,
+  plot.subtitle, plot.caption, plot.tag, plot.tag.position, plot.margin
+  
+&gt; strip.background, strip.background.x, strip.background.y,
+  strip.placement, strip.text, strip.text.x, strip.text.y,
+  strip.switch.pad.grid, strip.switch.pad.wrap
+
+
+
+---
+name: uglyplot
+
+# An ugly plot, for locating components!
+
+Now we'll create this plot to get a sense of how thematic modifications can be made, by 1) specifying the component to be adjusted 
+2) the element of the component to be adjusted and 3) indicating the aesthetic adjustment.  
+
+The adjustments made should make clear what components of the plot are called in ggplot. 
+
+Later we'll walk through a more focused adjustments.  We'll go through time elements one at at time: text, rectangular, line, etc.  
+
+&lt;img src="taming_ggplot_themes_files/figure-html/custom_theme-1.png" width="50%" /&gt;
+
+---
+
+
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+*g 
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_custom_theme_1-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+* theme(rect = element_rect(fill = "snow3"))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_custom_theme_2-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  theme(rect = element_rect(fill = "snow3")) +
+* theme(text = element_text(family = "Times New Roman"))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_custom_theme_3-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  theme(rect = element_rect(fill = "snow3")) +
+  theme(text = element_text(family = "Times New Roman")) +
+* theme(axis.title = element_text(color = "slateblue4"))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_custom_theme_4-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  theme(rect = element_rect(fill = "snow3")) +
+  theme(text = element_text(family = "Times New Roman")) +
+  theme(axis.title = element_text(color = "slateblue4")) +
+* theme(title = element_text(color = "seagreen"))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_custom_theme_5-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  theme(rect = element_rect(fill = "snow3")) +
+  theme(text = element_text(family = "Times New Roman")) +
+  theme(axis.title = element_text(color = "slateblue4")) +
+  theme(title = element_text(color = "seagreen")) +
+* theme(axis.line = element_line(color = "orange"))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_custom_theme_6-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  theme(rect = element_rect(fill = "snow3")) +
+  theme(text = element_text(family = "Times New Roman")) +
+  theme(axis.title = element_text(color = "slateblue4")) +
+  theme(title = element_text(color = "seagreen")) +
+  theme(axis.line = element_line(color = "orange")) +
+* theme(legend.key = element_rect(fill = "violet"))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_custom_theme_7-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  theme(rect = element_rect(fill = "snow3")) +
+  theme(text = element_text(family = "Times New Roman")) +
+  theme(axis.title = element_text(color = "slateblue4")) +
+  theme(title = element_text(color = "seagreen")) +
+  theme(axis.line = element_line(color = "orange")) +
+  theme(legend.key = element_rect(fill = "violet")) +
+* theme(axis.ticks = element_line(color = "blue"))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_custom_theme_8-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  theme(rect = element_rect(fill = "snow3")) +
+  theme(text = element_text(family = "Times New Roman")) +
+  theme(axis.title = element_text(color = "slateblue4")) +
+  theme(title = element_text(color = "seagreen")) +
+  theme(axis.line = element_line(color = "orange")) +
+  theme(legend.key = element_rect(fill = "violet")) +
+  theme(axis.ticks = element_line(color = "blue")) +
+* theme(axis.ticks.x = element_blank())
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_custom_theme_9-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  theme(rect = element_rect(fill = "snow3")) +
+  theme(text = element_text(family = "Times New Roman")) +
+  theme(axis.title = element_text(color = "slateblue4")) +
+  theme(title = element_text(color = "seagreen")) +
+  theme(axis.line = element_line(color = "orange")) +
+  theme(legend.key = element_rect(fill = "violet")) +
+  theme(axis.ticks = element_line(color = "blue")) +
+  theme(axis.ticks.x = element_blank()) +
+* theme(panel.background = element_rect(fill = "steelblue"))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_custom_theme_10-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  theme(rect = element_rect(fill = "snow3")) +
+  theme(text = element_text(family = "Times New Roman")) +
+  theme(axis.title = element_text(color = "slateblue4")) +
+  theme(title = element_text(color = "seagreen")) +
+  theme(axis.line = element_line(color = "orange")) +
+  theme(legend.key = element_rect(fill = "violet")) +
+  theme(axis.ticks = element_line(color = "blue")) +
+  theme(axis.ticks.x = element_blank()) +
+  theme(panel.background = element_rect(fill = "steelblue")) +
+* theme(panel.grid =
+*         element_line(size = 3, color = "thistle1"))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_custom_theme_12-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  theme(rect = element_rect(fill = "snow3")) +
+  theme(text = element_text(family = "Times New Roman")) +
+  theme(axis.title = element_text(color = "slateblue4")) +
+  theme(title = element_text(color = "seagreen")) +
+  theme(axis.line = element_line(color = "orange")) +
+  theme(legend.key = element_rect(fill = "violet")) +
+  theme(axis.ticks = element_line(color = "blue")) +
+  theme(axis.ticks.x = element_blank()) +
+  theme(panel.background = element_rect(fill = "steelblue")) +
+  theme(panel.grid = 
+          element_line(size = 3, color = "thistle1")) +
+* theme(legend.background = element_rect(fill = "goldenrod1"))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_custom_theme_13-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  theme(rect = element_rect(fill = "snow3")) +
+  theme(text = element_text(family = "Times New Roman")) +
+  theme(axis.title = element_text(color = "slateblue4")) +
+  theme(title = element_text(color = "seagreen")) +
+  theme(axis.line = element_line(color = "orange")) +
+  theme(legend.key = element_rect(fill = "violet")) +
+  theme(axis.ticks = element_line(color = "blue")) +
+  theme(axis.ticks.x = element_blank()) +
+  theme(panel.background = element_rect(fill = "steelblue")) +
+  theme(panel.grid = 
+          element_line(size = 3, color = "thistle1")) +
+  theme(legend.background = element_rect(fill = "goldenrod1")) +
+* theme(legend.text = element_text(size = 7))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_custom_theme_14-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  theme(rect = element_rect(fill = "snow3")) +
+  theme(text = element_text(family = "Times New Roman")) +
+  theme(axis.title = element_text(color = "slateblue4")) +
+  theme(title = element_text(color = "seagreen")) +
+  theme(axis.line = element_line(color = "orange")) +
+  theme(legend.key = element_rect(fill = "violet")) +
+  theme(axis.ticks = element_line(color = "blue")) +
+  theme(axis.ticks.x = element_blank()) +
+  theme(panel.background = element_rect(fill = "steelblue")) +
+  theme(panel.grid = 
+          element_line(size = 3, color = "thistle1")) +
+  theme(legend.background = element_rect(fill = "goldenrod1")) +
+  theme(legend.text = element_text(size = 7)) +
+* theme(legend.position = "bottom")
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_custom_theme_15-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  theme(rect = element_rect(fill = "snow3")) +
+  theme(text = element_text(family = "Times New Roman")) +
+  theme(axis.title = element_text(color = "slateblue4")) +
+  theme(title = element_text(color = "seagreen")) +
+  theme(axis.line = element_line(color = "orange")) +
+  theme(legend.key = element_rect(fill = "violet")) +
+  theme(axis.ticks = element_line(color = "blue")) +
+  theme(axis.ticks.x = element_blank()) +
+  theme(panel.background = element_rect(fill = "steelblue")) +
+  theme(panel.grid = 
+          element_line(size = 3, color = "thistle1")) +
+  theme(legend.background = element_rect(fill = "goldenrod1")) +
+  theme(legend.text = element_text(size = 7)) +
+  theme(legend.position = "bottom") +
+* theme(legend.margin = margin(t = 0, r = 20,
+*                              b = 0, l = 40, unit = "pt"))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_custom_theme_17-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  theme(rect = element_rect(fill = "snow3")) +
+  theme(text = element_text(family = "Times New Roman")) +
+  theme(axis.title = element_text(color = "slateblue4")) +
+  theme(title = element_text(color = "seagreen")) +
+  theme(axis.line = element_line(color = "orange")) +
+  theme(legend.key = element_rect(fill = "violet")) +
+  theme(axis.ticks = element_line(color = "blue")) +
+  theme(axis.ticks.x = element_blank()) +
+  theme(panel.background = element_rect(fill = "steelblue")) +
+  theme(panel.grid = 
+          element_line(size = 3, color = "thistle1")) +
+  theme(legend.background = element_rect(fill = "goldenrod1")) +
+  theme(legend.text = element_text(size = 7)) +
+  theme(legend.position = "bottom") +
+  theme(legend.margin = margin(t = 0, r = 20, 
+                               b = 0, l = 40, unit = "pt")) +
+* theme(aspect.ratio = .5)
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_custom_theme_18-1.png" width="100%" /&gt;
+]]
+
+
+
+
+
+---
+
+# What are the elements of these components?
+
+Now we'll focus on different elements of the components: 
+
+- element_line()
+- element_rect()
+- element_text()
+
+Additionally, element_blank(), allows you to indicate that you don't want the component included in the plot at all. 
+
+
+---
+
+
+# Across-the-board adjustment
+
+Across-the-board adjustment to all components with given elements can also be done using the *line*, *rect*, *text*, and *title* adjustments.
+These will apply generally where no more specific adjustment has been made.  
+
+&gt; line
+
+&gt; rect
+
+&gt; text 
+
+&gt; title
+
+
+---
+
+
+
+
+```r
+options(scipen = 10) # adjust when scientific notation turns on
+library(tidyverse)
+library(gapminder)
+```
+
+
+
+
+
+
+
+
+
+---
+
+name: textelements
+
+# Focus on text elements!
+
+
+
+&lt;img src="taming_ggplot_themes_files/figure-html/text_components-1.png" width="60%" /&gt;
+
+---
+
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+*g 
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_text_components_1-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+* theme(plot.tag =
+*         element_text(color = "plum4", size = 25))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_text_components_3-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  theme(plot.tag = 
+          element_text(color = "plum4", size = 25)) +
+* theme(plot.title =
+*         element_text(color = "plum4",
+*                      size = 20,
+*                      lineheight = 2.5))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_text_components_7-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  theme(plot.tag = 
+          element_text(color = "plum4", size = 25)) +
+  theme(plot.title = 
+          element_text(color = "plum4", 
+                       size = 20,
+                       lineheight = 2.5)) +
+* theme(plot.subtitle = element_text(color = "plum4"))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_text_components_8-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  theme(plot.tag = 
+          element_text(color = "plum4", size = 25)) +
+  theme(plot.title = 
+          element_text(color = "plum4", 
+                       size = 20,
+                       lineheight = 2.5)) +
+  theme(plot.subtitle = element_text(color = "plum4")) +
+* theme(axis.title.y =
+*         element_text(color = "plum4",
+*                      size = rel(3)))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_text_components_11-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  theme(plot.tag = 
+          element_text(color = "plum4", size = 25)) +
+  theme(plot.title = 
+          element_text(color = "plum4", 
+                       size = 20,
+                       lineheight = 2.5)) +
+  theme(plot.subtitle = element_text(color = "plum4")) +
+  theme(axis.title.y = 
+          element_text(color = "plum4", 
+                       size = rel(3))) +
+* theme(axis.text.y = element_text(color = "plum4"))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_text_components_12-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  theme(plot.tag = 
+          element_text(color = "plum4", size = 25)) +
+  theme(plot.title = 
+          element_text(color = "plum4", 
+                       size = 20,
+                       lineheight = 2.5)) +
+  theme(plot.subtitle = element_text(color = "plum4")) +
+  theme(axis.title.y = 
+          element_text(color = "plum4", 
+                       size = rel(3))) +
+  theme(axis.text.y = element_text(color = "plum4")) +
+* theme(legend.title =
+*         element_text(color = "plum4", size = 22))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_text_components_14-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  theme(plot.tag = 
+          element_text(color = "plum4", size = 25)) +
+  theme(plot.title = 
+          element_text(color = "plum4", 
+                       size = 20,
+                       lineheight = 2.5)) +
+  theme(plot.subtitle = element_text(color = "plum4")) +
+  theme(axis.title.y = 
+          element_text(color = "plum4", 
+                       size = rel(3))) +
+  theme(axis.text.y = element_text(color = "plum4")) +
+  theme(legend.title = 
+          element_text(color = "plum4", size = 22)) +
+* theme(legend.text = element_text(color = "plum4"))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_text_components_15-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  theme(plot.tag = 
+          element_text(color = "plum4", size = 25)) +
+  theme(plot.title = 
+          element_text(color = "plum4", 
+                       size = 20,
+                       lineheight = 2.5)) +
+  theme(plot.subtitle = element_text(color = "plum4")) +
+  theme(axis.title.y = 
+          element_text(color = "plum4", 
+                       size = rel(3))) +
+  theme(axis.text.y = element_text(color = "plum4")) +
+  theme(legend.title = 
+          element_text(color = "plum4", size = 22)) +
+  theme(legend.text = element_text(color = "plum4")) +
+* theme(axis.title.x = element_text(color = "plum4"))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_text_components_16-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  theme(plot.tag = 
+          element_text(color = "plum4", size = 25)) +
+  theme(plot.title = 
+          element_text(color = "plum4", 
+                       size = 20,
+                       lineheight = 2.5)) +
+  theme(plot.subtitle = element_text(color = "plum4")) +
+  theme(axis.title.y = 
+          element_text(color = "plum4", 
+                       size = rel(3))) +
+  theme(axis.text.y = element_text(color = "plum4")) +
+  theme(legend.title = 
+          element_text(color = "plum4", size = 22)) +
+  theme(legend.text = element_text(color = "plum4")) +
+  theme(axis.title.x = element_text(color = "plum4")) +
+* theme(axis.text.x = element_text(color = "plum4"))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_text_components_17-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  theme(plot.tag = 
+          element_text(color = "plum4", size = 25)) +
+  theme(plot.title = 
+          element_text(color = "plum4", 
+                       size = 20,
+                       lineheight = 2.5)) +
+  theme(plot.subtitle = element_text(color = "plum4")) +
+  theme(axis.title.y = 
+          element_text(color = "plum4", 
+                       size = rel(3))) +
+  theme(axis.text.y = element_text(color = "plum4")) +
+  theme(legend.title = 
+          element_text(color = "plum4", size = 22)) +
+  theme(legend.text = element_text(color = "plum4")) +
+  theme(axis.title.x = element_text(color = "plum4")) +
+  theme(axis.text.x = element_text(color = "plum4")) +
+* theme(plot.caption =
+*         element_text(color = "plum4", size = 20))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_text_components_19-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  theme(plot.tag = 
+          element_text(color = "plum4", size = 25)) +
+  theme(plot.title = 
+          element_text(color = "plum4", 
+                       size = 20,
+                       lineheight = 2.5)) +
+  theme(plot.subtitle = element_text(color = "plum4")) +
+  theme(axis.title.y = 
+          element_text(color = "plum4", 
+                       size = rel(3))) +
+  theme(axis.text.y = element_text(color = "plum4")) +
+  theme(legend.title = 
+          element_text(color = "plum4", size = 22)) +
+  theme(legend.text = element_text(color = "plum4")) +
+  theme(axis.title.x = element_text(color = "plum4")) +
+  theme(axis.text.x = element_text(color = "plum4")) +
+  theme(plot.caption = 
+          element_text(color = "plum4", size = 20)) +
+* theme(text = element_text(family = "Times"))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_text_components_20-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  theme(plot.tag = 
+          element_text(color = "plum4", size = 25)) +
+  theme(plot.title = 
+          element_text(color = "plum4", 
+                       size = 20,
+                       lineheight = 2.5)) +
+  theme(plot.subtitle = element_text(color = "plum4")) +
+  theme(axis.title.y = 
+          element_text(color = "plum4", 
+                       size = rel(3))) +
+  theme(axis.text.y = element_text(color = "plum4")) +
+  theme(legend.title = 
+          element_text(color = "plum4", size = 22)) +
+  theme(legend.text = element_text(color = "plum4")) +
+  theme(axis.title.x = element_text(color = "plum4")) +
+  theme(axis.text.x = element_text(color = "plum4")) +
+  theme(plot.caption = 
+          element_text(color = "plum4", size = 20)) +
+  theme(text = element_text(family = "Times")) + 
+* theme(text = element_text(face = "bold.italic"))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_text_components_21-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  theme(plot.tag = 
+          element_text(color = "plum4", size = 25)) +
+  theme(plot.title = 
+          element_text(color = "plum4", 
+                       size = 20,
+                       lineheight = 2.5)) +
+  theme(plot.subtitle = element_text(color = "plum4")) +
+  theme(axis.title.y = 
+          element_text(color = "plum4", 
+                       size = rel(3))) +
+  theme(axis.text.y = element_text(color = "plum4")) +
+  theme(legend.title = 
+          element_text(color = "plum4", size = 22)) +
+  theme(legend.text = element_text(color = "plum4")) +
+  theme(axis.title.x = element_text(color = "plum4")) +
+  theme(axis.text.x = element_text(color = "plum4")) +
+  theme(plot.caption = 
+          element_text(color = "plum4", size = 20)) +
+  theme(text = element_text(family = "Times")) + 
+  theme(text = element_text(face = "bold.italic")) +
+* theme(text = element_text(
+*   margin = margin(t = 3, r = 3, b = 3, l = 3,
+*                   unit = "pt")))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_text_components_24-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  theme(plot.tag = 
+          element_text(color = "plum4", size = 25)) +
+  theme(plot.title = 
+          element_text(color = "plum4", 
+                       size = 20,
+                       lineheight = 2.5)) +
+  theme(plot.subtitle = element_text(color = "plum4")) +
+  theme(axis.title.y = 
+          element_text(color = "plum4", 
+                       size = rel(3))) +
+  theme(axis.text.y = element_text(color = "plum4")) +
+  theme(legend.title = 
+          element_text(color = "plum4", size = 22)) +
+  theme(legend.text = element_text(color = "plum4")) +
+  theme(axis.title.x = element_text(color = "plum4")) +
+  theme(axis.text.x = element_text(color = "plum4")) +
+  theme(plot.caption = 
+          element_text(color = "plum4", size = 20)) +
+  theme(text = element_text(family = "Times")) + 
+  theme(text = element_text(face = "bold.italic")) +
+  theme(text = element_text(
+    margin = margin(t = 3, r = 3, b = 3, l = 3, 
+                    unit = "pt"))) +
+* theme(text = element_text(angle = 2))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_text_components_25-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  theme(plot.tag = 
+          element_text(color = "plum4", size = 25)) +
+  theme(plot.title = 
+          element_text(color = "plum4", 
+                       size = 20,
+                       lineheight = 2.5)) +
+  theme(plot.subtitle = element_text(color = "plum4")) +
+  theme(axis.title.y = 
+          element_text(color = "plum4", 
+                       size = rel(3))) +
+  theme(axis.text.y = element_text(color = "plum4")) +
+  theme(legend.title = 
+          element_text(color = "plum4", size = 22)) +
+  theme(legend.text = element_text(color = "plum4")) +
+  theme(axis.title.x = element_text(color = "plum4")) +
+  theme(axis.text.x = element_text(color = "plum4")) +
+  theme(plot.caption = 
+          element_text(color = "plum4", size = 20)) +
+  theme(text = element_text(family = "Times")) + 
+  theme(text = element_text(face = "bold.italic")) +
+  theme(text = element_text(
+    margin = margin(t = 3, r = 3, b = 3, l = 3, 
+                    unit = "pt"))) +
+  theme(text = element_text(angle = 2)) +
+* theme(plot.title = element_text(hjust = .5))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_text_components_26-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  theme(plot.tag = 
+          element_text(color = "plum4", size = 25)) +
+  theme(plot.title = 
+          element_text(color = "plum4", 
+                       size = 20,
+                       lineheight = 2.5)) +
+  theme(plot.subtitle = element_text(color = "plum4")) +
+  theme(axis.title.y = 
+          element_text(color = "plum4", 
+                       size = rel(3))) +
+  theme(axis.text.y = element_text(color = "plum4")) +
+  theme(legend.title = 
+          element_text(color = "plum4", size = 22)) +
+  theme(legend.text = element_text(color = "plum4")) +
+  theme(axis.title.x = element_text(color = "plum4")) +
+  theme(axis.text.x = element_text(color = "plum4")) +
+  theme(plot.caption = 
+          element_text(color = "plum4", size = 20)) +
+  theme(text = element_text(family = "Times")) + 
+  theme(text = element_text(face = "bold.italic")) +
+  theme(text = element_text(
+    margin = margin(t = 3, r = 3, b = 3, l = 3, 
+                    unit = "pt"))) +
+  theme(text = element_text(angle = 2)) +
+  theme(plot.title = element_text(hjust = .5)) +
+* theme(axis.title.x = element_text(hjust = 1))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_text_components_27-1.png" width="100%" /&gt;
+]]
+
+
+---
+
+name: rectangularelements
+
+# Focus on rectangular elements!
+
+
+&lt;img src="taming_ggplot_themes_files/figure-html/rect_components-1.png" width="60%" /&gt;
+
+---
+
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+*g 
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_rect_components_1-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g +
+* theme(plot.background =
+*         element_rect(fill = "purple",
+*                      color = "darkolivegreen",
+*                      size = 3))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_rect_components_5-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g +
+  theme(plot.background = 
+          element_rect(fill = "purple", 
+                       color = "darkolivegreen", 
+                       size = 3)) +
+* theme(panel.background =
+*         element_rect(fill = "purple",
+*                      color = "darkolivegreen",
+*                      size = 3))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_rect_components_9-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g +
+  theme(plot.background = 
+          element_rect(fill = "purple", 
+                       color = "darkolivegreen", 
+                       size = 3)) +
+  theme(panel.background = 
+          element_rect(fill = "purple", 
+                       color = "darkolivegreen",
+                       size = 3)) +
+* theme(legend.background =
+*         element_rect(fill = "purple",
+*                      color = "darkolivegreen",
+*                      size = 3))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_rect_components_13-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g +
+  theme(plot.background = 
+          element_rect(fill = "purple", 
+                       color = "darkolivegreen", 
+                       size = 3)) +
+  theme(panel.background = 
+          element_rect(fill = "purple", 
+                       color = "darkolivegreen",
+                       size = 3)) +
+  theme(legend.background = 
+          element_rect(fill = "purple", 
+                       color = "darkolivegreen", 
+                       size = 3)) +
+* theme(legend.key =
+*         element_rect(fill = "purple",
+*                      color = "darkolivegreen",
+*                      size = 3))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_rect_components_17-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g +
+  theme(plot.background = 
+          element_rect(fill = "purple", 
+                       color = "darkolivegreen", 
+                       size = 3)) +
+  theme(panel.background = 
+          element_rect(fill = "purple", 
+                       color = "darkolivegreen",
+                       size = 3)) +
+  theme(legend.background = 
+          element_rect(fill = "purple", 
+                       color = "darkolivegreen", 
+                       size = 3)) +
+  theme(legend.key = 
+          element_rect(fill = "purple", 
+                       color = "darkolivegreen", 
+                       size = 3)) +
+* theme(panel.border =
+*         element_rect(color = "magenta",
+*                      fill = NA, size = 4))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_rect_components_20-1.png" width="100%" /&gt;
+]]
+
+---
+
+name: lineelements
+
+# Focus on line elements!
+
+
+&lt;img src="taming_ggplot_themes_files/figure-html/line_components-1.png" width="60%" /&gt;
+
+---
+
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+*g 
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_line_components_1-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g +
+* theme(axis.ticks.y =
+*         element_line(size = 10,
+*                      color = "blue"))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_line_components_4-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g +
+  theme(axis.ticks.y = 
+          element_line(size = 10, 
+                       color = "blue")) +
+* theme(axis.ticks.x =
+*         element_line(size = 10,
+*                      color = "blue"))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_line_components_7-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g +
+  theme(axis.ticks.y = 
+          element_line(size = 10, 
+                       color = "blue")) +
+  theme(axis.ticks.x = 
+          element_line(size = 10, 
+                       color = "blue")) +
+* theme(panel.grid.major.y =
+*         element_line(size = 2,
+*                      linetype = "dashed",
+*                      color = "blue",
+*                      lineend = "round"))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_line_components_12-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g +
+  theme(axis.ticks.y = 
+          element_line(size = 10, 
+                       color = "blue")) +
+  theme(axis.ticks.x = 
+          element_line(size = 10, 
+                       color = "blue")) +
+  theme(panel.grid.major.y = 
+          element_line(size = 2,
+                       linetype = "dashed",
+                       color = "blue",
+                       lineend = "round")) +
+* theme(panel.grid.major.x =
+*         element_line(size = 2,
+*                      arrow = arrow(),
+*                      color = "blue",
+*                      lineend = "round"))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_line_components_17-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g +
+  theme(axis.ticks.y = 
+          element_line(size = 10, 
+                       color = "blue")) +
+  theme(axis.ticks.x = 
+          element_line(size = 10, 
+                       color = "blue")) +
+  theme(panel.grid.major.y = 
+          element_line(size = 2,
+                       linetype = "dashed",
+                       color = "blue",
+                       lineend = "round")) +
+  theme(panel.grid.major.x = 
+          element_line(size = 2, 
+                       arrow = arrow(),
+                       color = "blue",
+                       lineend = "round")) +
+* theme(panel.grid.minor.y =
+*         element_line(size = 1,
+*                      linetype = "dotted",
+*                      color = "blue",
+*                      lineend = "butt"))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_line_components_22-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g +
+  theme(axis.ticks.y = 
+          element_line(size = 10, 
+                       color = "blue")) +
+  theme(axis.ticks.x = 
+          element_line(size = 10, 
+                       color = "blue")) +
+  theme(panel.grid.major.y = 
+          element_line(size = 2,
+                       linetype = "dashed",
+                       color = "blue",
+                       lineend = "round")) +
+  theme(panel.grid.major.x = 
+          element_line(size = 2, 
+                       arrow = arrow(),
+                       color = "blue",
+                       lineend = "round")) +
+  theme(panel.grid.minor.y = 
+          element_line(size = 1, 
+                       linetype = "dotted",
+                       color = "blue",
+                       lineend = "butt")) +
+* theme(panel.grid =
+*         element_line(color = "blue"))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_line_components_24-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g +
+  theme(axis.ticks.y = 
+          element_line(size = 10, 
+                       color = "blue")) +
+  theme(axis.ticks.x = 
+          element_line(size = 10, 
+                       color = "blue")) +
+  theme(panel.grid.major.y = 
+          element_line(size = 2,
+                       linetype = "dashed",
+                       color = "blue",
+                       lineend = "round")) +
+  theme(panel.grid.major.x = 
+          element_line(size = 2, 
+                       arrow = arrow(),
+                       color = "blue",
+                       lineend = "round")) +
+  theme(panel.grid.minor.y = 
+          element_line(size = 1, 
+                       linetype = "dotted",
+                       color = "blue",
+                       lineend = "butt")) +
+  theme(panel.grid = 
+          element_line(color = "blue")) +
+* theme(axis.line.x.top =
+*         element_line(size = 2,
+*                      color = "blue"))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_line_components_27-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g +
+  theme(axis.ticks.y = 
+          element_line(size = 10, 
+                       color = "blue")) +
+  theme(axis.ticks.x = 
+          element_line(size = 10, 
+                       color = "blue")) +
+  theme(panel.grid.major.y = 
+          element_line(size = 2,
+                       linetype = "dashed",
+                       color = "blue",
+                       lineend = "round")) +
+  theme(panel.grid.major.x = 
+          element_line(size = 2, 
+                       arrow = arrow(),
+                       color = "blue",
+                       lineend = "round")) +
+  theme(panel.grid.minor.y = 
+          element_line(size = 1, 
+                       linetype = "dotted",
+                       color = "blue",
+                       lineend = "butt")) +
+  theme(panel.grid = 
+          element_line(color = "blue")) +
+  theme(axis.line.x.top = 
+          element_line(size = 2,
+                       color = "blue")) +
+* theme(panel.ontop = TRUE,
+*       panel.background = element_blank()) # in front of the data
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_line_components_29-1.png" width="100%" /&gt;
+]]
+
+
+
+---
+
+# What aesthetics of these elements can be adjusted?
+
+| aesthetic | adjustable for element of type: |
+|-----|----|
+| fill | *rect*  |
+| color | *rect, line, text* |
+| size |  *rect, line, text* |
+| linetype | *rect, line* |
+| lineend | *line* |
+| arrow | *line* |
+| family (font) | *text* |
+| face | *text* |
+| hjust | *text* |
+| vjust | *text* |
+| angle  | *text* |
+| lineheight |  *text* |
+| margin | *text* |
+| debug | *text* |
+| inherit.blank | *rect, line, text* |
+
+
+
+---
+
+name: legends
+
+# More legend options!
+
+
+
+
+&lt;img src="taming_ggplot_themes_files/figure-html/legend-1.png" width="60%" /&gt;
+---
+
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+*g 
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_legend_1-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g +
+* theme(legend.position = "bottom")
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_legend_2-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g +
+  theme(legend.position = "bottom") +
+* theme(legend.position = "none")
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_legend_3-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g +
+  theme(legend.position = "bottom") +
+  theme(legend.position = "none") +
+* theme(legend.position = c(.8, .25))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_legend_4-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g +
+  theme(legend.position = "bottom") +
+  theme(legend.position = "none") +
+  theme(legend.position = c(.8, .25)) +
+* theme(legend.direction = "horizontal")
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_legend_5-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g +
+  theme(legend.position = "bottom") +
+  theme(legend.position = "none") +
+  theme(legend.position = c(.8, .25)) +
+  theme(legend.direction = "horizontal") +
+* theme(legend.key = element_rect())
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_legend_6-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g +
+  theme(legend.position = "bottom") +
+  theme(legend.position = "none") +
+  theme(legend.position = c(.8, .25)) +
+  theme(legend.direction = "horizontal") +
+  theme(legend.key = element_rect()) +
+* guides(fill = guide_legend(size = 35))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_legend_7-1.png" width="100%" /&gt;
+]]
+
+---
+
+name: sundries
+
+# More modifications! (Sundries)
+
+
+&lt;img src="taming_ggplot_themes_files/figure-html/sundries-1.png" width="60%" /&gt;
+
+---
+
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+*g 
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_sundries_1-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g +
+* theme(plot.tag.position = "topright")
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_sundries_2-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g +
+  theme(plot.tag.position = "topright") + 
+* scale_color_discrete(guide = FALSE)
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_sundries_3-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g +
+  theme(plot.tag.position = "topright") + 
+  scale_color_discrete(guide = FALSE) +
+* scale_fill_discrete(guide = FALSE)
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_sundries_4-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g +
+  theme(plot.tag.position = "topright") + 
+  scale_color_discrete(guide = FALSE) +
+  scale_fill_discrete(guide = FALSE) +
+* scale_x_continuous(position = "top")
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_sundries_5-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g +
+  theme(plot.tag.position = "topright") + 
+  scale_color_discrete(guide = FALSE) +
+  scale_fill_discrete(guide = FALSE) +
+  scale_x_continuous(position = "top") +
+* scale_y_continuous(position = "right")
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_sundries_6-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g +
+  theme(plot.tag.position = "topright") + 
+  scale_color_discrete(guide = FALSE) +
+  scale_fill_discrete(guide = FALSE) +
+  scale_x_continuous(position = "top") +
+  scale_y_continuous(position = "right") +
+* theme(aspect.ratio = .5)
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_sundries_7-1.png" width="100%" /&gt;
+]]
+
+
+---
+
+name: facet
+
+# Focus on facet elements!
+
+
+&lt;img src="taming_ggplot_themes_files/figure-html/small_multiples-1.png" width="60%" /&gt;
+
+---
+
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+*g 
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_small_multiples_1-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+* facet_wrap(~ continent,
+*            strip.position = "right")
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_small_multiples_3-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  facet_wrap(~ continent, 
+             strip.position = "right") +
+* theme(strip.background =
+*         element_rect(fill = "pink"))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_small_multiples_5-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  facet_wrap(~ continent, 
+             strip.position = "right") +
+  theme(strip.background = 
+          element_rect(fill = "pink")) +
+* theme(strip.text.y =
+*         element_text(color = "snow", size = 12))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_small_multiples_7-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  facet_wrap(~ continent, 
+             strip.position = "right") +
+  theme(strip.background = 
+          element_rect(fill = "pink")) +
+  theme(strip.text.y = 
+          element_text(color = "snow", size = 12)) +
+* theme(strip.text.y =
+*         element_text(angle = -80))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_small_multiples_9-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  facet_wrap(~ continent, 
+             strip.position = "right") +
+  theme(strip.background = 
+          element_rect(fill = "pink")) +
+  theme(strip.text.y = 
+          element_text(color = "snow", size = 12)) +
+  theme(strip.text.y = 
+          element_text(angle = -80)) +
+* theme(panel.spacing.x =
+*         unit(1.5, "lines"))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_small_multiples_11-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  facet_wrap(~ continent, 
+             strip.position = "right") +
+  theme(strip.background = 
+          element_rect(fill = "pink")) +
+  theme(strip.text.y = 
+          element_text(color = "snow", size = 12)) +
+  theme(strip.text.y = 
+          element_text(angle = -80)) +
+  theme(panel.spacing.x = 
+          unit(1.5, "lines")) +
+* theme(panel.spacing.y =
+*         unit(2, "lines"))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_small_multiples_13-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  facet_wrap(~ continent, 
+             strip.position = "right") +
+  theme(strip.background = 
+          element_rect(fill = "pink")) +
+  theme(strip.text.y = 
+          element_text(color = "snow", size = 12)) +
+  theme(strip.text.y = 
+          element_text(angle = -80)) +
+  theme(panel.spacing.x = 
+          unit(1.5, "lines")) +
+  theme(panel.spacing.y = 
+          unit(2, "lines")) +
+* theme(strip.switch.pad.grid =
+*         unit(0, "cm"))
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_small_multiples_15-1.png" width="100%" /&gt;
+]]
+
+---
+
+name: presetthemes
+
+# "base" ggplot preset themes
+
+Next we'll have at different preset themes available in ggplot that can be applied in one line of code. 
+
+---
+
+
+
+---
+
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+*g 
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_theme_presets_1-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+* theme_bw()
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_theme_presets_2-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  theme_bw() +
+* theme_classic()
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_theme_presets_3-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  theme_bw() +
+  theme_classic() +
+* theme_dark()
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_theme_presets_4-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  theme_bw() +
+  theme_classic() +
+  theme_dark() +
+* theme_gray()
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_theme_presets_5-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  theme_bw() +
+  theme_classic() +
+  theme_dark() +
+  theme_gray() + 
+* theme_light()
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_theme_presets_6-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  theme_bw() +
+  theme_classic() +
+  theme_dark() +
+  theme_gray() + 
+  theme_light() +
+* theme_linedraw()
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_theme_presets_7-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  theme_bw() +
+  theme_classic() +
+  theme_dark() +
+  theme_gray() + 
+  theme_light() +
+  theme_linedraw() +
+* theme_minimal()
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_theme_presets_8-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  theme_bw() +
+  theme_classic() +
+  theme_dark() +
+  theme_gray() + 
+  theme_light() +
+  theme_linedraw() +
+  theme_minimal() +
+* theme_void()
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_theme_presets_9-1.png" width="100%" /&gt;
+]]
+
+---
+
+# Outside themes package 
+
+Other packages are designed to complement ggplot in providing more these
+
+Featured here are `ggthemes`, `ggpomological`, and `ggdark`.
+
+
+```r
+# If you don't have devtools installed
+# install.packages("devtools")
+# devtools::install_github("gadenbuie/ggpomological")
+```
+
+
+```r
+library(ggthemes)
+library(ggpomological)
+library(ggdark)
+```
+
+Let's check some of these out!
+
+---
+
+# ggthemes
+
+---
+
+
+
+---
+
+
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+*g 
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_ggthemes_1-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+* ggthemes::theme_base()
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_ggthemes_2-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  ggthemes::theme_base() +
+* ggthemes::theme_calc()
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_ggthemes_3-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  ggthemes::theme_base() +
+  ggthemes::theme_calc() + 
+* ggthemes::theme_economist()
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_ggthemes_4-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  ggthemes::theme_base() +
+  ggthemes::theme_calc() + 
+  ggthemes::theme_economist() +
+* ggthemes::theme_economist_white()
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_ggthemes_5-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  ggthemes::theme_base() +
+  ggthemes::theme_calc() + 
+  ggthemes::theme_economist() +
+  ggthemes::theme_economist_white() +
+* ggthemes::theme_excel()
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_ggthemes_6-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  ggthemes::theme_base() +
+  ggthemes::theme_calc() + 
+  ggthemes::theme_economist() +
+  ggthemes::theme_economist_white() +
+  ggthemes::theme_excel() +
+* ggthemes::theme_excel_new()
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_ggthemes_7-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  ggthemes::theme_base() +
+  ggthemes::theme_calc() + 
+  ggthemes::theme_economist() +
+  ggthemes::theme_economist_white() +
+  ggthemes::theme_excel() +
+  ggthemes::theme_excel_new() +
+* ggthemes::theme_few()
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_ggthemes_8-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  ggthemes::theme_base() +
+  ggthemes::theme_calc() + 
+  ggthemes::theme_economist() +
+  ggthemes::theme_economist_white() +
+  ggthemes::theme_excel() +
+  ggthemes::theme_excel_new() +
+  ggthemes::theme_few() +
+* ggthemes::theme_fivethirtyeight()
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_ggthemes_9-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  ggthemes::theme_base() +
+  ggthemes::theme_calc() + 
+  ggthemes::theme_economist() +
+  ggthemes::theme_economist_white() +
+  ggthemes::theme_excel() +
+  ggthemes::theme_excel_new() +
+  ggthemes::theme_few() +
+  ggthemes::theme_fivethirtyeight() +
+* ggthemes::theme_gdocs()
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_ggthemes_10-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  ggthemes::theme_base() +
+  ggthemes::theme_calc() + 
+  ggthemes::theme_economist() +
+  ggthemes::theme_economist_white() +
+  ggthemes::theme_excel() +
+  ggthemes::theme_excel_new() +
+  ggthemes::theme_few() +
+  ggthemes::theme_fivethirtyeight() +
+  ggthemes::theme_gdocs() +
+* ggthemes::theme_hc()
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_ggthemes_11-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  ggthemes::theme_base() +
+  ggthemes::theme_calc() + 
+  ggthemes::theme_economist() +
+  ggthemes::theme_economist_white() +
+  ggthemes::theme_excel() +
+  ggthemes::theme_excel_new() +
+  ggthemes::theme_few() +
+  ggthemes::theme_fivethirtyeight() +
+  ggthemes::theme_gdocs() +
+  ggthemes::theme_hc() +
+* ggthemes::theme_igray()
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_ggthemes_12-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  ggthemes::theme_base() +
+  ggthemes::theme_calc() + 
+  ggthemes::theme_economist() +
+  ggthemes::theme_economist_white() +
+  ggthemes::theme_excel() +
+  ggthemes::theme_excel_new() +
+  ggthemes::theme_few() +
+  ggthemes::theme_fivethirtyeight() +
+  ggthemes::theme_gdocs() +
+  ggthemes::theme_hc() +
+  ggthemes::theme_igray() +
+* ggthemes::theme_map()
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_ggthemes_13-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  ggthemes::theme_base() +
+  ggthemes::theme_calc() + 
+  ggthemes::theme_economist() +
+  ggthemes::theme_economist_white() +
+  ggthemes::theme_excel() +
+  ggthemes::theme_excel_new() +
+  ggthemes::theme_few() +
+  ggthemes::theme_fivethirtyeight() +
+  ggthemes::theme_gdocs() +
+  ggthemes::theme_hc() +
+  ggthemes::theme_igray() +
+  ggthemes::theme_map() +
+* ggthemes::theme_solarized()
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_ggthemes_14-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  ggthemes::theme_base() +
+  ggthemes::theme_calc() + 
+  ggthemes::theme_economist() +
+  ggthemes::theme_economist_white() +
+  ggthemes::theme_excel() +
+  ggthemes::theme_excel_new() +
+  ggthemes::theme_few() +
+  ggthemes::theme_fivethirtyeight() +
+  ggthemes::theme_gdocs() +
+  ggthemes::theme_hc() +
+  ggthemes::theme_igray() +
+  ggthemes::theme_map() +
+  ggthemes::theme_solarized() +
+* ggthemes::theme_solarized_2()
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_ggthemes_15-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  ggthemes::theme_base() +
+  ggthemes::theme_calc() + 
+  ggthemes::theme_economist() +
+  ggthemes::theme_economist_white() +
+  ggthemes::theme_excel() +
+  ggthemes::theme_excel_new() +
+  ggthemes::theme_few() +
+  ggthemes::theme_fivethirtyeight() +
+  ggthemes::theme_gdocs() +
+  ggthemes::theme_hc() +
+  ggthemes::theme_igray() +
+  ggthemes::theme_map() +
+  ggthemes::theme_solarized() +
+  ggthemes::theme_solarized_2() + 
+* ggthemes::theme_solid()
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_ggthemes_16-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  ggthemes::theme_base() +
+  ggthemes::theme_calc() + 
+  ggthemes::theme_economist() +
+  ggthemes::theme_economist_white() +
+  ggthemes::theme_excel() +
+  ggthemes::theme_excel_new() +
+  ggthemes::theme_few() +
+  ggthemes::theme_fivethirtyeight() +
+  ggthemes::theme_gdocs() +
+  ggthemes::theme_hc() +
+  ggthemes::theme_igray() +
+  ggthemes::theme_map() +
+  ggthemes::theme_solarized() +
+  ggthemes::theme_solarized_2() + 
+  ggthemes::theme_solid() +
+* ggthemes::theme_stata()
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_ggthemes_17-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  ggthemes::theme_base() +
+  ggthemes::theme_calc() + 
+  ggthemes::theme_economist() +
+  ggthemes::theme_economist_white() +
+  ggthemes::theme_excel() +
+  ggthemes::theme_excel_new() +
+  ggthemes::theme_few() +
+  ggthemes::theme_fivethirtyeight() +
+  ggthemes::theme_gdocs() +
+  ggthemes::theme_hc() +
+  ggthemes::theme_igray() +
+  ggthemes::theme_map() +
+  ggthemes::theme_solarized() +
+  ggthemes::theme_solarized_2() + 
+  ggthemes::theme_solid() +
+  ggthemes::theme_stata() +
+* ggthemes::theme_wsj()
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_ggthemes_18-1.png" width="100%" /&gt;
+]]
+
+---
+
+
+
+---
+
+# ggpomological
+
+---
+
+
+
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+*g 
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_ggpomological_1-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g +
+* ggpomological::theme_pomological()
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_ggpomological_2-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g +
+  ggpomological::theme_pomological() +
+* ggpomological::theme_pomological_nobg()
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_ggpomological_3-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g +
+  ggpomological::theme_pomological() +
+  ggpomological::theme_pomological_nobg() +
+* ggpomological::theme_pomological_plain()
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_ggpomological_4-1.png" width="100%" /&gt;
+]]
+
+---
+
+# ggdark
+
+
+---
+
+
+
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+*g 
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_ggdark_1-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g +
+* ggdark::dark_theme_bw()
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_ggdark_2-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g +
+  ggdark::dark_theme_bw() +
+* ggdark::dark_theme_classic()
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_ggdark_3-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g +
+  ggdark::dark_theme_bw() +
+  ggdark::dark_theme_classic() +
+* ggdark::dark_theme_dark()
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_ggdark_4-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g +
+  ggdark::dark_theme_bw() +
+  ggdark::dark_theme_classic() +
+  ggdark::dark_theme_dark() +
+* ggdark::dark_theme_gray()
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_ggdark_5-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g +
+  ggdark::dark_theme_bw() +
+  ggdark::dark_theme_classic() +
+  ggdark::dark_theme_dark() +
+  ggdark::dark_theme_gray() +
+* ggdark::dark_theme_light()
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_ggdark_6-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g +
+  ggdark::dark_theme_bw() +
+  ggdark::dark_theme_classic() +
+  ggdark::dark_theme_dark() +
+  ggdark::dark_theme_gray() +
+  ggdark::dark_theme_light() +
+* ggdark::dark_theme_linedraw()
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_ggdark_7-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g +
+  ggdark::dark_theme_bw() +
+  ggdark::dark_theme_classic() +
+  ggdark::dark_theme_dark() +
+  ggdark::dark_theme_gray() +
+  ggdark::dark_theme_light() +
+  ggdark::dark_theme_linedraw() +
+* ggdark::dark_theme_minimal()
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_ggdark_8-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g +
+  ggdark::dark_theme_bw() +
+  ggdark::dark_theme_classic() +
+  ggdark::dark_theme_dark() +
+  ggdark::dark_theme_gray() +
+  ggdark::dark_theme_light() +
+  ggdark::dark_theme_linedraw() +
+  ggdark::dark_theme_minimal() +
+* ggdark::dark_theme_test()
+```
+]]
+.column[.content.center[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_ggdark_9-1.png" width="100%" /&gt;
+]]
+
+
+
+
+-------
+
+
+
+
+
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 70%}
+&lt;/style&gt;
+
+
+
+
+&lt;!-- # hrbrthemes --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- ```{r} --&gt;
+&lt;!-- g +  --&gt;
+&lt;!--   hrbrthemes::theme_ft_rc() + --&gt;
+&lt;!--   hrbrthemes::theme_ipsum() + --&gt;
+&lt;!--   hrbrthemes::theme_ipsum_ps() + --&gt;
+&lt;!--   hrbrthemes::theme_ipsum_pub() + --&gt;
+&lt;!--   hrbrthemes::theme_ipsum_rc() + --&gt;
+&lt;!--   hrbrthemes::theme_ipsum_tw() + --&gt;
+&lt;!--   hrbrthemes::theme_modern_rc() --&gt;
+&lt;!-- ``` --&gt;
+    </textarea>
+<script src="libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightLines": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script>
+(function() {
+  var i, text, code, codes = document.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+})();
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
