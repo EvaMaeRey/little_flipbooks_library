@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>A Minimal #TidyTuesday Flipbook</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Gina Reynolds, May 2019" />
+    <link href="libs/remark-css-0.0.1/kunoichi.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# A Minimal #TidyTuesday Flipbook
+### Gina Reynolds, May 2019
+
+---
+
+
+
+
+
+
+
+
+---
+
+# Introduction
+
+This is a minimal example to demonstrate how to create a flipbook with data from #TidyTuesday.  It walks through data wrangling and plots pipelines made with the Tidyverse.  The functions that make this possible are the work of Emi Tanaka, Garrick Aden-Buie and myself, and are built for Xaringan, an Rmarkdown file type for creating presentation slides; the functions make use of the function `knitr:::knit_code$get()`.
+
+The code to create the flipbook is an .Rmd that you can download [**here**](https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/tidytuesday_minimal_example/tidytuesday_minimal_example.Rmd).
+
+---
+
+Interested in more flipbooks? Check out 
+
+- [the ggplot flipbook](https://evamaerey.github.io/ggplot_flipbook/ggplot_flipbook_xaringan.html)
+- [The Tidyverse in Action](https://evamaerey.github.io/tidyverse_in_action/tidyverse_in_action.html)
+
+
+
+
+For more about Xaringan:
+
+- [Xaringan presentation slides](https://slides.yihui.name/xaringan/)
+
+The sequential workflow of the Tidyverse makes incremental display of pipelines and ggplot statements ideal:  
+
+- [www.tidyverse.org](https://www.tidyverse.org/)
+
+
+---
+
+
+# What's the slow ggplot style?
+
+"Slow ggplot" just means working more incrementally than is typical. Elements of the approach are as follows:
+
+- pulling out aes() from the ggplot() function:  
+- using fewer functions; example - using labs() to add a title instead of ggtitle()
+- using functions multiple times; example aes(x = var1) + aes(y = var2) rather than aes(x = var1, y = var2)
+- using base R functions and tidyverse functions.  For other packages, the :: style to call them
+- write out arguments (no shortcuts)  aes(x = gdppercap) not aes(gdppercap)
+- order ggplot commands so that reactivity is obvious; scale adjustments to aesthetics might also be near the aesthetic declaration. 
+
+
+---
+
+Here, I contrast the usual plotting method to slow ggplotting:
+
+Usual approach:
+
+
+```r
+ggplot(my_data, aes(var1, y = var2, col = var3)) +
+  geom_point() +
+  ggtitle("My Title") +
+  labs(x = "the x label", y = "the y label", col = "legend title")
+```
+
+Using slow ggplotting: 
+
+
+```r
+ggplot(data = my_data) +
+  aes(x = var1) +
+  labs(x = "the x label") +
+  aes(y = var2) +
+  labs(y = "the y label") +
+  geom_point() +
+  aes(col = var3) +
+  labs(col = "legend title") +
+  labs(title = "My title")
+```
+
+
+
+
+---
+
+# Set up
+
+Okay. Let's load the the `reveal for xaringan` functions for "flipbooking" and the `tidyverse`.
+
+
+```r
+source(file = "https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/xaringan_reveal_parenthetical.R")
+```
+
+And load the tidyverse.
+
+
+```r
+library(tidyverse)
+```
+
+And load the data from the tidytuesday github page. 
+
+
+```r
+nobel_winners &lt;- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-05-14/nobel_winners.csv")
+```
+
+---
+
+# Where we are going: 
+
+We'll create this plot.  I have **echo** set to FALSE in the code chunk options here so that you don't see the code, and **eval** to TRUE so that the plot output is produced.  The code chunk is given the name "gapminder2007", and this is used in the in apply_reveal function, which breaks down code by wrangling and plot statements. 
+
+![](tidytuesday_minimal_example_files/figure-html/nobel-1.png)&lt;!-- --&gt;
+ 
+
+ 
+---
+
+# How do we get there?
+
+In the next slide, we'll walk through the code that produces this plot, and the output along the way. We use the code `apply_reveal("gapminder2007")` in-line to access the code from the code chunk called *gapminder2007*.
+ 
+---
+
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+*nobel_winners
+```
+]]
+.column[.content.center[
+
+```
+# A tibble: 969 x 18
+   prize_year category prize motivation prize_share laureate_id
+        &lt;int&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;             &lt;int&gt;
+ 1       1901 Chemist… The … "\"in rec… 1/1                 160
+ 2       1901 Literat… The … "\"in spe… 1/1                 569
+ 3       1901 Medicine The … "\"for hi… 1/1                 293
+ 4       1901 Peace    The … &lt;NA&gt;       1/2                 462
+ 5       1901 Peace    The … &lt;NA&gt;       1/2                 463
+ 6       1901 Physics  The … "\"in rec… 1/1                   1
+ 7       1902 Chemist… The … "\"in rec… 1/1                 161
+ 8       1902 Literat… The … "\"the gr… 1/1                 571
+ 9       1902 Medicine The … "\"for hi… 1/1                 294
+10       1902 Peace    The … &lt;NA&gt;       1/2                 464
+# … with 959 more rows, and 12 more variables: laureate_type &lt;chr&gt;,
+#   full_name &lt;chr&gt;, birth_date &lt;date&gt;, birth_city &lt;chr&gt;,
+#   birth_country &lt;chr&gt;, gender &lt;chr&gt;, organization_name &lt;chr&gt;,
+#   organization_city &lt;chr&gt;, organization_country &lt;chr&gt;,
+#   death_date &lt;date&gt;, death_city &lt;chr&gt;, death_country &lt;chr&gt;
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+nobel_winners %&gt;% 
+* mutate(age_at_win = prize_year -
+*          lubridate::year(birth_date))
+```
+]]
+.column[.content.center[
+
+```
+# A tibble: 969 x 19
+   prize_year category prize motivation prize_share laureate_id
+        &lt;int&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;             &lt;int&gt;
+ 1       1901 Chemist… The … "\"in rec… 1/1                 160
+ 2       1901 Literat… The … "\"in spe… 1/1                 569
+ 3       1901 Medicine The … "\"for hi… 1/1                 293
+ 4       1901 Peace    The … &lt;NA&gt;       1/2                 462
+ 5       1901 Peace    The … &lt;NA&gt;       1/2                 463
+ 6       1901 Physics  The … "\"in rec… 1/1                   1
+ 7       1902 Chemist… The … "\"in rec… 1/1                 161
+ 8       1902 Literat… The … "\"the gr… 1/1                 571
+ 9       1902 Medicine The … "\"for hi… 1/1                 294
+10       1902 Peace    The … &lt;NA&gt;       1/2                 464
+# … with 959 more rows, and 13 more variables: laureate_type &lt;chr&gt;,
+#   full_name &lt;chr&gt;, birth_date &lt;date&gt;, birth_city &lt;chr&gt;,
+#   birth_country &lt;chr&gt;, gender &lt;chr&gt;, organization_name &lt;chr&gt;,
+#   organization_city &lt;chr&gt;, organization_country &lt;chr&gt;,
+#   death_date &lt;date&gt;, death_city &lt;chr&gt;, death_country &lt;chr&gt;,
+#   age_at_win &lt;dbl&gt;
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+nobel_winners %&gt;% 
+  mutate(age_at_win = prize_year -
+           lubridate::year(birth_date)) %&gt;% 
+*ggplot()
+```
+]]
+.column[.content.center[
+![](tidytuesday_minimal_example_files/figure-html/output_nobel_4-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+nobel_winners %&gt;% 
+  mutate(age_at_win = prize_year -
+           lubridate::year(birth_date)) %&gt;% 
+ggplot() + 
+* aes(x = prize_year) # x axis
+```
+]]
+.column[.content.center[
+![](tidytuesday_minimal_example_files/figure-html/output_nobel_5-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+nobel_winners %&gt;% 
+  mutate(age_at_win = prize_year -
+           lubridate::year(birth_date)) %&gt;% 
+ggplot() + 
+  aes(x = prize_year) +  # x axis 
+* aes(y = age_at_win) # y axis
+```
+]]
+.column[.content.center[
+![](tidytuesday_minimal_example_files/figure-html/output_nobel_6-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+nobel_winners %&gt;% 
+  mutate(age_at_win = prize_year -
+           lubridate::year(birth_date)) %&gt;% 
+ggplot() + 
+  aes(x = prize_year) +  # x axis 
+  aes(y = age_at_win) +  # y axis
+* geom_point()
+```
+]]
+.column[.content.center[
+![](tidytuesday_minimal_example_files/figure-html/output_nobel_7-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+nobel_winners %&gt;% 
+  mutate(age_at_win = prize_year -
+           lubridate::year(birth_date)) %&gt;% 
+ggplot() + 
+  aes(x = prize_year) +  # x axis 
+  aes(y = age_at_win) +  # y axis
+  geom_point() +
+* geom_smooth() # loess smoothing
+```
+]]
+.column[.content.center[
+![](tidytuesday_minimal_example_files/figure-html/output_nobel_8-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+nobel_winners %&gt;% 
+  mutate(age_at_win = prize_year -
+           lubridate::year(birth_date)) %&gt;% 
+ggplot() + 
+  aes(x = prize_year) +  # x axis 
+  aes(y = age_at_win) +  # y axis
+  geom_point() +
+  geom_smooth() +  # loess smoothing
+* theme_minimal()
+```
+]]
+.column[.content.center[
+![](tidytuesday_minimal_example_files/figure-html/output_nobel_9-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+nobel_winners %&gt;% 
+  mutate(age_at_win = prize_year -
+           lubridate::year(birth_date)) %&gt;% 
+ggplot() + 
+  aes(x = prize_year) +  # x axis 
+  aes(y = age_at_win) +  # y axis
+  geom_point() +
+  geom_smooth() +  # loess smoothing
+  theme_minimal() +
+* labs(x = "Year of prize")
+```
+]]
+.column[.content.center[
+![](tidytuesday_minimal_example_files/figure-html/output_nobel_10-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+nobel_winners %&gt;% 
+  mutate(age_at_win = prize_year -
+           lubridate::year(birth_date)) %&gt;% 
+ggplot() + 
+  aes(x = prize_year) +  # x axis 
+  aes(y = age_at_win) +  # y axis
+  geom_point() +
+  geom_smooth() +  # loess smoothing
+  theme_minimal() +
+  labs(x = "Year of prize") +
+* labs(y = "Age at Win")
+```
+]]
+.column[.content.center[
+![](tidytuesday_minimal_example_files/figure-html/output_nobel_11-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+nobel_winners %&gt;% 
+  mutate(age_at_win = prize_year -
+           lubridate::year(birth_date)) %&gt;% 
+ggplot() + 
+  aes(x = prize_year) +  # x axis 
+  aes(y = age_at_win) +  # y axis
+  geom_point() +
+  geom_smooth() +  # loess smoothing
+  theme_minimal() +
+  labs(x = "Year of prize") +
+  labs(y = "Age at Win") +
+* labs(caption = "Vis: Gina Reynolds for #TidyTuesday")
+```
+]]
+.column[.content.center[
+![](tidytuesday_minimal_example_files/figure-html/output_nobel_12-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+nobel_winners %&gt;% 
+  mutate(age_at_win = prize_year -
+           lubridate::year(birth_date)) %&gt;% 
+ggplot() + 
+  aes(x = prize_year) +  # x axis 
+  aes(y = age_at_win) +  # y axis
+  geom_point() +
+  geom_smooth() +  # loess smoothing
+  theme_minimal() +
+  labs(x = "Year of prize") +
+  labs(y = "Age at Win") +
+  labs(caption = "Vis: Gina Reynolds for #TidyTuesday") +
+* labs(title = "Nobel Prize award year vs. age of winner")
+```
+]]
+.column[.content.center[
+![](tidytuesday_minimal_example_files/figure-html/output_nobel_13-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+nobel_winners %&gt;% 
+  mutate(age_at_win = prize_year -
+           lubridate::year(birth_date)) %&gt;% 
+ggplot() + 
+  aes(x = prize_year) +  # x axis 
+  aes(y = age_at_win) +  # y axis
+  geom_point() +
+  geom_smooth() +  # loess smoothing
+  theme_minimal() +
+  labs(x = "Year of prize") +
+  labs(y = "Age at Win") +
+  labs(caption = "Vis: Gina Reynolds for #TidyTuesday") +
+  labs(title = "Nobel Prize award year vs. age of winner") +
+* labs(subtitle = "Data: \"A dataset of publication records for Nobel laureates\" \nLi, Jichao; Yin, Yian; Fortunato, Santo; Wang Dashun, 2018 ")
+```
+]]
+.column[.content.center[
+![](tidytuesday_minimal_example_files/figure-html/output_nobel_14-1.png)&lt;!-- --&gt;
+]]
+
+
+---
+
+# A second approach: Separate the data manipulation from the plotting.
+
+If you'd like, you can also save your manipulated data and then plot, using the `%&gt;%` to create your pipe line, and then reverse assignment operator `-&gt;`.  An example follows. 
+
+---
+
+
+
+
+---
+
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+*nobel_winners
+```
+]]
+.column[.content.center[
+
+```
+# A tibble: 969 x 18
+   prize_year category prize motivation prize_share laureate_id
+        &lt;int&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;             &lt;int&gt;
+ 1       1901 Chemist… The … "\"in rec… 1/1                 160
+ 2       1901 Literat… The … "\"in spe… 1/1                 569
+ 3       1901 Medicine The … "\"for hi… 1/1                 293
+ 4       1901 Peace    The … &lt;NA&gt;       1/2                 462
+ 5       1901 Peace    The … &lt;NA&gt;       1/2                 463
+ 6       1901 Physics  The … "\"in rec… 1/1                   1
+ 7       1902 Chemist… The … "\"in rec… 1/1                 161
+ 8       1902 Literat… The … "\"the gr… 1/1                 571
+ 9       1902 Medicine The … "\"for hi… 1/1                 294
+10       1902 Peace    The … &lt;NA&gt;       1/2                 464
+# … with 959 more rows, and 12 more variables: laureate_type &lt;chr&gt;,
+#   full_name &lt;chr&gt;, birth_date &lt;date&gt;, birth_city &lt;chr&gt;,
+#   birth_country &lt;chr&gt;, gender &lt;chr&gt;, organization_name &lt;chr&gt;,
+#   organization_city &lt;chr&gt;, organization_country &lt;chr&gt;,
+#   death_date &lt;date&gt;, death_city &lt;chr&gt;, death_country &lt;chr&gt;
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+nobel_winners %&gt;% 
+* mutate(age_at_win = prize_year -
+*          lubridate::year(birth_date))
+```
+]]
+.column[.content.center[
+
+```
+# A tibble: 969 x 19
+   prize_year category prize motivation prize_share laureate_id
+        &lt;int&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;             &lt;int&gt;
+ 1       1901 Chemist… The … "\"in rec… 1/1                 160
+ 2       1901 Literat… The … "\"in spe… 1/1                 569
+ 3       1901 Medicine The … "\"for hi… 1/1                 293
+ 4       1901 Peace    The … &lt;NA&gt;       1/2                 462
+ 5       1901 Peace    The … &lt;NA&gt;       1/2                 463
+ 6       1901 Physics  The … "\"in rec… 1/1                   1
+ 7       1902 Chemist… The … "\"in rec… 1/1                 161
+ 8       1902 Literat… The … "\"the gr… 1/1                 571
+ 9       1902 Medicine The … "\"for hi… 1/1                 294
+10       1902 Peace    The … &lt;NA&gt;       1/2                 464
+# … with 959 more rows, and 13 more variables: laureate_type &lt;chr&gt;,
+#   full_name &lt;chr&gt;, birth_date &lt;date&gt;, birth_city &lt;chr&gt;,
+#   birth_country &lt;chr&gt;, gender &lt;chr&gt;, organization_name &lt;chr&gt;,
+#   organization_city &lt;chr&gt;, organization_country &lt;chr&gt;,
+#   death_date &lt;date&gt;, death_city &lt;chr&gt;, death_country &lt;chr&gt;,
+#   age_at_win &lt;dbl&gt;
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+nobel_winners %&gt;% 
+  mutate(age_at_win = prize_year -
+           lubridate::year(birth_date)) -&gt; 
+* nobel_winners_w_age
+```
+]]
+.column[.content.center[
+
+]]
+
+---
+
+# Plotting the transformed data
+
+Now you can use the transformed data to start the plot.
+
+---
+
+![](tidytuesday_minimal_example_files/figure-html/plot_nobel_again-1.png)&lt;!-- --&gt;
+
+
+---
+
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+*ggplot(data = nobel_winners_w_age)
+```
+]]
+.column[.content.center[
+![](tidytuesday_minimal_example_files/figure-html/output_plot_nobel_again_1-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = nobel_winners_w_age) + 
+* aes(x = prize_year) # x axis
+```
+]]
+.column[.content.center[
+![](tidytuesday_minimal_example_files/figure-html/output_plot_nobel_again_2-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = nobel_winners_w_age) + 
+  aes(x = prize_year) +  # x axis 
+* aes(y = age_at_win) # y axis
+```
+]]
+.column[.content.center[
+![](tidytuesday_minimal_example_files/figure-html/output_plot_nobel_again_3-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = nobel_winners_w_age) + 
+  aes(x = prize_year) +  # x axis 
+  aes(y = age_at_win) +  # y axis
+* geom_point()
+```
+]]
+.column[.content.center[
+![](tidytuesday_minimal_example_files/figure-html/output_plot_nobel_again_4-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = nobel_winners_w_age) + 
+  aes(x = prize_year) +  # x axis 
+  aes(y = age_at_win) +  # y axis
+  geom_point() +
+* geom_smooth() # loess smoothing
+```
+]]
+.column[.content.center[
+![](tidytuesday_minimal_example_files/figure-html/output_plot_nobel_again_5-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = nobel_winners_w_age) + 
+  aes(x = prize_year) +  # x axis 
+  aes(y = age_at_win) +  # y axis
+  geom_point() +
+  geom_smooth() +  # loess smoothing
+* theme_minimal()
+```
+]]
+.column[.content.center[
+![](tidytuesday_minimal_example_files/figure-html/output_plot_nobel_again_6-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = nobel_winners_w_age) + 
+  aes(x = prize_year) +  # x axis 
+  aes(y = age_at_win) +  # y axis
+  geom_point() +
+  geom_smooth() +  # loess smoothing
+  theme_minimal() +
+* labs(x = "Year of prize")
+```
+]]
+.column[.content.center[
+![](tidytuesday_minimal_example_files/figure-html/output_plot_nobel_again_7-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = nobel_winners_w_age) + 
+  aes(x = prize_year) +  # x axis 
+  aes(y = age_at_win) +  # y axis
+  geom_point() +
+  geom_smooth() +  # loess smoothing
+  theme_minimal() +
+  labs(x = "Year of prize") +
+* labs(y = "Age at Win")
+```
+]]
+.column[.content.center[
+![](tidytuesday_minimal_example_files/figure-html/output_plot_nobel_again_8-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = nobel_winners_w_age) + 
+  aes(x = prize_year) +  # x axis 
+  aes(y = age_at_win) +  # y axis
+  geom_point() +
+  geom_smooth() +  # loess smoothing
+  theme_minimal() +
+  labs(x = "Year of prize") +
+  labs(y = "Age at Win")+
+* labs(x = "Year of prize")
+```
+]]
+.column[.content.center[
+![](tidytuesday_minimal_example_files/figure-html/output_plot_nobel_again_9-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = nobel_winners_w_age) + 
+  aes(x = prize_year) +  # x axis 
+  aes(y = age_at_win) +  # y axis
+  geom_point() +
+  geom_smooth() +  # loess smoothing
+  theme_minimal() +
+  labs(x = "Year of prize") +
+  labs(y = "Age at Win")+
+  labs(x = "Year of prize") +
+* labs(y = "Age at Win")
+```
+]]
+.column[.content.center[
+![](tidytuesday_minimal_example_files/figure-html/output_plot_nobel_again_10-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = nobel_winners_w_age) + 
+  aes(x = prize_year) +  # x axis 
+  aes(y = age_at_win) +  # y axis
+  geom_point() +
+  geom_smooth() +  # loess smoothing
+  theme_minimal() +
+  labs(x = "Year of prize") +
+  labs(y = "Age at Win")+
+  labs(x = "Year of prize") +
+  labs(y = "Age at Win") +
+* labs(caption = "Vis: Gina Reynolds for #TidyTuesday")
+```
+]]
+.column[.content.center[
+![](tidytuesday_minimal_example_files/figure-html/output_plot_nobel_again_11-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = nobel_winners_w_age) + 
+  aes(x = prize_year) +  # x axis 
+  aes(y = age_at_win) +  # y axis
+  geom_point() +
+  geom_smooth() +  # loess smoothing
+  theme_minimal() +
+  labs(x = "Year of prize") +
+  labs(y = "Age at Win")+
+  labs(x = "Year of prize") +
+  labs(y = "Age at Win") +
+  labs(caption = "Vis: Gina Reynolds for #TidyTuesday") +
+* labs(title = "Nobel Prize award year vs. age of winner")
+```
+]]
+.column[.content.center[
+![](tidytuesday_minimal_example_files/figure-html/output_plot_nobel_again_12-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = nobel_winners_w_age) + 
+  aes(x = prize_year) +  # x axis 
+  aes(y = age_at_win) +  # y axis
+  geom_point() +
+  geom_smooth() +  # loess smoothing
+  theme_minimal() +
+  labs(x = "Year of prize") +
+  labs(y = "Age at Win")+
+  labs(x = "Year of prize") +
+  labs(y = "Age at Win") +
+  labs(caption = "Vis: Gina Reynolds for #TidyTuesday") +
+  labs(title = "Nobel Prize award year vs. age of winner") +
+* labs(subtitle = "Data: \"A dataset of publication records for Nobel laureates\" \nLi, Jichao; Yin, Yian; Fortunato, Santo; Wang Dashun, 2018 ")
+```
+]]
+.column[.content.center[
+![](tidytuesday_minimal_example_files/figure-html/output_plot_nobel_again_13-1.png)&lt;!-- --&gt;
+]]
+
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 80%}
+&lt;/style&gt;
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:10",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script>
+(function() {
+  var i, text, code, codes = document.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+})();
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
