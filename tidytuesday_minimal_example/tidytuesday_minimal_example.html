@@ -27,15 +27,11 @@ class: center, middle, inverse, title-slide
 
 # Introduction
 
-<<<<<<< HEAD
 This is a minimal example to demonstrate how to create a flipbook with data from #TidyTuesday.  It walks through data wrangling and plots pipelines made with the Tidyverse.  The functions that make this possible are the work of Emi Tanaka, Garrick Aden-Buie and myself, and are built for Xaringan, an Rmarkdown file type for creating presentation slides; the functions make use of the function `knitr:::knit_code$get()`.
 
 The code to create the flipbook is an .Rmd that you can download [**here**](https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/tidytuesday_minimal_example/tidytuesday_minimal_example.Rmd).
 
 ---
-=======
-This is a minimal example to demonstrate how to create a flipbook with data from #TidyTuesday that will walk through data wrangling and plots pipelines made with the Tidyverse.  The functions that make this possible are the work of Emi Tanaka, Garrick Aden-Buie and myself, and are built for Xaringan, an Rmarkdown file type for creating presentation slides; the functions make use of the function `knitr:::knit_code$get()`.
->>>>>>> b9f6f4b45d5bd38bedcdb151e4f3f733620a90d0
 
 Interested in more flipbooks? Check out 
 
@@ -443,36 +439,6 @@ ggplot() +
 .column[.content.center[
 ![](tidytuesday_minimal_example_files/figure-html/output_nobel_14-1.png)&lt;!-- --&gt;
 ]]
-<<<<<<< HEAD
-=======
----
-class: split-40
-count: false
-
-.column[.content[
-
-```r
-nobel_winners %&gt;% 
-  mutate(age_at_win = prize_year -
-           lubridate::year(birth_date)) %&gt;% 
-ggplot() + 
-  aes(x = prize_year) +  # x axis 
-  aes(y = age_at_win) +  # y axis
-  geom_point() +
-  geom_smooth() +  # loess smoothing
-  theme_minimal() +
-  labs(x = "Year of prize") +
-  labs(y = "Age at Win") +
-  labs(caption = "Vis: Gina Reynolds for #TidyTuesday") +
-  labs(title = "Nobel Prize award year vs. age of winner") +
-  labs(subtitle = "Data: \"A dataset of publication records for Nobel laureates\" \nLi, Jichao; Yin, Yian; Fortunato, Santo; Wang Dashun, 2018 ")
- #&lt;&lt;
-```
-]]
-.column[.content.center[
-![](tidytuesday_minimal_example_files/figure-html/output_nobel_15-1.png)&lt;!-- --&gt;
-]]
->>>>>>> b9f6f4b45d5bd38bedcdb151e4f3f733620a90d0
 
 
 ---
@@ -731,7 +697,7 @@ ggplot(data = nobel_winners_w_age) +
   geom_smooth() +  # loess smoothing
   theme_minimal() +
   labs(x = "Year of prize") +
-  labs(y = "Age at Win")+
+  labs(y = "Age at Win") +
 * labs(x = "Year of prize")
 ```
 ]]
@@ -752,7 +718,7 @@ ggplot(data = nobel_winners_w_age) +
   geom_smooth() +  # loess smoothing
   theme_minimal() +
   labs(x = "Year of prize") +
-  labs(y = "Age at Win")+
+  labs(y = "Age at Win") +
   labs(x = "Year of prize") +
 * labs(y = "Age at Win")
 ```
@@ -774,7 +740,7 @@ ggplot(data = nobel_winners_w_age) +
   geom_smooth() +  # loess smoothing
   theme_minimal() +
   labs(x = "Year of prize") +
-  labs(y = "Age at Win")+
+  labs(y = "Age at Win") +
   labs(x = "Year of prize") +
   labs(y = "Age at Win") +
 * labs(caption = "Vis: Gina Reynolds for #TidyTuesday")
@@ -797,7 +763,7 @@ ggplot(data = nobel_winners_w_age) +
   geom_smooth() +  # loess smoothing
   theme_minimal() +
   labs(x = "Year of prize") +
-  labs(y = "Age at Win")+
+  labs(y = "Age at Win") +
   labs(x = "Year of prize") +
   labs(y = "Age at Win") +
   labs(caption = "Vis: Gina Reynolds for #TidyTuesday") +
@@ -821,7 +787,7 @@ ggplot(data = nobel_winners_w_age) +
   geom_smooth() +  # loess smoothing
   theme_minimal() +
   labs(x = "Year of prize") +
-  labs(y = "Age at Win")+
+  labs(y = "Age at Win") +
   labs(x = "Year of prize") +
   labs(y = "Age at Win") +
   labs(caption = "Vis: Gina Reynolds for #TidyTuesday") +
