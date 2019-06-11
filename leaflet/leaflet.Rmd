@@ -1,0 +1,48 @@
+---
+title: "A leaflet flipbook"
+author: "Gina Reynolds, June 2019"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: ["kunoichi", "ninjutsu"]
+    nature:
+      ratio: 16:10
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r}
+# Load leaflet R package
+library(leaflet)
+source(file = "https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/xaringan_reveal_parenthetical.R")
+
+```
+
+---
+
+```{r mymap, eval = T, echo = F}
+leaflet() %>% # Leaflet map widget
+  addTiles() %>% 
+  setView(lat = 39.6759427, 
+          lng = -104.9621703, 
+          zoom = 13) %>% 
+  addProviderTiles(provider = 
+                     providers$Stamen.Toner) %>% 
+  addCircles(lat = 39.6759427,
+             lng = -104.9621703,
+             radius = 1000,
+             color = "orange",
+             fillColor = "red")
+```
+
+---
+
+`r apply_reveal("mymap")`
+
+
+
+```{css, eval = TRUE, echo = F}
+.remark-code{line-height: 1.5; font-size: 70%}
+```
+
