@@ -27,18 +27,36 @@ leaflet() %>% # Leaflet map widget
   setView(lat = 39.6759427, 
           lng = -104.9621703, 
           zoom = 13) %>% 
-  addProviderTiles(provider = 
-                     providers$Stamen.Toner) %>% 
+  addProviderTiles(provider =
+                     providers$Stamen.Toner) %>%
   addCircles(lat = 39.6759427,
              lng = -104.9621703,
              radius = 1000,
              color = "orange",
-             fillColor = "red")
+             fillColor = "red") 
 ```
+
 
 ---
 
 `r apply_reveal("mymap")`
+
+---
+
+
+```{r auckland, eval = T, echo = F}
+leaflet() %>%
+  addTiles() %>%  # Add default OpenStreetMap map tiles
+  addMarkers(lng = 174.768, 
+             lat = -36.852, 
+             popup = "The birthplace of R")
+```
+
+---
+
+`r apply_reveal("auckland")`
+
+---
 
 
 
