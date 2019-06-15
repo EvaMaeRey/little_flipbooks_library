@@ -1,0 +1,151 @@
+---
+title: "Teachers have it Tough"
+subtitle: "Christian Burkhart | made with Xaringan"
+author: "<br><br>Edited by Gina Reynolds, 2019"
+date: "<br>"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: ["kunoichi", "ninjutsu"]
+    nature:
+      ratio: "16:9"
+      highlightLines: true
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
+knitr::opts_chunk$set(fig.height = 6, out.width = "100%", comment = " ", cache = T)
+source("https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/xaringan_reveal_parenthetical.R")
+```
+
+
+---
+
+# "Teachers have it Tough" by Christian Burkhart 
+
+```{r, echo = F}
+knitr::include_graphics(path = "figures/student_teacher_ratio.png")
+```
+
+
+---
+
+
+```{r}
+library(tidyverse)
+library(countrycode)
+library(gghighlight)
+library(cowplot)
+library(mapproj)
+```
+
+
+```{r}
+tidy_tuesday_url <- "https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-05-07/student_teacher_ratio.csv"
+student_ratio <- readr::read_csv(tidy_tuesday_url)
+```
+
+---
+
+```{r joindataandmap, eval = T, echo = F}
+student_ratio %>%
+  filter(indicator == "Tertiary Education") %>%
+  group_by(country) %>%
+  summarise(student_ratio = 
+              mean(student_ratio, 
+                   na.rm = TRUE)) %>%
+  ungroup() %>%
+  drop_na(student_ratio) %>%
+  rename(region = country) %>%
+  full_join(
+    map_data("world") %>% filter(region != "Antarctica"), 
+    by = "region") ->
+student_ratio_world
+```
+
+`r apply_reveal("joindataandmap")`
+
+---
+
+# Build figure
+
+---
+
+```{r map, eval = T, echo = F}
+ggplot(data = student_ratio_world) + 
+  aes(x = long) + 
+  aes(y = lat) +
+  aes(map_id = region) + 
+  geom_map(map = student_ratio_world, 
+           col = "grey34", 
+           alpha = .6, size = .05) +
+  aes(fill = student_ratio) +
+  scale_fill_gradient(low = "#55bee9", 
+                      high = "#f1b545", 
+                      na.value = "#282828") +
+  scale_y_continuous(breaks = c()) +
+  scale_x_continuous(breaks = c()) +
+  labs(x = "") + 
+  labs(y = "") +
+  guides(fill = 
+           guide_legend(title = 
+                          "# of students\nper teacher")) +
+  coord_map("gilbert", xlim = c(-180, 180)) +
+  labs(title = '"Oh dear, some teachers have it tough"') +
+  labs(subtitle = "How the student-to-teacher ratio varies across the globe*") +
+  labs(caption = "Visualization: Christian Burkhart for #TidyTuesday\nData:\n*average 2012-2017 Terciary Education") ->
+g
+```
+
+
+
+
+`r apply_reveal("map")`
+
+---
+
+
+
+# Adjust theme
+
+---
+
+```{r thematic, eval = F, echo = F}
+g + 
+  theme(plot.background = 
+          element_rect(fill = "#323232")) +
+  theme(plot.title = 
+          element_text(color = "#ffffff", 
+                       margin = margin(t = 30, 
+                                       b = 10), 
+                       size = 12)) +
+  theme(plot.subtitle = 
+          element_text(color = "#ababab", 
+                       margin = margin(b = 20), 
+                       size = 10, hjust = 0.7)) +
+  theme(plot.caption = 
+          element_text(color = "#ababab", 
+                       size = 7, hjust = 1)) +
+  theme(plot.background  = 
+          element_rect(fill  = "#323232")) +
+  theme(legend.title = 
+          element_text(color = "#6d6d6d", 
+                       size = 8)) +
+  theme(legend.text = 
+          element_text(color = "#6d6d6d", 
+                       size = 8))
+```
+
+`r apply_reveal("thematic")`
+
+---
+
+```{r, include = F}
+ggsave(filename = "figures/student_teacher_ratio.png")
+```
+
+
+
+```{css, eval = TRUE, echo = F}
+.remark-code{line-height: 1.5; font-size: 75%}
+```

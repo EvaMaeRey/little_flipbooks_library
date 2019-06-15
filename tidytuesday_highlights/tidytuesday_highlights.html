@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>#TidyTuesday Highlights</title>
+    <meta charset="utf-8">
+    <meta name="author" content="  Edited by Gina Reynolds, 2019" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# #TidyTuesday Highlights
+## A flipbook made with Xaringan
+### <br><br>Edited by Gina Reynolds, 2019
+### <br>
+
+---
+
+
+
+
+
+
+
+
+
+---
+
+# "Teachers have it Tough" by Christian Burkhart 
+
+&lt;img src="figures/student_teacher_ratio.png" width="100%" /&gt;
+
+
+---
+
+
+
+```r
+library(tidyverse)
+library(countrycode)
+library(gghighlight)
+library(cowplot)
+library(mapproj)
+```
+
+
+
+```r
+tidy_tuesday_url &lt;- "https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-05-07/student_teacher_ratio.csv"
+student_ratio &lt;- readr::read_csv(tidy_tuesday_url)
+```
+
+---
+
+
+
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+*student_ratio
+```
+]]
+.column[.content.center[
+
+```
+  # A tibble: 5,189 x 8
+     edulit_ind indicator country_code country  year student_ratio flag_codes
+     &lt;chr&gt;      &lt;chr&gt;     &lt;chr&gt;        &lt;chr&gt;   &lt;int&gt;         &lt;dbl&gt; &lt;chr&gt;     
+   1 PTRHC_2    Lower Se… MRT          Maurit…  2013         56.6  &lt;NA&gt;      
+   2 PTRHC_2    Lower Se… MRT          Maurit…  2014         51.9  &lt;NA&gt;      
+   3 PTRHC_2    Lower Se… MRT          Maurit…  2015         53.2  &lt;NA&gt;      
+   4 PTRHC_2    Lower Se… MRT          Maurit…  2016         38.2  &lt;NA&gt;      
+   5 PTRHC_1    Primary … COD          Democr…  2012         34.7  &lt;NA&gt;      
+   6 PTRHC_1    Primary … COD          Democr…  2013         37.1  &lt;NA&gt;      
+   7 PTRHC_1    Primary … COD          Democr…  2014         35.3  &lt;NA&gt;      
+   8 PTRHC_1    Primary … COD          Democr…  2015         33.2  &lt;NA&gt;      
+   9 PTRHC_3    Upper Se… SYR          Syrian…  2013          8.47 &lt;NA&gt;      
+  10 PTRHC_02   Pre-Prim… GNQ          Equato…  2012         17.5  &lt;NA&gt;      
+  # … with 5,179 more rows, and 1 more variable: flags &lt;chr&gt;
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+student_ratio %&gt;%
+* filter(indicator == "Tertiary Education")
+```
+]]
+.column[.content.center[
+
+```
+  # A tibble: 550 x 8
+     edulit_ind indicator country_code country  year student_ratio flag_codes
+     &lt;chr&gt;      &lt;chr&gt;     &lt;chr&gt;        &lt;chr&gt;   &lt;int&gt;         &lt;dbl&gt; &lt;chr&gt;     
+   1 PTRHC_5T8  Tertiary… PLW          Palau    2013          8.22 &lt;NA&gt;      
+   2 PTRHC_5T8  Tertiary… SWE          Sweden   2012         14.0  &lt;NA&gt;      
+   3 PTRHC_5T8  Tertiary… SWE          Sweden   2013         13.4  &lt;NA&gt;      
+   4 PTRHC_5T8  Tertiary… SWE          Sweden   2014         12.9  &lt;NA&gt;      
+   5 PTRHC_5T8  Tertiary… SWE          Sweden   2015         12.6  &lt;NA&gt;      
+   6 PTRHC_5T8  Tertiary… SWE          Sweden   2016         12.4  &lt;NA&gt;      
+   7 PTRHC_5T8  Tertiary… BEL          Belgium  2012         16.6  &lt;NA&gt;      
+   8 PTRHC_5T8  Tertiary… BEL          Belgium  2013         16.3  &lt;NA&gt;      
+   9 PTRHC_5T8  Tertiary… BEL          Belgium  2014         17.3  &lt;NA&gt;      
+  10 PTRHC_5T8  Tertiary… BEL          Belgium  2015         17.6  &lt;NA&gt;      
+  # … with 540 more rows, and 1 more variable: flags &lt;chr&gt;
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+student_ratio %&gt;%
+  filter(indicator == "Tertiary Education") %&gt;%
+* group_by(country)
+```
+]]
+.column[.content.center[
+
+```
+  # A tibble: 550 x 8
+  # Groups:   country [148]
+     edulit_ind indicator country_code country  year student_ratio flag_codes
+     &lt;chr&gt;      &lt;chr&gt;     &lt;chr&gt;        &lt;chr&gt;   &lt;int&gt;         &lt;dbl&gt; &lt;chr&gt;     
+   1 PTRHC_5T8  Tertiary… PLW          Palau    2013          8.22 &lt;NA&gt;      
+   2 PTRHC_5T8  Tertiary… SWE          Sweden   2012         14.0  &lt;NA&gt;      
+   3 PTRHC_5T8  Tertiary… SWE          Sweden   2013         13.4  &lt;NA&gt;      
+   4 PTRHC_5T8  Tertiary… SWE          Sweden   2014         12.9  &lt;NA&gt;      
+   5 PTRHC_5T8  Tertiary… SWE          Sweden   2015         12.6  &lt;NA&gt;      
+   6 PTRHC_5T8  Tertiary… SWE          Sweden   2016         12.4  &lt;NA&gt;      
+   7 PTRHC_5T8  Tertiary… BEL          Belgium  2012         16.6  &lt;NA&gt;      
+   8 PTRHC_5T8  Tertiary… BEL          Belgium  2013         16.3  &lt;NA&gt;      
+   9 PTRHC_5T8  Tertiary… BEL          Belgium  2014         17.3  &lt;NA&gt;      
+  10 PTRHC_5T8  Tertiary… BEL          Belgium  2015         17.6  &lt;NA&gt;      
+  # … with 540 more rows, and 1 more variable: flags &lt;chr&gt;
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+student_ratio %&gt;%
+  filter(indicator == "Tertiary Education") %&gt;%
+  group_by(country) %&gt;%
+* summarise(student_ratio =
+*             mean(student_ratio,
+*                  na.rm = TRUE))
+```
+]]
+.column[.content.center[
+
+```
+  # A tibble: 148 x 2
+     country             student_ratio
+     &lt;chr&gt;                       &lt;dbl&gt;
+   1 Afghanistan                 22.7 
+   2 Albania                     19.9 
+   3 Algeria                     25.2 
+   4 Andorra                      4.23
+   5 Angola                      25.5 
+   6 Antigua and Barbuda          8.18
+   7 Armenia                      7.13
+   8 Aruba                       10.6 
+   9 Austria                      7.37
+  10 Azerbaijan                   8.95
+  # … with 138 more rows
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+student_ratio %&gt;%
+  filter(indicator == "Tertiary Education") %&gt;%
+  group_by(country) %&gt;%
+  summarise(student_ratio = 
+              mean(student_ratio, 
+                   na.rm = TRUE)) %&gt;%
+* ungroup()
+```
+]]
+.column[.content.center[
+
+```
+  # A tibble: 148 x 2
+     country             student_ratio
+     &lt;chr&gt;                       &lt;dbl&gt;
+   1 Afghanistan                 22.7 
+   2 Albania                     19.9 
+   3 Algeria                     25.2 
+   4 Andorra                      4.23
+   5 Angola                      25.5 
+   6 Antigua and Barbuda          8.18
+   7 Armenia                      7.13
+   8 Aruba                       10.6 
+   9 Austria                      7.37
+  10 Azerbaijan                   8.95
+  # … with 138 more rows
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+student_ratio %&gt;%
+  filter(indicator == "Tertiary Education") %&gt;%
+  group_by(country) %&gt;%
+  summarise(student_ratio = 
+              mean(student_ratio, 
+                   na.rm = TRUE)) %&gt;%
+  ungroup() %&gt;%
+* drop_na(student_ratio)
+```
+]]
+.column[.content.center[
+
+```
+  # A tibble: 146 x 2
+     country             student_ratio
+     &lt;chr&gt;                       &lt;dbl&gt;
+   1 Afghanistan                 22.7 
+   2 Albania                     19.9 
+   3 Algeria                     25.2 
+   4 Andorra                      4.23
+   5 Angola                      25.5 
+   6 Antigua and Barbuda          8.18
+   7 Armenia                      7.13
+   8 Aruba                       10.6 
+   9 Austria                      7.37
+  10 Azerbaijan                   8.95
+  # … with 136 more rows
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+student_ratio %&gt;%
+  filter(indicator == "Tertiary Education") %&gt;%
+  group_by(country) %&gt;%
+  summarise(student_ratio = 
+              mean(student_ratio, 
+                   na.rm = TRUE)) %&gt;%
+  ungroup() %&gt;%
+  drop_na(student_ratio) %&gt;%
+* rename(region = country)
+```
+]]
+.column[.content.center[
+
+```
+  # A tibble: 146 x 2
+     region              student_ratio
+     &lt;chr&gt;                       &lt;dbl&gt;
+   1 Afghanistan                 22.7 
+   2 Albania                     19.9 
+   3 Algeria                     25.2 
+   4 Andorra                      4.23
+   5 Angola                      25.5 
+   6 Antigua and Barbuda          8.18
+   7 Armenia                      7.13
+   8 Aruba                       10.6 
+   9 Austria                      7.37
+  10 Azerbaijan                   8.95
+  # … with 136 more rows
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+student_ratio %&gt;%
+  filter(indicator == "Tertiary Education") %&gt;%
+  group_by(country) %&gt;%
+  summarise(student_ratio = 
+              mean(student_ratio, 
+                   na.rm = TRUE)) %&gt;%
+  ungroup() %&gt;%
+  drop_na(student_ratio) %&gt;%
+  rename(region = country) %&gt;%
+* full_join(
+*   map_data("world") %&gt;% filter(region != "Antarctica"),
+*   by = "region")
+```
+]]
+.column[.content.center[
+
+```
+  # A tibble: 94,703 x 7
+     region      student_ratio  long   lat group order subregion
+     &lt;chr&gt;               &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;chr&gt;    
+   1 Afghanistan          22.7  74.9  37.2     2    12 &lt;NA&gt;     
+   2 Afghanistan          22.7  74.8  37.2     2    13 &lt;NA&gt;     
+   3 Afghanistan          22.7  74.8  37.2     2    14 &lt;NA&gt;     
+   4 Afghanistan          22.7  74.7  37.3     2    15 &lt;NA&gt;     
+   5 Afghanistan          22.7  74.7  37.3     2    16 &lt;NA&gt;     
+   6 Afghanistan          22.7  74.7  37.3     2    17 &lt;NA&gt;     
+   7 Afghanistan          22.7  74.6  37.2     2    18 &lt;NA&gt;     
+   8 Afghanistan          22.7  74.4  37.2     2    19 &lt;NA&gt;     
+   9 Afghanistan          22.7  74.4  37.1     2    20 &lt;NA&gt;     
+  10 Afghanistan          22.7  74.5  37.1     2    21 &lt;NA&gt;     
+  # … with 94,693 more rows
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+student_ratio %&gt;%
+  filter(indicator == "Tertiary Education") %&gt;%
+  group_by(country) %&gt;%
+  summarise(student_ratio = 
+              mean(student_ratio, 
+                   na.rm = TRUE)) %&gt;%
+  ungroup() %&gt;%
+  drop_na(student_ratio) %&gt;%
+  rename(region = country) %&gt;%
+  full_join(
+    map_data("world") %&gt;% filter(region != "Antarctica"), 
+    by = "region") -&gt;
+*student_ratio_world
+```
+]]
+.column[.content.center[
+
+]]
+
+---
+
+# Build figure
+
+---
+
+
+
+
+
+
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+*ggplot(data = student_ratio_world)
+```
+]]
+.column[.content.center[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_map_1-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = student_ratio_world) + 
+* aes(x = long)
+```
+]]
+.column[.content.center[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_map_2-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = student_ratio_world) + 
+  aes(x = long) + 
+* aes(y = lat)
+```
+]]
+.column[.content.center[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_map_3-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = student_ratio_world) + 
+  aes(x = long) + 
+  aes(y = lat) +
+* aes(map_id = region)
+```
+]]
+.column[.content.center[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_map_4-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = student_ratio_world) + 
+  aes(x = long) + 
+  aes(y = lat) +
+  aes(map_id = region) + 
+* geom_map(map = student_ratio_world,
+*          col = "grey34",
+*          alpha = .6, size = .05)
+```
+]]
+.column[.content.center[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_map_7-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = student_ratio_world) + 
+  aes(x = long) + 
+  aes(y = lat) +
+  aes(map_id = region) + 
+  geom_map(map = student_ratio_world, 
+           col = "grey34", 
+           alpha = .6, size = .05) +
+* aes(fill = student_ratio)
+```
+]]
+.column[.content.center[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_map_8-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = student_ratio_world) + 
+  aes(x = long) + 
+  aes(y = lat) +
+  aes(map_id = region) + 
+  geom_map(map = student_ratio_world, 
+           col = "grey34", 
+           alpha = .6, size = .05) +
+  aes(fill = student_ratio) +
+* scale_fill_gradient(low = "#55bee9",
+*                     high = "#f1b545",
+*                     na.value = "#282828")
+```
+]]
+.column[.content.center[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_map_11-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = student_ratio_world) + 
+  aes(x = long) + 
+  aes(y = lat) +
+  aes(map_id = region) + 
+  geom_map(map = student_ratio_world, 
+           col = "grey34", 
+           alpha = .6, size = .05) +
+  aes(fill = student_ratio) +
+  scale_fill_gradient(low = "#55bee9", 
+                      high = "#f1b545", 
+                      na.value = "#282828") +
+* scale_y_continuous(breaks = c())
+```
+]]
+.column[.content.center[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_map_12-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = student_ratio_world) + 
+  aes(x = long) + 
+  aes(y = lat) +
+  aes(map_id = region) + 
+  geom_map(map = student_ratio_world, 
+           col = "grey34", 
+           alpha = .6, size = .05) +
+  aes(fill = student_ratio) +
+  scale_fill_gradient(low = "#55bee9", 
+                      high = "#f1b545", 
+                      na.value = "#282828") +
+  scale_y_continuous(breaks = c()) +
+* scale_x_continuous(breaks = c())
+```
+]]
+.column[.content.center[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_map_13-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = student_ratio_world) + 
+  aes(x = long) + 
+  aes(y = lat) +
+  aes(map_id = region) + 
+  geom_map(map = student_ratio_world, 
+           col = "grey34", 
+           alpha = .6, size = .05) +
+  aes(fill = student_ratio) +
+  scale_fill_gradient(low = "#55bee9", 
+                      high = "#f1b545", 
+                      na.value = "#282828") +
+  scale_y_continuous(breaks = c()) +
+  scale_x_continuous(breaks = c()) +
+* labs(x = "")
+```
+]]
+.column[.content.center[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_map_14-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = student_ratio_world) + 
+  aes(x = long) + 
+  aes(y = lat) +
+  aes(map_id = region) + 
+  geom_map(map = student_ratio_world, 
+           col = "grey34", 
+           alpha = .6, size = .05) +
+  aes(fill = student_ratio) +
+  scale_fill_gradient(low = "#55bee9", 
+                      high = "#f1b545", 
+                      na.value = "#282828") +
+  scale_y_continuous(breaks = c()) +
+  scale_x_continuous(breaks = c()) +
+  labs(x = "") + 
+* labs(y = "")
+```
+]]
+.column[.content.center[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_map_15-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = student_ratio_world) + 
+  aes(x = long) + 
+  aes(y = lat) +
+  aes(map_id = region) + 
+  geom_map(map = student_ratio_world, 
+           col = "grey34", 
+           alpha = .6, size = .05) +
+  aes(fill = student_ratio) +
+  scale_fill_gradient(low = "#55bee9", 
+                      high = "#f1b545", 
+                      na.value = "#282828") +
+  scale_y_continuous(breaks = c()) +
+  scale_x_continuous(breaks = c()) +
+  labs(x = "") + 
+  labs(y = "") +
+* guides(fill =
+*          guide_legend(title =
+*                         "# of students\nper teacher"))
+```
+]]
+.column[.content.center[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_map_18-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = student_ratio_world) + 
+  aes(x = long) + 
+  aes(y = lat) +
+  aes(map_id = region) + 
+  geom_map(map = student_ratio_world, 
+           col = "grey34", 
+           alpha = .6, size = .05) +
+  aes(fill = student_ratio) +
+  scale_fill_gradient(low = "#55bee9", 
+                      high = "#f1b545", 
+                      na.value = "#282828") +
+  scale_y_continuous(breaks = c()) +
+  scale_x_continuous(breaks = c()) +
+  labs(x = "") + 
+  labs(y = "") +
+  guides(fill = 
+           guide_legend(title = 
+                          "# of students\nper teacher")) +
+* coord_map("gilbert", xlim = c(-180, 180))
+```
+]]
+.column[.content.center[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_map_19-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = student_ratio_world) + 
+  aes(x = long) + 
+  aes(y = lat) +
+  aes(map_id = region) + 
+  geom_map(map = student_ratio_world, 
+           col = "grey34", 
+           alpha = .6, size = .05) +
+  aes(fill = student_ratio) +
+  scale_fill_gradient(low = "#55bee9", 
+                      high = "#f1b545", 
+                      na.value = "#282828") +
+  scale_y_continuous(breaks = c()) +
+  scale_x_continuous(breaks = c()) +
+  labs(x = "") + 
+  labs(y = "") +
+  guides(fill = 
+           guide_legend(title = 
+                          "# of students\nper teacher")) +
+  coord_map("gilbert", xlim = c(-180, 180)) +
+* labs(title = '"Oh dear, some teachers have it tough"')
+```
+]]
+.column[.content.center[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_map_20-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = student_ratio_world) + 
+  aes(x = long) + 
+  aes(y = lat) +
+  aes(map_id = region) + 
+  geom_map(map = student_ratio_world, 
+           col = "grey34", 
+           alpha = .6, size = .05) +
+  aes(fill = student_ratio) +
+  scale_fill_gradient(low = "#55bee9", 
+                      high = "#f1b545", 
+                      na.value = "#282828") +
+  scale_y_continuous(breaks = c()) +
+  scale_x_continuous(breaks = c()) +
+  labs(x = "") + 
+  labs(y = "") +
+  guides(fill = 
+           guide_legend(title = 
+                          "# of students\nper teacher")) +
+  coord_map("gilbert", xlim = c(-180, 180)) +
+  labs(title = '"Oh dear, some teachers have it tough"') +
+* labs(subtitle = "How the student-to-teacher ratio varies across the globe*")
+```
+]]
+.column[.content.center[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_map_21-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = student_ratio_world) + 
+  aes(x = long) + 
+  aes(y = lat) +
+  aes(map_id = region) + 
+  geom_map(map = student_ratio_world, 
+           col = "grey34", 
+           alpha = .6, size = .05) +
+  aes(fill = student_ratio) +
+  scale_fill_gradient(low = "#55bee9", 
+                      high = "#f1b545", 
+                      na.value = "#282828") +
+  scale_y_continuous(breaks = c()) +
+  scale_x_continuous(breaks = c()) +
+  labs(x = "") + 
+  labs(y = "") +
+  guides(fill = 
+           guide_legend(title = 
+                          "# of students\nper teacher")) +
+  coord_map("gilbert", xlim = c(-180, 180)) +
+  labs(title = '"Oh dear, some teachers have it tough"') +
+  labs(subtitle = "How the student-to-teacher ratio varies across the globe*") +
+* labs(caption = "Visualization: Christian Burkhart for #TidyTuesday\nData:\n*average 2012-2017 Terciary Education")
+```
+]]
+.column[.content.center[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_map_22-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(data = student_ratio_world) + 
+  aes(x = long) + 
+  aes(y = lat) +
+  aes(map_id = region) + 
+  geom_map(map = student_ratio_world, 
+           col = "grey34", 
+           alpha = .6, size = .05) +
+  aes(fill = student_ratio) +
+  scale_fill_gradient(low = "#55bee9", 
+                      high = "#f1b545", 
+                      na.value = "#282828") +
+  scale_y_continuous(breaks = c()) +
+  scale_x_continuous(breaks = c()) +
+  labs(x = "") + 
+  labs(y = "") +
+  guides(fill = 
+           guide_legend(title = 
+                          "# of students\nper teacher")) +
+  coord_map("gilbert", xlim = c(-180, 180)) +
+  labs(title = '"Oh dear, some teachers have it tough"') +
+  labs(subtitle = "How the student-to-teacher ratio varies across the globe*") +
+  labs(caption = "Visualization: Christian Burkhart for #TidyTuesday\nData:\n*average 2012-2017 Terciary Education") -&gt;
+*g 
+```
+]]
+.column[.content.center[
+
+]]
+
+---
+
+
+
+# Adjust theme
+
+---
+
+
+
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+*g 
+```
+]]
+.column[.content.center[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_thematic_1-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+* theme(plot.background =
+*         element_rect(fill = "#323232"))
+```
+]]
+.column[.content.center[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_thematic_3-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  theme(plot.background = 
+          element_rect(fill = "#323232")) +
+* theme(plot.title =
+*         element_text(color = "#ffffff",
+*                      margin = margin(t = 30,
+*                                      b = 10),
+*                      size = 12))
+```
+]]
+.column[.content.center[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_thematic_8-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  theme(plot.background = 
+          element_rect(fill = "#323232")) +
+  theme(plot.title = 
+          element_text(color = "#ffffff", 
+                       margin = margin(t = 30, 
+                                       b = 10), 
+                       size = 12)) +
+* theme(plot.subtitle =
+*         element_text(color = "#ababab",
+*                      margin = margin(b = 20),
+*                      size = 10, hjust = 0.7))
+```
+]]
+.column[.content.center[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_thematic_12-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  theme(plot.background = 
+          element_rect(fill = "#323232")) +
+  theme(plot.title = 
+          element_text(color = "#ffffff", 
+                       margin = margin(t = 30, 
+                                       b = 10), 
+                       size = 12)) +
+  theme(plot.subtitle = 
+          element_text(color = "#ababab", 
+                       margin = margin(b = 20), 
+                       size = 10, hjust = 0.7)) +
+* theme(plot.caption =
+*         element_text(color = "#ababab",
+*                      size = 7, hjust = 1))
+```
+]]
+.column[.content.center[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_thematic_15-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  theme(plot.background = 
+          element_rect(fill = "#323232")) +
+  theme(plot.title = 
+          element_text(color = "#ffffff", 
+                       margin = margin(t = 30, 
+                                       b = 10), 
+                       size = 12)) +
+  theme(plot.subtitle = 
+          element_text(color = "#ababab", 
+                       margin = margin(b = 20), 
+                       size = 10, hjust = 0.7)) +
+  theme(plot.caption = 
+          element_text(color = "#ababab", 
+                       size = 7, hjust = 1)) +
+* theme(plot.background  =
+*         element_rect(fill  = "#323232"))
+```
+]]
+.column[.content.center[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_thematic_17-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  theme(plot.background = 
+          element_rect(fill = "#323232")) +
+  theme(plot.title = 
+          element_text(color = "#ffffff", 
+                       margin = margin(t = 30, 
+                                       b = 10), 
+                       size = 12)) +
+  theme(plot.subtitle = 
+          element_text(color = "#ababab", 
+                       margin = margin(b = 20), 
+                       size = 10, hjust = 0.7)) +
+  theme(plot.caption = 
+          element_text(color = "#ababab", 
+                       size = 7, hjust = 1)) +
+  theme(plot.background  = 
+          element_rect(fill  = "#323232")) +
+* theme(legend.title =
+*         element_text(color = "#6d6d6d",
+*                      size = 8))
+```
+]]
+.column[.content.center[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_thematic_20-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+g + 
+  theme(plot.background = 
+          element_rect(fill = "#323232")) +
+  theme(plot.title = 
+          element_text(color = "#ffffff", 
+                       margin = margin(t = 30, 
+                                       b = 10), 
+                       size = 12)) +
+  theme(plot.subtitle = 
+          element_text(color = "#ababab", 
+                       margin = margin(b = 20), 
+                       size = 10, hjust = 0.7)) +
+  theme(plot.caption = 
+          element_text(color = "#ababab", 
+                       size = 7, hjust = 1)) +
+  theme(plot.background  = 
+          element_rect(fill  = "#323232")) +
+  theme(legend.title = 
+          element_text(color = "#6d6d6d", 
+                       size = 8)) +
+* theme(legend.text =
+*         element_text(color = "#6d6d6d",
+*                      size = 8))
+```
+]]
+.column[.content.center[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_thematic_23-1.png" width="100%" /&gt;
+]]
+
+---
+
+
+
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 75%}
+&lt;/style&gt;
+
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 75%}
+&lt;/style&gt;
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightLines": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script>
+(function() {
+  var i, text, code, codes = document.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+})();
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
