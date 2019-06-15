@@ -52,27 +52,27 @@ leaflet() %>%
 ```{r mymap, eval = T, echo = F}
 leaflet() %>% # Leaflet map widget
   addTiles() %>% # OpenStreetMap default
-  setView(lat = 39.6759427, 
+  setView(lat = 39.6774101, 
           lng = -104.9621703, 
           zoom = 15) %>% 
   addProviderTiles(provider =
                      providers$OpenStreetMap.BlackAndWhite) %>% 
-  addMarkers(lat = 39.6759427,
+  addMarkers(lat = 39.6774101,
              lng = -104.9621703, 
-             popup = "Korbel School of International Studies") %>% 
+             popup = "University of Denver") %>% 
   addProviderTiles(provider =
                      providers$Stamen.Toner) %>% 
   addProviderTiles(provider =
                      providers$OpenTopoMap) %>%
-  addCircles(lat = 39.6759427,
+  addCircles(lat = 39.6774101,
              lng = -104.9621703,
              radius = 500,
              color = "orange",
              fillColor = "red") %>% 
-  setView(lat = 39.6759427,
+  setView(lat = 39.6774101,
           lng = -104.9621703,
           zoom = 8) %>% 
-  setView(lat = 39.6759427,
+  setView(lat = 39.6774101,
           lng = -104.9621703,
           zoom = 4)
 ```
@@ -86,7 +86,7 @@ leaflet() %>% # Leaflet map widget
 
 
 
-# Discover Ames, Iowa
+# Discover Ames
 
 
 - a weather layer
