@@ -15,25 +15,66 @@ output:
 ```{r}
 # Load leaflet R package
 library(leaflet)
+# This flipbook was created w/ xaringan reveal functions:
 source(file = "https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/xaringan_reveal_parenthetical.R")
 
 ```
 
+
 ---
+
+# Discover Auckland (Birthplace of R)
+
+
+```{r auckland, eval = T, echo = F}
+leaflet() %>%
+  addTiles() %>%  # Add default OpenStreetMap map tiles
+  addMarkers(lng = 174.768, 
+             lat = -36.852, 
+             popup = "The birthplace of R") %>% 
+  setView(lng = 174.768, 
+          lat = -36.852,
+          zoom = 4)
+```
+
+---
+
+`r apply_reveal("auckland")`
+
+
+---
+
+# Discover Denver 
+
+- Explore the provider tiles - full opacity 
+- Open maps seem not quite keeping up with DU construction
 
 ```{r mymap, eval = T, echo = F}
 leaflet() %>% # Leaflet map widget
-  addTiles() %>% 
+  addTiles() %>% # OpenStreetMap default
   setView(lat = 39.6759427, 
           lng = -104.9621703, 
-          zoom = 13) %>% 
+          zoom = 15) %>% 
   addProviderTiles(provider =
-                     providers$Stamen.Toner) %>%
+                     providers$OpenStreetMap.BlackAndWhite) %>% 
+  addMarkers(lat = 39.6759427,
+             lng = -104.9621703, 
+             popup = "Korbel School of International Studies") %>% 
+  addProviderTiles(provider =
+                     providers$Stamen.Toner) %>% 
+  addProviderTiles(provider =
+                     providers$OpenTopoMap) %>%
   addCircles(lat = 39.6759427,
              lng = -104.9621703,
-             radius = 1000,
+             radius = 500,
              color = "orange",
-             fillColor = "red") 
+             fillColor = "red") %>% 
+  setView(lat = 39.6759427,
+          lng = -104.9621703,
+          zoom = 8) %>% 
+  setView(lat = 39.6759427,
+          lng = -104.9621703,
+          zoom = 4)
 ```
 
 
@@ -44,23 +85,60 @@ leaflet() %>% # Leaflet map widget
 ---
 
 
-```{r auckland, eval = T, echo = F}
-leaflet() %>%
-  addTiles() %>%  # Add default OpenStreetMap map tiles
-  addMarkers(lng = 174.768, 
-             lat = -36.852, 
-             popup = "The birthplace of R")
+
+# Discover Ames, Iowa
+
+
+- a weather layer
+- a semi opaque layer
+
+
+
+```{r weather, eval = T, echo = F}
+leaflet() %>% 
+  addTiles() %>% 
+  setView(-93.3712, 42.0205, zoom = 7.5) %>%
+  addWMSTiles(baseUrl = "http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r.cgi",
+    layers = "nexrad-n0r-900913",
+    options = WMSTileOptions(format = "image/png", 
+                             transparent = TRUE),
+    attribution = "Weather data © 2012 IEM Nexrad") %>% 
+  setView(-93.6, 42.0205, zoom = 11) %>%
+  addProviderTiles(providers$OpenRailwayMap,
+    options = providerTileOptions(opacity = 0.75))
 ```
 
----
-
-`r apply_reveal("auckland")`
 
 ---
 
+`r apply_reveal("weather")`
+
+
+---
+
+# Discover Boston
+
+Walk-through of almost verbatim example from https://rstudio.github.io/leaflet/basemaps.html
+
+- provider lines and labels
+
+```{r boston, eval = T, echo = F}
+leaflet() %>% 
+  setView(lng = -71.0589, lat = 42.3601, 
+          zoom = 12) %>% 
+  addProviderTiles(providers$MtbMap) %>%
+  addProviderTiles(providers$Stamen.TonerLines,
+    options = providerTileOptions(opacity = 0.35)) %>%
+  addProviderTiles(providers$Stamen.TonerLabels)
+```
+
+
+---
+
+`r apply_reveal("boston")`
 
 
 ```{css, eval = TRUE, echo = F}
-.remark-code{line-height: 1.5; font-size: 70%}
+.remark-code{line-height: 1.5; font-size: 65%}
 ```
 
