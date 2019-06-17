@@ -12,6 +12,17 @@ output:
       countIncrementalSlides: false
 ---
 
+
+
+# Introduction
+
+Leaflet is an open source JavaScript library for embedding custom interactive maps.  Leaflet for R "makes it easy to create Leaflet maps from R."  There is a really helpful [website]( https://rstudio.github.io/leaflet/) introducing this package.  And this [flipbook](https://github.com/EvaMaeRey/little_flipbooks_library) draws a lot from its examples, and is intended to further clarify in-between steps.  
+
+Leaflet is definitely a fun package to explore!   
+
+
+---
+
 ```{r}
 # Load leaflet R package
 library(leaflet)
@@ -19,6 +30,8 @@ library(leaflet)
 source(file = "https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/xaringan_reveal_parenthetical.R")
 
 ```
+
+
 
 
 ---
@@ -90,8 +103,7 @@ leaflet() %>% # Leaflet map widget
 
 
 - a semi opaque layer
-- a weather layer
-- add multiple markers
+- adding a rectangle
 
 ---
 
@@ -126,6 +138,7 @@ Walk-through of almost verbatim example from https://rstudio.github.io/leaflet/b
 - provider lines and labels
 - multiple markers
 - weather layer
+- including external data
 
 ---
 
@@ -144,9 +157,9 @@ Providence,41.8236,-71.4222,177994"))
 ```{r boston, eval = T, echo = F}
 new_england %>% 
 leaflet() %>% 
+  addProviderTiles(providers$MtbMap) %>%
   setView(lng = -71.0589, lat = 42.3601, 
           zoom = 12) %>% 
-  addProviderTiles(providers$MtbMap) %>%
   addProviderTiles(providers$Stamen.TonerLines,
     options = providerTileOptions(opacity = 0.35)) %>%
   addProviderTiles(providers$Stamen.TonerLabels) %>%
@@ -176,6 +189,8 @@ leaflet() %>%
 
 - adding polygons
 
+Somehow the "flipbook" function `apply_reveal()` failed here.  Nevertheless, I'm including the code and the complete result. 
+
 ```{r, eval = F}
 download.file("https://www.bundeswahlleiter.de/dam/jcr/f92e42fa-44f1-47e5-b775-924926b34268/btw17_geometrie_wahlkreise_geo_shp.zip", "btw17_geometrie_wahlkreise_geo_shp.zip")
 unzip("btw17_geometrie_wahlkreise_geo_shp.zip")
@@ -198,7 +213,14 @@ german_districts %>% leaflet() %>%
               highlightOptions = 
                 highlightOptions(color = "white", 
                                  weight = 2,
-                                 bringToFront = TRUE))
+                                 bringToFront = TRUE)) ->
+g
+```
+
+---
+
+```{r}
+g
 ```
 
 
