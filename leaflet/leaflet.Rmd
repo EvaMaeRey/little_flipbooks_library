@@ -89,29 +89,32 @@ leaflet() %>% # Leaflet map widget
 # Discover Ames
 
 
-- a weather layer
 - a semi opaque layer
+- a weather layer
+- add multiple markers
+
+---
 
 
 
-```{r weather, eval = T, echo = F}
+
+```{r ames, eval = T, echo = F}
 leaflet() %>% 
   addTiles() %>% 
-  setView(-93.3712, 42.0205, zoom = 7.5) %>%
-  addWMSTiles(baseUrl = "http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r.cgi",
-    layers = "nexrad-n0r-900913",
-    options = WMSTileOptions(format = "image/png", 
-                             transparent = TRUE),
-    attribution = "Weather data © 2012 IEM Nexrad") %>% 
-  setView(-93.6, 42.0205, zoom = 11) %>%
+  setView(-93.625, 42.0205, zoom = 11) %>%
+  addRectangles(
+    lng1 = -93.625 - .03, lat1 = 42.0205 - .03,
+    lng2 = -93.625 + .03, lat2 = 42.0205 + .03,
+    fillColor = "transparent"
+  ) %>% 
   addProviderTiles(providers$OpenRailwayMap,
-    options = providerTileOptions(opacity = 0.75))
+    options = providerTileOptions(opacity = 0.75)) 
 ```
 
 
 ---
 
-`r apply_reveal("weather")`
+`r apply_reveal("ames")`
 
 
 ---
@@ -121,15 +124,43 @@ leaflet() %>%
 Walk-through of almost verbatim example from https://rstudio.github.io/leaflet/basemaps.html
 
 - provider lines and labels
+- multiple markers
+- weather layer
+
+---
+
+
+```{r}
+new_england <- read.csv(textConnection("City,Lat,Long,Pop
+Boston,42.3601,-71.0589,645966
+Hartford,41.7627,-72.6743,125017
+New York City,40.7127,-74.0059,8406000
+Philadelphia,39.9500,-75.1667,1553000
+Pittsburgh,40.4397,-79.9764,305841
+Providence,41.8236,-71.4222,177994"))
+```
+
 
 ```{r boston, eval = T, echo = F}
+new_england %>% 
 leaflet() %>% 
   setView(lng = -71.0589, lat = 42.3601, 
           zoom = 12) %>% 
   addProviderTiles(providers$MtbMap) %>%
   addProviderTiles(providers$Stamen.TonerLines,
     options = providerTileOptions(opacity = 0.35)) %>%
-  addProviderTiles(providers$Stamen.TonerLabels)
+  addProviderTiles(providers$Stamen.TonerLabels) %>%
+  setView(-84, 42.0205, zoom = 4) %>% 
+  addWMSTiles(baseUrl = "http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r.cgi",
+    layers = "nexrad-n0r-900913",
+    options = WMSTileOptions(format = "image/png", 
+                             transparent = TRUE),
+    attribution = "Weather data © 2012 IEM Nexrad") %>%
+  addCircles(lng = ~ Long, lat = ~ Lat, 
+             weight = 1, 
+             radius = ~ sqrt(Pop) * 30, 
+             popup = ~ City, color = "red")  %>%
+  addMarkers(lng = ~ Long, lat = ~ Lat) 
 ```
 
 
@@ -137,6 +168,42 @@ leaflet() %>%
 
 `r apply_reveal("boston")`
 
+
+---
+
+
+# Discover Germany
+
+- adding polygons
+
+```{r, eval = F}
+download.file("https://www.bundeswahlleiter.de/dam/jcr/f92e42fa-44f1-47e5-b775-924926b34268/btw17_geometrie_wahlkreise_geo_shp.zip", "btw17_geometrie_wahlkreise_geo_shp.zip")
+unzip("btw17_geometrie_wahlkreise_geo_shp.zip")
+```    
+
+```{r, warning=F, message=F}
+library(rgdal)
+german_districts <- readOGR(dsn = "Geometrie_Wahlkreise_19DBT_geo.shp", layer = "Geometrie_Wahlkreise_19DBT_geo")
+```
+---
+
+```{r bundestag, eval = T, echo = T}
+german_districts %>% leaflet() %>% 
+  addTiles() %>% 
+  setView(lng = 7, lat = 50, zoom = 5) %>% 
+  addPolygons(color = "grey", weight = 1, 
+              smoothFactor = 0.5,
+              fillOpacity = 0.25,
+              fillColor = "blue",
+              highlightOptions = 
+                highlightOptions(color = "white", 
+                                 weight = 2,
+                                 bringToFront = TRUE))
+```
+
+
+
+---
 
 ```{css, eval = TRUE, echo = F}
 .remark-code{line-height: 1.5; font-size: 65%}
