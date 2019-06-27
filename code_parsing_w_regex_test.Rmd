@@ -1,15 +1,7 @@
 ---
 title: "Proposed code parsing for flipbooks"
 author: "Gina Reynolds, May 2019"
-output:
-  xaringan::moon_reader:
-    lib_dir: libs
-    css: ["kunoichi", "ninjutsu"]
-    nature:
-      ratio: 16:10
-      highlightStyle: github
-      highlightLines: true
-      countIncrementalSlides: false
+output: html_document
 ---
 
 
@@ -38,10 +30,15 @@ parse_code <- function(code) {
 }
 ```
 
+---
+
 ```{r}
 library(gapminder)
 library(tidyverse)
 ```
+
+
+---
 
 # Example code
 
@@ -60,9 +57,11 @@ gapminder %>%             # the data  #REVEAL
 my_plot 
 ```
 
+---
 
 ```{r}
-local_code <- "gapminder %>%             # the data  #REVEAL
+local_code <- # for testing w/o knitting
+"gapminder %>%             # the data  #REVEAL
   filter(year == (2000 + 7)) %>%  # subset 
   ggplot() +              # pipe to ggplot 
   aes(x = gdpPercap) +
@@ -88,10 +87,9 @@ knitr:::knit_code$get("the_code")
 # use parse_code() to pull apart example code
 
 ```{r}
-parse_code(knitr:::knit_code$get("the_code")) %>% 
-  knitr::kable()
+parse_code(knitr:::knit_code$get("the_code")) %>% knitr::kable()
 
-parse_code(str_split(local_code, "\n")[[1]])
+# parse_code(str_split(local_code, "\n")[[1]])
 
 the_parsed <- parse_code(knitr:::knit_code$get("the_code"))
 
@@ -126,6 +124,10 @@ break_points(the_parsed) ->
 
 
 
+# highlighting
+
+from 1 + plus last break point to current break
+
 ```{r}
 highlighting <- function(the_break_points){
   
@@ -147,6 +149,8 @@ highlighting(my_break_points) ->
   my_highlighting
 ```
 
+# Just a reminder how the original reveal function worked
+
 ```{r emi_reveal}
 # reveal lines up to `upto` and highlight lines `highlight`
 emi_reveal <- function(name, upto, highlight) {
@@ -160,6 +164,7 @@ emi_reveal("the_code", 4, 4)
 
 ```
 
+# proposed new reveal
 
 ```{r}
 reveal <- function(chunk_name, upto, highlight) {
@@ -178,14 +183,13 @@ reveal <- function(chunk_name, upto, highlight) {
 }
 ```
 
-# reveal example
-
+# reveal at one break point example
 
 ```{r}
 reveal("the_code", my_break_points[7], my_highlighting[[7]])
 ```
 
-
+# reveal, and 
 
 ```{r}
 partial_knit_chunks <- function(chunk_name, the_break_points, the_highlighting, show_code = T) {
