@@ -32,7 +32,7 @@ source("https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/mas
 
 ```r
 library(tidyverse)
-options(gganimate.nframes = 200, scipen = 10)
+options(gganimate.nframes = 400, scipen = 10)
 ```
 
 ---
@@ -41,11 +41,10 @@ options(gganimate.nframes = 200, scipen = 10)
 
 
 ```r
-n &lt;- 5^2  # number of ball bearnings 
-          # make it a squared number
-stop_level &lt;- 12 # number of perturbation levels 
+n &lt;- 70  # number of ball bearnings 
+stop_level &lt;- 10 # number of perturbation levels 
                 # make it an even number
-levels &lt;- n + stop_level + 10
+levels &lt;- 44 # greater than stop_levels
 ```
 
 
@@ -56,6 +55,10 @@ levels &lt;- n + stop_level + 10
 ---
 
 
+
+
+
+---
 
 class: split-40
 count: false
@@ -84,7 +87,7 @@ set.seed(2019)
 .column[.content.center[
 
 ```
-# A tibble: 1,175 x 2
+# A tibble: 3,080 x 2
    unit_id level
      &lt;int&gt; &lt;dbl&gt;
  1       1     0
@@ -97,7 +100,7 @@ set.seed(2019)
  8       1     7
  9       1     8
 10       1     9
-# … with 1,165 more rows
+# … with 3,070 more rows
 ```
 ]]
 ---
@@ -119,7 +122,7 @@ crossing(unit_id = 1:n,
 .column[.content.center[
 
 ```
-# A tibble: 1,175 x 3
+# A tibble: 3,080 x 3
    unit_id level perturbation
      &lt;int&gt; &lt;dbl&gt;        &lt;dbl&gt;
  1       1     0            1
@@ -132,7 +135,7 @@ crossing(unit_id = 1:n,
  8       1     7           -1
  9       1     8           -1
 10       1     9            1
-# … with 1,165 more rows
+# … with 3,070 more rows
 ```
 ]]
 ---
@@ -155,8 +158,8 @@ crossing(unit_id = 1:n,
 .column[.content.center[
 
 ```
-# A tibble: 1,175 x 3
-# Groups:   unit_id [25]
+# A tibble: 3,080 x 3
+# Groups:   unit_id [70]
    unit_id level perturbation
      &lt;int&gt; &lt;dbl&gt;        &lt;dbl&gt;
  1       1     0            1
@@ -169,7 +172,7 @@ crossing(unit_id = 1:n,
  8       1     7           -1
  9       1     8           -1
 10       1     9            1
-# … with 1,165 more rows
+# … with 3,070 more rows
 ```
 ]]
 ---
@@ -196,8 +199,8 @@ crossing(unit_id = 1:n,
 .column[.content.center[
 
 ```
-# A tibble: 1,175 x 3
-# Groups:   unit_id [25]
+# A tibble: 3,080 x 3
+# Groups:   unit_id [70]
    unit_id level perturbation
      &lt;int&gt; &lt;dbl&gt;        &lt;dbl&gt;
  1       1     0            0
@@ -210,7 +213,7 @@ crossing(unit_id = 1:n,
  8       1     7           -1
  9       1     8           -1
 10       1     9            1
-# … with 1,165 more rows
+# … with 3,070 more rows
 ```
 ]]
 ---
@@ -242,8 +245,8 @@ crossing(unit_id = 1:n,
 .column[.content.center[
 
 ```
-# A tibble: 1,175 x 4
-# Groups:   unit_id [25]
+# A tibble: 3,080 x 4
+# Groups:   unit_id [70]
    unit_id level perturbation  time
      &lt;int&gt; &lt;dbl&gt;        &lt;dbl&gt; &lt;dbl&gt;
  1       1     0            0     3
@@ -256,7 +259,7 @@ crossing(unit_id = 1:n,
  8       1     7           -1    10
  9       1     8           -1    11
 10       1     9            1    12
-# … with 1,165 more rows
+# … with 3,070 more rows
 ```
 ]]
 ---
@@ -289,8 +292,8 @@ crossing(unit_id = 1:n,
 .column[.content.center[
 
 ```
-# A tibble: 1,175 x 4
-# Groups:   unit_id [25]
+# A tibble: 3,080 x 4
+# Groups:   unit_id [70]
    unit_id level perturbation  time
      &lt;int&gt; &lt;dbl&gt;        &lt;dbl&gt; &lt;dbl&gt;
  1       1     0            0     3
@@ -303,7 +306,7 @@ crossing(unit_id = 1:n,
  8       1     7           -1    10
  9       1     8           -1    11
 10       1     9            1    12
-# … with 1,165 more rows
+# … with 3,070 more rows
 ```
 ]]
 ---
@@ -339,8 +342,8 @@ crossing(unit_id = 1:n,
 .column[.content.center[
 
 ```
-# A tibble: 1,175 x 5
-# Groups:   unit_id [25]
+# A tibble: 3,080 x 5
+# Groups:   unit_id [70]
    unit_id level perturbation  time x_position
      &lt;int&gt; &lt;dbl&gt;        &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;
  1       1     0            0     3          0
@@ -353,7 +356,7 @@ crossing(unit_id = 1:n,
  8       1     7           -1    10         -1
  9       1     8           -1    11         -2
 10       1     9            1    12         -1
-# … with 1,165 more rows
+# … with 3,070 more rows
 ```
 ]]
 ---
@@ -394,8 +397,8 @@ crossing(unit_id = 1:n,
 .column[.content.center[
 
 ```
-# A tibble: 1,175 x 5
-# Groups:   unit_id [25]
+# A tibble: 3,080 x 5
+# Groups:   unit_id [70]
    unit_id level perturbation  time x_position
      &lt;int&gt; &lt;dbl&gt;        &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;
  1       1     0            0     3          0
@@ -408,7 +411,7 @@ crossing(unit_id = 1:n,
  8       1     7           -1    10         -1
  9       1     8           -1    11         -2
 10       1     9            1    12         -1
-# … with 1,165 more rows
+# … with 3,070 more rows
 ```
 ]]
 ---
@@ -451,8 +454,8 @@ crossing(unit_id = 1:n,
 .column[.content.center[
 
 ```
-# A tibble: 1,175 x 5
-# Groups:   unit_id [25]
+# A tibble: 3,080 x 5
+# Groups:   unit_id [70]
    unit_id level perturbation  time x_position
      &lt;int&gt; &lt;dbl&gt;        &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;
  1       1     0            0     3          0
@@ -465,7 +468,7 @@ crossing(unit_id = 1:n,
  8       1     7           -1    10         -1
  9       1     8           -1    11         -2
 10       1     9            1    12         -1
-# … with 1,165 more rows
+# … with 3,070 more rows
 ```
 ]]
 ---
@@ -509,7 +512,7 @@ crossing(unit_id = 1:n,
 .column[.content.center[
 
 ```
-# A tibble: 1,175 x 5
+# A tibble: 3,080 x 5
    unit_id level perturbation  time x_position
      &lt;int&gt; &lt;dbl&gt;        &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;
  1       1     0            0     3          0
@@ -522,7 +525,7 @@ crossing(unit_id = 1:n,
  8       1     7           -1    10         -1
  9       1     8           -1    11         -2
 10       1     9            1    12         -1
-# … with 1,165 more rows
+# … with 3,070 more rows
 ```
 ]]
 ---
@@ -570,6 +573,227 @@ crossing(unit_id = 1:n,
 
 ---
 
+# Now some code to count the number of ball bearings seen at the final level.
+
+We want to keep track of how many ball bearings end up in each position.
+
+---
+
+
+
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+*ball_bearings
+```
+]]
+.column[.content.center[
+
+```
+# A tibble: 3,080 x 5
+   unit_id level perturbation  time x_position
+     &lt;int&gt; &lt;dbl&gt;        &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;
+ 1       1     0            0     3          0
+ 2       1     1            1     4          1
+ 3       1     2           -1     5          0
+ 4       1     3            1     6          1
+ 5       1     4           -1     7          0
+ 6       1     5           -1     8         -1
+ 7       1     6            1     9          0
+ 8       1     7           -1    10         -1
+ 9       1     8           -1    11         -2
+10       1     9            1    12         -1
+# … with 3,070 more rows
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ball_bearings %&gt;%
+* filter(level == (levels - 1) )
+```
+]]
+.column[.content.center[
+
+```
+# A tibble: 70 x 5
+   unit_id level perturbation  time x_position
+     &lt;int&gt; &lt;dbl&gt;        &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;
+ 1       1    43            1    46          0
+ 2       2    43            1    49         -4
+ 3       3    43           -1    52          2
+ 4       4    43            1    55         -4
+ 5       5    43           -1    58         -2
+ 6       6    43            1    61         -2
+ 7       7    43            1    64         -2
+ 8       8    43           -1    67          0
+ 9       9    43           -1    70          2
+10      10    43           -1    73          0
+# … with 60 more rows
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ball_bearings %&gt;%
+  filter(level == (levels - 1) ) %&gt;%
+* rename(final_time = time)
+```
+]]
+.column[.content.center[
+
+```
+# A tibble: 70 x 5
+   unit_id level perturbation final_time x_position
+     &lt;int&gt; &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
+ 1       1    43            1         46          0
+ 2       2    43            1         49         -4
+ 3       3    43           -1         52          2
+ 4       4    43            1         55         -4
+ 5       5    43           -1         58         -2
+ 6       6    43            1         61         -2
+ 7       7    43            1         64         -2
+ 8       8    43           -1         67          0
+ 9       9    43           -1         70          2
+10      10    43           -1         73          0
+# … with 60 more rows
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ball_bearings %&gt;%
+  filter(level == (levels - 1) ) %&gt;%
+  rename(final_time = time) %&gt;%
+* crossing(time = as.numeric(1:max(ball_bearings$time)))
+```
+]]
+.column[.content.center[
+
+```
+# A tibble: 17,710 x 6
+   unit_id level perturbation final_time x_position  time
+     &lt;int&gt; &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;dbl&gt;
+ 1       1    43            1         46          0     1
+ 2       1    43            1         46          0     2
+ 3       1    43            1         46          0     3
+ 4       1    43            1         46          0     4
+ 5       1    43            1         46          0     5
+ 6       1    43            1         46          0     6
+ 7       1    43            1         46          0     7
+ 8       1    43            1         46          0     8
+ 9       1    43            1         46          0     9
+10       1    43            1         46          0    10
+# … with 17,700 more rows
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ball_bearings %&gt;%
+  filter(level == (levels - 1) ) %&gt;%
+  rename(final_time = time) %&gt;%
+  crossing(time = as.numeric(1:max(ball_bearings$time))) %&gt;%
+* group_by(time, x_position)
+```
+]]
+.column[.content.center[
+
+```
+# A tibble: 17,710 x 6
+# Groups:   time, x_position [2,024]
+   unit_id level perturbation final_time x_position  time
+     &lt;int&gt; &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;dbl&gt;
+ 1       1    43            1         46          0     1
+ 2       1    43            1         46          0     2
+ 3       1    43            1         46          0     3
+ 4       1    43            1         46          0     4
+ 5       1    43            1         46          0     5
+ 6       1    43            1         46          0     6
+ 7       1    43            1         46          0     7
+ 8       1    43            1         46          0     8
+ 9       1    43            1         46          0     9
+10       1    43            1         46          0    10
+# … with 17,700 more rows
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ball_bearings %&gt;%
+  filter(level == (levels - 1) ) %&gt;%
+  rename(final_time = time) %&gt;%
+  crossing(time = as.numeric(1:max(ball_bearings$time))) %&gt;%
+  group_by(time, x_position) %&gt;%
+* summarise(x_position_count = sum(time &gt; final_time))
+```
+]]
+.column[.content.center[
+
+```
+# A tibble: 2,024 x 3
+# Groups:   time [?]
+    time x_position x_position_count
+   &lt;dbl&gt;      &lt;dbl&gt;            &lt;int&gt;
+ 1     1         -8                0
+ 2     1         -6                0
+ 3     1         -4                0
+ 4     1         -2                0
+ 5     1          0                0
+ 6     1          2                0
+ 7     1          4                0
+ 8     1          6                0
+ 9     2         -8                0
+10     2         -6                0
+# … with 2,014 more rows
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ball_bearings %&gt;%
+  filter(level == (levels - 1) ) %&gt;%
+  rename(final_time = time) %&gt;%
+  crossing(time = as.numeric(1:max(ball_bearings$time))) %&gt;%
+  group_by(time, x_position) %&gt;%
+  summarise(x_position_count = sum(time &gt; final_time)) -&gt;
+*ball_bearings_collect
+```
+]]
+.column[.content.center[
+
+]]
+
+
+---
+
 
 
 
@@ -581,14 +805,14 @@ count: false
 ```r
 * # Lets make some pegs
 *crossing(unit_id =
-*          (-sqrt(n)*2):(sqrt(n)*2),
+*          -stop_level:stop_level,
 *        level = 1:stop_level)
 ```
 ]]
 .column[.content.center[
 
 ```
-# A tibble: 252 x 2
+# A tibble: 210 x 2
    unit_id level
      &lt;int&gt; &lt;int&gt;
  1     -10     1
@@ -601,7 +825,7 @@ count: false
  8     -10     8
  9     -10     9
 10     -10    10
-# … with 242 more rows
+# … with 200 more rows
 ```
 ]]
 ---
@@ -613,7 +837,7 @@ count: false
 ```r
   # Lets make some pegs
 crossing(unit_id =
-           (-sqrt(n)*2):(sqrt(n)*2),
+           -stop_level:stop_level,
          level = 1:stop_level) %&gt;%
 * mutate(transparent =
 *          (unit_id + level) %% 2)
@@ -622,7 +846,7 @@ crossing(unit_id =
 .column[.content.center[
 
 ```
-# A tibble: 252 x 3
+# A tibble: 210 x 3
    unit_id level transparent
      &lt;int&gt; &lt;int&gt;       &lt;dbl&gt;
  1     -10     1           1
@@ -635,7 +859,7 @@ crossing(unit_id =
  8     -10     8           0
  9     -10     9           1
 10     -10    10           0
-# … with 242 more rows
+# … with 200 more rows
 ```
 ]]
 ---
@@ -647,7 +871,7 @@ count: false
 ```r
   # Lets make some pegs
 crossing(unit_id =
-           (-sqrt(n)*2):(sqrt(n)*2),
+           -stop_level:stop_level,
          level = 1:stop_level) %&gt;%
   mutate(transparent =
            (unit_id + level) %% 2) -&gt;
@@ -666,34 +890,34 @@ count: false
 ```r
   # Lets make some pegs
 crossing(unit_id =
-           (-sqrt(n)*2):(sqrt(n)*2),
+           -stop_level:stop_level,
          level = 1:stop_level) %&gt;%
   mutate(transparent =
            (unit_id + level) %% 2) -&gt;
 pegs
 * # Lets make walls
 *crossing(unit_id =
-*          (-sqrt(n)*2):(sqrt(n)*2),
+*          -(stop_level + 1):(stop_level + 1),
 *        level = stop_level:levels)
 ```
 ]]
 .column[.content.center[
 
 ```
-# A tibble: 756 x 2
+# A tibble: 805 x 2
    unit_id level
      &lt;int&gt; &lt;int&gt;
- 1     -10    12
- 2     -10    13
- 3     -10    14
- 4     -10    15
- 5     -10    16
- 6     -10    17
- 7     -10    18
- 8     -10    19
- 9     -10    20
-10     -10    21
-# … with 746 more rows
+ 1     -11    10
+ 2     -11    11
+ 3     -11    12
+ 4     -11    13
+ 5     -11    14
+ 6     -11    15
+ 7     -11    16
+ 8     -11    17
+ 9     -11    18
+10     -11    19
+# … with 795 more rows
 ```
 ]]
 ---
@@ -705,14 +929,14 @@ count: false
 ```r
   # Lets make some pegs
 crossing(unit_id =
-           (-sqrt(n)*2):(sqrt(n)*2),
+           -stop_level:stop_level,
          level = 1:stop_level) %&gt;%
   mutate(transparent =
            (unit_id + level) %% 2) -&gt;
 pegs
   # Lets make walls
 crossing(unit_id =
-           (-sqrt(n)*2):(sqrt(n)*2),
+           -(stop_level + 1):(stop_level + 1),
          level = stop_level:levels) %&gt;%
 * mutate(transparent =
 *          unit_id %% 2)
@@ -721,20 +945,20 @@ crossing(unit_id =
 .column[.content.center[
 
 ```
-# A tibble: 756 x 3
+# A tibble: 805 x 3
    unit_id level transparent
      &lt;int&gt; &lt;int&gt;       &lt;dbl&gt;
- 1     -10    12           0
- 2     -10    13           0
- 3     -10    14           0
- 4     -10    15           0
- 5     -10    16           0
- 6     -10    17           0
- 7     -10    18           0
- 8     -10    19           0
- 9     -10    20           0
-10     -10    21           0
-# … with 746 more rows
+ 1     -11    10           1
+ 2     -11    11           1
+ 3     -11    12           1
+ 4     -11    13           1
+ 5     -11    14           1
+ 6     -11    15           1
+ 7     -11    16           1
+ 8     -11    17           1
+ 9     -11    18           1
+10     -11    19           1
+# … with 795 more rows
 ```
 ]]
 ---
@@ -746,14 +970,14 @@ count: false
 ```r
   # Lets make some pegs
 crossing(unit_id =
-           (-sqrt(n)*2):(sqrt(n)*2),
+           -stop_level:stop_level,
          level = 1:stop_level) %&gt;%
   mutate(transparent =
            (unit_id + level) %% 2) -&gt;
 pegs
   # Lets make walls
 crossing(unit_id =
-           (-sqrt(n)*2):(sqrt(n)*2),
+           -(stop_level + 1):(stop_level + 1),
          level = stop_level:levels) %&gt;%
   mutate(transparent =
            unit_id %% 2) -&gt;
@@ -1111,12 +1335,18 @@ ggplot(ball_bearings) +
   annotate(geom = "tile",
            height = 2, width = 1.75,
            x = 0 , y = -1.5, fill = "white") +
-* geom_point(size = ball_bearings_size,
-*            col = "steelblue")
+* geom_rect(data = ball_bearings_collect,
+*           mapping = aes(xmin = x_position - .35,
+*                         xmax = x_position + .35,
+*                         ymax = max(ball_bearings$level) + 1 - x_position_count*1.5,
+*                         ymin = max(ball_bearings$level) + 1,
+*                         group = x_position,
+*                         y = NULL, x = NULL),
+*           fill = "darkgrey")
 ```
 ]]
 .column[.content.center[
-![](galton_board_files/figure-html/output_static_build_27-1.png)&lt;!-- --&gt;
+![](galton_board_files/figure-html/output_static_build_33-1.png)&lt;!-- --&gt;
 ]]
 ---
 class: split-40
@@ -1150,13 +1380,68 @@ ggplot(ball_bearings) +
   annotate(geom = "tile",
            height = 2, width = 1.75,
            x = 0 , y = -1.5, fill = "white") +
+  geom_rect(data = ball_bearings_collect,
+            mapping = aes(xmin = x_position - .35,
+                          xmax = x_position + .35,
+                          ymax = max(ball_bearings$level) + 1 - x_position_count*1.5,
+                          ymin = max(ball_bearings$level) + 1,
+                          group = x_position,
+                          y = NULL, x = NULL),
+            fill = "darkgrey") +
+* geom_point(size = ball_bearings_size,
+*            col = "steelblue")
+```
+]]
+.column[.content.center[
+![](galton_board_files/figure-html/output_static_build_35-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(ball_bearings) +
+  aes(y = level) +
+  aes(x = x_position) +
+  scale_y_reverse() +
+  aes(group = unit_id) +
+  geom_point(data = walls,
+             aes(x = unit_id, alpha = transparent),
+             col = "grey30", size = peg_size) +
+  geom_point(data = pegs,
+             aes(x = unit_id, alpha = transparent),
+             col = "grey30", size = peg_size) +
+  geom_segment(x = -sqrt(n), xend = -1.5,
+               y = 0, yend = 0) +
+  geom_segment(x = sqrt(n), xend = 1.5,
+               y = 0, yend = 0) +
+  geom_abline(intercept = 1.5,
+              slope = -1) +
+  geom_abline(intercept = 1.5,
+              slope = 1) +
+  annotate(geom = "tile",
+           height = 2, width = 2,
+           x = 0 , y = -1.5) +
+  annotate(geom = "tile",
+           height = 2, width = 1.75,
+           x = 0 , y = -1.5, fill = "white") +
+  geom_rect(data = ball_bearings_collect,
+            mapping = aes(xmin = x_position - .35,
+                          xmax = x_position + .35,
+                          ymax = max(ball_bearings$level) + 1 - x_position_count*1.5,
+                          ymin = max(ball_bearings$level) + 1,
+                          group = x_position,
+                          y = NULL, x = NULL),
+            fill = "darkgrey") +
   geom_point(size = ball_bearings_size,
              col = "steelblue") +
 * coord_equal()
 ```
 ]]
 .column[.content.center[
-![](galton_board_files/figure-html/output_static_build_28-1.png)&lt;!-- --&gt;
+![](galton_board_files/figure-html/output_static_build_36-1.png)&lt;!-- --&gt;
 ]]
 ---
 class: split-40
@@ -1190,15 +1475,23 @@ ggplot(ball_bearings) +
   annotate(geom = "tile",
            height = 2, width = 1.75,
            x = 0 , y = -1.5, fill = "white") +
+  geom_rect(data = ball_bearings_collect,
+            mapping = aes(xmin = x_position - .35,
+                          xmax = x_position + .35,
+                          ymax = max(ball_bearings$level) + 1 - x_position_count*1.5,
+                          ymin = max(ball_bearings$level) + 1,
+                          group = x_position,
+                          y = NULL, x = NULL),
+            fill = "darkgrey") +
   geom_point(size = ball_bearings_size,
              col = "steelblue") +
   coord_equal() +
 * geom_hline(yintercept = stop_level,
-*            linetype = "dashed")
+*            linetype = "dotted")
 ```
 ]]
 .column[.content.center[
-![](galton_board_files/figure-html/output_static_build_30-1.png)&lt;!-- --&gt;
+![](galton_board_files/figure-html/output_static_build_38-1.png)&lt;!-- --&gt;
 ]]
 ---
 class: split-40
@@ -1232,16 +1525,24 @@ ggplot(ball_bearings) +
   annotate(geom = "tile",
            height = 2, width = 1.75,
            x = 0 , y = -1.5, fill = "white") +
+  geom_rect(data = ball_bearings_collect,
+            mapping = aes(xmin = x_position - .35,
+                          xmax = x_position + .35,
+                          ymax = max(ball_bearings$level) + 1 - x_position_count*1.5,
+                          ymin = max(ball_bearings$level) + 1,
+                          group = x_position,
+                          y = NULL, x = NULL),
+            fill = "darkgrey") +
   geom_point(size = ball_bearings_size,
              col = "steelblue") +
   coord_equal() +
   geom_hline(yintercept = stop_level,
-             linetype = "dashed") +
+             linetype = "dotted") +
 * scale_alpha_continuous(range = c(0, 1), guide = F)
 ```
 ]]
 .column[.content.center[
-![](galton_board_files/figure-html/output_static_build_31-1.png)&lt;!-- --&gt;
+![](galton_board_files/figure-html/output_static_build_39-1.png)&lt;!-- --&gt;
 ]]
 ---
 class: split-40
@@ -1275,17 +1576,25 @@ ggplot(ball_bearings) +
   annotate(geom = "tile",
            height = 2, width = 1.75,
            x = 0 , y = -1.5, fill = "white") +
+  geom_rect(data = ball_bearings_collect,
+            mapping = aes(xmin = x_position - .35,
+                          xmax = x_position + .35,
+                          ymax = max(ball_bearings$level) + 1 - x_position_count*1.5,
+                          ymin = max(ball_bearings$level) + 1,
+                          group = x_position,
+                          y = NULL, x = NULL),
+            fill = "darkgrey") +
   geom_point(size = ball_bearings_size,
              col = "steelblue") +
   coord_equal() +
   geom_hline(yintercept = stop_level,
-             linetype = "dashed") +
+             linetype = "dotted") +
   scale_alpha_continuous(range = c(0, 1), guide = F) +
 * theme_void()
 ```
 ]]
 .column[.content.center[
-![](galton_board_files/figure-html/output_static_build_32-1.png)&lt;!-- --&gt;
+![](galton_board_files/figure-html/output_static_build_40-1.png)&lt;!-- --&gt;
 ]]
 ---
 class: split-40
@@ -1319,11 +1628,19 @@ ggplot(ball_bearings) +
   annotate(geom = "tile",
            height = 2, width = 1.75,
            x = 0 , y = -1.5, fill = "white") +
+  geom_rect(data = ball_bearings_collect,
+            mapping = aes(xmin = x_position - .35,
+                          xmax = x_position + .35,
+                          ymax = max(ball_bearings$level) + 1 - x_position_count*1.5,
+                          ymin = max(ball_bearings$level) + 1,
+                          group = x_position,
+                          y = NULL, x = NULL),
+            fill = "darkgrey") +
   geom_point(size = ball_bearings_size,
              col = "steelblue") +
   coord_equal() +
   geom_hline(yintercept = stop_level,
-             linetype = "dashed") +
+             linetype = "dotted") +
   scale_alpha_continuous(range = c(0, 1), guide = F) +
   theme_void() -&gt;
 g#&lt;&lt;
@@ -1345,7 +1662,7 @@ count: false
 ```r
 *g +
 * gganimate::transition_time(time = time) +
-* gganimate::shadow_wake(wake_length = .1 ) +
+* gganimate::shadow_wake(wake_length = .05) +
 * gganimate::ease_aes("bounce-in-out")
 ```
 ]]
@@ -1357,7 +1674,7 @@ count: false
 
 # Binomial distribution
 
-The creation above fails to collect all the ball bearings at the end.  Maybe that will be a future project, but it felt like it added some unnecesary complexity.  So, quickly, what follows summarizes outcomes of many random perturbations on many units.  
+Now the fast way to simulating...  
 
 ---
 
@@ -1667,8 +1984,16 @@ crossing(ball_id = 1:n_balls,
 ]]
 
 
+
+
+
+
+
+
+
+
 &lt;style type="text/css"&gt;
-.remark-code{line-height: 1.5; font-size: 55%}
+.remark-code{line-height: 1.5; font-size: 50%}
 &lt;/style&gt;
     </textarea>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

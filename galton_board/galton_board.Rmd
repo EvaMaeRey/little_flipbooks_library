@@ -28,7 +28,7 @@ knitr::opts_chunk$set(fig.width = 6, message = F, warning = F,
 
 ```{r}
 library(tidyverse)
-options(gganimate.nframes = 200, scipen = 10)
+options(gganimate.nframes = 400, scipen = 10)
 ```
 
 ---
@@ -36,11 +36,10 @@ options(gganimate.nframes = 200, scipen = 10)
 # Define paramters
 
 ```{r}
-n <- 5^2  # number of ball bearnings 
-          # make it a squared number
-stop_level <- 12 # number of perturbation levels 
+n <- 70  # number of ball bearnings 
+stop_level <- 10 # number of perturbation levels 
                 # make it an even number
-levels <- n + stop_level + 10
+levels <- 44 # greater than stop_levels
 ```
 
 
@@ -83,21 +82,46 @@ crossing(unit_id = 1:n,
 ball_bearings
 ```
 
+
+
+---
+
 `r apply_reveal("ball_bearings")`
+
+---
+
+# Now some code to count the number of ball bearings seen at the final level.
+
+We want to keep track of how many ball bearings end up in each position.
+
+---
+
+```{r collect_ball_bearings, eval = T, echo = F}
+ball_bearings %>% 
+  filter(level == (levels - 1) ) %>% 
+  rename(final_time = time) %>% 
+  crossing(time = as.numeric(1:max(ball_bearings$time))) %>% 
+  group_by(time, x_position) %>% 
+  summarise(x_position_count = sum(time > final_time)) ->
+ball_bearings_collect
+```
+
+`r apply_reveal("collect_ball_bearings")`
+
 
 ---
 
 ```{r architecture, eval = T, echo = F}
 # Lets make some pegs
 crossing(unit_id = 
-           (-sqrt(n)*2):(sqrt(n)*2), 
+           -stop_level:stop_level, 
          level = 1:stop_level) %>% 
   mutate(transparent = 
            (unit_id + level) %% 2) ->
 pegs
 # Lets make walls
 crossing(unit_id = 
-           (-sqrt(n)*2):(sqrt(n)*2), 
+           -(stop_level + 1):(stop_level + 1), 
          level = stop_level:levels) %>% 
   mutate(transparent = 
            unit_id %% 2) ->
@@ -143,11 +167,19 @@ ggplot(ball_bearings) +
   annotate(geom = "tile", 
            height = 2, width = 1.75, 
            x = 0 , y = -1.5, fill = "white") +
+  geom_rect(data = ball_bearings_collect,
+            mapping = aes(xmin = x_position - .35, 
+                          xmax = x_position + .35,
+                          ymax = max(ball_bearings$level) + 1 - x_position_count*1.5,
+                          ymin = max(ball_bearings$level) + 1,
+                          group = x_position, 
+                          y = NULL, x = NULL),
+            fill = "darkgrey") +
   geom_point(size = ball_bearings_size, 
              col = "steelblue") +
   coord_equal() +
   geom_hline(yintercept = stop_level, 
-             linetype = "dashed") +
+             linetype = "dotted") +
   scale_alpha_continuous(range = c(0, 1), guide = F) +
   theme_void() ->
 g
@@ -162,7 +194,7 @@ g
 ```{r, animation, eval = F, echo = F}
 g +  
   gganimate::transition_time(time = time) + 
-  gganimate::shadow_wake(wake_length = .1 ) + 
+  gganimate::shadow_wake(wake_length = .05) + 
   gganimate::ease_aes("bounce-in-out") #REVEAL
 ```
 
@@ -172,7 +204,7 @@ g +
 
 # Binomial distribution
 
-The creation above fails to collect all the ball bearings at the end.  Maybe that will be a future project, but it felt like it added some unnecesary complexity.  So, quickly, what follows summarizes outcomes of many random perturbations on many units.  
+Now the fast way to simulating...  
 
 ---
 
@@ -201,6 +233,14 @@ crossing(ball_id = 1:n_balls,
 `r apply_reveal("distribution")`
 
 
+
+
+
+
+
+
+
+
 ```{css, eval = TRUE, echo = F}
-.remark-code{line-height: 1.5; font-size: 55%}
+.remark-code{line-height: 1.5; font-size: 50%}
 ```
