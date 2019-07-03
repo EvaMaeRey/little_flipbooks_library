@@ -75,7 +75,7 @@ partial_knit_chunks <- function(chunk_name, user_reveal_defined = F, show_code =
   parsed <- parse_code(knitr:::knit_code$get(chunk_name))
   
   if (user_reveal_defined == T) {
-
+    
     breaks <- parsed$user_reveal
     
   } else {
@@ -107,7 +107,7 @@ partial_knit_chunks <- function(chunk_name, user_reveal_defined = F, show_code =
       "```{r plot_{{chunk_name}}_{{the_break_points}}, eval=FALSE, code=reveal('{{chunk_name}}', {{the_break_points}}, {{highlighting}})}",
       "```",
       "]]",
-      ".column[.content.center[",
+      ".column[.content[",
       "```{r output_{{chunk_name}}_{{the_break_points}}, echo=FALSE, code=reveal('{{chunk_name}}', {{the_break_points}}, {{highlighting}})}",
       "```",
       "]]",
@@ -129,7 +129,5 @@ partial_knit_chunks <- function(chunk_name, user_reveal_defined = F, show_code =
 apply_reveal <- function(chunk_name, show_code){
   paste(knitr::knit(text = partial_knit_chunks(chunk_name, show_code = T)), collapse = "\n")
 }
-
-
 
 
