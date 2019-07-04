@@ -4,6 +4,7 @@ The incremental code/result reveal provided by flipbooks may help you digest lon
 
 This is the home of little flipbooks!
 
+- [Galton Board](https://evamaerey.github.io/little_flipbooks_library/galton_board/galton_board.html#1)
 - [leaflet for R (interactive maps)](https://evamaerey.github.io/little_flipbooks_library/leaflet/leaflet#1)
 - [ggplot themes](https://evamaerey.github.io/little_flipbooks_library/taming_themes_in_ggplot/taming_ggplot_themes.html)
 - [racing barchart](https://evamaerey.github.io/little_flipbooks_library/racing_bars/racing_barcharts.html)
