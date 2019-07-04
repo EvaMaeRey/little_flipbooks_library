@@ -126,8 +126,8 @@ partial_knit_chunks <- function(chunk_name, user_reveal_defined = F, show_code =
   
 }
 
-apply_reveal <- function(chunk_name, show_code){
-  paste(knitr::knit(text = partial_knit_chunks(chunk_name, show_code = T)), collapse = "\n")
+apply_reveal <- function(...){
+  paste(knitr::knit(text = partial_knit_chunks(...)), collapse = "\n")
 }
 
 
