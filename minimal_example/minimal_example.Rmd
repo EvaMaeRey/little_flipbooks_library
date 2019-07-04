@@ -16,7 +16,7 @@ output:
 ```{r setup, include=F}
 knitr::opts_chunk$set(fig.width = 6, message = F, warning = F, 
                       comment = "", cache = F)
-options(tibble.print_max = Inf) 
+options(tibble.print_max = 20) 
 ```
 
 
@@ -49,13 +49,13 @@ The sequential workflow of the Tidyverse makes incremental display of pipelines 
 Okay. Let's load the the `reveal for xaringan` functions for "flipbooking" and the `tidyverse`.
 
 ```{r}
-if(file.exists("../xaringan_reveal_parenthetical.R")){
+if(file.exists("../xaringan_reveal_parentheses_balanced.R")){
 
-  source(file = "../xaringan_reveal_parenthetical.R")
+  source(file = "../xaringan_reveal_parentheses_balanced.R")
   
 } else {
 
-source(file = "https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/xaringan_reveal_parenthetical.R")
+source(file = "https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/xaringan_reveal_parentheses_balanced.R")
   
 }
 
@@ -132,34 +132,37 @@ Consider the case where you want to show the x-axis, then add the y-axis, show o
 
 Building up plots slowly in presentations has been a technique employed by Hans Rosling and Mona Chalabi.  Matthew Blackwell tweeted this advice in 2018 -- it resonated with a lot of folks!
 
----
-
-First we prep a lot of the plot.  In a presentation we would set echo to FALSE. 
-
-```{r}
-gapminder_2007 <- gapminder %>% 
-  filter(year == 2007) 
-g <- ggplot(gapminder_2007) + 
-  theme_minimal(base_size = 22)
-```
 
 ---
 
-Then we prep a code chunk so that lines end where we want breaks.  
+To do this, we prep a code chunk with our plot, defining where we want breaks in display to come with the statement **#REVEAL** at the end of the key lines.  
 
 
 ```{r, gapminder2007plotonly, eval = F}
-g + aes(x = gdpPercap) + labs(x = "GDP per Capita ($US)") +
-  aes(y = lifeExp) + geom_blank() + labs(y = "Life Expectency") +
-  geom_point(data = gapminder_2007 %>% filter(country == "Spain")) +
-  geom_point() 
+gapminder %>%              # Prep
+  filter(year == 2007) %>% # Data
+  ggplot() +      # pipe to ggplot
+  theme_minimal(base_size = 15) +
+  # prep x axis
+  aes(x = gdpPercap) + 
+  labs(x = "GDP per Capita ($US)") + #REVEAL
+  # prep y axis
+  aes(y = lifeExp) + 
+  labs(y = "Life Expectency") + 
+  geom_blank() + # keep all points  #REVEAL
+  # plot one point
+  geom_point(data = gapminder_2007 %>% 
+               filter(country == "Spain")) + #REVEAL
+  # plot rest of points
+  geom_point() #REVEAL
 ```
+---
 
-Then we'll use the name of this code chunk in a reveal function "partial_knit_chunks".  
+Then, we'll use the name of this code chunk in a reveal function "apply_reveal", with `show_code` set to F, and `user_reveal_defined` set to T.  
 
 ---
 
-`r paste(knitr::knit(text = partial_knit_chunks("gapminder2007plotonly", show_code = F)), collapse = "\n")`
+`r apply_reveal(chunk_name = "gapminder2007plotonly", user_reveal_defined = T, show_code = F)`
 
 
 
