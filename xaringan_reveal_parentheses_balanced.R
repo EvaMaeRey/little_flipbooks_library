@@ -67,7 +67,7 @@ reveal <- function(chunk_name, upto, highlight) {
 
 # partial knit chunks
 
-partial_knit_chunks <- function(chunk_name, user_reveal_defined = F, show_code = T) {
+partial_knit_chunks <- function(chunk_name, user_reveal_defined = F, show_code = T, title = "") {
   # Create slide for lines 1:N for each line N in the given chunk
   # break_points <- seq_along(knitr:::knit_code$get(chunk_name)) # original code, breaks for each line
   
@@ -120,7 +120,7 @@ partial_knit_chunks <- function(chunk_name, user_reveal_defined = F, show_code =
                                      "```",
                                      .open = "{{", .close = "}}", .sep = "\n"
     )
-    glue::glue_collapse(partial_knit_steps, "\n---\n")
+    glue::glue_collapse(title, partial_knit_steps, "\n---\n")
     
   }
   
