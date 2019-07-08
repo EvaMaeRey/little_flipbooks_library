@@ -1,0 +1,156 @@
+---
+title: "data cleaning flipbook"
+subtitle: "a flipbook with some data cleaning examples | made with Xaringan"
+author: "<br><br>Gina Reynolds, April 2019"
+date: "<br>"
+output:
+  xaringan::moon_reader:
+    chakra: libs/remark-latest.min.js
+    lib_dir: libs
+    css: ["kunoichi", "ninjutsu"]
+    nature:
+      ratio: "16:9"
+      highlightLines: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(fig.height = 6, out.width = "100%", comment = " ", cache = T)
+
+source("../xaringan_reveal_parentheses_balanced.R")
+# options(tibble.print_max = 30) 
+```
+
+
+# Introduction
+
+Data cleaning is the pits.  Or is it?  The cleaning tools of the tidyverse and other packages might help such tasks become less terrible.  Let's look at a couple of examples. 
+
+<!-- Data transformation, visualization, and modeling are key steps of data analysis.  The incredibly popular collection of packages known as the *Tidyverse* have made these activities more fluid and intuitive in R. -->
+
+<!-- Still, the syntax and behavior of the functions must be learned and remembered; having references and examples at the ready may be helpful to newcomers taking on this task.  The "Tidyverse in Action" is aimed at providing such a reference alongside other invaluable resources.  [R for Data Science](https://r4ds.had.co.nz/index.html) and the [RStudio cheatsheets](https://www.rstudio.com/resources/cheatsheets/) are particularly useful.  -->
+
+<!-- Topics to be included are wrangling, plotting, and modeling.  The wrangling section is the most developed at this point, thought there is more to add.  In the first formulation of this book, I divided wrangling and plotting.  But no plots didn't feel very satisfying.  It's a bit more of a slog to follow the data transformation steps.  So there will be plotting throughout -- respite from looking at transforming tables of text -- even when plotting is not the emphasis of the section. I've included some ideas on plotting but there isn't much organization or explanation at this point.  There's nothing on modeling yet.  Someday.   -->
+
+
+---
+
+# Getting started with R and RStudio
+
+The tools demonstrated in this book are implemented in the statistical software, R which is opensource and freely available.  RStudio, an integrated development environment (IDE), is a nice environment for working in R.  The following links may help you get R and RStudio up and running. 
+
+- [Install Windows](https://www.youtube.com/watch?v=aCRMhAWmtpw)
+- [Install Mac](https://www.youtube.com/watch?v=GLLZhc_5enQ)
+
+
+---
+
+# Acknowledgements
+
+I'm grateful to the tidyverse team for their tireless work on developing and maintaining this wonderful toolkit and to RStudio for supporting the development.  Emi Tanaka (@statsgen) and Garrick Aden-Buie (@grrrck) helped by writing code to made the flipbook style possible. I'm *very* grateful to them for their work on this as well as to Yihui Xie and others for their work on the Xaringan package --- the extraordinary platform for creating the slides for this book.  I'm thankful too to my students who refresh my perspective on teaching and learning new tools.  Finally, thanks to David who is supportive of data cleaning and of me. 
+
+
+
+---
+
+# Load the tidyverse
+
+```{r, message = F, warning=F, eval = T}
+library(tidyverse)
+```
+
+The date come from the second table on the Wikipedia page [Fishing Industry by Country](https://en.wikipedia.org/wiki/Fishing_industry_by_country).
+
+---
+
+```{r clean_wikipedia_fisheries, eval = F, echo = F}
+url <- "https://en.wikipedia.org/wiki/Fishing_industry_by_country"
+htmltab::htmltab(doc = url, which = 2) %>% 
+  as_tibble() %>% 
+  janitor::clean_names(case = "snake") %>% 
+  mutate(capture = 
+           str_replace_all(string = capture, 
+                           pattern = ",", 
+                           replacement = "")) %>% 
+  mutate(capture = as.numeric(x = capture)) %>% 
+  mutate(aquaculture = 
+           str_replace_all(string = aquaculture, 
+                           pattern = ",", 
+                           replacement = "")) %>% 
+  mutate(aquaculture = as.numeric(x = aquaculture)) %>% 
+  mutate(total = str_replace_all(string = total, 
+                                 pattern = ",", 
+                                 replacement = "")) %>% 
+  mutate(total = as.numeric(x = total)) %>% 
+  mutate(country = str_trim(string = country)) %>% 
+  filter(country != "Total (2015)") ->
+fisheries_2015
+```
+
+`r apply_reveal("clean_wikipedia_fisheries")`
+
+
+
+<!-- --- -->
+
+<!-- I get the UN Security Council data from the UN's website "Countries Elected Members of the Security Council". -->
+
+```{r, eval = F, echo = F}
+text <- readLines("https://www.un.org/securitycouncil/content/countries-elected-members", encoding = "windows-1252")
+text
+```
+
+
+---
+
+```{r unsc_membership_clean, eval = F, echo = F}
+tibble(text) %>%
+  mutate(tenure = str_detect(text, "^\\d")) %>%
+  mutate(country = ifelse(!tenure,text, NA)) %>%
+  fill(country) %>%
+  filter(tenure) %>%
+  mutate(tenure = str_split(text, ",")) %>%
+  unnest() %>%
+  mutate(country = str_trim(country)) %>%
+  mutate(tenure = str_trim(tenure)) %>%
+  select(-text) %>%
+  separate(tenure, c("first_year_tenure", "second_year_tenure")) %>%
+  mutate(first_year_tenure = as.numeric(first_year_tenure)) %>%
+  mutate(second_year_tenure = as.numeric(second_year_tenure)) %>%
+  arrange(country, first_year_tenure) %>%
+  filter(country != "Saudi Arabia") %>%
+  bind_rows(data_frame(country = "East Germany", first_year_tenure = 1980, second_year_tenure = 1981, which_tenure = 1)) %>%  # East German case was missing
+  mutate(country = countrycode::countrycode(sourcevar = country, origin = "country.name", destination = "country.name")) %>%
+  group_by(country) %>%
+  mutate(which_tenure = 1:n()) %>%
+  ungroup() %>%
+  gather(key = "which_tenure_year", value = "year", first_year_tenure:second_year_tenure) %>%
+  filter(!is.na(year))
+```
+
+
+---
+
+```{r}
+citation("janitor")
+```
+
+---
+
+```{r}
+citation("tidyverse")
+```
+
+
+
+
+```{css, eval = TRUE, echo = F}
+.remark-code{line-height: 1.5; font-size: 70%}
+```
+
+
+
+
+
+
+
