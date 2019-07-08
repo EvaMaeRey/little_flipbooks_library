@@ -5,7 +5,6 @@ author: "<br><br>Gina Reynolds, April 2019"
 date: "<br>"
 output:
   xaringan::moon_reader:
-    chakra: libs/remark-latest.min.js
     lib_dir: libs
     css: ["kunoichi", "ninjutsu"]
     nature:
@@ -15,7 +14,7 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-knitr::opts_chunk$set(fig.height = 6, out.width = "100%", comment = " ", cache = T)
+knitr::opts_chunk$set(fig.height = 6, out.width = "100%", comment = " ", cache = F)
 
 source("../xaringan_reveal_parentheses_balanced.R")
 # options(tibble.print_max = 30) 
