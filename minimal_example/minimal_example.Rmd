@@ -15,7 +15,7 @@ output:
 
 ```{r setup, include=F}
 knitr::opts_chunk$set(fig.width = 6, message = F, warning = F, 
-                      comment = "", cache = F)
+                      comment = "", cache = F, fig.align = "center")
 options(tibble.print_max = 20) 
 ```
 
@@ -120,7 +120,7 @@ gapminder %>%
 
 ---
 
-`r apply_reveal("gapminder2007pipe")`
+`r apply_reveal("gapminder2007pipe", title = "# Hey")`
 
 ---
 
@@ -162,7 +162,7 @@ Then, we'll use the name of this code chunk in a reveal function "apply_reveal",
 
 ---
 
-`r apply_reveal(chunk_name = "gapminder2007plotonly", user_reveal_defined = T, show_code = F)`
+`r apply_reveal(chunk_name = "gapminder2007plotonly", user_reveal_defined = T, show_code = F, title = "# My Title")`
 
 
 

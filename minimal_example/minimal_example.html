@@ -82,7 +82,7 @@ gapminder_2007 &lt;-
 
 We'll create this plot.  I have **echo** set to FALSE in the code chunk options here so that you don't see the code, and **eval** to TRUE so that the plot output is produced.  The code chunk is given the name "gapminder2007", and this is used in the in apply_reveal function, which breaks down code by wrangling and plot statements. 
 
-![](minimal_example_files/figure-html/gapminder2007-1.png)&lt;!-- --&gt;
+&lt;img src="minimal_example_files/figure-html/gapminder2007-1.png" style="display: block; margin: auto;" /&gt;
  
 
  
@@ -96,7 +96,6 @@ In the next slide, we'll walk through the code that produces this plot, and the 
 
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -104,12 +103,11 @@ count: false
 ```
 ]]
 .column[.content[
-![](minimal_example_files/figure-html/output_gapminder2007_1-1.png)&lt;!-- --&gt;
+&lt;img src="minimal_example_files/figure-html/output_gapminder2007_1-1.png" style="display: block; margin: auto;" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -118,12 +116,11 @@ ggplot(data = gapminder_2007) +
 ```
 ]]
 .column[.content[
-![](minimal_example_files/figure-html/output_gapminder2007_2-1.png)&lt;!-- --&gt;
+&lt;img src="minimal_example_files/figure-html/output_gapminder2007_2-1.png" style="display: block; margin: auto;" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -133,12 +130,11 @@ ggplot(data = gapminder_2007) +
 ```
 ]]
 .column[.content[
-![](minimal_example_files/figure-html/output_gapminder2007_3-1.png)&lt;!-- --&gt;
+&lt;img src="minimal_example_files/figure-html/output_gapminder2007_3-1.png" style="display: block; margin: auto;" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -149,12 +145,11 @@ ggplot(data = gapminder_2007) +
 ```
 ]]
 .column[.content[
-![](minimal_example_files/figure-html/output_gapminder2007_4-1.png)&lt;!-- --&gt;
+&lt;img src="minimal_example_files/figure-html/output_gapminder2007_4-1.png" style="display: block; margin: auto;" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -166,7 +161,7 @@ ggplot(data = gapminder_2007) +
 ```
 ]]
 .column[.content[
-![](minimal_example_files/figure-html/output_gapminder2007_5-1.png)&lt;!-- --&gt;
+&lt;img src="minimal_example_files/figure-html/output_gapminder2007_5-1.png" style="display: block; margin: auto;" /&gt;
 ]]
 
 
@@ -183,7 +178,6 @@ The reveal functions are also written to recognize the pipe, `%&gt;%`, and rever
 
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -212,7 +206,6 @@ count: false
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -242,7 +235,6 @@ gapminder %&gt;%
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -252,12 +244,11 @@ gapminder %&gt;%
 ```
 ]]
 .column[.content[
-![](minimal_example_files/figure-html/output_gapminder2007pipe_3-1.png)&lt;!-- --&gt;
+&lt;img src="minimal_example_files/figure-html/output_gapminder2007pipe_3-1.png" style="display: block; margin: auto;" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -268,12 +259,11 @@ gapminder %&gt;%
 ```
 ]]
 .column[.content[
-![](minimal_example_files/figure-html/output_gapminder2007pipe_4-1.png)&lt;!-- --&gt;
+&lt;img src="minimal_example_files/figure-html/output_gapminder2007pipe_4-1.png" style="display: block; margin: auto;" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -285,12 +275,11 @@ gapminder %&gt;%
 ```
 ]]
 .column[.content[
-![](minimal_example_files/figure-html/output_gapminder2007pipe_5-1.png)&lt;!-- --&gt;
+&lt;img src="minimal_example_files/figure-html/output_gapminder2007pipe_5-1.png" style="display: block; margin: auto;" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -303,12 +292,11 @@ gapminder %&gt;%
 ```
 ]]
 .column[.content[
-![](minimal_example_files/figure-html/output_gapminder2007pipe_6-1.png)&lt;!-- --&gt;
+&lt;img src="minimal_example_files/figure-html/output_gapminder2007pipe_6-1.png" style="display: block; margin: auto;" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -322,12 +310,11 @@ gapminder %&gt;%
 ```
 ]]
 .column[.content[
-![](minimal_example_files/figure-html/output_gapminder2007pipe_7-1.png)&lt;!-- --&gt;
+&lt;img src="minimal_example_files/figure-html/output_gapminder2007pipe_7-1.png" style="display: block; margin: auto;" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -386,13 +373,17 @@ Then, we'll use the name of this code chunk in a reveal function "apply_reveal",
 
 ---
 
-![](minimal_example_files/figure-html/output_gapminder2007plotonly_7-1.png)&lt;!-- --&gt;
+# My Title
+&lt;img src="minimal_example_files/figure-html/output_gapminder2007plotonly_7-1.png" style="display: block; margin: auto;" /&gt;
 ---
-![](minimal_example_files/figure-html/output_gapminder2007plotonly_11-1.png)&lt;!-- --&gt;
+# My Title
+&lt;img src="minimal_example_files/figure-html/output_gapminder2007plotonly_11-1.png" style="display: block; margin: auto;" /&gt;
 ---
-![](minimal_example_files/figure-html/output_gapminder2007plotonly_14-1.png)&lt;!-- --&gt;
+# My Title
+&lt;img src="minimal_example_files/figure-html/output_gapminder2007plotonly_14-1.png" style="display: block; margin: auto;" /&gt;
 ---
-![](minimal_example_files/figure-html/output_gapminder2007plotonly_16-1.png)&lt;!-- --&gt;
+# My Title
+&lt;img src="minimal_example_files/figure-html/output_gapminder2007plotonly_16-1.png" style="display: block; margin: auto;" /&gt;
 
 
 
