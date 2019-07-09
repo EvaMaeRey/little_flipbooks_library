@@ -102,7 +102,6 @@ partial_knit_chunks <- function(chunk_name, user_reveal_defined = F, show_code =
     partial_knit_steps <- glue::glue(
       "class: split-40",
       "count: false",
-      "",
       ".column[.content[",
       "```{r plot_{{chunk_name}}_{{the_break_points}}, eval=FALSE, code=reveal('{{chunk_name}}', {{the_break_points}}, {{highlighting}})}",
       "```",
@@ -113,17 +112,16 @@ partial_knit_chunks <- function(chunk_name, user_reveal_defined = F, show_code =
       "]]",
       .open = "{{", .close = "}}", .sep = "\n"
     )
-    glue::glue_collapse(partial_knit_steps, "\n---\n")
-  } else {
+    } else {
     
-    partial_knit_steps <- glue::glue("```{r output_{{chunk_name}}_{{the_break_points}}, echo=FALSE, code=reveal('{{chunk_name}}', {{the_break_points}}, {{highlighting}})}",
+    partial_knit_steps <- glue::glue(title,"```{r output_{{chunk_name}}_{{the_break_points}}, echo=FALSE, code=reveal('{{chunk_name}}', {{the_break_points}}, {{highlighting}})}",
                                      "```",
                                      .open = "{{", .close = "}}", .sep = "\n"
     )
-    glue::glue_collapse(title, partial_knit_steps, "\n---\n")
     
   }
   
+    glue::glue_collapse(x = partial_knit_steps, sep = "\n---\n")
 }
 
 apply_reveal <- function(...){
