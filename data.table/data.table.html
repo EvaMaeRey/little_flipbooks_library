@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>data.table</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Gina Reynolds, July 2019" />
+    <link href="libs/remark-css-0.0.1/kunoichi.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# data.table
+### Gina Reynolds, July 2019
+
+---
+
+
+
+
+
+
+
+---
+
+# Set up
+
+Okay. Let's load the the `reveal for xaringan` functions for "flipbooking" and the `data.table`.
+
+
+```r
+source(file = "https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/xaringan_reveal_parentheses_balanced.R")
+```
+
+
+# Where we are headed 
+
+![](data.table_files/figure-html/pipe_data.table-1.png)&lt;!-- --&gt;
+
+
+---
+
+# The pipeline 
+
+---
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*library(data.table)
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(data.table)
+*library(gapminder)
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(data.table)
+library(gapminder)
+*library(magrittr)
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(data.table)
+library(gapminder)
+library(magrittr)
+*library(ggplot2)
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(data.table)
+library(gapminder)
+library(magrittr)
+library(ggplot2)
+*gapminder
+```
+]]
+.column[.content[
+
+```
+# A tibble: 1,704 x 6
+   country     continent  year lifeExp      pop gdpPercap
+   &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+ 1 Afghanistan Asia       1952    28.8  8425333      779.
+ 2 Afghanistan Asia       1957    30.3  9240934      821.
+ 3 Afghanistan Asia       1962    32.0 10267083      853.
+ 4 Afghanistan Asia       1967    34.0 11537966      836.
+ 5 Afghanistan Asia       1972    36.1 13079460      740.
+ 6 Afghanistan Asia       1977    38.4 14880372      786.
+ 7 Afghanistan Asia       1982    39.9 12881816      978.
+ 8 Afghanistan Asia       1987    40.8 13867957      852.
+ 9 Afghanistan Asia       1992    41.7 16317921      649.
+10 Afghanistan Asia       1997    41.8 22227415      635.
+# … with 1,694 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(data.table)
+library(gapminder)
+library(magrittr)
+library(ggplot2)
+gapminder %&gt;%
+* as.data.table()
+```
+]]
+.column[.content[
+
+```
+          country continent year lifeExp      pop gdpPercap
+   1: Afghanistan      Asia 1952  28.801  8425333  779.4453
+   2: Afghanistan      Asia 1957  30.332  9240934  820.8530
+   3: Afghanistan      Asia 1962  31.997 10267083  853.1007
+   4: Afghanistan      Asia 1967  34.020 11537966  836.1971
+   5: Afghanistan      Asia 1972  36.088 13079460  739.9811
+  ---                                                      
+1700:    Zimbabwe    Africa 1987  62.351  9216418  706.1573
+1701:    Zimbabwe    Africa 1992  60.377 10704340  693.4208
+1702:    Zimbabwe    Africa 1997  46.809 11404948  792.4500
+1703:    Zimbabwe    Africa 2002  39.989 11926563  672.0386
+1704:    Zimbabwe    Africa 2007  43.487 12311143  469.7093
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(data.table)
+library(gapminder)
+library(magrittr)
+library(ggplot2)
+gapminder %&gt;%
+  as.data.table() %&gt;%
+*  .[year &gt; 1980]
+```
+]]
+.column[.content[
+
+```
+         country continent year lifeExp      pop gdpPercap
+  1: Afghanistan      Asia 1982  39.854 12881816  978.0114
+  2: Afghanistan      Asia 1987  40.822 13867957  852.3959
+  3: Afghanistan      Asia 1992  41.674 16317921  649.3414
+  4: Afghanistan      Asia 1997  41.763 22227415  635.3414
+  5: Afghanistan      Asia 2002  42.129 25268405  726.7341
+ ---                                                      
+848:    Zimbabwe    Africa 1987  62.351  9216418  706.1573
+849:    Zimbabwe    Africa 1992  60.377 10704340  693.4208
+850:    Zimbabwe    Africa 1997  46.809 11404948  792.4500
+851:    Zimbabwe    Africa 2002  39.989 11926563  672.0386
+852:    Zimbabwe    Africa 2007  43.487 12311143  469.7093
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(data.table)
+library(gapminder)
+library(magrittr)
+library(ggplot2)
+gapminder %&gt;%
+  as.data.table() %&gt;%
+   .[year &gt; 1980] %&gt;%
+*  .[                       ,
+*    mean(gdpPercap)        ,
+*    by = .(continent, year) ]
+```
+]]
+.column[.content[
+
+```
+    continent year        V1
+ 1:      Asia 1982  7434.135
+ 2:      Asia 1987  7608.227
+ 3:      Asia 1992  8639.690
+ 4:      Asia 1997  9834.093
+ 5:      Asia 2002 10174.090
+ 6:      Asia 2007 12473.027
+ 7:    Europe 1982 15617.897
+ 8:    Europe 1987 17214.311
+ 9:    Europe 1992 17061.568
+10:    Europe 1997 19076.782
+11:    Europe 2002 21711.732
+12:    Europe 2007 25054.482
+13:    Africa 1982  2481.593
+14:    Africa 1987  2282.669
+15:    Africa 1992  2281.810
+16:    Africa 1997  2378.760
+17:    Africa 2002  2599.385
+18:    Africa 2007  3089.033
+19:  Americas 1982  7506.737
+20:  Americas 1987  7793.400
+21:  Americas 1992  8044.934
+22:  Americas 1997  8889.301
+23:  Americas 2002  9287.677
+24:  Americas 2007 11003.032
+25:   Oceania 1982 18554.710
+26:   Oceania 1987 20448.040
+27:   Oceania 1992 20894.046
+28:   Oceania 1997 24024.175
+29:   Oceania 2002 26938.778
+30:   Oceania 2007 29810.188
+    continent year        V1
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(data.table)
+library(gapminder)
+library(magrittr)
+library(ggplot2)
+gapminder %&gt;%
+  as.data.table() %&gt;%
+   .[year &gt; 1980] %&gt;%
+   .[                       ,
+     mean(gdpPercap)        ,
+     by = .(continent, year) ] %&gt;%
+* ggplot()
+```
+]]
+.column[.content[
+![](data.table_files/figure-html/output_pipe_data.table_11-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(data.table)
+library(gapminder)
+library(magrittr)
+library(ggplot2)
+gapminder %&gt;%
+  as.data.table() %&gt;%
+   .[year &gt; 1980] %&gt;%
+   .[                       ,
+     mean(gdpPercap)        ,
+     by = .(continent, year) ] %&gt;%
+  ggplot() +
+* aes(x = year)
+```
+]]
+.column[.content[
+![](data.table_files/figure-html/output_pipe_data.table_12-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(data.table)
+library(gapminder)
+library(magrittr)
+library(ggplot2)
+gapminder %&gt;%
+  as.data.table() %&gt;%
+   .[year &gt; 1980] %&gt;%
+   .[                       ,
+     mean(gdpPercap)        ,
+     by = .(continent, year) ] %&gt;%
+  ggplot() +
+  aes(x = year) +
+* aes(y = V1)
+```
+]]
+.column[.content[
+![](data.table_files/figure-html/output_pipe_data.table_13-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(data.table)
+library(gapminder)
+library(magrittr)
+library(ggplot2)
+gapminder %&gt;%
+  as.data.table() %&gt;%
+   .[year &gt; 1980] %&gt;%
+   .[                       ,
+     mean(gdpPercap)        ,
+     by = .(continent, year) ] %&gt;%
+  ggplot() +
+  aes(x = year) +
+  aes(y = V1) +
+* labs(y = "Average GDP per cap")
+```
+]]
+.column[.content[
+![](data.table_files/figure-html/output_pipe_data.table_14-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(data.table)
+library(gapminder)
+library(magrittr)
+library(ggplot2)
+gapminder %&gt;%
+  as.data.table() %&gt;%
+   .[year &gt; 1980] %&gt;%
+   .[                       ,
+     mean(gdpPercap)        ,
+     by = .(continent, year) ] %&gt;%
+  ggplot() +
+  aes(x = year) +
+  aes(y = V1) +
+  labs(y = "Average GDP per cap") +
+* geom_point()
+```
+]]
+.column[.content[
+![](data.table_files/figure-html/output_pipe_data.table_15-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(data.table)
+library(gapminder)
+library(magrittr)
+library(ggplot2)
+gapminder %&gt;%
+  as.data.table() %&gt;%
+   .[year &gt; 1980] %&gt;%
+   .[                       ,
+     mean(gdpPercap)        ,
+     by = .(continent, year) ] %&gt;%
+  ggplot() +
+  aes(x = year) +
+  aes(y = V1) +
+  labs(y = "Average GDP per cap") +
+  geom_point() +
+* geom_line()
+```
+]]
+.column[.content[
+![](data.table_files/figure-html/output_pipe_data.table_16-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(data.table)
+library(gapminder)
+library(magrittr)
+library(ggplot2)
+gapminder %&gt;%
+  as.data.table() %&gt;%
+   .[year &gt; 1980] %&gt;%
+   .[                       ,
+     mean(gdpPercap)        ,
+     by = .(continent, year) ] %&gt;%
+  ggplot() +
+  aes(x = year) +
+  aes(y = V1) +
+  labs(y = "Average GDP per cap") +
+  geom_point() +
+  geom_line() +
+* aes(color = continent)
+```
+]]
+.column[.content[
+![](data.table_files/figure-html/output_pipe_data.table_17-1.png)&lt;!-- --&gt;
+]]
+
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 80%}
+&lt;/style&gt;
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:10",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script>
+(function() {
+  var i, text, code, codes = document.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+})();
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

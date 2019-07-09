@@ -1,0 +1,71 @@
+---
+title: "data.table"
+author: "Gina Reynolds, July 2019"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: ["kunoichi", "ninjutsu"]
+    nature:
+      ratio: 16:10
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+```{r setup, include=F}
+knitr::opts_chunk$set(fig.width = 6, message = F, warning = F, 
+                      comment = "", cache = F)
+```
+
+
+
+---
+
+# Set up
+
+Okay. Let's load the the `reveal for xaringan` functions for "flipbooking" and the `data.table`.
+
+```{r}
+source(file = "https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/xaringan_reveal_parentheses_balanced.R")
+```
+
+
+# Where we are headed 
+
+```{r pipe_data.table, echo = F, eval = T, fig.height=5}
+library(data.table)
+library(gapminder)
+library(magrittr)
+library(ggplot2)
+gapminder %>% 
+  as.data.table() %>% 
+   .[year > 1980] %>% 
+   .[                       , 
+     mean(gdpPercap)        , 
+     by = .(continent, year) ] %>% 
+  ggplot() +
+  aes(x = year) +
+  aes(y = V1) + 
+  labs(y = "Average GDP per cap") +
+  geom_point() +
+  geom_line() +
+  aes(color = continent)
+```
+
+
+---
+
+# The pipeline 
+
+---
+
+`r apply_reveal("pipe_data.table")`
+
+
+
+```{css, eval = TRUE, echo = F}
+.remark-code{line-height: 1.5; font-size: 80%}
+```
+
+
