@@ -69,7 +69,7 @@ count: false
 *set.seed(2019)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ]]
 ---
@@ -84,7 +84,7 @@ set.seed(2019)
 *        level = 1:levels - 1)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ```
 # A tibble: 3,080 x 2
@@ -119,7 +119,7 @@ crossing(unit_id = 1:n,
 *                 replace = T))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ```
 # A tibble: 3,080 x 3
@@ -155,7 +155,7 @@ crossing(unit_id = 1:n,
 * group_by(unit_id)   # operations on each ball
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ```
 # A tibble: 3,080 x 3
@@ -196,7 +196,7 @@ crossing(unit_id = 1:n,
 *                 no = perturbation))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ```
 # A tibble: 3,080 x 3
@@ -242,7 +242,7 @@ crossing(unit_id = 1:n,
 *          unit_id * 3 - 1)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ```
 # A tibble: 3,080 x 4
@@ -289,7 +289,7 @@ crossing(unit_id = 1:n,
 * filter(time &gt; 0)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ```
 # A tibble: 3,080 x 4
@@ -339,7 +339,7 @@ crossing(unit_id = 1:n,
 *          cumsum(perturbation))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ```
 # A tibble: 3,080 x 5
@@ -394,7 +394,7 @@ crossing(unit_id = 1:n,
 *                 no = NA))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ```
 # A tibble: 3,080 x 5
@@ -451,7 +451,7 @@ crossing(unit_id = 1:n,
 * fill(x_position)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ```
 # A tibble: 3,080 x 5
@@ -509,7 +509,7 @@ crossing(unit_id = 1:n,
 * ungroup()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ```
 # A tibble: 3,080 x 5
@@ -567,7 +567,7 @@ crossing(unit_id = 1:n,
 *ball_bearings
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ]]
 
@@ -590,7 +590,7 @@ count: false
 *ball_bearings
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ```
 # A tibble: 3,080 x 5
@@ -620,7 +620,7 @@ ball_bearings %&gt;%
 * filter(level == (levels - 1) )
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ```
 # A tibble: 70 x 5
@@ -651,7 +651,7 @@ ball_bearings %&gt;%
 * rename(final_time = time)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ```
 # A tibble: 70 x 5
@@ -683,7 +683,7 @@ ball_bearings %&gt;%
 * crossing(time = as.numeric(1:max(ball_bearings$time)))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ```
 # A tibble: 17,710 x 6
@@ -716,7 +716,7 @@ ball_bearings %&gt;%
 * group_by(time, x_position)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ```
 # A tibble: 17,710 x 6
@@ -751,7 +751,7 @@ ball_bearings %&gt;%
 * summarise(x_position_count = sum(time &gt; final_time))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ```
 # A tibble: 2,024 x 3
@@ -787,7 +787,7 @@ ball_bearings %&gt;%
 *ball_bearings_collect
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ]]
 
@@ -809,7 +809,7 @@ count: false
 *        level = 1:stop_level)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ```
 # A tibble: 210 x 2
@@ -843,7 +843,7 @@ crossing(unit_id =
 *          (unit_id + level) %% 2)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ```
 # A tibble: 210 x 3
@@ -878,7 +878,7 @@ crossing(unit_id =
 *pegs
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ]]
 ---
@@ -901,7 +901,7 @@ pegs
 *        level = stop_level:levels)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ```
 # A tibble: 805 x 2
@@ -942,7 +942,7 @@ crossing(unit_id =
 *          unit_id %% 2)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ```
 # A tibble: 805 x 3
@@ -984,7 +984,7 @@ crossing(unit_id =
 *walls
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ]]
 
@@ -1012,7 +1012,7 @@ count: false
 *ggplot(ball_bearings)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](galton_board_files/figure-html/output_static_build_1-1.png)&lt;!-- --&gt;
 ]]
 ---
@@ -1026,7 +1026,7 @@ ggplot(ball_bearings) +
 * aes(y = level)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](galton_board_files/figure-html/output_static_build_2-1.png)&lt;!-- --&gt;
 ]]
 ---
@@ -1041,7 +1041,7 @@ ggplot(ball_bearings) +
 * aes(x = x_position)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](galton_board_files/figure-html/output_static_build_3-1.png)&lt;!-- --&gt;
 ]]
 ---
@@ -1057,7 +1057,7 @@ ggplot(ball_bearings) +
 * scale_y_reverse()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](galton_board_files/figure-html/output_static_build_4-1.png)&lt;!-- --&gt;
 ]]
 ---
@@ -1074,7 +1074,7 @@ ggplot(ball_bearings) +
 * aes(group = unit_id)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](galton_board_files/figure-html/output_static_build_5-1.png)&lt;!-- --&gt;
 ]]
 ---
@@ -1094,7 +1094,7 @@ ggplot(ball_bearings) +
 *            col = "grey30", size = peg_size)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](galton_board_files/figure-html/output_static_build_8-1.png)&lt;!-- --&gt;
 ]]
 ---
@@ -1117,7 +1117,7 @@ ggplot(ball_bearings) +
 *            col = "grey30", size = peg_size)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](galton_board_files/figure-html/output_static_build_11-1.png)&lt;!-- --&gt;
 ]]
 ---
@@ -1142,7 +1142,7 @@ ggplot(ball_bearings) +
 *              y = 0, yend = 0)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](galton_board_files/figure-html/output_static_build_13-1.png)&lt;!-- --&gt;
 ]]
 ---
@@ -1169,7 +1169,7 @@ ggplot(ball_bearings) +
 *              y = 0, yend = 0)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](galton_board_files/figure-html/output_static_build_15-1.png)&lt;!-- --&gt;
 ]]
 ---
@@ -1198,7 +1198,7 @@ ggplot(ball_bearings) +
 *             slope = -1)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](galton_board_files/figure-html/output_static_build_17-1.png)&lt;!-- --&gt;
 ]]
 ---
@@ -1229,7 +1229,7 @@ ggplot(ball_bearings) +
 *             slope = 1)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](galton_board_files/figure-html/output_static_build_19-1.png)&lt;!-- --&gt;
 ]]
 ---
@@ -1263,7 +1263,7 @@ ggplot(ball_bearings) +
 *          x = 0 , y = -1.5)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](galton_board_files/figure-html/output_static_build_22-1.png)&lt;!-- --&gt;
 ]]
 ---
@@ -1300,7 +1300,7 @@ ggplot(ball_bearings) +
 *          x = 0 , y = -1.5, fill = "white")
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](galton_board_files/figure-html/output_static_build_25-1.png)&lt;!-- --&gt;
 ]]
 ---
@@ -1345,7 +1345,7 @@ ggplot(ball_bearings) +
 *           fill = "darkgrey")
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](galton_board_files/figure-html/output_static_build_33-1.png)&lt;!-- --&gt;
 ]]
 ---
@@ -1392,7 +1392,7 @@ ggplot(ball_bearings) +
 *            col = "steelblue")
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](galton_board_files/figure-html/output_static_build_35-1.png)&lt;!-- --&gt;
 ]]
 ---
@@ -1440,7 +1440,7 @@ ggplot(ball_bearings) +
 * coord_equal()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](galton_board_files/figure-html/output_static_build_36-1.png)&lt;!-- --&gt;
 ]]
 ---
@@ -1490,7 +1490,7 @@ ggplot(ball_bearings) +
 *            linetype = "dotted")
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](galton_board_files/figure-html/output_static_build_38-1.png)&lt;!-- --&gt;
 ]]
 ---
@@ -1541,7 +1541,7 @@ ggplot(ball_bearings) +
 * scale_alpha_continuous(range = c(0, 1), guide = F)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](galton_board_files/figure-html/output_static_build_39-1.png)&lt;!-- --&gt;
 ]]
 ---
@@ -1593,7 +1593,7 @@ ggplot(ball_bearings) +
 * theme_void()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](galton_board_files/figure-html/output_static_build_40-1.png)&lt;!-- --&gt;
 ]]
 ---
@@ -1646,7 +1646,7 @@ ggplot(ball_bearings) +
 g#&lt;&lt;
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ]]
 
@@ -1666,7 +1666,7 @@ count: false
 * gganimate::ease_aes("bounce-in-out")
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](galton_board_files/figure-html/output_animation_4-1.gif)&lt;!-- --&gt;
 ]]
 
@@ -1689,7 +1689,7 @@ count: false
 *set.seed(1999)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ]]
 ---
@@ -1703,7 +1703,7 @@ set.seed(1999)
 *n_balls &lt;- 1000
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ]]
 ---
@@ -1718,7 +1718,7 @@ n_balls &lt;- 1000
 *n_perturb &lt;- 200
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ]]
 ---
@@ -1735,7 +1735,7 @@ n_perturb &lt;- 200
 *        1:n_perturb)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ```
 # A tibble: 200,000 x 2
@@ -1772,7 +1772,7 @@ crossing(ball_id = 1:n_balls,
 *                 replace = T))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ```
 # A tibble: 200,000 x 3
@@ -1810,7 +1810,7 @@ crossing(ball_id = 1:n_balls,
 * group_by(ball_id)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ```
 # A tibble: 200,000 x 3
@@ -1851,7 +1851,7 @@ crossing(ball_id = 1:n_balls,
 *             sum(perturbation))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ```
 # A tibble: 1,000 x 2
@@ -1892,7 +1892,7 @@ crossing(ball_id = 1:n_balls,
 * ggplot()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](galton_board_files/figure-html/output_distribution_13-1.png)&lt;!-- --&gt;
 ]]
 ---
@@ -1918,7 +1918,7 @@ crossing(ball_id = 1:n_balls,
 * aes(x = x_position)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](galton_board_files/figure-html/output_distribution_14-1.png)&lt;!-- --&gt;
 ]]
 ---
@@ -1948,7 +1948,7 @@ crossing(ball_id = 1:n_balls,
 *                alpha = .7)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](galton_board_files/figure-html/output_distribution_18-1.png)&lt;!-- --&gt;
 ]]
 ---
@@ -1979,7 +1979,7 @@ crossing(ball_id = 1:n_balls,
 * theme_minimal()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](galton_board_files/figure-html/output_distribution_19-1.png)&lt;!-- --&gt;
 ]]
 
