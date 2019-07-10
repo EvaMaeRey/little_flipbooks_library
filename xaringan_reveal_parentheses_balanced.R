@@ -10,7 +10,7 @@ parse_code <- function(code) {
   tibble(code = code) %>% 
     mutate(user_reveal = str_detect(code, "#REVEAL")) %>% # Handle user defined pause points
     mutate(code = str_remove(code, "#REVEAL")) %>% # pull out any comments
-    separate(col = code, into = c("code", "comment"), sep = "\\s#|^#") %>% 
+    separate(col = code, into = c("code", "comment"), sep = "\\s#|^# ") %>% 
     mutate(comment = str_trim(comment)) %>% 
     mutate(comment = paste0("  # ", comment)) %>%  
     mutate(comment = ifelse("  # NA" == comment, "", comment)) %>% 
