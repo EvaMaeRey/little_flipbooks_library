@@ -22,4 +22,4 @@ Other examples that are pretty minimal:
 - [checkerboard](https://evamaerey.github.io/little_flipbooks_library/checkerboard/checkerboard.html)
 
 
-You might also be interested in [the ggplot flipbook](https://evamaerey.github.io/ggplot_flipbook/ggplot_flipbook_xaringan.html) and [The Tidyverse in Action](https://evamaerey.github.io/tidyverse_in_action/tidyverse_in_action.html) which have their own repositories [here](https://github.com/EvaMaeRey/ggplot_flipbook) and [here](https://github.com/EvaMaeRey/tidyverse_in_action) respectively.  
+You might also be interested in [the ggplot flipbook](https://evamaerey.github.io/ggplot_flipbook/ggplot_flipbook_xaringan.html) and [The Tidyverse in Action](https://evamaerey.github.io/tidyverse_in_action/tidyverse_in_action.html) which have their own GitHub repositories [here](https://github.com/EvaMaeRey/ggplot_flipbook) and [here](https://github.com/EvaMaeRey/tidyverse_in_action) respectively.  
