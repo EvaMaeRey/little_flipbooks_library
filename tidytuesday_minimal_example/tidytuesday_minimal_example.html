@@ -105,7 +105,7 @@ Okay. Let's load the the `reveal for xaringan` functions for "flipbooking" and t
 
 
 ```r
-source(file = "https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/xaringan_reveal_parenthetical.R")
+source(file = "https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/xaringan_reveal_parentheses_balanced.R")
 ```
 
 And load the tidyverse.
@@ -149,7 +149,7 @@ count: false
 *nobel_winners
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ```
 # A tibble: 969 x 18
@@ -179,12 +179,12 @@ count: false
 .column[.content[
 
 ```r
-nobel_winners %&gt;% 
+nobel_winners %&gt;%
 * mutate(age_at_win = prize_year -
 *          lubridate::year(birth_date))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ```
 # A tibble: 969 x 19
@@ -215,13 +215,13 @@ count: false
 .column[.content[
 
 ```r
-nobel_winners %&gt;% 
+nobel_winners %&gt;%
   mutate(age_at_win = prize_year -
-           lubridate::year(birth_date)) %&gt;% 
+           lubridate::year(birth_date)) %&gt;%
 *ggplot()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](tidytuesday_minimal_example_files/figure-html/output_nobel_4-1.png)&lt;!-- --&gt;
 ]]
 ---
@@ -231,14 +231,14 @@ count: false
 .column[.content[
 
 ```r
-nobel_winners %&gt;% 
+nobel_winners %&gt;%
   mutate(age_at_win = prize_year -
-           lubridate::year(birth_date)) %&gt;% 
-ggplot() + 
-* aes(x = prize_year) # x axis
+           lubridate::year(birth_date)) %&gt;%
+ggplot() +
+* aes(x = prize_year)   # x axis
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](tidytuesday_minimal_example_files/figure-html/output_nobel_5-1.png)&lt;!-- --&gt;
 ]]
 ---
@@ -248,15 +248,15 @@ count: false
 .column[.content[
 
 ```r
-nobel_winners %&gt;% 
+nobel_winners %&gt;%
   mutate(age_at_win = prize_year -
-           lubridate::year(birth_date)) %&gt;% 
-ggplot() + 
-  aes(x = prize_year) +  # x axis 
-* aes(y = age_at_win) # y axis
+           lubridate::year(birth_date)) %&gt;%
+ggplot() +
+  aes(x = prize_year) +  # x axis
+* aes(y = age_at_win)   # y axis
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](tidytuesday_minimal_example_files/figure-html/output_nobel_6-1.png)&lt;!-- --&gt;
 ]]
 ---
@@ -266,16 +266,16 @@ count: false
 .column[.content[
 
 ```r
-nobel_winners %&gt;% 
+nobel_winners %&gt;%
   mutate(age_at_win = prize_year -
-           lubridate::year(birth_date)) %&gt;% 
-ggplot() + 
-  aes(x = prize_year) +  # x axis 
+           lubridate::year(birth_date)) %&gt;%
+ggplot() +
+  aes(x = prize_year) +  # x axis
   aes(y = age_at_win) +  # y axis
 * geom_point()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](tidytuesday_minimal_example_files/figure-html/output_nobel_7-1.png)&lt;!-- --&gt;
 ]]
 ---
@@ -285,17 +285,17 @@ count: false
 .column[.content[
 
 ```r
-nobel_winners %&gt;% 
+nobel_winners %&gt;%
   mutate(age_at_win = prize_year -
-           lubridate::year(birth_date)) %&gt;% 
-ggplot() + 
-  aes(x = prize_year) +  # x axis 
+           lubridate::year(birth_date)) %&gt;%
+ggplot() +
+  aes(x = prize_year) +  # x axis
   aes(y = age_at_win) +  # y axis
   geom_point() +
-* geom_smooth() # loess smoothing
+* geom_smooth()   # loess smoothing
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](tidytuesday_minimal_example_files/figure-html/output_nobel_8-1.png)&lt;!-- --&gt;
 ]]
 ---
@@ -305,18 +305,18 @@ count: false
 .column[.content[
 
 ```r
-nobel_winners %&gt;% 
+nobel_winners %&gt;%
   mutate(age_at_win = prize_year -
-           lubridate::year(birth_date)) %&gt;% 
-ggplot() + 
-  aes(x = prize_year) +  # x axis 
+           lubridate::year(birth_date)) %&gt;%
+ggplot() +
+  aes(x = prize_year) +  # x axis
   aes(y = age_at_win) +  # y axis
   geom_point() +
   geom_smooth() +  # loess smoothing
 * theme_minimal()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](tidytuesday_minimal_example_files/figure-html/output_nobel_9-1.png)&lt;!-- --&gt;
 ]]
 ---
@@ -326,11 +326,11 @@ count: false
 .column[.content[
 
 ```r
-nobel_winners %&gt;% 
+nobel_winners %&gt;%
   mutate(age_at_win = prize_year -
-           lubridate::year(birth_date)) %&gt;% 
-ggplot() + 
-  aes(x = prize_year) +  # x axis 
+           lubridate::year(birth_date)) %&gt;%
+ggplot() +
+  aes(x = prize_year) +  # x axis
   aes(y = age_at_win) +  # y axis
   geom_point() +
   geom_smooth() +  # loess smoothing
@@ -338,7 +338,7 @@ ggplot() +
 * labs(x = "Year of prize")
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](tidytuesday_minimal_example_files/figure-html/output_nobel_10-1.png)&lt;!-- --&gt;
 ]]
 ---
@@ -348,11 +348,11 @@ count: false
 .column[.content[
 
 ```r
-nobel_winners %&gt;% 
+nobel_winners %&gt;%
   mutate(age_at_win = prize_year -
-           lubridate::year(birth_date)) %&gt;% 
-ggplot() + 
-  aes(x = prize_year) +  # x axis 
+           lubridate::year(birth_date)) %&gt;%
+ggplot() +
+  aes(x = prize_year) +  # x axis
   aes(y = age_at_win) +  # y axis
   geom_point() +
   geom_smooth() +  # loess smoothing
@@ -361,7 +361,7 @@ ggplot() +
 * labs(y = "Age at Win")
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](tidytuesday_minimal_example_files/figure-html/output_nobel_11-1.png)&lt;!-- --&gt;
 ]]
 ---
@@ -371,21 +371,21 @@ count: false
 .column[.content[
 
 ```r
-nobel_winners %&gt;% 
+nobel_winners %&gt;%
   mutate(age_at_win = prize_year -
-           lubridate::year(birth_date)) %&gt;% 
-ggplot() + 
-  aes(x = prize_year) +  # x axis 
+           lubridate::year(birth_date)) %&gt;%
+ggplot() +
+  aes(x = prize_year) +  # x axis
   aes(y = age_at_win) +  # y axis
   geom_point() +
   geom_smooth() +  # loess smoothing
   theme_minimal() +
   labs(x = "Year of prize") +
   labs(y = "Age at Win") +
-* labs(caption = "Vis: Gina Reynolds for #TidyTuesday")
+* labs(caption = "Vis: Gina Reynolds for TidyTuesday")
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](tidytuesday_minimal_example_files/figure-html/output_nobel_12-1.png)&lt;!-- --&gt;
 ]]
 ---
@@ -395,22 +395,22 @@ count: false
 .column[.content[
 
 ```r
-nobel_winners %&gt;% 
+nobel_winners %&gt;%
   mutate(age_at_win = prize_year -
-           lubridate::year(birth_date)) %&gt;% 
-ggplot() + 
-  aes(x = prize_year) +  # x axis 
+           lubridate::year(birth_date)) %&gt;%
+ggplot() +
+  aes(x = prize_year) +  # x axis
   aes(y = age_at_win) +  # y axis
   geom_point() +
   geom_smooth() +  # loess smoothing
   theme_minimal() +
   labs(x = "Year of prize") +
   labs(y = "Age at Win") +
-  labs(caption = "Vis: Gina Reynolds for #TidyTuesday") +
+  labs(caption = "Vis: Gina Reynolds for TidyTuesday") +
 * labs(title = "Nobel Prize award year vs. age of winner")
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](tidytuesday_minimal_example_files/figure-html/output_nobel_13-1.png)&lt;!-- --&gt;
 ]]
 ---
@@ -420,23 +420,23 @@ count: false
 .column[.content[
 
 ```r
-nobel_winners %&gt;% 
+nobel_winners %&gt;%
   mutate(age_at_win = prize_year -
-           lubridate::year(birth_date)) %&gt;% 
-ggplot() + 
-  aes(x = prize_year) +  # x axis 
+           lubridate::year(birth_date)) %&gt;%
+ggplot() +
+  aes(x = prize_year) +  # x axis
   aes(y = age_at_win) +  # y axis
   geom_point() +
   geom_smooth() +  # loess smoothing
   theme_minimal() +
   labs(x = "Year of prize") +
   labs(y = "Age at Win") +
-  labs(caption = "Vis: Gina Reynolds for #TidyTuesday") +
+  labs(caption = "Vis: Gina Reynolds for TidyTuesday") +
   labs(title = "Nobel Prize award year vs. age of winner") +
 * labs(subtitle = "Data: \"A dataset of publication records for Nobel laureates\" \nLi, Jichao; Yin, Yian; Fortunato, Santo; Wang Dashun, 2018 ")
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](tidytuesday_minimal_example_files/figure-html/output_nobel_14-1.png)&lt;!-- --&gt;
 ]]
 
@@ -463,7 +463,7 @@ count: false
 *nobel_winners
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ```
 # A tibble: 969 x 18
@@ -493,12 +493,12 @@ count: false
 .column[.content[
 
 ```r
-nobel_winners %&gt;% 
+nobel_winners %&gt;%
 * mutate(age_at_win = prize_year -
 *          lubridate::year(birth_date))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ```
 # A tibble: 969 x 19
@@ -529,13 +529,13 @@ count: false
 .column[.content[
 
 ```r
-nobel_winners %&gt;% 
+nobel_winners %&gt;%
   mutate(age_at_win = prize_year -
-           lubridate::year(birth_date)) -&gt; 
+           lubridate::year(birth_date)) -&gt;
 * nobel_winners_w_age
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ]]
 
@@ -561,7 +561,7 @@ count: false
 *ggplot(data = nobel_winners_w_age)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](tidytuesday_minimal_example_files/figure-html/output_plot_nobel_again_1-1.png)&lt;!-- --&gt;
 ]]
 ---
@@ -571,11 +571,11 @@ count: false
 .column[.content[
 
 ```r
-ggplot(data = nobel_winners_w_age) + 
-* aes(x = prize_year) # x axis
+ggplot(data = nobel_winners_w_age) +
+* aes(x = prize_year)   # x axis
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](tidytuesday_minimal_example_files/figure-html/output_plot_nobel_again_2-1.png)&lt;!-- --&gt;
 ]]
 ---
@@ -585,12 +585,12 @@ count: false
 .column[.content[
 
 ```r
-ggplot(data = nobel_winners_w_age) + 
-  aes(x = prize_year) +  # x axis 
-* aes(y = age_at_win) # y axis
+ggplot(data = nobel_winners_w_age) +
+  aes(x = prize_year) +  # x axis
+* aes(y = age_at_win)   # y axis
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](tidytuesday_minimal_example_files/figure-html/output_plot_nobel_again_3-1.png)&lt;!-- --&gt;
 ]]
 ---
@@ -600,13 +600,13 @@ count: false
 .column[.content[
 
 ```r
-ggplot(data = nobel_winners_w_age) + 
-  aes(x = prize_year) +  # x axis 
+ggplot(data = nobel_winners_w_age) +
+  aes(x = prize_year) +  # x axis
   aes(y = age_at_win) +  # y axis
 * geom_point()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](tidytuesday_minimal_example_files/figure-html/output_plot_nobel_again_4-1.png)&lt;!-- --&gt;
 ]]
 ---
@@ -616,14 +616,14 @@ count: false
 .column[.content[
 
 ```r
-ggplot(data = nobel_winners_w_age) + 
-  aes(x = prize_year) +  # x axis 
+ggplot(data = nobel_winners_w_age) +
+  aes(x = prize_year) +  # x axis
   aes(y = age_at_win) +  # y axis
   geom_point() +
-* geom_smooth() # loess smoothing
+* geom_smooth()   # loess smoothing
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](tidytuesday_minimal_example_files/figure-html/output_plot_nobel_again_5-1.png)&lt;!-- --&gt;
 ]]
 ---
@@ -633,15 +633,15 @@ count: false
 .column[.content[
 
 ```r
-ggplot(data = nobel_winners_w_age) + 
-  aes(x = prize_year) +  # x axis 
+ggplot(data = nobel_winners_w_age) +
+  aes(x = prize_year) +  # x axis
   aes(y = age_at_win) +  # y axis
   geom_point() +
   geom_smooth() +  # loess smoothing
 * theme_minimal()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](tidytuesday_minimal_example_files/figure-html/output_plot_nobel_again_6-1.png)&lt;!-- --&gt;
 ]]
 ---
@@ -651,8 +651,8 @@ count: false
 .column[.content[
 
 ```r
-ggplot(data = nobel_winners_w_age) + 
-  aes(x = prize_year) +  # x axis 
+ggplot(data = nobel_winners_w_age) +
+  aes(x = prize_year) +  # x axis
   aes(y = age_at_win) +  # y axis
   geom_point() +
   geom_smooth() +  # loess smoothing
@@ -660,7 +660,7 @@ ggplot(data = nobel_winners_w_age) +
 * labs(x = "Year of prize")
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](tidytuesday_minimal_example_files/figure-html/output_plot_nobel_again_7-1.png)&lt;!-- --&gt;
 ]]
 ---
@@ -670,8 +670,8 @@ count: false
 .column[.content[
 
 ```r
-ggplot(data = nobel_winners_w_age) + 
-  aes(x = prize_year) +  # x axis 
+ggplot(data = nobel_winners_w_age) +
+  aes(x = prize_year) +  # x axis
   aes(y = age_at_win) +  # y axis
   geom_point() +
   geom_smooth() +  # loess smoothing
@@ -680,7 +680,7 @@ ggplot(data = nobel_winners_w_age) +
 * labs(y = "Age at Win")
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](tidytuesday_minimal_example_files/figure-html/output_plot_nobel_again_8-1.png)&lt;!-- --&gt;
 ]]
 ---
@@ -690,8 +690,8 @@ count: false
 .column[.content[
 
 ```r
-ggplot(data = nobel_winners_w_age) + 
-  aes(x = prize_year) +  # x axis 
+ggplot(data = nobel_winners_w_age) +
+  aes(x = prize_year) +  # x axis
   aes(y = age_at_win) +  # y axis
   geom_point() +
   geom_smooth() +  # loess smoothing
@@ -701,7 +701,7 @@ ggplot(data = nobel_winners_w_age) +
 * labs(x = "Year of prize")
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](tidytuesday_minimal_example_files/figure-html/output_plot_nobel_again_9-1.png)&lt;!-- --&gt;
 ]]
 ---
@@ -711,8 +711,8 @@ count: false
 .column[.content[
 
 ```r
-ggplot(data = nobel_winners_w_age) + 
-  aes(x = prize_year) +  # x axis 
+ggplot(data = nobel_winners_w_age) +
+  aes(x = prize_year) +  # x axis
   aes(y = age_at_win) +  # y axis
   geom_point() +
   geom_smooth() +  # loess smoothing
@@ -723,7 +723,7 @@ ggplot(data = nobel_winners_w_age) +
 * labs(y = "Age at Win")
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](tidytuesday_minimal_example_files/figure-html/output_plot_nobel_again_10-1.png)&lt;!-- --&gt;
 ]]
 ---
@@ -733,8 +733,8 @@ count: false
 .column[.content[
 
 ```r
-ggplot(data = nobel_winners_w_age) + 
-  aes(x = prize_year) +  # x axis 
+ggplot(data = nobel_winners_w_age) +
+  aes(x = prize_year) +  # x axis
   aes(y = age_at_win) +  # y axis
   geom_point() +
   geom_smooth() +  # loess smoothing
@@ -743,10 +743,10 @@ ggplot(data = nobel_winners_w_age) +
   labs(y = "Age at Win") +
   labs(x = "Year of prize") +
   labs(y = "Age at Win") +
-* labs(caption = "Vis: Gina Reynolds for #TidyTuesday")
+* labs(caption = "Vis: Gina Reynolds for TidyTuesday")
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](tidytuesday_minimal_example_files/figure-html/output_plot_nobel_again_11-1.png)&lt;!-- --&gt;
 ]]
 ---
@@ -756,8 +756,8 @@ count: false
 .column[.content[
 
 ```r
-ggplot(data = nobel_winners_w_age) + 
-  aes(x = prize_year) +  # x axis 
+ggplot(data = nobel_winners_w_age) +
+  aes(x = prize_year) +  # x axis
   aes(y = age_at_win) +  # y axis
   geom_point() +
   geom_smooth() +  # loess smoothing
@@ -766,11 +766,11 @@ ggplot(data = nobel_winners_w_age) +
   labs(y = "Age at Win") +
   labs(x = "Year of prize") +
   labs(y = "Age at Win") +
-  labs(caption = "Vis: Gina Reynolds for #TidyTuesday") +
+  labs(caption = "Vis: Gina Reynolds for TidyTuesday") +
 * labs(title = "Nobel Prize award year vs. age of winner")
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](tidytuesday_minimal_example_files/figure-html/output_plot_nobel_again_12-1.png)&lt;!-- --&gt;
 ]]
 ---
@@ -780,8 +780,8 @@ count: false
 .column[.content[
 
 ```r
-ggplot(data = nobel_winners_w_age) + 
-  aes(x = prize_year) +  # x axis 
+ggplot(data = nobel_winners_w_age) +
+  aes(x = prize_year) +  # x axis
   aes(y = age_at_win) +  # y axis
   geom_point() +
   geom_smooth() +  # loess smoothing
@@ -790,12 +790,12 @@ ggplot(data = nobel_winners_w_age) +
   labs(y = "Age at Win") +
   labs(x = "Year of prize") +
   labs(y = "Age at Win") +
-  labs(caption = "Vis: Gina Reynolds for #TidyTuesday") +
+  labs(caption = "Vis: Gina Reynolds for TidyTuesday") +
   labs(title = "Nobel Prize award year vs. age of winner") +
 * labs(subtitle = "Data: \"A dataset of publication records for Nobel laureates\" \nLi, Jichao; Yin, Yian; Fortunato, Santo; Wang Dashun, 2018 ")
 ```
 ]]
-.column[.content.center[
+.column[.content[
 ![](tidytuesday_minimal_example_files/figure-html/output_plot_nobel_again_13-1.png)&lt;!-- --&gt;
 ]]
 

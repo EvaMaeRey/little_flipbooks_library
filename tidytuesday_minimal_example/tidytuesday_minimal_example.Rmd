@@ -100,7 +100,7 @@ ggplot(data = my_data) +
 Okay. Let's load the the `reveal for xaringan` functions for "flipbooking" and the `tidyverse`.
 
 ```{r}
-source(file = "https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/xaringan_reveal_parenthetical.R")
+source(file = "https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/xaringan_reveal_parentheses_balanced.R")
 ```
 
 And load the tidyverse.
@@ -134,7 +134,7 @@ ggplot() +
   theme_minimal() +
   labs(x = "Year of prize") +
   labs(y = "Age at Win") +
-  labs(caption = "Vis: Gina Reynolds for #TidyTuesday") +
+  labs(caption = "Vis: Gina Reynolds for TidyTuesday") +
   labs(title = "Nobel Prize award year vs. age of winner") +
   labs(subtitle = "Data: \"A dataset of publication records for Nobel laureates\" \nLi, Jichao; Yin, Yian; Fortunato, Santo; Wang Dashun, 2018 ")
 ```
@@ -191,7 +191,7 @@ ggplot(data = nobel_winners_w_age) +
   labs(y = "Age at Win") +
   labs(x = "Year of prize") +
   labs(y = "Age at Win") +
-  labs(caption = "Vis: Gina Reynolds for #TidyTuesday") +
+  labs(caption = "Vis: Gina Reynolds for TidyTuesday") +
   labs(title = "Nobel Prize award year vs. age of winner") +
   labs(subtitle = "Data: \"A dataset of publication records for Nobel laureates\" \nLi, Jichao; Yin, Yian; Fortunato, Santo; Wang Dashun, 2018 ")
 ```
