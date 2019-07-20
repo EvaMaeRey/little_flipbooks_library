@@ -1,8 +1,6 @@
 # Little flipbooks library
 
-The incremental code/result reveal provided by flipbooks may help you digest longer snippets code including pipelines and ggplot builds.  Since developing the code-parsing code that allows flipbooking (with Emi Tanaka and Garrick Aden-Buie), I've produced many little books, that don't all seem like they need their own github repository.  So they live [here](https://github.com/EvaMaeRey/little_flipbooks_library) together.  
-
-This is the home of little flipbooks!
+The incremental code/result reveal provided by flipbooks may help you digest longer snippets code including pipelines and ggplot builds.  Since developing the code-parsing code that allows flipbooking (with Emi Tanaka and Garrick Aden-Buie), I've produced many little books, that don't all seem like they need their own github repository.  So they live here together:  
 
 - [Galton Board](https://evamaerey.github.io/little_flipbooks_library/galton_board/galton_board.html#1)
 - [leaflet for R (interactive maps)](https://evamaerey.github.io/little_flipbooks_library/leaflet/leaflet#1)
