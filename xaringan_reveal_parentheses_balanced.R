@@ -135,4 +135,7 @@ save_complete_plot_from_chunk <- function(chunk_name, filename = chunk_name, pat
   ggsave(paste0(path, filename, type), dpi = 300)  
 }
 
+make_html_picture_link <- function(path, link){
+paste0('<a href=', link, '><img src=', path, 'width="82" height="86" title="White flower" alt="Flower"></a>')
+}
 
