@@ -129,3 +129,10 @@ apply_reveal <- function(...){
 }
 
 
+save_complete_plot_from_chunk <- function(chunk_name, filename = chunk_name, path = "figures/", type = ".png"){
+  get_what_save_what <- chunk_name
+  eval(parse(text = paste(knitr:::knit_code$get(get_what_save_what), collapse = "")))
+  ggsave(paste0(path, filename, type), dpi = 300)  
+}
+
+
