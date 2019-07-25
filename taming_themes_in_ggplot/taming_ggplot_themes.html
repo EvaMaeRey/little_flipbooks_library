@@ -28,23 +28,44 @@ class: center, middle, inverse, title-slide
 
 - [Ugly Theme Choices](#uglyplot)
 
-- [Text Elements](#textelements)
-- [Rectangular Elements](#rectangularelements)
-- [Line Elements](#lineelements)
+- Elements
+  - [Text Elements](#textelements)
+  - [Rectangular Elements](#rectangularelements)
+  - [Line Elements](#lineelements)
 
-- [Legends](#legend)
-- [Sundry](#sundry)
-- [Facets](#facet)
+- More
+  - [Legends](#legend)
+  - [Sundry](#sundry)
+  -  [Facets](#facet)
 
 - [Preset Themes](#presetthemes)
 
 ---
 
+# Visual Table of Contents
+
+&lt;a href="#uglyplot"&gt;&lt;img src="figures/custom_theme.png"width="150" height="150" title=figures/custom_theme.png alt=figures/custom_theme.png&gt;&lt;/a&gt;&lt;a href="#textelements"&gt;&lt;img src="figures/text_components.png"width="150" height="150" title=figures/text_components.png alt=figures/text_components.png&gt;&lt;/a&gt;&lt;a href="#rectangularelements"&gt;&lt;img src="figures/rect_components.png"width="150" height="150" title=figures/rect_components.png alt=figures/rect_components.png&gt;&lt;/a&gt;&lt;a href="#lineelements"&gt;&lt;img src="figures/line_components.png"width="150" height="150" title=figures/line_components.png alt=figures/line_components.png&gt;&lt;/a&gt;
+
+
+&lt;a href="#legend"&gt;&lt;img src="figures/legend.png"width="150" height="150" title=figures/legend.png alt=figures/legend.png&gt;&lt;/a&gt;&lt;a href="#sundry"&gt;&lt;img src="figures/sundries.png"width="150" height="150" title=figures/sundries.png alt=figures/sundries.png&gt;&lt;/a&gt;&lt;a href="#facet"&gt;&lt;img src="figures/small_multiples.png"width="150" height="150" title=figures/small_multiples.png alt=figures/small_multiples.png&gt;&lt;/a&gt;&lt;a href="#presetthemes"&gt;&lt;img src="figures/theme_presets.png"width="150" height="150" title=figures/theme_presets.png alt=figures/theme_presets.png&gt;&lt;/a&gt;
+
+
+
+---
 
 # Introduction
 
 This is a focused extension of [the ggplot flipbook](https://evamaerey.github.io/ggplot_flipbook/ggplot_flipbook_xaringan.html).The aim is to illuminate theme statements. 
 
+
+
+
+
+```r
+options(scipen = 10) # adjust when scientific notation turns on
+library(tidyverse)
+library(gapminder)
+```
 
 
 
@@ -56,7 +77,7 @@ We'll work with the plot below to apply all the theme adjustments.  In the next 
 
 
 
-&lt;img src="taming_ggplot_themes_files/figure-html/unnamed-chunk-1-1.png" width="50%" /&gt;
+&lt;img src="taming_ggplot_themes_files/figure-html/unnamed-chunk-4-1.png" width="50%" /&gt;
 
 
 
@@ -64,14 +85,13 @@ We'll work with the plot below to apply all the theme adjustments.  In the next 
 
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 *gapminder
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ```
   # A tibble: 1,704 x 6
@@ -93,7 +113,6 @@ count: false
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -101,7 +120,7 @@ gapminder %&gt;%
 * filter(year == 1992)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ```
   # A tibble: 142 x 6
@@ -123,7 +142,6 @@ gapminder %&gt;%
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -132,13 +150,12 @@ gapminder %&gt;%
 * ggplot()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_the_plot_3-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -148,13 +165,12 @@ gapminder %&gt;%
 * aes(x = gdpPercap, y = lifeExp)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_the_plot_4-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -166,13 +182,12 @@ gapminder %&gt;%
 *            fill = "white")
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_the_plot_6-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -180,18 +195,17 @@ gapminder %&gt;%
   filter(year == 1992) %&gt;%
   ggplot() +
   aes(x = gdpPercap, y = lifeExp) +
-  geom_point(alpha = .8, shape = 21, 
+  geom_point(alpha = .8, shape = 21,
              fill = "white") +
 * aes(col = continent, fill = continent)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_the_plot_7-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -199,19 +213,18 @@ gapminder %&gt;%
   filter(year == 1992) %&gt;%
   ggplot() +
   aes(x = gdpPercap, y = lifeExp) +
-  geom_point(alpha = .8, shape = 21, 
+  geom_point(alpha = .8, shape = 21,
              fill = "white") +
   aes(col = continent, fill = continent) +
 * geom_point(alpha = .3, shape = 21)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_the_plot_8-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -219,20 +232,19 @@ gapminder %&gt;%
   filter(year == 1992) %&gt;%
   ggplot() +
   aes(x = gdpPercap, y = lifeExp) +
-  geom_point(alpha = .8, shape = 21, 
+  geom_point(alpha = .8, shape = 21,
              fill = "white") +
   aes(col = continent, fill = continent) +
   geom_point(alpha = .3, shape = 21) +
 * aes(size = pop)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_the_plot_9-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -240,7 +252,7 @@ gapminder %&gt;%
   filter(year == 1992) %&gt;%
   ggplot() +
   aes(x = gdpPercap, y = lifeExp) +
-  geom_point(alpha = .8, shape = 21, 
+  geom_point(alpha = .8, shape = 21,
              fill = "white") +
   aes(col = continent, fill = continent) +
   geom_point(alpha = .3, shape = 21) +
@@ -248,13 +260,12 @@ gapminder %&gt;%
 * scale_size(guide = F)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_the_plot_10-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -262,7 +273,7 @@ gapminder %&gt;%
   filter(year == 1992) %&gt;%
   ggplot() +
   aes(x = gdpPercap, y = lifeExp) +
-  geom_point(alpha = .8, shape = 21, 
+  geom_point(alpha = .8, shape = 21,
              fill = "white") +
   aes(col = continent, fill = continent) +
   geom_point(alpha = .3, shape = 21) +
@@ -271,13 +282,12 @@ gapminder %&gt;%
 * labs(title = "Wealth and expected longevity\n in 1992")
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_the_plot_11-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -285,7 +295,7 @@ gapminder %&gt;%
   filter(year == 1992) %&gt;%
   ggplot() +
   aes(x = gdpPercap, y = lifeExp) +
-  geom_point(alpha = .8, shape = 21, 
+  geom_point(alpha = .8, shape = 21,
              fill = "white") +
   aes(col = continent, fill = continent) +
   geom_point(alpha = .3, shape = 21) +
@@ -295,13 +305,12 @@ gapminder %&gt;%
 * labs(subtitle = "Data from gapminder package in R")
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_the_plot_12-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -309,7 +318,7 @@ gapminder %&gt;%
   filter(year == 1992) %&gt;%
   ggplot() +
   aes(x = gdpPercap, y = lifeExp) +
-  geom_point(alpha = .8, shape = 21, 
+  geom_point(alpha = .8, shape = 21,
              fill = "white") +
   aes(col = continent, fill = continent) +
   geom_point(alpha = .3, shape = 21) +
@@ -320,13 +329,12 @@ gapminder %&gt;%
 * labs(x = "GDP per Capita")
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_the_plot_13-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -334,7 +342,7 @@ gapminder %&gt;%
   filter(year == 1992) %&gt;%
   ggplot() +
   aes(x = gdpPercap, y = lifeExp) +
-  geom_point(alpha = .8, shape = 21, 
+  geom_point(alpha = .8, shape = 21,
              fill = "white") +
   aes(col = continent, fill = continent) +
   geom_point(alpha = .3, shape = 21) +
@@ -346,13 +354,12 @@ gapminder %&gt;%
 * labs(y = "Life Expectency")
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_the_plot_14-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -360,7 +367,7 @@ gapminder %&gt;%
   filter(year == 1992) %&gt;%
   ggplot() +
   aes(x = gdpPercap, y = lifeExp) +
-  geom_point(alpha = .8, shape = 21, 
+  geom_point(alpha = .8, shape = 21,
              fill = "white") +
   aes(col = continent, fill = continent) +
   geom_point(alpha = .3, shape = 21) +
@@ -373,13 +380,12 @@ gapminder %&gt;%
 * labs(tag = "Plot 1")
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_the_plot_15-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -387,7 +393,7 @@ gapminder %&gt;%
   filter(year == 1992) %&gt;%
   ggplot() +
   aes(x = gdpPercap, y = lifeExp) +
-  geom_point(alpha = .8, shape = 21, 
+  geom_point(alpha = .8, shape = 21,
              fill = "white") +
   aes(col = continent, fill = continent) +
   geom_point(alpha = .3, shape = 21) +
@@ -401,13 +407,12 @@ gapminder %&gt;%
 * labs(col = "Continent", fill = "Continent")
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_the_plot_16-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -415,7 +420,7 @@ gapminder %&gt;%
   filter(year == 1992) %&gt;%
   ggplot() +
   aes(x = gdpPercap, y = lifeExp) +
-  geom_point(alpha = .8, shape = 21, 
+  geom_point(alpha = .8, shape = 21,
              fill = "white") +
   aes(col = continent, fill = continent) +
   geom_point(alpha = .3, shape = 21) +
@@ -430,13 +435,12 @@ gapminder %&gt;%
 * labs(caption = "Vis: @EvaMaeRey with ggplot")
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_the_plot_17-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -444,7 +448,7 @@ gapminder %&gt;%
   filter(year == 1992) %&gt;%
   ggplot() +
   aes(x = gdpPercap, y = lifeExp) +
-  geom_point(alpha = .8, shape = 21, 
+  geom_point(alpha = .8, shape = 21,
              fill = "white") +
   aes(col = continent, fill = continent) +
   geom_point(alpha = .3, shape = 21) +
@@ -457,10 +461,10 @@ gapminder %&gt;%
   labs(tag = "Plot 1") +
   labs(col = "Continent", fill = "Continent") +
   labs(caption = "Vis: @EvaMaeRey with ggplot") -&gt;
-*g 
+g#&lt;&lt;
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ]]
 
@@ -546,91 +550,89 @@ Later we'll walk through a more focused adjustments.  We'll go through time elem
 
 &lt;img src="taming_ggplot_themes_files/figure-html/custom_theme-1.png" width="50%" /&gt;
 
+
+
+
+
 ---
 
 
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 *g 
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_custom_theme_1-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
+g +
 * theme(rect = element_rect(fill = "snow3"))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_custom_theme_2-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
+g +
   theme(rect = element_rect(fill = "snow3")) +
 * theme(text = element_text(family = "Times New Roman"))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_custom_theme_3-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
+g +
   theme(rect = element_rect(fill = "snow3")) +
   theme(text = element_text(family = "Times New Roman")) +
 * theme(axis.title = element_text(color = "slateblue4"))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_custom_theme_4-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
+g +
   theme(rect = element_rect(fill = "snow3")) +
   theme(text = element_text(family = "Times New Roman")) +
   theme(axis.title = element_text(color = "slateblue4")) +
 * theme(title = element_text(color = "seagreen"))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_custom_theme_5-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
+g +
   theme(rect = element_rect(fill = "snow3")) +
   theme(text = element_text(family = "Times New Roman")) +
   theme(axis.title = element_text(color = "slateblue4")) +
@@ -638,17 +640,16 @@ g +
 * theme(axis.line = element_line(color = "orange"))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_custom_theme_6-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
+g +
   theme(rect = element_rect(fill = "snow3")) +
   theme(text = element_text(family = "Times New Roman")) +
   theme(axis.title = element_text(color = "slateblue4")) +
@@ -657,17 +658,16 @@ g +
 * theme(legend.key = element_rect(fill = "violet"))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_custom_theme_7-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
+g +
   theme(rect = element_rect(fill = "snow3")) +
   theme(text = element_text(family = "Times New Roman")) +
   theme(axis.title = element_text(color = "slateblue4")) +
@@ -677,17 +677,16 @@ g +
 * theme(axis.ticks = element_line(color = "blue"))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_custom_theme_8-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
+g +
   theme(rect = element_rect(fill = "snow3")) +
   theme(text = element_text(family = "Times New Roman")) +
   theme(axis.title = element_text(color = "slateblue4")) +
@@ -698,17 +697,16 @@ g +
 * theme(axis.ticks.x = element_blank())
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_custom_theme_9-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
+g +
   theme(rect = element_rect(fill = "snow3")) +
   theme(text = element_text(family = "Times New Roman")) +
   theme(axis.title = element_text(color = "slateblue4")) +
@@ -720,17 +718,16 @@ g +
 * theme(panel.background = element_rect(fill = "steelblue"))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_custom_theme_10-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
+g +
   theme(rect = element_rect(fill = "snow3")) +
   theme(text = element_text(family = "Times New Roman")) +
   theme(axis.title = element_text(color = "slateblue4")) +
@@ -744,17 +741,16 @@ g +
 *         element_line(size = 3, color = "thistle1"))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_custom_theme_12-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
+g +
   theme(rect = element_rect(fill = "snow3")) +
   theme(text = element_text(family = "Times New Roman")) +
   theme(axis.title = element_text(color = "slateblue4")) +
@@ -764,22 +760,21 @@ g +
   theme(axis.ticks = element_line(color = "blue")) +
   theme(axis.ticks.x = element_blank()) +
   theme(panel.background = element_rect(fill = "steelblue")) +
-  theme(panel.grid = 
+  theme(panel.grid =
           element_line(size = 3, color = "thistle1")) +
 * theme(legend.background = element_rect(fill = "goldenrod1"))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_custom_theme_13-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
+g +
   theme(rect = element_rect(fill = "snow3")) +
   theme(text = element_text(family = "Times New Roman")) +
   theme(axis.title = element_text(color = "slateblue4")) +
@@ -789,23 +784,22 @@ g +
   theme(axis.ticks = element_line(color = "blue")) +
   theme(axis.ticks.x = element_blank()) +
   theme(panel.background = element_rect(fill = "steelblue")) +
-  theme(panel.grid = 
+  theme(panel.grid =
           element_line(size = 3, color = "thistle1")) +
   theme(legend.background = element_rect(fill = "goldenrod1")) +
 * theme(legend.text = element_text(size = 7))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_custom_theme_14-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
+g +
   theme(rect = element_rect(fill = "snow3")) +
   theme(text = element_text(family = "Times New Roman")) +
   theme(axis.title = element_text(color = "slateblue4")) +
@@ -815,24 +809,23 @@ g +
   theme(axis.ticks = element_line(color = "blue")) +
   theme(axis.ticks.x = element_blank()) +
   theme(panel.background = element_rect(fill = "steelblue")) +
-  theme(panel.grid = 
+  theme(panel.grid =
           element_line(size = 3, color = "thistle1")) +
   theme(legend.background = element_rect(fill = "goldenrod1")) +
   theme(legend.text = element_text(size = 7)) +
 * theme(legend.position = "bottom")
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_custom_theme_15-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
+g +
   theme(rect = element_rect(fill = "snow3")) +
   theme(text = element_text(family = "Times New Roman")) +
   theme(axis.title = element_text(color = "slateblue4")) +
@@ -842,7 +835,7 @@ g +
   theme(axis.ticks = element_line(color = "blue")) +
   theme(axis.ticks.x = element_blank()) +
   theme(panel.background = element_rect(fill = "steelblue")) +
-  theme(panel.grid = 
+  theme(panel.grid =
           element_line(size = 3, color = "thistle1")) +
   theme(legend.background = element_rect(fill = "goldenrod1")) +
   theme(legend.text = element_text(size = 7)) +
@@ -851,17 +844,16 @@ g +
 *                              b = 0, l = 40, unit = "pt"))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_custom_theme_17-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
+g +
   theme(rect = element_rect(fill = "snow3")) +
   theme(text = element_text(family = "Times New Roman")) +
   theme(axis.title = element_text(color = "slateblue4")) +
@@ -871,17 +863,17 @@ g +
   theme(axis.ticks = element_line(color = "blue")) +
   theme(axis.ticks.x = element_blank()) +
   theme(panel.background = element_rect(fill = "steelblue")) +
-  theme(panel.grid = 
+  theme(panel.grid =
           element_line(size = 3, color = "thistle1")) +
   theme(legend.background = element_rect(fill = "goldenrod1")) +
   theme(legend.text = element_text(size = 7)) +
   theme(legend.position = "bottom") +
-  theme(legend.margin = margin(t = 0, r = 20, 
+  theme(legend.margin = margin(t = 0, r = 20,
                                b = 0, l = 40, unit = "pt")) +
 * theme(aspect.ratio = .5)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_custom_theme_18-1.png" width="100%" /&gt;
 ]]
 
@@ -924,13 +916,6 @@ These will apply generally where no more specific adjustment has been made.
 
 
 
-```r
-options(scipen = 10) # adjust when scientific notation turns on
-library(tidyverse)
-library(gapminder)
-```
-
-
 
 
 
@@ -948,44 +933,45 @@ name: textelements
 
 &lt;img src="taming_ggplot_themes_files/figure-html/text_components-1.png" width="60%" /&gt;
 
+
+
+
+
 ---
 
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 *g 
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_text_components_1-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
+g +
 * theme(plot.tag =
 *         element_text(color = "plum4", size = 25))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_text_components_3-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
-  theme(plot.tag = 
+g +
+  theme(plot.tag =
           element_text(color = "plum4", size = 25)) +
 * theme(plot.title =
 *         element_text(color = "plum4",
@@ -993,41 +979,39 @@ g +
 *                      lineheight = 2.5))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_text_components_7-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
-  theme(plot.tag = 
+g +
+  theme(plot.tag =
           element_text(color = "plum4", size = 25)) +
-  theme(plot.title = 
-          element_text(color = "plum4", 
+  theme(plot.title =
+          element_text(color = "plum4",
                        size = 20,
                        lineheight = 2.5)) +
 * theme(plot.subtitle = element_text(color = "plum4"))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_text_components_8-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
-  theme(plot.tag = 
+g +
+  theme(plot.tag =
           element_text(color = "plum4", size = 25)) +
-  theme(plot.title = 
-          element_text(color = "plum4", 
+  theme(plot.title =
+          element_text(color = "plum4",
                        size = 20,
                        lineheight = 2.5)) +
   theme(plot.subtitle = element_text(color = "plum4")) +
@@ -1036,163 +1020,157 @@ g +
 *                      size = rel(3)))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_text_components_11-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
-  theme(plot.tag = 
+g +
+  theme(plot.tag =
           element_text(color = "plum4", size = 25)) +
-  theme(plot.title = 
-          element_text(color = "plum4", 
+  theme(plot.title =
+          element_text(color = "plum4",
                        size = 20,
                        lineheight = 2.5)) +
   theme(plot.subtitle = element_text(color = "plum4")) +
-  theme(axis.title.y = 
-          element_text(color = "plum4", 
+  theme(axis.title.y =
+          element_text(color = "plum4",
                        size = rel(3))) +
 * theme(axis.text.y = element_text(color = "plum4"))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_text_components_12-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
-  theme(plot.tag = 
+g +
+  theme(plot.tag =
           element_text(color = "plum4", size = 25)) +
-  theme(plot.title = 
-          element_text(color = "plum4", 
+  theme(plot.title =
+          element_text(color = "plum4",
                        size = 20,
                        lineheight = 2.5)) +
   theme(plot.subtitle = element_text(color = "plum4")) +
-  theme(axis.title.y = 
-          element_text(color = "plum4", 
+  theme(axis.title.y =
+          element_text(color = "plum4",
                        size = rel(3))) +
   theme(axis.text.y = element_text(color = "plum4")) +
 * theme(legend.title =
 *         element_text(color = "plum4", size = 22))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_text_components_14-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
-  theme(plot.tag = 
+g +
+  theme(plot.tag =
           element_text(color = "plum4", size = 25)) +
-  theme(plot.title = 
-          element_text(color = "plum4", 
+  theme(plot.title =
+          element_text(color = "plum4",
                        size = 20,
                        lineheight = 2.5)) +
   theme(plot.subtitle = element_text(color = "plum4")) +
-  theme(axis.title.y = 
-          element_text(color = "plum4", 
+  theme(axis.title.y =
+          element_text(color = "plum4",
                        size = rel(3))) +
   theme(axis.text.y = element_text(color = "plum4")) +
-  theme(legend.title = 
+  theme(legend.title =
           element_text(color = "plum4", size = 22)) +
 * theme(legend.text = element_text(color = "plum4"))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_text_components_15-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
-  theme(plot.tag = 
+g +
+  theme(plot.tag =
           element_text(color = "plum4", size = 25)) +
-  theme(plot.title = 
-          element_text(color = "plum4", 
+  theme(plot.title =
+          element_text(color = "plum4",
                        size = 20,
                        lineheight = 2.5)) +
   theme(plot.subtitle = element_text(color = "plum4")) +
-  theme(axis.title.y = 
-          element_text(color = "plum4", 
+  theme(axis.title.y =
+          element_text(color = "plum4",
                        size = rel(3))) +
   theme(axis.text.y = element_text(color = "plum4")) +
-  theme(legend.title = 
+  theme(legend.title =
           element_text(color = "plum4", size = 22)) +
   theme(legend.text = element_text(color = "plum4")) +
 * theme(axis.title.x = element_text(color = "plum4"))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_text_components_16-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
-  theme(plot.tag = 
+g +
+  theme(plot.tag =
           element_text(color = "plum4", size = 25)) +
-  theme(plot.title = 
-          element_text(color = "plum4", 
+  theme(plot.title =
+          element_text(color = "plum4",
                        size = 20,
                        lineheight = 2.5)) +
   theme(plot.subtitle = element_text(color = "plum4")) +
-  theme(axis.title.y = 
-          element_text(color = "plum4", 
+  theme(axis.title.y =
+          element_text(color = "plum4",
                        size = rel(3))) +
   theme(axis.text.y = element_text(color = "plum4")) +
-  theme(legend.title = 
+  theme(legend.title =
           element_text(color = "plum4", size = 22)) +
   theme(legend.text = element_text(color = "plum4")) +
   theme(axis.title.x = element_text(color = "plum4")) +
 * theme(axis.text.x = element_text(color = "plum4"))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_text_components_17-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
-  theme(plot.tag = 
+g +
+  theme(plot.tag =
           element_text(color = "plum4", size = 25)) +
-  theme(plot.title = 
-          element_text(color = "plum4", 
+  theme(plot.title =
+          element_text(color = "plum4",
                        size = 20,
                        lineheight = 2.5)) +
   theme(plot.subtitle = element_text(color = "plum4")) +
-  theme(axis.title.y = 
-          element_text(color = "plum4", 
+  theme(axis.title.y =
+          element_text(color = "plum4",
                        size = rel(3))) +
   theme(axis.text.y = element_text(color = "plum4")) +
-  theme(legend.title = 
+  theme(legend.title =
           element_text(color = "plum4", size = 22)) +
   theme(legend.text = element_text(color = "plum4")) +
   theme(axis.title.x = element_text(color = "plum4")) +
@@ -1201,222 +1179,216 @@ g +
 *         element_text(color = "plum4", size = 20))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_text_components_19-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
-  theme(plot.tag = 
+g +
+  theme(plot.tag =
           element_text(color = "plum4", size = 25)) +
-  theme(plot.title = 
-          element_text(color = "plum4", 
+  theme(plot.title =
+          element_text(color = "plum4",
                        size = 20,
                        lineheight = 2.5)) +
   theme(plot.subtitle = element_text(color = "plum4")) +
-  theme(axis.title.y = 
-          element_text(color = "plum4", 
+  theme(axis.title.y =
+          element_text(color = "plum4",
                        size = rel(3))) +
   theme(axis.text.y = element_text(color = "plum4")) +
-  theme(legend.title = 
+  theme(legend.title =
           element_text(color = "plum4", size = 22)) +
   theme(legend.text = element_text(color = "plum4")) +
   theme(axis.title.x = element_text(color = "plum4")) +
   theme(axis.text.x = element_text(color = "plum4")) +
-  theme(plot.caption = 
+  theme(plot.caption =
           element_text(color = "plum4", size = 20)) +
 * theme(text = element_text(family = "Times"))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_text_components_20-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
-  theme(plot.tag = 
+g +
+  theme(plot.tag =
           element_text(color = "plum4", size = 25)) +
-  theme(plot.title = 
-          element_text(color = "plum4", 
+  theme(plot.title =
+          element_text(color = "plum4",
                        size = 20,
                        lineheight = 2.5)) +
   theme(plot.subtitle = element_text(color = "plum4")) +
-  theme(axis.title.y = 
-          element_text(color = "plum4", 
+  theme(axis.title.y =
+          element_text(color = "plum4",
                        size = rel(3))) +
   theme(axis.text.y = element_text(color = "plum4")) +
-  theme(legend.title = 
+  theme(legend.title =
           element_text(color = "plum4", size = 22)) +
   theme(legend.text = element_text(color = "plum4")) +
   theme(axis.title.x = element_text(color = "plum4")) +
   theme(axis.text.x = element_text(color = "plum4")) +
-  theme(plot.caption = 
+  theme(plot.caption =
           element_text(color = "plum4", size = 20)) +
-  theme(text = element_text(family = "Times")) + 
+  theme(text = element_text(family = "Times")) +
 * theme(text = element_text(face = "bold.italic"))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_text_components_21-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
-  theme(plot.tag = 
+g +
+  theme(plot.tag =
           element_text(color = "plum4", size = 25)) +
-  theme(plot.title = 
-          element_text(color = "plum4", 
+  theme(plot.title =
+          element_text(color = "plum4",
                        size = 20,
                        lineheight = 2.5)) +
   theme(plot.subtitle = element_text(color = "plum4")) +
-  theme(axis.title.y = 
-          element_text(color = "plum4", 
+  theme(axis.title.y =
+          element_text(color = "plum4",
                        size = rel(3))) +
   theme(axis.text.y = element_text(color = "plum4")) +
-  theme(legend.title = 
+  theme(legend.title =
           element_text(color = "plum4", size = 22)) +
   theme(legend.text = element_text(color = "plum4")) +
   theme(axis.title.x = element_text(color = "plum4")) +
   theme(axis.text.x = element_text(color = "plum4")) +
-  theme(plot.caption = 
+  theme(plot.caption =
           element_text(color = "plum4", size = 20)) +
-  theme(text = element_text(family = "Times")) + 
+  theme(text = element_text(family = "Times")) +
   theme(text = element_text(face = "bold.italic")) +
 * theme(text = element_text(
 *   margin = margin(t = 3, r = 3, b = 3, l = 3,
 *                   unit = "pt")))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_text_components_24-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
-  theme(plot.tag = 
+g +
+  theme(plot.tag =
           element_text(color = "plum4", size = 25)) +
-  theme(plot.title = 
-          element_text(color = "plum4", 
+  theme(plot.title =
+          element_text(color = "plum4",
                        size = 20,
                        lineheight = 2.5)) +
   theme(plot.subtitle = element_text(color = "plum4")) +
-  theme(axis.title.y = 
-          element_text(color = "plum4", 
+  theme(axis.title.y =
+          element_text(color = "plum4",
                        size = rel(3))) +
   theme(axis.text.y = element_text(color = "plum4")) +
-  theme(legend.title = 
+  theme(legend.title =
           element_text(color = "plum4", size = 22)) +
   theme(legend.text = element_text(color = "plum4")) +
   theme(axis.title.x = element_text(color = "plum4")) +
   theme(axis.text.x = element_text(color = "plum4")) +
-  theme(plot.caption = 
+  theme(plot.caption =
           element_text(color = "plum4", size = 20)) +
-  theme(text = element_text(family = "Times")) + 
+  theme(text = element_text(family = "Times")) +
   theme(text = element_text(face = "bold.italic")) +
   theme(text = element_text(
-    margin = margin(t = 3, r = 3, b = 3, l = 3, 
+    margin = margin(t = 3, r = 3, b = 3, l = 3,
                     unit = "pt"))) +
 * theme(text = element_text(angle = 2))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_text_components_25-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
-  theme(plot.tag = 
+g +
+  theme(plot.tag =
           element_text(color = "plum4", size = 25)) +
-  theme(plot.title = 
-          element_text(color = "plum4", 
+  theme(plot.title =
+          element_text(color = "plum4",
                        size = 20,
                        lineheight = 2.5)) +
   theme(plot.subtitle = element_text(color = "plum4")) +
-  theme(axis.title.y = 
-          element_text(color = "plum4", 
+  theme(axis.title.y =
+          element_text(color = "plum4",
                        size = rel(3))) +
   theme(axis.text.y = element_text(color = "plum4")) +
-  theme(legend.title = 
+  theme(legend.title =
           element_text(color = "plum4", size = 22)) +
   theme(legend.text = element_text(color = "plum4")) +
   theme(axis.title.x = element_text(color = "plum4")) +
   theme(axis.text.x = element_text(color = "plum4")) +
-  theme(plot.caption = 
+  theme(plot.caption =
           element_text(color = "plum4", size = 20)) +
-  theme(text = element_text(family = "Times")) + 
+  theme(text = element_text(family = "Times")) +
   theme(text = element_text(face = "bold.italic")) +
   theme(text = element_text(
-    margin = margin(t = 3, r = 3, b = 3, l = 3, 
+    margin = margin(t = 3, r = 3, b = 3, l = 3,
                     unit = "pt"))) +
   theme(text = element_text(angle = 2)) +
 * theme(plot.title = element_text(hjust = .5))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_text_components_26-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
-  theme(plot.tag = 
+g +
+  theme(plot.tag =
           element_text(color = "plum4", size = 25)) +
-  theme(plot.title = 
-          element_text(color = "plum4", 
+  theme(plot.title =
+          element_text(color = "plum4",
                        size = 20,
                        lineheight = 2.5)) +
   theme(plot.subtitle = element_text(color = "plum4")) +
-  theme(axis.title.y = 
-          element_text(color = "plum4", 
+  theme(axis.title.y =
+          element_text(color = "plum4",
                        size = rel(3))) +
   theme(axis.text.y = element_text(color = "plum4")) +
-  theme(legend.title = 
+  theme(legend.title =
           element_text(color = "plum4", size = 22)) +
   theme(legend.text = element_text(color = "plum4")) +
   theme(axis.title.x = element_text(color = "plum4")) +
   theme(axis.text.x = element_text(color = "plum4")) +
-  theme(plot.caption = 
+  theme(plot.caption =
           element_text(color = "plum4", size = 20)) +
-  theme(text = element_text(family = "Times")) + 
+  theme(text = element_text(family = "Times")) +
   theme(text = element_text(face = "bold.italic")) +
   theme(text = element_text(
-    margin = margin(t = 3, r = 3, b = 3, l = 3, 
+    margin = margin(t = 3, r = 3, b = 3, l = 3,
                     unit = "pt"))) +
   theme(text = element_text(angle = 2)) +
   theme(plot.title = element_text(hjust = .5)) +
 * theme(axis.title.x = element_text(hjust = 1))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_text_components_27-1.png" width="100%" /&gt;
 ]]
 
@@ -1430,24 +1402,25 @@ name: rectangularelements
 
 &lt;img src="taming_ggplot_themes_files/figure-html/rect_components-1.png" width="60%" /&gt;
 
+
+
+
 ---
 
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 *g 
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_rect_components_1-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -1458,20 +1431,19 @@ g +
 *                      size = 3))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_rect_components_5-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 g +
-  theme(plot.background = 
-          element_rect(fill = "purple", 
-                       color = "darkolivegreen", 
+  theme(plot.background =
+          element_rect(fill = "purple",
+                       color = "darkolivegreen",
                        size = 3)) +
 * theme(panel.background =
 *         element_rect(fill = "purple",
@@ -1479,23 +1451,22 @@ g +
 *                      size = 3))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_rect_components_9-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 g +
-  theme(plot.background = 
-          element_rect(fill = "purple", 
-                       color = "darkolivegreen", 
+  theme(plot.background =
+          element_rect(fill = "purple",
+                       color = "darkolivegreen",
                        size = 3)) +
-  theme(panel.background = 
-          element_rect(fill = "purple", 
+  theme(panel.background =
+          element_rect(fill = "purple",
                        color = "darkolivegreen",
                        size = 3)) +
 * theme(legend.background =
@@ -1504,28 +1475,27 @@ g +
 *                      size = 3))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_rect_components_13-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 g +
-  theme(plot.background = 
-          element_rect(fill = "purple", 
-                       color = "darkolivegreen", 
-                       size = 3)) +
-  theme(panel.background = 
-          element_rect(fill = "purple", 
+  theme(plot.background =
+          element_rect(fill = "purple",
                        color = "darkolivegreen",
                        size = 3)) +
-  theme(legend.background = 
-          element_rect(fill = "purple", 
-                       color = "darkolivegreen", 
+  theme(panel.background =
+          element_rect(fill = "purple",
+                       color = "darkolivegreen",
+                       size = 3)) +
+  theme(legend.background =
+          element_rect(fill = "purple",
+                       color = "darkolivegreen",
                        size = 3)) +
 * theme(legend.key =
 *         element_rect(fill = "purple",
@@ -1533,39 +1503,38 @@ g +
 *                      size = 3))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_rect_components_17-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 g +
-  theme(plot.background = 
-          element_rect(fill = "purple", 
-                       color = "darkolivegreen", 
-                       size = 3)) +
-  theme(panel.background = 
-          element_rect(fill = "purple", 
+  theme(plot.background =
+          element_rect(fill = "purple",
                        color = "darkolivegreen",
                        size = 3)) +
-  theme(legend.background = 
-          element_rect(fill = "purple", 
-                       color = "darkolivegreen", 
+  theme(panel.background =
+          element_rect(fill = "purple",
+                       color = "darkolivegreen",
                        size = 3)) +
-  theme(legend.key = 
-          element_rect(fill = "purple", 
-                       color = "darkolivegreen", 
+  theme(legend.background =
+          element_rect(fill = "purple",
+                       color = "darkolivegreen",
+                       size = 3)) +
+  theme(legend.key =
+          element_rect(fill = "purple",
+                       color = "darkolivegreen",
                        size = 3)) +
 * theme(panel.border =
 *         element_rect(color = "magenta",
 *                      fill = NA, size = 4))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_rect_components_20-1.png" width="100%" /&gt;
 ]]
 
@@ -1578,24 +1547,24 @@ name: lineelements
 
 &lt;img src="taming_ggplot_themes_files/figure-html/line_components-1.png" width="60%" /&gt;
 
+
+
 ---
 
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 *g 
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_line_components_1-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -1605,41 +1574,39 @@ g +
 *                      color = "blue"))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_line_components_4-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 g +
-  theme(axis.ticks.y = 
-          element_line(size = 10, 
+  theme(axis.ticks.y =
+          element_line(size = 10,
                        color = "blue")) +
 * theme(axis.ticks.x =
 *         element_line(size = 10,
 *                      color = "blue"))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_line_components_7-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 g +
-  theme(axis.ticks.y = 
-          element_line(size = 10, 
+  theme(axis.ticks.y =
+          element_line(size = 10,
                        color = "blue")) +
-  theme(axis.ticks.x = 
-          element_line(size = 10, 
+  theme(axis.ticks.x =
+          element_line(size = 10,
                        color = "blue")) +
 * theme(panel.grid.major.y =
 *         element_line(size = 2,
@@ -1648,24 +1615,23 @@ g +
 *                      lineend = "round"))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_line_components_12-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 g +
-  theme(axis.ticks.y = 
-          element_line(size = 10, 
+  theme(axis.ticks.y =
+          element_line(size = 10,
                        color = "blue")) +
-  theme(axis.ticks.x = 
-          element_line(size = 10, 
+  theme(axis.ticks.x =
+          element_line(size = 10,
                        color = "blue")) +
-  theme(panel.grid.major.y = 
+  theme(panel.grid.major.y =
           element_line(size = 2,
                        linetype = "dashed",
                        color = "blue",
@@ -1677,30 +1643,29 @@ g +
 *                      lineend = "round"))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_line_components_17-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 g +
-  theme(axis.ticks.y = 
-          element_line(size = 10, 
+  theme(axis.ticks.y =
+          element_line(size = 10,
                        color = "blue")) +
-  theme(axis.ticks.x = 
-          element_line(size = 10, 
+  theme(axis.ticks.x =
+          element_line(size = 10,
                        color = "blue")) +
-  theme(panel.grid.major.y = 
+  theme(panel.grid.major.y =
           element_line(size = 2,
                        linetype = "dashed",
                        color = "blue",
                        lineend = "round")) +
-  theme(panel.grid.major.x = 
-          element_line(size = 2, 
+  theme(panel.grid.major.x =
+          element_line(size = 2,
                        arrow = arrow(),
                        color = "blue",
                        lineend = "round")) +
@@ -1711,35 +1676,34 @@ g +
 *                      lineend = "butt"))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_line_components_22-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 g +
-  theme(axis.ticks.y = 
-          element_line(size = 10, 
+  theme(axis.ticks.y =
+          element_line(size = 10,
                        color = "blue")) +
-  theme(axis.ticks.x = 
-          element_line(size = 10, 
+  theme(axis.ticks.x =
+          element_line(size = 10,
                        color = "blue")) +
-  theme(panel.grid.major.y = 
+  theme(panel.grid.major.y =
           element_line(size = 2,
                        linetype = "dashed",
                        color = "blue",
                        lineend = "round")) +
-  theme(panel.grid.major.x = 
-          element_line(size = 2, 
+  theme(panel.grid.major.x =
+          element_line(size = 2,
                        arrow = arrow(),
                        color = "blue",
                        lineend = "round")) +
-  theme(panel.grid.minor.y = 
-          element_line(size = 1, 
+  theme(panel.grid.minor.y =
+          element_line(size = 1,
                        linetype = "dotted",
                        color = "blue",
                        lineend = "butt")) +
@@ -1747,87 +1711,85 @@ g +
 *         element_line(color = "blue"))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_line_components_24-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 g +
-  theme(axis.ticks.y = 
-          element_line(size = 10, 
+  theme(axis.ticks.y =
+          element_line(size = 10,
                        color = "blue")) +
-  theme(axis.ticks.x = 
-          element_line(size = 10, 
+  theme(axis.ticks.x =
+          element_line(size = 10,
                        color = "blue")) +
-  theme(panel.grid.major.y = 
+  theme(panel.grid.major.y =
           element_line(size = 2,
                        linetype = "dashed",
                        color = "blue",
                        lineend = "round")) +
-  theme(panel.grid.major.x = 
-          element_line(size = 2, 
+  theme(panel.grid.major.x =
+          element_line(size = 2,
                        arrow = arrow(),
                        color = "blue",
                        lineend = "round")) +
-  theme(panel.grid.minor.y = 
-          element_line(size = 1, 
+  theme(panel.grid.minor.y =
+          element_line(size = 1,
                        linetype = "dotted",
                        color = "blue",
                        lineend = "butt")) +
-  theme(panel.grid = 
+  theme(panel.grid =
           element_line(color = "blue")) +
 * theme(axis.line.x.top =
 *         element_line(size = 2,
 *                      color = "blue"))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_line_components_27-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 g +
-  theme(axis.ticks.y = 
-          element_line(size = 10, 
+  theme(axis.ticks.y =
+          element_line(size = 10,
                        color = "blue")) +
-  theme(axis.ticks.x = 
-          element_line(size = 10, 
+  theme(axis.ticks.x =
+          element_line(size = 10,
                        color = "blue")) +
-  theme(panel.grid.major.y = 
+  theme(panel.grid.major.y =
           element_line(size = 2,
                        linetype = "dashed",
                        color = "blue",
                        lineend = "round")) +
-  theme(panel.grid.major.x = 
-          element_line(size = 2, 
+  theme(panel.grid.major.x =
+          element_line(size = 2,
                        arrow = arrow(),
                        color = "blue",
                        lineend = "round")) +
-  theme(panel.grid.minor.y = 
-          element_line(size = 1, 
+  theme(panel.grid.minor.y =
+          element_line(size = 1,
                        linetype = "dotted",
                        color = "blue",
                        lineend = "butt")) +
-  theme(panel.grid = 
+  theme(panel.grid =
           element_line(color = "blue")) +
-  theme(axis.line.x.top = 
+  theme(axis.line.x.top =
           element_line(size = 2,
                        color = "blue")) +
 * theme(panel.ontop = TRUE,
-*       panel.background = element_blank()) # in front of the data
+*       panel.background = element_blank())  # in front of the data
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_line_components_29-1.png" width="100%" /&gt;
 ]]
 
@@ -1867,24 +1829,24 @@ name: legends
 
 
 &lt;img src="taming_ggplot_themes_files/figure-html/legend-1.png" width="60%" /&gt;
+
+
 ---
 
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 *g 
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_legend_1-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -1892,13 +1854,12 @@ g +
 * theme(legend.position = "bottom")
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_legend_2-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -1907,13 +1868,12 @@ g +
 * theme(legend.position = "none")
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_legend_3-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -1923,13 +1883,12 @@ g +
 * theme(legend.position = c(.8, .25))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_legend_4-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -1940,13 +1899,12 @@ g +
 * theme(legend.direction = "horizontal")
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_legend_5-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -1958,13 +1916,12 @@ g +
 * theme(legend.key = element_rect())
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_legend_6-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -1977,7 +1934,7 @@ g +
 * guides(fill = guide_legend(size = 35))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_legend_7-1.png" width="100%" /&gt;
 ]]
 
@@ -1992,22 +1949,23 @@ name: sundries
 
 ---
 
+
+
+
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 *g 
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_sundries_1-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -2015,84 +1973,79 @@ g +
 * theme(plot.tag.position = "topright")
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_sundries_2-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 g +
-  theme(plot.tag.position = "topright") + 
+  theme(plot.tag.position = "topright") +
 * scale_color_discrete(guide = FALSE)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_sundries_3-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 g +
-  theme(plot.tag.position = "topright") + 
+  theme(plot.tag.position = "topright") +
   scale_color_discrete(guide = FALSE) +
 * scale_fill_discrete(guide = FALSE)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_sundries_4-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 g +
-  theme(plot.tag.position = "topright") + 
+  theme(plot.tag.position = "topright") +
   scale_color_discrete(guide = FALSE) +
   scale_fill_discrete(guide = FALSE) +
 * scale_x_continuous(position = "top")
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_sundries_5-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 g +
-  theme(plot.tag.position = "topright") + 
+  theme(plot.tag.position = "topright") +
   scale_color_discrete(guide = FALSE) +
   scale_fill_discrete(guide = FALSE) +
   scale_x_continuous(position = "top") +
 * scale_y_continuous(position = "right")
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_sundries_6-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 g +
-  theme(plot.tag.position = "topright") + 
+  theme(plot.tag.position = "topright") +
   scale_color_discrete(guide = FALSE) +
   scale_fill_discrete(guide = FALSE) +
   scale_x_continuous(position = "top") +
@@ -2100,7 +2053,7 @@ g +
 * theme(aspect.ratio = .5)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_sundries_7-1.png" width="100%" /&gt;
 ]]
 
@@ -2114,165 +2067,160 @@ name: facet
 
 &lt;img src="taming_ggplot_themes_files/figure-html/small_multiples-1.png" width="60%" /&gt;
 
+
+
+
 ---
 
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 *g 
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_small_multiples_1-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
+g +
 * facet_wrap(~ continent,
 *            strip.position = "right")
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_small_multiples_3-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
-  facet_wrap(~ continent, 
+g +
+  facet_wrap(~ continent,
              strip.position = "right") +
 * theme(strip.background =
 *         element_rect(fill = "pink"))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_small_multiples_5-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
-  facet_wrap(~ continent, 
+g +
+  facet_wrap(~ continent,
              strip.position = "right") +
-  theme(strip.background = 
+  theme(strip.background =
           element_rect(fill = "pink")) +
 * theme(strip.text.y =
 *         element_text(color = "snow", size = 12))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_small_multiples_7-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
-  facet_wrap(~ continent, 
+g +
+  facet_wrap(~ continent,
              strip.position = "right") +
-  theme(strip.background = 
+  theme(strip.background =
           element_rect(fill = "pink")) +
-  theme(strip.text.y = 
+  theme(strip.text.y =
           element_text(color = "snow", size = 12)) +
 * theme(strip.text.y =
 *         element_text(angle = -80))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_small_multiples_9-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
-  facet_wrap(~ continent, 
+g +
+  facet_wrap(~ continent,
              strip.position = "right") +
-  theme(strip.background = 
+  theme(strip.background =
           element_rect(fill = "pink")) +
-  theme(strip.text.y = 
+  theme(strip.text.y =
           element_text(color = "snow", size = 12)) +
-  theme(strip.text.y = 
+  theme(strip.text.y =
           element_text(angle = -80)) +
 * theme(panel.spacing.x =
 *         unit(1.5, "lines"))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_small_multiples_11-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
-  facet_wrap(~ continent, 
+g +
+  facet_wrap(~ continent,
              strip.position = "right") +
-  theme(strip.background = 
+  theme(strip.background =
           element_rect(fill = "pink")) +
-  theme(strip.text.y = 
+  theme(strip.text.y =
           element_text(color = "snow", size = 12)) +
-  theme(strip.text.y = 
+  theme(strip.text.y =
           element_text(angle = -80)) +
-  theme(panel.spacing.x = 
+  theme(panel.spacing.x =
           unit(1.5, "lines")) +
 * theme(panel.spacing.y =
 *         unit(2, "lines"))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_small_multiples_13-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
-  facet_wrap(~ continent, 
+g +
+  facet_wrap(~ continent,
              strip.position = "right") +
-  theme(strip.background = 
+  theme(strip.background =
           element_rect(fill = "pink")) +
-  theme(strip.text.y = 
+  theme(strip.text.y =
           element_text(color = "snow", size = 12)) +
-  theme(strip.text.y = 
+  theme(strip.text.y =
           element_text(angle = -80)) +
-  theme(panel.spacing.x = 
+  theme(panel.spacing.x =
           unit(1.5, "lines")) +
-  theme(panel.spacing.y = 
+  theme(panel.spacing.y =
           unit(2, "lines")) +
 * theme(strip.switch.pad.grid =
 *         unit(0, "cm"))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_small_multiples_15-1.png" width="100%" /&gt;
 ]]
 
@@ -2280,9 +2228,13 @@ g +
 
 name: presetthemes
 
-# "base" ggplot preset themes
+# preset themes
 
 Next we'll have at different preset themes available in ggplot that can be applied in one line of code. 
+
+
+&lt;img src="taming_ggplot_themes_files/figure-html/theme_presets-1.png" width="60%" /&gt;
+
 
 ---
 
@@ -2292,154 +2244,145 @@ Next we'll have at different preset themes available in ggplot that can be appli
 
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 *g 
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_theme_presets_1-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
+g +
 * theme_bw()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_theme_presets_2-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
+g +
   theme_bw() +
 * theme_classic()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_theme_presets_3-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
+g +
   theme_bw() +
   theme_classic() +
-* theme_dark()
+* theme_gray()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_theme_presets_4-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
+g +
   theme_bw() +
   theme_classic() +
-  theme_dark() +
-* theme_gray()
+  theme_gray() +
+* theme_light()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_theme_presets_5-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
+g +
   theme_bw() +
   theme_classic() +
-  theme_dark() +
-  theme_gray() + 
-* theme_light()
+  theme_gray() +
+  theme_light() +
+* theme_linedraw()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_theme_presets_6-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
+g +
   theme_bw() +
   theme_classic() +
-  theme_dark() +
-  theme_gray() + 
-  theme_light() +
-* theme_linedraw()
-```
-]]
-.column[.content.center[
-&lt;img src="taming_ggplot_themes_files/figure-html/output_theme_presets_7-1.png" width="100%" /&gt;
-]]
----
-class: split-40
-count: false
-
-.column[.content[
-
-```r
-g + 
-  theme_bw() +
-  theme_classic() +
-  theme_dark() +
-  theme_gray() + 
+  theme_gray() +
   theme_light() +
   theme_linedraw() +
 * theme_minimal()
 ```
 ]]
-.column[.content.center[
-&lt;img src="taming_ggplot_themes_files/figure-html/output_theme_presets_8-1.png" width="100%" /&gt;
+.column[.content[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_theme_presets_7-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
+g +
   theme_bw() +
   theme_classic() +
-  theme_dark() +
-  theme_gray() + 
+  theme_gray() +
   theme_light() +
   theme_linedraw() +
   theme_minimal() +
 * theme_void()
 ```
 ]]
-.column[.content.center[
+.column[.content[
+&lt;img src="taming_ggplot_themes_files/figure-html/output_theme_presets_8-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+g +
+  theme_bw() +
+  theme_classic() +
+  theme_gray() +
+  theme_light() +
+  theme_linedraw() +
+  theme_minimal() +
+  theme_void() +
+* theme_dark()
+```
+]]
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_theme_presets_9-1.png" width="100%" /&gt;
 ]]
 
@@ -2463,6 +2406,7 @@ Featured here are `ggthemes`, `ggpomological`, and `ggdark`.
 library(ggthemes)
 library(ggpomological)
 library(ggdark)
+library(hrbrthemes) # you may need extrafont::font_import()
 ```
 
 Let's check some of these out!
@@ -2478,127 +2422,151 @@ Let's check some of these out!
 ---
 
 
+
+```
+   [1] "g + "                                 
+   [2] "  ggthemes::theme_base() +"           
+   [3] "  ggthemes::theme_calc() + "          
+   [4] "  ggthemes::theme_economist() +"      
+   [5] "  ggthemes::theme_economist_white() +"
+   [6] "  ggthemes::theme_excel() +"          
+   [7] "  ggthemes::theme_excel_new() +"      
+   [8] "  ggthemes::theme_few() +"            
+   [9] "  ggthemes::theme_fivethirtyeight() +"
+  [10] "  ggthemes::theme_gdocs() +"          
+  [11] "  ggthemes::theme_hc() +"             
+  [12] "  ggthemes::theme_igray() +"          
+  [13] "  ggthemes::theme_map() +"            
+  [14] "  ggthemes::theme_solarized() +"      
+  [15] "  ggthemes::theme_solarized_2() + "   
+  [16] "  ggthemes::theme_solid() +"          
+  [17] "  ggthemes::theme_stata() +"          
+  [18] "  ggthemes::theme_wsj() "             
+  attr(,"chunk_opts")
+  attr(,"chunk_opts")$label
+  [1] "ggthemes"
+  
+  attr(,"chunk_opts")$eval
+  F
+  
+  attr(,"chunk_opts")$echo
+  F
+```
+
+
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 *g 
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_ggthemes_1-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
+g +
 * ggthemes::theme_base()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_ggthemes_2-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
+g +
   ggthemes::theme_base() +
 * ggthemes::theme_calc()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_ggthemes_3-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
+g +
   ggthemes::theme_base() +
-  ggthemes::theme_calc() + 
+  ggthemes::theme_calc() +
 * ggthemes::theme_economist()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_ggthemes_4-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
+g +
   ggthemes::theme_base() +
-  ggthemes::theme_calc() + 
+  ggthemes::theme_calc() +
   ggthemes::theme_economist() +
 * ggthemes::theme_economist_white()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_ggthemes_5-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
+g +
   ggthemes::theme_base() +
-  ggthemes::theme_calc() + 
+  ggthemes::theme_calc() +
   ggthemes::theme_economist() +
   ggthemes::theme_economist_white() +
 * ggthemes::theme_excel()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_ggthemes_6-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
+g +
   ggthemes::theme_base() +
-  ggthemes::theme_calc() + 
+  ggthemes::theme_calc() +
   ggthemes::theme_economist() +
   ggthemes::theme_economist_white() +
   ggthemes::theme_excel() +
 * ggthemes::theme_excel_new()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_ggthemes_7-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
+g +
   ggthemes::theme_base() +
-  ggthemes::theme_calc() + 
+  ggthemes::theme_calc() +
   ggthemes::theme_economist() +
   ggthemes::theme_economist_white() +
   ggthemes::theme_excel() +
@@ -2606,19 +2574,18 @@ g +
 * ggthemes::theme_few()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_ggthemes_8-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
+g +
   ggthemes::theme_base() +
-  ggthemes::theme_calc() + 
+  ggthemes::theme_calc() +
   ggthemes::theme_economist() +
   ggthemes::theme_economist_white() +
   ggthemes::theme_excel() +
@@ -2627,19 +2594,18 @@ g +
 * ggthemes::theme_fivethirtyeight()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_ggthemes_9-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
+g +
   ggthemes::theme_base() +
-  ggthemes::theme_calc() + 
+  ggthemes::theme_calc() +
   ggthemes::theme_economist() +
   ggthemes::theme_economist_white() +
   ggthemes::theme_excel() +
@@ -2649,19 +2615,18 @@ g +
 * ggthemes::theme_gdocs()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_ggthemes_10-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
+g +
   ggthemes::theme_base() +
-  ggthemes::theme_calc() + 
+  ggthemes::theme_calc() +
   ggthemes::theme_economist() +
   ggthemes::theme_economist_white() +
   ggthemes::theme_excel() +
@@ -2672,19 +2637,18 @@ g +
 * ggthemes::theme_hc()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_ggthemes_11-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
+g +
   ggthemes::theme_base() +
-  ggthemes::theme_calc() + 
+  ggthemes::theme_calc() +
   ggthemes::theme_economist() +
   ggthemes::theme_economist_white() +
   ggthemes::theme_excel() +
@@ -2696,19 +2660,18 @@ g +
 * ggthemes::theme_igray()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_ggthemes_12-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
+g +
   ggthemes::theme_base() +
-  ggthemes::theme_calc() + 
+  ggthemes::theme_calc() +
   ggthemes::theme_economist() +
   ggthemes::theme_economist_white() +
   ggthemes::theme_excel() +
@@ -2721,19 +2684,18 @@ g +
 * ggthemes::theme_map()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_ggthemes_13-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
+g +
   ggthemes::theme_base() +
-  ggthemes::theme_calc() + 
+  ggthemes::theme_calc() +
   ggthemes::theme_economist() +
   ggthemes::theme_economist_white() +
   ggthemes::theme_excel() +
@@ -2747,19 +2709,18 @@ g +
 * ggthemes::theme_solarized()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_ggthemes_14-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
+g +
   ggthemes::theme_base() +
-  ggthemes::theme_calc() + 
+  ggthemes::theme_calc() +
   ggthemes::theme_economist() +
   ggthemes::theme_economist_white() +
   ggthemes::theme_excel() +
@@ -2774,19 +2735,18 @@ g +
 * ggthemes::theme_solarized_2()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_ggthemes_15-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
+g +
   ggthemes::theme_base() +
-  ggthemes::theme_calc() + 
+  ggthemes::theme_calc() +
   ggthemes::theme_economist() +
   ggthemes::theme_economist_white() +
   ggthemes::theme_excel() +
@@ -2798,23 +2758,22 @@ g +
   ggthemes::theme_igray() +
   ggthemes::theme_map() +
   ggthemes::theme_solarized() +
-  ggthemes::theme_solarized_2() + 
+  ggthemes::theme_solarized_2() +
 * ggthemes::theme_solid()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_ggthemes_16-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
+g +
   ggthemes::theme_base() +
-  ggthemes::theme_calc() + 
+  ggthemes::theme_calc() +
   ggthemes::theme_economist() +
   ggthemes::theme_economist_white() +
   ggthemes::theme_excel() +
@@ -2826,24 +2785,23 @@ g +
   ggthemes::theme_igray() +
   ggthemes::theme_map() +
   ggthemes::theme_solarized() +
-  ggthemes::theme_solarized_2() + 
+  ggthemes::theme_solarized_2() +
   ggthemes::theme_solid() +
 * ggthemes::theme_stata()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_ggthemes_17-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
+g +
   ggthemes::theme_base() +
-  ggthemes::theme_calc() + 
+  ggthemes::theme_calc() +
   ggthemes::theme_economist() +
   ggthemes::theme_economist_white() +
   ggthemes::theme_excel() +
@@ -2855,13 +2813,13 @@ g +
   ggthemes::theme_igray() +
   ggthemes::theme_map() +
   ggthemes::theme_solarized() +
-  ggthemes::theme_solarized_2() + 
+  ggthemes::theme_solarized_2() +
   ggthemes::theme_solid() +
   ggthemes::theme_stata() +
 * ggthemes::theme_wsj()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_ggthemes_18-1.png" width="100%" /&gt;
 ]]
 
@@ -2879,20 +2837,18 @@ g +
 
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 *g 
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_ggpomological_1-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -2900,13 +2856,12 @@ g +
 * ggpomological::theme_pomological()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_ggpomological_2-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -2915,13 +2870,12 @@ g +
 * ggpomological::theme_pomological_nobg()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_ggpomological_3-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -2931,7 +2885,7 @@ g +
 * ggpomological::theme_pomological_plain()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_ggpomological_4-1.png" width="100%" /&gt;
 ]]
 
@@ -2946,20 +2900,18 @@ g +
 
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 *g 
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_ggdark_1-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -2967,13 +2919,12 @@ g +
 * ggdark::dark_theme_bw()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_ggdark_2-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -2982,13 +2933,12 @@ g +
 * ggdark::dark_theme_classic()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_ggdark_3-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -2998,13 +2948,12 @@ g +
 * ggdark::dark_theme_dark()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_ggdark_4-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -3015,13 +2964,12 @@ g +
 * ggdark::dark_theme_gray()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_ggdark_5-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -3033,13 +2981,12 @@ g +
 * ggdark::dark_theme_light()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_ggdark_6-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -3052,13 +2999,12 @@ g +
 * ggdark::dark_theme_linedraw()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_ggdark_7-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -3072,13 +3018,12 @@ g +
 * ggdark::dark_theme_minimal()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_ggdark_8-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -3093,7 +3038,7 @@ g +
 * ggdark::dark_theme_test()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="taming_ggplot_themes_files/figure-html/output_ggdark_9-1.png" width="100%" /&gt;
 ]]
 
@@ -3108,27 +3053,43 @@ g +
 
 
 
-&lt;style type="text/css"&gt;
-.remark-code{line-height: 1.5; font-size: 70%}
-&lt;/style&gt;
 
 
+# hrbrthemes
 
-
-&lt;!-- # hrbrthemes --&gt;
-
-&lt;!-- --- --&gt;
+---
 
 &lt;!-- ```{r} --&gt;
-&lt;!-- g +  --&gt;
+&lt;!-- g + --&gt;
 &lt;!--   hrbrthemes::theme_ft_rc() + --&gt;
 &lt;!--   hrbrthemes::theme_ipsum() + --&gt;
 &lt;!--   hrbrthemes::theme_ipsum_ps() + --&gt;
-&lt;!--   hrbrthemes::theme_ipsum_pub() + --&gt;
 &lt;!--   hrbrthemes::theme_ipsum_rc() + --&gt;
 &lt;!--   hrbrthemes::theme_ipsum_tw() + --&gt;
 &lt;!--   hrbrthemes::theme_modern_rc() --&gt;
 &lt;!-- ``` --&gt;
+
+
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 70%}
+
+.column-left {
+  float: left;
+  width: 33.333%;
+}
+
+.column-right {
+  float: right;
+  width: 33.333%;
+}
+
+.column-center {
+  display: inline-block;
+  width: 33.333%;
+}
+&lt;/style&gt;
     </textarea>
 <script src="libs/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
