@@ -1,0 +1,111 @@
+---
+title: "Anime"
+author: "Gina Reynolds, May 2019"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: ["kunoichi", "ninjutsu"]
+    nature:
+      ratio: 16:10
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+
+```{r}
+source("../xaringan_reveal_parenthetical.R")
+```
+
+```{r}
+library(tidyverse)
+library(lubridate)
+library(paletteer) 
+library(extrafont)
+# font_import()
+```
+
+```{r}
+tidy_anime <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-04-23/tidy_anime.csv")
+
+# remove duplicate entries because of multiple genres
+# only keep those scored by at least 100 users
+tidy_anime_unique <- tidy_anime %>% 
+  distinct(animeID, .keep_all = TRUE) %>% 
+  filter(scored_by >= 100, !is.na(score), !is.na(start_date)) %>% 
+  mutate(decade = (year(start_date) %/% 10) * 10)
+
+# focus just on films since 1960
+tidy_anime_movie <- tidy_anime_unique %>% 
+  filter(type == "Movie", start_date >= as.Date("1960-01-01")) %>% 
+  mutate(decade = paste0(decade, "s"))
+
+# top 5 most rated films to be highlighted in plot
+movie_most_scored <- tidy_anime_movie %>% 
+  top_n(5, scored_by) 
+
+# background colour
+back_col <- paletteer_d(ghibli, MarnieLight1)[2]
+```
+
+
+```{r basic_build}
+ggplot(tidy_anime_movie, aes(x = decade, y = score)) +
+  geom_jitter(aes(size = scored_by, fill = decade), 
+              width = 0.1, alpha = 0.4, shape = 21) +
+  geom_boxplot(aes(fill = decade), colour = "white", width = 0.4,
+               show.legend = FALSE, outlier.shape = NA, alpha = 0.4) +
+  geom_text(aes(x = "2000s", y = 9.5, 
+                label = "Movies with the most user ratings\ntend to have the highest scores"),
+            size = 2.5, hjust = 0.5) +
+  scale_y_continuous(limits = c(0, 10), breaks = seq(0, 10, 2)) +
+  scale_size_continuous(breaks = seq(100000, 500000, 100000), 
+                        labels = paste0(seq(100, 500, 100), "k")) +
+  labs(title = "Are Anime Movies getting better?",
+       subtitle = "Anime movies since the 1960s as scored by MyAnimeList users",
+       caption = "Movies scored by less than 100 users have been removed\n@committedtotape") +
+  guides(colour = FALSE,
+         fill = FALSE) ->
+  g
+```
+
+---
+
+`r apply_reveal("basic_build")`
+
+---
+
+```{r thematic}
+g +
+  theme(text = element_text(colour = "white"
+                            #, family = "AnimeAce"
+                            )) +
+  theme(plot.title = element_text(
+    #family = "AnimeAceBold", 
+    size = rel(1.5))) +
+  theme(plot.caption = element_text(size = rel(0.7))) +
+  theme(plot.background = element_rect(fill = back_col)) +
+  theme(panel.background = element_rect(fill = back_col)) +
+  theme(panel.grid = element_line(colour = "gray40")) +
+  theme(panel.grid.major.x = element_blank()) +
+  theme(axis.text = element_text(colour = "white")) +
+  theme(legend.position = c(0.5, 0.15)) +
+  theme(legend.direction = "horizontal") +
+  theme(legend.background = element_rect(fill = back_col)) +
+  theme(legend.box.background = element_rect(fill = back_col)) +
+  theme(legend.key = element_rect(fill = back_col,  colour = back_col)) +
+  theme(legend.title = element_text(size = rel(0.8))) +
+  guides(colour = FALSE,
+         fill = FALSE,
+         size = guide_legend(title.position = "top", title.hjust = 0.5,
+                             override.aes = list(colour = "white", alpha = 1))) +
+    geom_text(aes(x = "2000s", y = 9.5, 
+                label = "Movies with the most user ratings\ntend to have the highest scores"),
+            size = 2.5, hjust = 0.5, col = "white")
+```
+
+---
+
+`r apply_reveal("thematic")`

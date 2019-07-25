@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>#TidyTuesday Highlights</title>
+    <title>#TidyTuesday walk-throughs</title>
     <meta charset="utf-8">
     <meta name="author" content="  Edited by Gina Reynolds, 2019" />
     <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
@@ -11,7 +11,7 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# #TidyTuesday Highlights
+# #TidyTuesday walk-throughs
 ## A flipbook made with Xaringan
 ### <br><br>Edited by Gina Reynolds, 2019
 ### <br>
@@ -20,6 +20,1583 @@ class: center, middle, inverse, title-slide
 
 
 
+
+---
+
+# Table of contents
+
+&lt;a href="#ufo"&gt;&lt;img src="figures/ufo_theme.png"width="150" height="150" title="White flower" alt="Flower"&gt;&lt;/a&gt;&lt;a href="#teacher"&gt;&lt;img src="figures/complete_teacher_student.png"width="150" height="150" title="White flower" alt="Flower"&gt;&lt;/a&gt;&lt;a href="#worldcup"&gt;&lt;img src="figures/world_cup.png"width="150" height="150" title="White flower" alt="Flower"&gt;&lt;/a&gt;&lt;a href="#franchises"&gt;&lt;img src="figures/top_5.png"width="150" height="150" title="White flower" alt="Flower"&gt;&lt;/a&gt;
+
+
+
+---
+
+name: ufo
+
+# Joel Soroos' *UFOs over North Carolina*
+
+&lt;img src="figures/ufo_theme.png" width="70%" /&gt;
+
+---
+
+
+
+
+
+
+# UFO sitings
+
+This work is by Joel Soros who focuses on UFO sitings in North Carolina.  
+
+
+---
+
+## Set up
+
+
+
+
+```r
+library(tidyverse)
+url &lt;- "https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-06-25/ufo_sightings.csv"
+ufo_raw &lt;- readr::read_csv(file = url) 
+```
+
+---
+
+## First a little data cleaning
+
+---
+
+
+
+
+---
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*ufo_raw
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 80,332 x 11
+     date_time city_area state country ufo_shape encounter_length
+     &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;                &lt;int&gt;
+   1 10/10/19… san marc… tx    us      cylinder              2700
+   2 10/10/19… lackland… tx    &lt;NA&gt;    light                 7200
+   3 10/10/19… chester … &lt;NA&gt;  gb      circle                  20
+   4 10/10/19… edna      tx    us      circle                  20
+   5 10/10/19… kaneohe   hi    us      light                  900
+   6 10/10/19… bristol   tn    us      sphere                 300
+   7 10/10/19… penarth … &lt;NA&gt;  gb      circle                 180
+   8 10/10/19… norwalk   ct    us      disk                  1200
+   9 10/10/19… pell city al    us      disk                   180
+  10 10/10/19… live oak  fl    us      disk                   120
+  # … with 80,322 more rows, and 5 more variables:
+  #   described_encounter_length &lt;chr&gt;, description &lt;chr&gt;,
+  #   date_documented &lt;chr&gt;, latitude &lt;dbl&gt;, longitude &lt;dbl&gt;
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ufo_raw %&gt;%
+*     janitor::clean_names()
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 80,332 x 11
+     date_time city_area state country ufo_shape encounter_length
+     &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;                &lt;int&gt;
+   1 10/10/19… san marc… tx    us      cylinder              2700
+   2 10/10/19… lackland… tx    &lt;NA&gt;    light                 7200
+   3 10/10/19… chester … &lt;NA&gt;  gb      circle                  20
+   4 10/10/19… edna      tx    us      circle                  20
+   5 10/10/19… kaneohe   hi    us      light                  900
+   6 10/10/19… bristol   tn    us      sphere                 300
+   7 10/10/19… penarth … &lt;NA&gt;  gb      circle                 180
+   8 10/10/19… norwalk   ct    us      disk                  1200
+   9 10/10/19… pell city al    us      disk                   180
+  10 10/10/19… live oak  fl    us      disk                   120
+  # … with 80,322 more rows, and 5 more variables:
+  #   described_encounter_length &lt;chr&gt;, description &lt;chr&gt;,
+  #   date_documented &lt;chr&gt;, latitude &lt;dbl&gt;, longitude &lt;dbl&gt;
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ufo_raw %&gt;%
+      janitor::clean_names() %&gt;%
+*     select(date_time, city_area,
+*            state, latitude,
+*            longitude, encounter_length)
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 80,332 x 6
+     date_time      city_area       state latitude longitude encounter_length
+     &lt;chr&gt;          &lt;chr&gt;           &lt;chr&gt;    &lt;dbl&gt;     &lt;dbl&gt;            &lt;int&gt;
+   1 10/10/1949 20… san marcos      tx        29.9    -97.9              2700
+   2 10/10/1949 21… lackland afb    tx        29.4    -98.6              7200
+   3 10/10/1955 17… chester (uk/en… &lt;NA&gt;      53.2     -2.92               20
+   4 10/10/1956 21… edna            tx        29.0    -96.6                20
+   5 10/10/1960 20… kaneohe         hi        21.4   -158.                900
+   6 10/10/1961 19… bristol         tn        36.6    -82.2               300
+   7 10/10/1965 21… penarth (uk/wa… &lt;NA&gt;      51.4     -3.18              180
+   8 10/10/1965 23… norwalk         ct        41.1    -73.4              1200
+   9 10/10/1966 20… pell city       al        33.6    -86.3               180
+  10 10/10/1966 21… live oak        fl        30.3    -83.0               120
+  # … with 80,322 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ufo_raw %&gt;%
+      janitor::clean_names() %&gt;%
+      select(date_time, city_area,
+             state, latitude,
+             longitude, encounter_length) %&gt;%
+* rename(lat = latitude,
+*        long = longitude)
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 80,332 x 6
+     date_time        city_area          state   lat    long encounter_length
+     &lt;chr&gt;            &lt;chr&gt;              &lt;chr&gt; &lt;dbl&gt;   &lt;dbl&gt;            &lt;int&gt;
+   1 10/10/1949 20:30 san marcos         tx     29.9  -97.9              2700
+   2 10/10/1949 21:00 lackland afb       tx     29.4  -98.6              7200
+   3 10/10/1955 17:00 chester (uk/engla… &lt;NA&gt;   53.2   -2.92               20
+   4 10/10/1956 21:00 edna               tx     29.0  -96.6                20
+   5 10/10/1960 20:00 kaneohe            hi     21.4 -158.                900
+   6 10/10/1961 19:00 bristol            tn     36.6  -82.2               300
+   7 10/10/1965 21:00 penarth (uk/wales) &lt;NA&gt;   51.4   -3.18              180
+   8 10/10/1965 23:45 norwalk            ct     41.1  -73.4              1200
+   9 10/10/1966 20:00 pell city          al     33.6  -86.3               180
+  10 10/10/1966 21:00 live oak           fl     30.3  -83.0               120
+  # … with 80,322 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ufo_raw %&gt;%
+      janitor::clean_names() %&gt;%
+      select(date_time, city_area,
+             state, latitude,
+             longitude, encounter_length) %&gt;%
+  rename(lat = latitude,
+         long = longitude) %&gt;%
+*     filter(
+*        state == "nc",
+*        lat &gt; 30,  # remove borders erroneously listed as NC outside of state borders
+*        lat &lt; 37,  # remove borders erroneously listed as NC outside of state borders
+*        long &lt; -75  # remove borders erroneously listed as NC outside of state borders
+*        )
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 1,862 x 6
+     date_time        city_area      state   lat  long encounter_length
+     &lt;chr&gt;            &lt;chr&gt;          &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;            &lt;int&gt;
+   1 10/10/1968 19:00 brevard        nc     35.2 -82.7              180
+   2 10/10/1971 21:00 lexington      nc     35.8 -80.3               30
+   3 10/10/1991 22:00 frisco         nc     35.2 -75.6             1800
+   4 10/10/1998 20:50 mooresville    nc     35.6 -80.8                2
+   5 10/10/2005 23:00 hendersonville nc     35.3 -82.5              600
+   6 10/10/2009 20:45 wilmington     nc     34.2 -77.9              600
+   7 10/11/2008 13:00 salisbury      nc     35.7 -80.5               20
+   8 10/11/2011 21:10 holden beach   nc     33.9 -78.3               30
+   9 10/1/1961 22:00  graham         nc     36.1 -79.4               30
+  10 10/1/1978 00:00  windsor        nc     36.0 -76.9              300
+  # … with 1,852 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ufo_raw %&gt;%
+      janitor::clean_names() %&gt;%
+      select(date_time, city_area,
+             state, latitude,
+             longitude, encounter_length) %&gt;%
+  rename(lat = latitude,
+         long = longitude) %&gt;%
+      filter(
+         state == "nc",
+         lat &gt; 30,  # remove borders erroneously listed as NC outside of state borders
+         lat &lt; 37,  # remove borders erroneously listed as NC outside of state borders
+         long &lt; -75  # remove borders erroneously listed as NC outside of state borders
+         ) %&gt;%
+*     mutate(
+*        encounter_length = encounter_length/3600,              #convert seconds to hours
+*        date_time = as.Date(date_time, format = "%m/%d/%Y")
+*        )
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 1,862 x 6
+     date_time  city_area      state   lat  long encounter_length
+     &lt;date&gt;     &lt;chr&gt;          &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt;
+   1 1968-10-10 brevard        nc     35.2 -82.7         0.05    
+   2 1971-10-10 lexington      nc     35.8 -80.3         0.00833 
+   3 1991-10-10 frisco         nc     35.2 -75.6         0.5     
+   4 1998-10-10 mooresville    nc     35.6 -80.8         0.000556
+   5 2005-10-10 hendersonville nc     35.3 -82.5         0.167   
+   6 2009-10-10 wilmington     nc     34.2 -77.9         0.167   
+   7 2008-10-11 salisbury      nc     35.7 -80.5         0.00556 
+   8 2011-10-11 holden beach   nc     33.9 -78.3         0.00833 
+   9 1961-10-01 graham         nc     36.1 -79.4         0.00833 
+  10 1978-10-01 windsor        nc     36.0 -76.9         0.0833  
+  # … with 1,852 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ufo_raw %&gt;%
+      janitor::clean_names() %&gt;%
+      select(date_time, city_area,
+             state, latitude,
+             longitude, encounter_length) %&gt;%
+  rename(lat = latitude,
+         long = longitude) %&gt;%
+      filter(
+         state == "nc",
+         lat &gt; 30,  # remove borders erroneously listed as NC outside of state borders
+         lat &lt; 37,  # remove borders erroneously listed as NC outside of state borders
+         long &lt; -75  # remove borders erroneously listed as NC outside of state borders
+         ) %&gt;%
+      mutate(
+         encounter_length = encounter_length/3600,              #convert seconds to hours
+         date_time = as.Date(date_time, format = "%m/%d/%Y")
+         ) -&gt;
+*ufo
+```
+]]
+.column[.content[
+
+]]
+
+
+---
+
+## prepping map data
+
+He also uses ggplot2's map_data to plot the North Carolina polygon.  
+
+
+
+```r
+map_borders &lt;- 
+  ggplot2::map_data("state", 
+           region = "north carolina") 
+```
+
+---
+
+# The basic plot
+
+---
+
+
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*ufo
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 1,862 x 6
+     date_time  city_area      state   lat  long encounter_length
+     &lt;date&gt;     &lt;chr&gt;          &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt;
+   1 1968-10-10 brevard        nc     35.2 -82.7         0.05    
+   2 1971-10-10 lexington      nc     35.8 -80.3         0.00833 
+   3 1991-10-10 frisco         nc     35.2 -75.6         0.5     
+   4 1998-10-10 mooresville    nc     35.6 -80.8         0.000556
+   5 2005-10-10 hendersonville nc     35.3 -82.5         0.167   
+   6 2009-10-10 wilmington     nc     34.2 -77.9         0.167   
+   7 2008-10-11 salisbury      nc     35.7 -80.5         0.00556 
+   8 2011-10-11 holden beach   nc     33.9 -78.3         0.00833 
+   9 1961-10-01 graham         nc     36.1 -79.4         0.00833 
+  10 1978-10-01 windsor        nc     36.0 -76.9         0.0833  
+  # … with 1,852 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ufo %&gt;%
+* ggplot()
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_build_ufo_nc_2-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ufo %&gt;%
+  ggplot() +
+* aes(x = long)
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_build_ufo_nc_3-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ufo %&gt;%
+  ggplot() +
+  aes(x = long) +
+* aes(y = lat)
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_build_ufo_nc_4-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ufo %&gt;%
+  ggplot() +
+  aes(x = long) +
+  aes(y = lat) +
+* # plot nc borders
+* geom_polygon(data = map_borders,
+*              mapping = aes(group = group),
+*              color = "black",
+*              fill = "grey25",
+*              size = 1.15)
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_build_ufo_nc_10-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ufo %&gt;%
+  ggplot() +
+  aes(x = long) +
+  aes(y = lat) +
+  # plot nc borders
+  geom_polygon(data = map_borders,
+               mapping = aes(group = group),
+               color = "black",
+               fill = "grey25",
+               size = 1.15) +
+* # plot UFO encounters
+* aes(size = encounter_length)
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_build_ufo_nc_12-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ufo %&gt;%
+  ggplot() +
+  aes(x = long) +
+  aes(y = lat) +
+  # plot nc borders
+  geom_polygon(data = map_borders,
+               mapping = aes(group = group),
+               color = "black",
+               fill = "grey25",
+               size = 1.15) +
+  # plot UFO encounters
+  aes(size = encounter_length) +
+* geom_point(color = "green", aes(group = NULL))
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_build_ufo_nc_13-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ufo %&gt;%
+  ggplot() +
+  aes(x = long) +
+  aes(y = lat) +
+  # plot nc borders
+  geom_polygon(data = map_borders,
+               mapping = aes(group = group),
+               color = "black",
+               fill = "grey25",
+               size = 1.15) +
+  # plot UFO encounters
+  aes(size = encounter_length) +
+  geom_point(color = "green", aes(group = NULL)) +
+* coord_fixed(1.3)
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_build_ufo_nc_14-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ufo %&gt;%
+  ggplot() +
+  aes(x = long) +
+  aes(y = lat) +
+  # plot nc borders
+  geom_polygon(data = map_borders,
+               mapping = aes(group = group),
+               color = "black",
+               fill = "grey25",
+               size = 1.15) +
+  # plot UFO encounters
+  aes(size = encounter_length) +
+  geom_point(color = "green", aes(group = NULL)) +
+  coord_fixed(1.3) +
+* scale_size_continuous(breaks = c(1, 10, 100))
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_build_ufo_nc_15-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ufo %&gt;%
+  ggplot() +
+  aes(x = long) +
+  aes(y = lat) +
+  # plot nc borders
+  geom_polygon(data = map_borders,
+               mapping = aes(group = group),
+               color = "black",
+               fill = "grey25",
+               size = 1.15) +
+  # plot UFO encounters
+  aes(size = encounter_length) +
+  geom_point(color = "green", aes(group = NULL)) +
+  coord_fixed(1.3) +
+  scale_size_continuous(breaks = c(1, 10, 100)) +
+* labs(title = "UFOs over North Carolina\n")
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_build_ufo_nc_16-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ufo %&gt;%
+  ggplot() +
+  aes(x = long) +
+  aes(y = lat) +
+  # plot nc borders
+  geom_polygon(data = map_borders,
+               mapping = aes(group = group),
+               color = "black",
+               fill = "grey25",
+               size = 1.15) +
+  # plot UFO encounters
+  aes(size = encounter_length) +
+  geom_point(color = "green", aes(group = NULL)) +
+  coord_fixed(1.3) +
+  scale_size_continuous(breaks = c(1, 10, 100)) +
+  labs(title = "UFOs over North Carolina\n") +
+* labs(size = "Encounter (hrs)")
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_build_ufo_nc_17-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ufo %&gt;%
+  ggplot() +
+  aes(x = long) +
+  aes(y = lat) +
+  # plot nc borders
+  geom_polygon(data = map_borders,
+               mapping = aes(group = group),
+               color = "black",
+               fill = "grey25",
+               size = 1.15) +
+  # plot UFO encounters
+  aes(size = encounter_length) +
+  geom_point(color = "green", aes(group = NULL)) +
+  coord_fixed(1.3) +
+  scale_size_continuous(breaks = c(1, 10, 100)) +
+  labs(title = "UFOs over North Carolina\n") +
+  labs(size = "Encounter (hrs)") +
+* labs(caption = "\nEach dot represents a reported UFO sighting between 1995 and 2014.  \nSource: National UFO Reporting Center  | Visualization: Joel Soroos @soroosj")
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_build_ufo_nc_18-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ufo %&gt;%
+  ggplot() +
+  aes(x = long) +
+  aes(y = lat) +
+  # plot nc borders
+  geom_polygon(data = map_borders,
+               mapping = aes(group = group),
+               color = "black",
+               fill = "grey25",
+               size = 1.15) +
+  # plot UFO encounters
+  aes(size = encounter_length) +
+  geom_point(color = "green", aes(group = NULL)) +
+  coord_fixed(1.3) +
+  scale_size_continuous(breaks = c(1, 10, 100)) +
+  labs(title = "UFOs over North Carolina\n") +
+  labs(size = "Encounter (hrs)") +
+  labs(caption = "\nEach dot represents a reported UFO sighting between 1995 and 2014.  \nSource: National UFO Reporting Center  | Visualization: Joel Soroos @soroosj") -&gt;
+*basic_plot
+```
+]]
+.column[.content[
+
+]]
+
+
+---  
+  
+## Annotation layer
+
+---
+
+
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*basic_plot
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_annotation_ufo_1-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+basic_plot +
+* annotate(geom = "text",
+*       label = "30 hour encounter\nin Deep Gap (2009)",
+*       size = 3, hjust = 0, color = "green",
+*       family = "Rockwell",
+*       x = -84.9, y = 36.1
+*       )
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_annotation_ufo_7-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+basic_plot +
+  annotate(geom = "text",
+        label = "30 hour encounter\nin Deep Gap (2009)",
+        size = 3, hjust = 0, color = "green",
+        family = "Rockwell",
+        x = -84.9, y = 36.1
+        ) +
+* annotate(geom = "curve",
+*          x = -83.2, y = 36.2,
+*          xend = -81.7, yend = 36.27,
+*       arrow = arrow(length = unit(0.2, "cm")),
+*       size = 0.4, color = "green", curvature = -0.4
+*       )
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_annotation_ufo_13-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+basic_plot +
+  annotate(geom = "text",
+        label = "30 hour encounter\nin Deep Gap (2009)",
+        size = 3, hjust = 0, color = "green",
+        family = "Rockwell",
+        x = -84.9, y = 36.1
+        ) +
+  annotate(geom = "curve",
+           x = -83.2, y = 36.2,
+           xend = -81.7, yend = 36.27,
+        arrow = arrow(length = unit(0.2, "cm")),
+        size = 0.4, color = "green", curvature = -0.4
+        ) +
+* # Gastonia encounter annotation
+*    annotate("text",
+*       label = "120 hour encounter\nin Gastonia in 1993.",
+*       size = 3, hjust = 0, color = "green",
+*       family = "Rockwell",
+*       x = -83.1, y = 34.5
+*       )
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_annotation_ufo_20-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+basic_plot +
+  annotate(geom = "text",
+        label = "30 hour encounter\nin Deep Gap (2009)",
+        size = 3, hjust = 0, color = "green",
+        family = "Rockwell",
+        x = -84.9, y = 36.1
+        ) +
+  annotate(geom = "curve",
+           x = -83.2, y = 36.2,
+           xend = -81.7, yend = 36.27,
+        arrow = arrow(length = unit(0.2, "cm")),
+        size = 0.4, color = "green", curvature = -0.4
+        ) +
+  # Gastonia encounter annotation
+     annotate("text",
+        label = "120 hour encounter\nin Gastonia in 1993.",
+        size = 3, hjust = 0, color = "green",
+        family = "Rockwell",
+        x = -83.1, y = 34.5
+        ) +
+*    annotate(geom = "curve",
+*             x = -82.27, y = 34.65,
+*             xend = -81.37, yend = 35.2,
+*       arrow = arrow(length = unit(0.2, "cm")),
+*       size = 0.4, color = "green", curvature = -0.3
+*       )
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_annotation_ufo_26-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+basic_plot +
+  annotate(geom = "text",
+        label = "30 hour encounter\nin Deep Gap (2009)",
+        size = 3, hjust = 0, color = "green",
+        family = "Rockwell",
+        x = -84.9, y = 36.1
+        ) +
+  annotate(geom = "curve",
+           x = -83.2, y = 36.2,
+           xend = -81.7, yend = 36.27,
+        arrow = arrow(length = unit(0.2, "cm")),
+        size = 0.4, color = "green", curvature = -0.4
+        ) +
+  # Gastonia encounter annotation
+     annotate("text",
+        label = "120 hour encounter\nin Gastonia in 1993.",
+        size = 3, hjust = 0, color = "green",
+        family = "Rockwell",
+        x = -83.1, y = 34.5
+        ) +
+     annotate(geom = "curve",
+              x = -82.27, y = 34.65,
+              xend = -81.37, yend = 35.2,
+        arrow = arrow(length = unit(0.2, "cm")),
+        size = 0.4, color = "green", curvature = -0.3
+        ) -&gt;
+*ufo_plot
+```
+]]
+.column[.content[
+
+]]
+
+
+---
+
+# Adjusting themes
+
+---
+
+
+
+---
+
+
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*ufo_plot
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_ufo_theme_1-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ufo_plot +
+* ggdark::dark_mode(.theme =
+*                     theme_minimal())
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_ufo_theme_3-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ufo_plot +
+  ggdark::dark_mode(.theme =
+                      theme_minimal()) +
+* theme(axis.title = element_blank())
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_ufo_theme_4-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ufo_plot +
+  ggdark::dark_mode(.theme =
+                      theme_minimal()) +
+  theme(axis.title = element_blank()) +
+* theme(axis.text = element_blank())
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_ufo_theme_5-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ufo_plot +
+  ggdark::dark_mode(.theme =
+                      theme_minimal()) +
+  theme(axis.title = element_blank()) +
+  theme(axis.text = element_blank()) +
+* theme(axis.ticks = element_blank())
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_ufo_theme_6-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ufo_plot +
+  ggdark::dark_mode(.theme =
+                      theme_minimal()) +
+  theme(axis.title = element_blank()) +
+  theme(axis.text = element_blank()) +
+  theme(axis.ticks = element_blank()) +
+* theme(text = element_text(family = "Rockwell",
+*                           color = "green"))
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_ufo_theme_8-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ufo_plot +
+  ggdark::dark_mode(.theme =
+                      theme_minimal()) +
+  theme(axis.title = element_blank()) +
+  theme(axis.text = element_blank()) +
+  theme(axis.ticks = element_blank()) +
+  theme(text = element_text(family = "Rockwell",
+                            color = "green")) +
+* theme(plot.title = element_text(hjust = 0.5,
+*                                 size = 18))
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_ufo_theme_10-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ufo_plot +
+  ggdark::dark_mode(.theme =
+                      theme_minimal()) +
+  theme(axis.title = element_blank()) +
+  theme(axis.text = element_blank()) +
+  theme(axis.ticks = element_blank()) +
+  theme(text = element_text(family = "Rockwell",
+                            color = "green")) +
+  theme(plot.title = element_text(hjust = 0.5,
+                                  size = 18)) +
+* theme(plot.caption = element_text(hjust = 0,
+*                                   size = 8))
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_ufo_theme_12-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ufo_plot +
+  ggdark::dark_mode(.theme =
+                      theme_minimal()) +
+  theme(axis.title = element_blank()) +
+  theme(axis.text = element_blank()) +
+  theme(axis.ticks = element_blank()) +
+  theme(text = element_text(family = "Rockwell",
+                            color = "green")) +
+  theme(plot.title = element_text(hjust = 0.5,
+                                  size = 18)) +
+  theme(plot.caption = element_text(hjust = 0,
+                                    size = 8)) +
+* theme(legend.title = element_text(size = 10,
+*                                   hjust = 0.5,
+*                                   vjust = 0.5))
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_ufo_theme_15-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ufo_plot +
+  ggdark::dark_mode(.theme =
+                      theme_minimal()) +
+  theme(axis.title = element_blank()) +
+  theme(axis.text = element_blank()) +
+  theme(axis.ticks = element_blank()) +
+  theme(text = element_text(family = "Rockwell",
+                            color = "green")) +
+  theme(plot.title = element_text(hjust = 0.5,
+                                  size = 18)) +
+  theme(plot.caption = element_text(hjust = 0,
+                                    size = 8)) +
+  theme(legend.title = element_text(size = 10,
+                                    hjust = 0.5,
+                                    vjust = 0.5)) +
+* theme(legend.text = element_text(size = 9,
+*                                  hjust = 0.5,
+*                                  vjust = 0.5))
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_ufo_theme_18-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ufo_plot +
+  ggdark::dark_mode(.theme =
+                      theme_minimal()) +
+  theme(axis.title = element_blank()) +
+  theme(axis.text = element_blank()) +
+  theme(axis.ticks = element_blank()) +
+  theme(text = element_text(family = "Rockwell",
+                            color = "green")) +
+  theme(plot.title = element_text(hjust = 0.5,
+                                  size = 18)) +
+  theme(plot.caption = element_text(hjust = 0,
+                                    size = 8)) +
+  theme(legend.title = element_text(size = 10,
+                                    hjust = 0.5,
+                                    vjust = 0.5)) +
+  theme(legend.text = element_text(size = 9,
+                                   hjust = 0.5,
+                                   vjust = 0.5)) +
+* theme(legend.position = c(0.82, 0.18))
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_ufo_theme_19-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ufo_plot +
+  ggdark::dark_mode(.theme =
+                      theme_minimal()) +
+  theme(axis.title = element_blank()) +
+  theme(axis.text = element_blank()) +
+  theme(axis.ticks = element_blank()) +
+  theme(text = element_text(family = "Rockwell",
+                            color = "green")) +
+  theme(plot.title = element_text(hjust = 0.5,
+                                  size = 18)) +
+  theme(plot.caption = element_text(hjust = 0,
+                                    size = 8)) +
+  theme(legend.title = element_text(size = 10,
+                                    hjust = 0.5,
+                                    vjust = 0.5)) +
+  theme(legend.text = element_text(size = 9,
+                                   hjust = 0.5,
+                                   vjust = 0.5)) +
+  theme(legend.position = c(0.82, 0.18)) +
+* theme(legend.justification = c(0, 1))
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_ufo_theme_20-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ufo_plot +
+  ggdark::dark_mode(.theme =
+                      theme_minimal()) +
+  theme(axis.title = element_blank()) +
+  theme(axis.text = element_blank()) +
+  theme(axis.ticks = element_blank()) +
+  theme(text = element_text(family = "Rockwell",
+                            color = "green")) +
+  theme(plot.title = element_text(hjust = 0.5,
+                                  size = 18)) +
+  theme(plot.caption = element_text(hjust = 0,
+                                    size = 8)) +
+  theme(legend.title = element_text(size = 10,
+                                    hjust = 0.5,
+                                    vjust = 0.5)) +
+  theme(legend.text = element_text(size = 9,
+                                   hjust = 0.5,
+                                   vjust = 0.5)) +
+  theme(legend.position = c(0.82, 0.18)) +
+  theme(legend.justification = c(0, 1)) +
+* theme(legend.key.size = unit(0.1, 'lines'))
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_ufo_theme_21-1.png" width="100%" /&gt;
+]]
+
+---
+
+
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 40%}
+&lt;/style&gt;
+
+
+---
+
+name: worldcup
+
+# Ifeoma Egbogah's *Relationship Between Goals and Caps*
+
+
+&lt;img src="figures/world_cup.png" width="70%" /&gt;
+
+---
+
+
+
+
+
+
+
+```r
+url &lt;- "https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-07-09/squads.csv"
+squads &lt;- readr::read_csv(file = url)
+```
+
+---
+
+
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*squads
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 552 x 9
+     squad_no country pos   player dob                   age  caps goals
+        &lt;int&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;  &lt;dttm&gt;              &lt;int&gt; &lt;int&gt; &lt;int&gt;
+   1        1 US      GK    Alyss… 1988-04-20 00:00:00    31    43     0
+   2        2 US      FW    Mallo… 1998-04-29 00:00:00    21    50    15
+   3        3 US      MF    Sam M… 1992-10-09 00:00:00    26    47     9
+   4        4 US      DF    Becky… 1985-06-06 00:00:00    34   155     0
+   5        5 US      DF    Kelle… 1988-08-04 00:00:00    30   115     2
+   6        6 US      MF    Morga… 1993-02-26 00:00:00    26    82     6
+   7        7 US      DF    Abby … 1993-05-13 00:00:00    26    37     0
+   8        8 US      MF    Julie… 1992-04-06 00:00:00    27    79    18
+   9        9 US      MF    Linds… 1994-05-26 00:00:00    25    66     8
+  10       10 US      FW    Carli… 1982-07-16 00:00:00    36   271   107
+  # … with 542 more rows, and 1 more variable: club &lt;chr&gt;
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+squads %&gt;%
+* mutate(pos = case_when(pos == "DF" ~ "Defense",
+*                        pos == "MF" ~ "Mid fielder",
+*                        pos == "GK" ~ "Goal keeper",
+*                        pos == "FW" ~ "Forward"))
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 552 x 9
+     squad_no country pos   player dob                   age  caps goals
+        &lt;int&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;  &lt;dttm&gt;              &lt;int&gt; &lt;int&gt; &lt;int&gt;
+   1        1 US      Goal… Alyss… 1988-04-20 00:00:00    31    43     0
+   2        2 US      Forw… Mallo… 1998-04-29 00:00:00    21    50    15
+   3        3 US      Mid … Sam M… 1992-10-09 00:00:00    26    47     9
+   4        4 US      Defe… Becky… 1985-06-06 00:00:00    34   155     0
+   5        5 US      Defe… Kelle… 1988-08-04 00:00:00    30   115     2
+   6        6 US      Mid … Morga… 1993-02-26 00:00:00    26    82     6
+   7        7 US      Defe… Abby … 1993-05-13 00:00:00    26    37     0
+   8        8 US      Mid … Julie… 1992-04-06 00:00:00    27    79    18
+   9        9 US      Mid … Linds… 1994-05-26 00:00:00    25    66     8
+  10       10 US      Forw… Carli… 1982-07-16 00:00:00    36   271   107
+  # … with 542 more rows, and 1 more variable: club &lt;chr&gt;
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+squads %&gt;%
+  mutate(pos = case_when(pos == "DF" ~ "Defense",
+                         pos == "MF" ~ "Mid fielder",
+                         pos == "GK" ~ "Goal keeper",
+                         pos == "FW" ~ "Forward")) %&gt;%
+* ggplot()
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_world_cup_6-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+squads %&gt;%
+  mutate(pos = case_when(pos == "DF" ~ "Defense",
+                         pos == "MF" ~ "Mid fielder",
+                         pos == "GK" ~ "Goal keeper",
+                         pos == "FW" ~ "Forward")) %&gt;%
+  ggplot() +
+* aes(x = caps)
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_world_cup_7-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+squads %&gt;%
+  mutate(pos = case_when(pos == "DF" ~ "Defense",
+                         pos == "MF" ~ "Mid fielder",
+                         pos == "GK" ~ "Goal keeper",
+                         pos == "FW" ~ "Forward")) %&gt;%
+  ggplot() +
+  aes(x = caps) +
+* aes(y = goals)
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_world_cup_8-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+squads %&gt;%
+  mutate(pos = case_when(pos == "DF" ~ "Defense",
+                         pos == "MF" ~ "Mid fielder",
+                         pos == "GK" ~ "Goal keeper",
+                         pos == "FW" ~ "Forward")) %&gt;%
+  ggplot() +
+  aes(x = caps) +
+  aes(y = goals) +
+* geom_point()
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_world_cup_9-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+squads %&gt;%
+  mutate(pos = case_when(pos == "DF" ~ "Defense",
+                         pos == "MF" ~ "Mid fielder",
+                         pos == "GK" ~ "Goal keeper",
+                         pos == "FW" ~ "Forward")) %&gt;%
+  ggplot() +
+  aes(x = caps) +
+  aes(y = goals) +
+  geom_point() +
+* geom_smooth(method = lm)
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_world_cup_10-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+squads %&gt;%
+  mutate(pos = case_when(pos == "DF" ~ "Defense",
+                         pos == "MF" ~ "Mid fielder",
+                         pos == "GK" ~ "Goal keeper",
+                         pos == "FW" ~ "Forward")) %&gt;%
+  ggplot() +
+  aes(x = caps) +
+  aes(y = goals) +
+  geom_point() +
+  geom_smooth(method = lm) +
+* aes(colour = pos)
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_world_cup_11-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+squads %&gt;%
+  mutate(pos = case_when(pos == "DF" ~ "Defense",
+                         pos == "MF" ~ "Mid fielder",
+                         pos == "GK" ~ "Goal keeper",
+                         pos == "FW" ~ "Forward")) %&gt;%
+  ggplot() +
+  aes(x = caps) +
+  aes(y = goals) +
+  geom_point() +
+  geom_smooth(method = lm) +
+  aes(colour = pos) +
+* scale_colour_viridis_d(option = "B", guide = F)
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_world_cup_12-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+squads %&gt;%
+  mutate(pos = case_when(pos == "DF" ~ "Defense",
+                         pos == "MF" ~ "Mid fielder",
+                         pos == "GK" ~ "Goal keeper",
+                         pos == "FW" ~ "Forward")) %&gt;%
+  ggplot() +
+  aes(x = caps) +
+  aes(y = goals) +
+  geom_point() +
+  geom_smooth(method = lm) +
+  aes(colour = pos) +
+  scale_colour_viridis_d(option = "B", guide = F) +
+* facet_wrap(~pos)
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_world_cup_13-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+squads %&gt;%
+  mutate(pos = case_when(pos == "DF" ~ "Defense",
+                         pos == "MF" ~ "Mid fielder",
+                         pos == "GK" ~ "Goal keeper",
+                         pos == "FW" ~ "Forward")) %&gt;%
+  ggplot() +
+  aes(x = caps) +
+  aes(y = goals) +
+  geom_point() +
+  geom_smooth(method = lm) +
+  aes(colour = pos) +
+  scale_colour_viridis_d(option = "B", guide = F) +
+  facet_wrap(~pos) +
+* labs(x = "Caps")
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_world_cup_14-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+squads %&gt;%
+  mutate(pos = case_when(pos == "DF" ~ "Defense",
+                         pos == "MF" ~ "Mid fielder",
+                         pos == "GK" ~ "Goal keeper",
+                         pos == "FW" ~ "Forward")) %&gt;%
+  ggplot() +
+  aes(x = caps) +
+  aes(y = goals) +
+  geom_point() +
+  geom_smooth(method = lm) +
+  aes(colour = pos) +
+  scale_colour_viridis_d(option = "B", guide = F) +
+  facet_wrap(~pos) +
+  labs(x = "Caps") +
+* labs(y = "Goals")
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_world_cup_15-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+squads %&gt;%
+  mutate(pos = case_when(pos == "DF" ~ "Defense",
+                         pos == "MF" ~ "Mid fielder",
+                         pos == "GK" ~ "Goal keeper",
+                         pos == "FW" ~ "Forward")) %&gt;%
+  ggplot() +
+  aes(x = caps) +
+  aes(y = goals) +
+  geom_point() +
+  geom_smooth(method = lm) +
+  aes(colour = pos) +
+  scale_colour_viridis_d(option = "B", guide = F) +
+  facet_wrap(~pos) +
+  labs(x = "Caps") +
+  labs(y = "Goals") +
+* labs(title = "Relationship Between Goals and Caps")
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_world_cup_16-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+squads %&gt;%
+  mutate(pos = case_when(pos == "DF" ~ "Defense",
+                         pos == "MF" ~ "Mid fielder",
+                         pos == "GK" ~ "Goal keeper",
+                         pos == "FW" ~ "Forward")) %&gt;%
+  ggplot() +
+  aes(x = caps) +
+  aes(y = goals) +
+  geom_point() +
+  geom_smooth(method = lm) +
+  aes(colour = pos) +
+  scale_colour_viridis_d(option = "B", guide = F) +
+  facet_wrap(~pos) +
+  labs(x = "Caps") +
+  labs(y = "Goals") +
+  labs(title = "Relationship Between Goals and Caps") +
+* labs(subtitle = "For ladies who featured in the 2019 FIFA women's world cup\nbased on players positon on the field")
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_world_cup_17-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+squads %&gt;%
+  mutate(pos = case_when(pos == "DF" ~ "Defense",
+                         pos == "MF" ~ "Mid fielder",
+                         pos == "GK" ~ "Goal keeper",
+                         pos == "FW" ~ "Forward")) %&gt;%
+  ggplot() +
+  aes(x = caps) +
+  aes(y = goals) +
+  geom_point() +
+  geom_smooth(method = lm) +
+  aes(colour = pos) +
+  scale_colour_viridis_d(option = "B", guide = F) +
+  facet_wrap(~pos) +
+  labs(x = "Caps") +
+  labs(y = "Goals") +
+  labs(title = "Relationship Between Goals and Caps") +
+  labs(subtitle = "For ladies who featured in the 2019 FIFA women's world cup\nbased on players positon on the field") +
+* labs(caption = "Source: data.world | Visualization: Ifeoma Egbogah")
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_world_cup_18-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+squads %&gt;%
+  mutate(pos = case_when(pos == "DF" ~ "Defense",
+                         pos == "MF" ~ "Mid fielder",
+                         pos == "GK" ~ "Goal keeper",
+                         pos == "FW" ~ "Forward")) %&gt;%
+  ggplot() +
+  aes(x = caps) +
+  aes(y = goals) +
+  geom_point() +
+  geom_smooth(method = lm) +
+  aes(colour = pos) +
+  scale_colour_viridis_d(option = "B", guide = F) +
+  facet_wrap(~pos) +
+  labs(x = "Caps") +
+  labs(y = "Goals") +
+  labs(title = "Relationship Between Goals and Caps") +
+  labs(subtitle = "For ladies who featured in the 2019 FIFA women's world cup\nbased on players positon on the field") +
+  labs(caption = "Source: data.world | Visualization: Ifeoma Egbogah") +
+* theme(plot.subtitle =
+*         element_text(size = 10,
+*                      color = "#939184",
+*                      margin =
+*                        margin(b = 0.1, t = -0.1,
+*                               l = 2, unit = "cm"),
+*                      face = "bold"))
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_world_cup_25-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+squads %&gt;%
+  mutate(pos = case_when(pos == "DF" ~ "Defense",
+                         pos == "MF" ~ "Mid fielder",
+                         pos == "GK" ~ "Goal keeper",
+                         pos == "FW" ~ "Forward")) %&gt;%
+  ggplot() +
+  aes(x = caps) +
+  aes(y = goals) +
+  geom_point() +
+  geom_smooth(method = lm) +
+  aes(colour = pos) +
+  scale_colour_viridis_d(option = "B", guide = F) +
+  facet_wrap(~pos) +
+  labs(x = "Caps") +
+  labs(y = "Goals") +
+  labs(title = "Relationship Between Goals and Caps") +
+  labs(subtitle = "For ladies who featured in the 2019 FIFA women's world cup\nbased on players positon on the field") +
+  labs(caption = "Source: data.world | Visualization: Ifeoma Egbogah") +
+  theme(plot.subtitle =
+          element_text(size = 10,
+                       color = "#939184",
+                       margin =
+                         margin(b = 0.1, t = -0.1,
+                                l = 2, unit = "cm"),
+                       face = "bold")) +
+* theme(plot.caption =
+*         element_text(size = 7,
+*                      hjust = .5,
+*                      margin =
+*                        margin(t = 0.2,
+*                               b = 0,
+*                               unit = "cm"),
+*                               color = "#939184"))
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_world_cup_33-1.png" width="100%" /&gt;
+]]
+
+
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 65%}
+&lt;/style&gt;
+
+---
+
+name: teacher
+
+# Christian Burkhart's *Some teachers have it tough*
+
+&lt;img src="figures/student_teacher_ratio.png" width="70%" /&gt;
+
+---
 
 
 
@@ -30,19 +1607,15 @@ class: center, middle, inverse, title-slide
 
 # "Teachers have it Tough" by Christian Burkhart 
 
-&lt;img src="figures/student_teacher_ratio.png" width="100%" /&gt;
 
 
 ---
 
+## set up and getting data
 
 
 ```r
 library(tidyverse)
-library(countrycode)
-library(gghighlight)
-library(cowplot)
-library(mapproj)
 ```
 
 
@@ -54,18 +1627,21 @@ student_ratio &lt;- readr::read_csv(tidy_tuesday_url)
 
 ---
 
+## prepping data
+
+---
+
 
 
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 *student_ratio
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ```
   # A tibble: 5,189 x 8
@@ -87,73 +1663,102 @@ count: false
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 student_ratio %&gt;%
-* filter(indicator == "Tertiary Education")
+* select(country, student_ratio, indicator)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ```
-  # A tibble: 550 x 8
-     edulit_ind indicator country_code country  year student_ratio flag_codes
-     &lt;chr&gt;      &lt;chr&gt;     &lt;chr&gt;        &lt;chr&gt;   &lt;int&gt;         &lt;dbl&gt; &lt;chr&gt;     
-   1 PTRHC_5T8  Tertiary… PLW          Palau    2013          8.22 &lt;NA&gt;      
-   2 PTRHC_5T8  Tertiary… SWE          Sweden   2012         14.0  &lt;NA&gt;      
-   3 PTRHC_5T8  Tertiary… SWE          Sweden   2013         13.4  &lt;NA&gt;      
-   4 PTRHC_5T8  Tertiary… SWE          Sweden   2014         12.9  &lt;NA&gt;      
-   5 PTRHC_5T8  Tertiary… SWE          Sweden   2015         12.6  &lt;NA&gt;      
-   6 PTRHC_5T8  Tertiary… SWE          Sweden   2016         12.4  &lt;NA&gt;      
-   7 PTRHC_5T8  Tertiary… BEL          Belgium  2012         16.6  &lt;NA&gt;      
-   8 PTRHC_5T8  Tertiary… BEL          Belgium  2013         16.3  &lt;NA&gt;      
-   9 PTRHC_5T8  Tertiary… BEL          Belgium  2014         17.3  &lt;NA&gt;      
-  10 PTRHC_5T8  Tertiary… BEL          Belgium  2015         17.6  &lt;NA&gt;      
-  # … with 540 more rows, and 1 more variable: flags &lt;chr&gt;
+  # A tibble: 5,189 x 3
+     country                          student_ratio indicator                
+     &lt;chr&gt;                                    &lt;dbl&gt; &lt;chr&gt;                    
+   1 Mauritania                               56.6  Lower Secondary Education
+   2 Mauritania                               51.9  Lower Secondary Education
+   3 Mauritania                               53.2  Lower Secondary Education
+   4 Mauritania                               38.2  Lower Secondary Education
+   5 Democratic Republic of the Congo         34.7  Primary Education        
+   6 Democratic Republic of the Congo         37.1  Primary Education        
+   7 Democratic Republic of the Congo         35.3  Primary Education        
+   8 Democratic Republic of the Congo         33.2  Primary Education        
+   9 Syrian Arab Republic                      8.47 Upper Secondary Education
+  10 Equatorial Guinea                        17.5  Pre-Primary Education    
+  # … with 5,179 more rows
 ```
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 student_ratio %&gt;%
+  select(country, student_ratio, indicator) %&gt;%
+* filter(indicator == "Tertiary Education")
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 550 x 3
+     country student_ratio indicator         
+     &lt;chr&gt;           &lt;dbl&gt; &lt;chr&gt;             
+   1 Palau            8.22 Tertiary Education
+   2 Sweden          14.0  Tertiary Education
+   3 Sweden          13.4  Tertiary Education
+   4 Sweden          12.9  Tertiary Education
+   5 Sweden          12.6  Tertiary Education
+   6 Sweden          12.4  Tertiary Education
+   7 Belgium         16.6  Tertiary Education
+   8 Belgium         16.3  Tertiary Education
+   9 Belgium         17.3  Tertiary Education
+  10 Belgium         17.6  Tertiary Education
+  # … with 540 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+student_ratio %&gt;%
+  select(country, student_ratio, indicator) %&gt;%
   filter(indicator == "Tertiary Education") %&gt;%
 * group_by(country)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ```
-  # A tibble: 550 x 8
+  # A tibble: 550 x 3
   # Groups:   country [148]
-     edulit_ind indicator country_code country  year student_ratio flag_codes
-     &lt;chr&gt;      &lt;chr&gt;     &lt;chr&gt;        &lt;chr&gt;   &lt;int&gt;         &lt;dbl&gt; &lt;chr&gt;     
-   1 PTRHC_5T8  Tertiary… PLW          Palau    2013          8.22 &lt;NA&gt;      
-   2 PTRHC_5T8  Tertiary… SWE          Sweden   2012         14.0  &lt;NA&gt;      
-   3 PTRHC_5T8  Tertiary… SWE          Sweden   2013         13.4  &lt;NA&gt;      
-   4 PTRHC_5T8  Tertiary… SWE          Sweden   2014         12.9  &lt;NA&gt;      
-   5 PTRHC_5T8  Tertiary… SWE          Sweden   2015         12.6  &lt;NA&gt;      
-   6 PTRHC_5T8  Tertiary… SWE          Sweden   2016         12.4  &lt;NA&gt;      
-   7 PTRHC_5T8  Tertiary… BEL          Belgium  2012         16.6  &lt;NA&gt;      
-   8 PTRHC_5T8  Tertiary… BEL          Belgium  2013         16.3  &lt;NA&gt;      
-   9 PTRHC_5T8  Tertiary… BEL          Belgium  2014         17.3  &lt;NA&gt;      
-  10 PTRHC_5T8  Tertiary… BEL          Belgium  2015         17.6  &lt;NA&gt;      
-  # … with 540 more rows, and 1 more variable: flags &lt;chr&gt;
+     country student_ratio indicator         
+     &lt;chr&gt;           &lt;dbl&gt; &lt;chr&gt;             
+   1 Palau            8.22 Tertiary Education
+   2 Sweden          14.0  Tertiary Education
+   3 Sweden          13.4  Tertiary Education
+   4 Sweden          12.9  Tertiary Education
+   5 Sweden          12.6  Tertiary Education
+   6 Sweden          12.4  Tertiary Education
+   7 Belgium         16.6  Tertiary Education
+   8 Belgium         16.3  Tertiary Education
+   9 Belgium         17.3  Tertiary Education
+  10 Belgium         17.6  Tertiary Education
+  # … with 540 more rows
 ```
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 student_ratio %&gt;%
+  select(country, student_ratio, indicator) %&gt;%
   filter(indicator == "Tertiary Education") %&gt;%
   group_by(country) %&gt;%
 * summarise(student_ratio =
@@ -161,7 +1766,7 @@ student_ratio %&gt;%
 *                  na.rm = TRUE))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ```
   # A tibble: 148 x 2
@@ -183,20 +1788,20 @@ student_ratio %&gt;%
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 student_ratio %&gt;%
+  select(country, student_ratio, indicator) %&gt;%
   filter(indicator == "Tertiary Education") %&gt;%
   group_by(country) %&gt;%
-  summarise(student_ratio = 
-              mean(student_ratio, 
+  summarise(student_ratio =
+              mean(student_ratio,
                    na.rm = TRUE)) %&gt;%
 * ungroup()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ```
   # A tibble: 148 x 2
@@ -218,21 +1823,21 @@ student_ratio %&gt;%
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 student_ratio %&gt;%
+  select(country, student_ratio, indicator) %&gt;%
   filter(indicator == "Tertiary Education") %&gt;%
   group_by(country) %&gt;%
-  summarise(student_ratio = 
-              mean(student_ratio, 
+  summarise(student_ratio =
+              mean(student_ratio,
                    na.rm = TRUE)) %&gt;%
   ungroup() %&gt;%
 * drop_na(student_ratio)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ```
   # A tibble: 146 x 2
@@ -254,22 +1859,22 @@ student_ratio %&gt;%
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 student_ratio %&gt;%
+  select(country, student_ratio, indicator) %&gt;%
   filter(indicator == "Tertiary Education") %&gt;%
   group_by(country) %&gt;%
-  summarise(student_ratio = 
-              mean(student_ratio, 
+  summarise(student_ratio =
+              mean(student_ratio,
                    na.rm = TRUE)) %&gt;%
   ungroup() %&gt;%
   drop_na(student_ratio) %&gt;%
 * rename(region = country)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ```
   # A tibble: 146 x 2
@@ -291,25 +1896,26 @@ student_ratio %&gt;%
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 student_ratio %&gt;%
+  select(country, student_ratio, indicator) %&gt;%
   filter(indicator == "Tertiary Education") %&gt;%
   group_by(country) %&gt;%
-  summarise(student_ratio = 
-              mean(student_ratio, 
+  summarise(student_ratio =
+              mean(student_ratio,
                    na.rm = TRUE)) %&gt;%
   ungroup() %&gt;%
   drop_na(student_ratio) %&gt;%
   rename(region = country) %&gt;%
 * full_join(
-*   map_data("world") %&gt;% filter(region != "Antarctica"),
+*   map_data("world") %&gt;%
+*     filter(region != "Antarctica"),
 *   by = "region")
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ```
   # A tibble: 94,703 x 7
@@ -331,32 +1937,33 @@ student_ratio %&gt;%
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 student_ratio %&gt;%
+  select(country, student_ratio, indicator) %&gt;%
   filter(indicator == "Tertiary Education") %&gt;%
   group_by(country) %&gt;%
-  summarise(student_ratio = 
-              mean(student_ratio, 
+  summarise(student_ratio =
+              mean(student_ratio,
                    na.rm = TRUE)) %&gt;%
   ungroup() %&gt;%
   drop_na(student_ratio) %&gt;%
   rename(region = country) %&gt;%
   full_join(
-    map_data("world") %&gt;% filter(region != "Antarctica"), 
+    map_data("world") %&gt;%
+      filter(region != "Antarctica"),
     by = "region") -&gt;
 *student_ratio_world
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ]]
 
 ---
 
-# Build figure
+## Build figure
 
 ---
 
@@ -367,113 +1974,106 @@ student_ratio %&gt;%
 
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 *ggplot(data = student_ratio_world)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="tidytuesday_highlights_files/figure-html/output_map_1-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-ggplot(data = student_ratio_world) + 
+ggplot(data = student_ratio_world) +
 * aes(x = long)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="tidytuesday_highlights_files/figure-html/output_map_2-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-ggplot(data = student_ratio_world) + 
-  aes(x = long) + 
+ggplot(data = student_ratio_world) +
+  aes(x = long) +
 * aes(y = lat)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="tidytuesday_highlights_files/figure-html/output_map_3-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-ggplot(data = student_ratio_world) + 
-  aes(x = long) + 
+ggplot(data = student_ratio_world) +
+  aes(x = long) +
   aes(y = lat) +
 * aes(map_id = region)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="tidytuesday_highlights_files/figure-html/output_map_4-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-ggplot(data = student_ratio_world) + 
-  aes(x = long) + 
+ggplot(data = student_ratio_world) +
+  aes(x = long) +
   aes(y = lat) +
-  aes(map_id = region) + 
+  aes(map_id = region) +
 * geom_map(map = student_ratio_world,
 *          col = "grey34",
 *          alpha = .6, size = .05)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="tidytuesday_highlights_files/figure-html/output_map_7-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-ggplot(data = student_ratio_world) + 
-  aes(x = long) + 
+ggplot(data = student_ratio_world) +
+  aes(x = long) +
   aes(y = lat) +
-  aes(map_id = region) + 
-  geom_map(map = student_ratio_world, 
-           col = "grey34", 
+  aes(map_id = region) +
+  geom_map(map = student_ratio_world,
+           col = "grey34",
            alpha = .6, size = .05) +
 * aes(fill = student_ratio)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="tidytuesday_highlights_files/figure-html/output_map_8-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-ggplot(data = student_ratio_world) + 
-  aes(x = long) + 
+ggplot(data = student_ratio_world) +
+  aes(x = long) +
   aes(y = lat) +
-  aes(map_id = region) + 
-  geom_map(map = student_ratio_world, 
-           col = "grey34", 
+  aes(map_id = region) +
+  geom_map(map = student_ratio_world,
+           col = "grey34",
            alpha = .6, size = .05) +
   aes(fill = student_ratio) +
 * scale_fill_gradient(low = "#55bee9",
@@ -481,261 +2081,252 @@ ggplot(data = student_ratio_world) +
 *                     na.value = "#282828")
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="tidytuesday_highlights_files/figure-html/output_map_11-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-ggplot(data = student_ratio_world) + 
-  aes(x = long) + 
+ggplot(data = student_ratio_world) +
+  aes(x = long) +
   aes(y = lat) +
-  aes(map_id = region) + 
-  geom_map(map = student_ratio_world, 
-           col = "grey34", 
+  aes(map_id = region) +
+  geom_map(map = student_ratio_world,
+           col = "grey34",
            alpha = .6, size = .05) +
   aes(fill = student_ratio) +
-  scale_fill_gradient(low = "#55bee9", 
-                      high = "#f1b545", 
+  scale_fill_gradient(low = "#55bee9",
+                      high = "#f1b545",
                       na.value = "#282828") +
 * scale_y_continuous(breaks = c())
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="tidytuesday_highlights_files/figure-html/output_map_12-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-ggplot(data = student_ratio_world) + 
-  aes(x = long) + 
+ggplot(data = student_ratio_world) +
+  aes(x = long) +
   aes(y = lat) +
-  aes(map_id = region) + 
-  geom_map(map = student_ratio_world, 
-           col = "grey34", 
+  aes(map_id = region) +
+  geom_map(map = student_ratio_world,
+           col = "grey34",
            alpha = .6, size = .05) +
   aes(fill = student_ratio) +
-  scale_fill_gradient(low = "#55bee9", 
-                      high = "#f1b545", 
+  scale_fill_gradient(low = "#55bee9",
+                      high = "#f1b545",
                       na.value = "#282828") +
   scale_y_continuous(breaks = c()) +
 * scale_x_continuous(breaks = c())
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="tidytuesday_highlights_files/figure-html/output_map_13-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-ggplot(data = student_ratio_world) + 
-  aes(x = long) + 
+ggplot(data = student_ratio_world) +
+  aes(x = long) +
   aes(y = lat) +
-  aes(map_id = region) + 
-  geom_map(map = student_ratio_world, 
-           col = "grey34", 
+  aes(map_id = region) +
+  geom_map(map = student_ratio_world,
+           col = "grey34",
            alpha = .6, size = .05) +
   aes(fill = student_ratio) +
-  scale_fill_gradient(low = "#55bee9", 
-                      high = "#f1b545", 
+  scale_fill_gradient(low = "#55bee9",
+                      high = "#f1b545",
                       na.value = "#282828") +
   scale_y_continuous(breaks = c()) +
   scale_x_continuous(breaks = c()) +
 * labs(x = "")
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="tidytuesday_highlights_files/figure-html/output_map_14-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-ggplot(data = student_ratio_world) + 
-  aes(x = long) + 
+ggplot(data = student_ratio_world) +
+  aes(x = long) +
   aes(y = lat) +
-  aes(map_id = region) + 
-  geom_map(map = student_ratio_world, 
-           col = "grey34", 
+  aes(map_id = region) +
+  geom_map(map = student_ratio_world,
+           col = "grey34",
            alpha = .6, size = .05) +
   aes(fill = student_ratio) +
-  scale_fill_gradient(low = "#55bee9", 
-                      high = "#f1b545", 
+  scale_fill_gradient(low = "#55bee9",
+                      high = "#f1b545",
                       na.value = "#282828") +
   scale_y_continuous(breaks = c()) +
   scale_x_continuous(breaks = c()) +
-  labs(x = "") + 
+  labs(x = "") +
 * labs(y = "")
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="tidytuesday_highlights_files/figure-html/output_map_15-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-ggplot(data = student_ratio_world) + 
-  aes(x = long) + 
+ggplot(data = student_ratio_world) +
+  aes(x = long) +
   aes(y = lat) +
-  aes(map_id = region) + 
-  geom_map(map = student_ratio_world, 
-           col = "grey34", 
+  aes(map_id = region) +
+  geom_map(map = student_ratio_world,
+           col = "grey34",
            alpha = .6, size = .05) +
   aes(fill = student_ratio) +
-  scale_fill_gradient(low = "#55bee9", 
-                      high = "#f1b545", 
+  scale_fill_gradient(low = "#55bee9",
+                      high = "#f1b545",
                       na.value = "#282828") +
   scale_y_continuous(breaks = c()) +
   scale_x_continuous(breaks = c()) +
-  labs(x = "") + 
+  labs(x = "") +
   labs(y = "") +
 * guides(fill =
 *          guide_legend(title =
 *                         "# of students\nper teacher"))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="tidytuesday_highlights_files/figure-html/output_map_18-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-ggplot(data = student_ratio_world) + 
-  aes(x = long) + 
+ggplot(data = student_ratio_world) +
+  aes(x = long) +
   aes(y = lat) +
-  aes(map_id = region) + 
-  geom_map(map = student_ratio_world, 
-           col = "grey34", 
+  aes(map_id = region) +
+  geom_map(map = student_ratio_world,
+           col = "grey34",
            alpha = .6, size = .05) +
   aes(fill = student_ratio) +
-  scale_fill_gradient(low = "#55bee9", 
-                      high = "#f1b545", 
+  scale_fill_gradient(low = "#55bee9",
+                      high = "#f1b545",
                       na.value = "#282828") +
   scale_y_continuous(breaks = c()) +
   scale_x_continuous(breaks = c()) +
-  labs(x = "") + 
+  labs(x = "") +
   labs(y = "") +
-  guides(fill = 
-           guide_legend(title = 
+  guides(fill =
+           guide_legend(title =
                           "# of students\nper teacher")) +
 * coord_map("gilbert", xlim = c(-180, 180))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="tidytuesday_highlights_files/figure-html/output_map_19-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-ggplot(data = student_ratio_world) + 
-  aes(x = long) + 
+ggplot(data = student_ratio_world) +
+  aes(x = long) +
   aes(y = lat) +
-  aes(map_id = region) + 
-  geom_map(map = student_ratio_world, 
-           col = "grey34", 
+  aes(map_id = region) +
+  geom_map(map = student_ratio_world,
+           col = "grey34",
            alpha = .6, size = .05) +
   aes(fill = student_ratio) +
-  scale_fill_gradient(low = "#55bee9", 
-                      high = "#f1b545", 
+  scale_fill_gradient(low = "#55bee9",
+                      high = "#f1b545",
                       na.value = "#282828") +
   scale_y_continuous(breaks = c()) +
   scale_x_continuous(breaks = c()) +
-  labs(x = "") + 
+  labs(x = "") +
   labs(y = "") +
-  guides(fill = 
-           guide_legend(title = 
+  guides(fill =
+           guide_legend(title =
                           "# of students\nper teacher")) +
   coord_map("gilbert", xlim = c(-180, 180)) +
 * labs(title = '"Oh dear, some teachers have it tough"')
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="tidytuesday_highlights_files/figure-html/output_map_20-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-ggplot(data = student_ratio_world) + 
-  aes(x = long) + 
+ggplot(data = student_ratio_world) +
+  aes(x = long) +
   aes(y = lat) +
-  aes(map_id = region) + 
-  geom_map(map = student_ratio_world, 
-           col = "grey34", 
+  aes(map_id = region) +
+  geom_map(map = student_ratio_world,
+           col = "grey34",
            alpha = .6, size = .05) +
   aes(fill = student_ratio) +
-  scale_fill_gradient(low = "#55bee9", 
-                      high = "#f1b545", 
+  scale_fill_gradient(low = "#55bee9",
+                      high = "#f1b545",
                       na.value = "#282828") +
   scale_y_continuous(breaks = c()) +
   scale_x_continuous(breaks = c()) +
-  labs(x = "") + 
+  labs(x = "") +
   labs(y = "") +
-  guides(fill = 
-           guide_legend(title = 
+  guides(fill =
+           guide_legend(title =
                           "# of students\nper teacher")) +
   coord_map("gilbert", xlim = c(-180, 180)) +
   labs(title = '"Oh dear, some teachers have it tough"') +
 * labs(subtitle = "How the student-to-teacher ratio varies across the globe*")
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="tidytuesday_highlights_files/figure-html/output_map_21-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-ggplot(data = student_ratio_world) + 
-  aes(x = long) + 
+ggplot(data = student_ratio_world) +
+  aes(x = long) +
   aes(y = lat) +
-  aes(map_id = region) + 
-  geom_map(map = student_ratio_world, 
-           col = "grey34", 
+  aes(map_id = region) +
+  geom_map(map = student_ratio_world,
+           col = "grey34",
            alpha = .6, size = .05) +
   aes(fill = student_ratio) +
-  scale_fill_gradient(low = "#55bee9", 
-                      high = "#f1b545", 
+  scale_fill_gradient(low = "#55bee9",
+                      high = "#f1b545",
                       na.value = "#282828") +
   scale_y_continuous(breaks = c()) +
   scale_x_continuous(breaks = c()) +
-  labs(x = "") + 
+  labs(x = "") +
   labs(y = "") +
-  guides(fill = 
-           guide_legend(title = 
+  guides(fill =
+           guide_legend(title =
                           "# of students\nper teacher")) +
   coord_map("gilbert", xlim = c(-180, 180)) +
   labs(title = '"Oh dear, some teachers have it tough"') +
@@ -743,42 +2334,41 @@ ggplot(data = student_ratio_world) +
 * labs(caption = "Visualization: Christian Burkhart for #TidyTuesday\nData:\n*average 2012-2017 Terciary Education")
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="tidytuesday_highlights_files/figure-html/output_map_22-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-ggplot(data = student_ratio_world) + 
-  aes(x = long) + 
+ggplot(data = student_ratio_world) +
+  aes(x = long) +
   aes(y = lat) +
-  aes(map_id = region) + 
-  geom_map(map = student_ratio_world, 
-           col = "grey34", 
+  aes(map_id = region) +
+  geom_map(map = student_ratio_world,
+           col = "grey34",
            alpha = .6, size = .05) +
   aes(fill = student_ratio) +
-  scale_fill_gradient(low = "#55bee9", 
-                      high = "#f1b545", 
+  scale_fill_gradient(low = "#55bee9",
+                      high = "#f1b545",
                       na.value = "#282828") +
   scale_y_continuous(breaks = c()) +
   scale_x_continuous(breaks = c()) +
-  labs(x = "") + 
+  labs(x = "") +
   labs(y = "") +
-  guides(fill = 
-           guide_legend(title = 
+  guides(fill =
+           guide_legend(title =
                           "# of students\nper teacher")) +
   coord_map("gilbert", xlim = c(-180, 180)) +
   labs(title = '"Oh dear, some teachers have it tough"') +
   labs(subtitle = "How the student-to-teacher ratio varies across the globe*") +
   labs(caption = "Visualization: Christian Burkhart for #TidyTuesday\nData:\n*average 2012-2017 Terciary Education") -&gt;
-*g 
+*plot
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ]]
 
@@ -786,7 +2376,7 @@ ggplot(data = student_ratio_world) +
 
 
 
-# Adjust theme
+## Adjust theme
 
 ---
 
@@ -794,41 +2384,22 @@ ggplot(data = student_ratio_world) +
 
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-*g 
+*plot
 ```
 ]]
-.column[.content.center[
-&lt;img src="tidytuesday_highlights_files/figure-html/output_thematic_1-1.png" width="100%" /&gt;
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_complete_teacher_student_1-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
-* theme(plot.background =
-*         element_rect(fill = "#323232"))
-```
-]]
-.column[.content.center[
-&lt;img src="tidytuesday_highlights_files/figure-html/output_thematic_3-1.png" width="100%" /&gt;
-]]
----
-class: split-40
-count: false
-
-.column[.content[
-
-```r
-g + 
-  theme(plot.background = 
-          element_rect(fill = "#323232")) +
+plot +
 * theme(plot.title =
 *         element_text(color = "#ffffff",
 *                      margin = margin(t = 30,
@@ -836,155 +2407,140 @@ g +
 *                      size = 12))
 ```
 ]]
-.column[.content.center[
-&lt;img src="tidytuesday_highlights_files/figure-html/output_thematic_8-1.png" width="100%" /&gt;
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_complete_teacher_student_6-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
-  theme(plot.background = 
-          element_rect(fill = "#323232")) +
-  theme(plot.title = 
-          element_text(color = "#ffffff", 
-                       margin = margin(t = 30, 
-                                       b = 10), 
+plot +
+  theme(plot.title =
+          element_text(color = "#ffffff",
+                       margin = margin(t = 30,
+                                       b = 10),
                        size = 12)) +
 * theme(plot.subtitle =
 *         element_text(color = "#ababab",
 *                      margin = margin(b = 20),
-*                      size = 10, hjust = 0.7))
+*                      size = 10))
 ```
 ]]
-.column[.content.center[
-&lt;img src="tidytuesday_highlights_files/figure-html/output_thematic_12-1.png" width="100%" /&gt;
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_complete_teacher_student_10-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
-  theme(plot.background = 
-          element_rect(fill = "#323232")) +
-  theme(plot.title = 
-          element_text(color = "#ffffff", 
-                       margin = margin(t = 30, 
-                                       b = 10), 
+plot +
+  theme(plot.title =
+          element_text(color = "#ffffff",
+                       margin = margin(t = 30,
+                                       b = 10),
                        size = 12)) +
-  theme(plot.subtitle = 
-          element_text(color = "#ababab", 
-                       margin = margin(b = 20), 
-                       size = 10, hjust = 0.7)) +
+  theme(plot.subtitle =
+          element_text(color = "#ababab",
+                       margin = margin(b = 20),
+                       size = 10)) +
 * theme(plot.caption =
 *         element_text(color = "#ababab",
 *                      size = 7, hjust = 1))
 ```
 ]]
-.column[.content.center[
-&lt;img src="tidytuesday_highlights_files/figure-html/output_thematic_15-1.png" width="100%" /&gt;
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_complete_teacher_student_13-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
-  theme(plot.background = 
-          element_rect(fill = "#323232")) +
-  theme(plot.title = 
-          element_text(color = "#ffffff", 
-                       margin = margin(t = 30, 
-                                       b = 10), 
+plot +
+  theme(plot.title =
+          element_text(color = "#ffffff",
+                       margin = margin(t = 30,
+                                       b = 10),
                        size = 12)) +
-  theme(plot.subtitle = 
-          element_text(color = "#ababab", 
-                       margin = margin(b = 20), 
-                       size = 10, hjust = 0.7)) +
-  theme(plot.caption = 
-          element_text(color = "#ababab", 
+  theme(plot.subtitle =
+          element_text(color = "#ababab",
+                       margin = margin(b = 20),
+                       size = 10)) +
+  theme(plot.caption =
+          element_text(color = "#ababab",
                        size = 7, hjust = 1)) +
 * theme(plot.background  =
 *         element_rect(fill  = "#323232"))
 ```
 ]]
-.column[.content.center[
-&lt;img src="tidytuesday_highlights_files/figure-html/output_thematic_17-1.png" width="100%" /&gt;
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_complete_teacher_student_15-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
-  theme(plot.background = 
-          element_rect(fill = "#323232")) +
-  theme(plot.title = 
-          element_text(color = "#ffffff", 
-                       margin = margin(t = 30, 
-                                       b = 10), 
+plot +
+  theme(plot.title =
+          element_text(color = "#ffffff",
+                       margin = margin(t = 30,
+                                       b = 10),
                        size = 12)) +
-  theme(plot.subtitle = 
-          element_text(color = "#ababab", 
-                       margin = margin(b = 20), 
-                       size = 10, hjust = 0.7)) +
-  theme(plot.caption = 
-          element_text(color = "#ababab", 
+  theme(plot.subtitle =
+          element_text(color = "#ababab",
+                       margin = margin(b = 20),
+                       size = 10)) +
+  theme(plot.caption =
+          element_text(color = "#ababab",
                        size = 7, hjust = 1)) +
-  theme(plot.background  = 
+  theme(plot.background  =
           element_rect(fill  = "#323232")) +
 * theme(legend.title =
 *         element_text(color = "#6d6d6d",
 *                      size = 8))
 ```
 ]]
-.column[.content.center[
-&lt;img src="tidytuesday_highlights_files/figure-html/output_thematic_20-1.png" width="100%" /&gt;
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_complete_teacher_student_18-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-g + 
-  theme(plot.background = 
-          element_rect(fill = "#323232")) +
-  theme(plot.title = 
-          element_text(color = "#ffffff", 
-                       margin = margin(t = 30, 
-                                       b = 10), 
+plot +
+  theme(plot.title =
+          element_text(color = "#ffffff",
+                       margin = margin(t = 30,
+                                       b = 10),
                        size = 12)) +
-  theme(plot.subtitle = 
-          element_text(color = "#ababab", 
-                       margin = margin(b = 20), 
-                       size = 10, hjust = 0.7)) +
-  theme(plot.caption = 
-          element_text(color = "#ababab", 
+  theme(plot.subtitle =
+          element_text(color = "#ababab",
+                       margin = margin(b = 20),
+                       size = 10)) +
+  theme(plot.caption =
+          element_text(color = "#ababab",
                        size = 7, hjust = 1)) +
-  theme(plot.background  = 
+  theme(plot.background  =
           element_rect(fill  = "#323232")) +
-  theme(legend.title = 
-          element_text(color = "#6d6d6d", 
+  theme(legend.title =
+          element_text(color = "#6d6d6d",
                        size = 8)) +
 * theme(legend.text =
 *         element_text(color = "#6d6d6d",
 *                      size = 8))
 ```
 ]]
-.column[.content.center[
-&lt;img src="tidytuesday_highlights_files/figure-html/output_thematic_23-1.png" width="100%" /&gt;
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_complete_teacher_student_21-1.png" width="100%" /&gt;
 ]]
 
 ---
@@ -994,13 +2550,926 @@ g +
 
 
 &lt;style type="text/css"&gt;
-.remark-code{line-height: 1.5; font-size: 75%}
+.remark-code{line-height: 1.5; font-size: 65%}
 &lt;/style&gt;
 
+---
+
+name: franchises
+
+# David Carayon's *Revenue generated for the 5 most successful media*
+
+&lt;img src="figures/top_5.png" width="70%" /&gt;
+
+---
+
+
+
+
+
+
+
+
+---
+
+
+
+
+
+---
+
+
+```r
+# Data and packages loading -----------------------------------------------
+```
+
+
+# Set up
+
+David uses the tidyverse and #tidytuesday data
+
+
+```r
+library(tidyverse)
+url &lt;- "https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-07-02/media_franchises.csv"
+
+media_franchises &lt;- readr::read_csv(url) %&gt;%
+  mutate(revenue = revenue * 1000000000) 
+```
+
+
+
+
+---
+
+## Data prep
+
+Identifying top revenue media types
+
+
+
+
+
+
+
+---
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*media_franchises
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 321 x 7
+     franchise revenue_category revenue year_created original_media creators
+     &lt;chr&gt;     &lt;chr&gt;              &lt;dbl&gt;        &lt;int&gt; &lt;chr&gt;          &lt;chr&gt;   
+   1 A Song o… Book sales        9.00e8         1996 Novel          George …
+   2 A Song o… Box Office        1.00e6         1996 Novel          George …
+   3 A Song o… Home Video/Ente…  2.80e8         1996 Novel          George …
+   4 A Song o… TV                4.00e9         1996 Novel          George …
+   5 A Song o… Video Games/Gam…  1.32e8         1996 Novel          George …
+   6 Aladdin   Box Office        7.60e8         1992 Animated film  Walt Di…
+   7 Aladdin   Home Video/Ente…  1.00e9         1992 Animated film  Walt Di…
+   8 Aladdin   Merchandise, Li…  5.00e8         1992 Animated film  Walt Di…
+   9 Aladdin   Music             4.47e8         1992 Animated film  Walt Di…
+  10 Aladdin   Video Games/Gam…  2.20e9         1992 Animated film  Walt Di…
+  # … with 311 more rows, and 1 more variable: owners &lt;chr&gt;
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+media_franchises %&gt;%
+* group_by(original_media)
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 321 x 7
+  # Groups:   original_media [18]
+     franchise revenue_category revenue year_created original_media creators
+     &lt;chr&gt;     &lt;chr&gt;              &lt;dbl&gt;        &lt;int&gt; &lt;chr&gt;          &lt;chr&gt;   
+   1 A Song o… Book sales        9.00e8         1996 Novel          George …
+   2 A Song o… Box Office        1.00e6         1996 Novel          George …
+   3 A Song o… Home Video/Ente…  2.80e8         1996 Novel          George …
+   4 A Song o… TV                4.00e9         1996 Novel          George …
+   5 A Song o… Video Games/Gam…  1.32e8         1996 Novel          George …
+   6 Aladdin   Box Office        7.60e8         1992 Animated film  Walt Di…
+   7 Aladdin   Home Video/Ente…  1.00e9         1992 Animated film  Walt Di…
+   8 Aladdin   Merchandise, Li…  5.00e8         1992 Animated film  Walt Di…
+   9 Aladdin   Music             4.47e8         1992 Animated film  Walt Di…
+  10 Aladdin   Video Games/Gam…  2.20e9         1992 Animated film  Walt Di…
+  # … with 311 more rows, and 1 more variable: owners &lt;chr&gt;
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+media_franchises %&gt;%
+  group_by(original_media) %&gt;%
+* summarise(total_revenue = sum(revenue))
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 18 x 2
+     original_media    total_revenue
+     &lt;chr&gt;                     &lt;dbl&gt;
+   1 Animated cartoon    87107000000
+   2 Animated film      102252000000
+   3 Animated series    121024000000
+   4 Anime               47990000000
+   5 Book                82539000000
+   6 Cartoon              4065000000
+   7 Cartoon character   80026000000
+   8 Comic book          95100000000
+   9 Comic strip         17285000000
+  10 Digital pet         11128000000
+  11 Film               111674000000
+  12 Greeting card        9054000000
+  13 Manga              253791000000
+  14 Musical theatre      6155000000
+  15 Novel               85860000000
+  16 Television series   68723000000
+  17 Video game         334900000000
+  18 Visual novel         3569000000
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+media_franchises %&gt;%
+  group_by(original_media) %&gt;%
+  summarise(total_revenue = sum(revenue)) %&gt;%
+* top_n(5, total_revenue)
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 5 x 2
+    original_media  total_revenue
+    &lt;chr&gt;                   &lt;dbl&gt;
+  1 Animated film    102252000000
+  2 Animated series  121024000000
+  3 Film             111674000000
+  4 Manga            253791000000
+  5 Video game       334900000000
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+media_franchises %&gt;%
+  group_by(original_media) %&gt;%
+  summarise(total_revenue = sum(revenue)) %&gt;%
+  top_n(5, total_revenue) %&gt;%
+* pull(original_media)
+```
+]]
+.column[.content[
+
+```
+  [1] "Animated film"   "Animated series" "Film"            "Manga"          
+  [5] "Video game"
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+media_franchises %&gt;%
+  group_by(original_media) %&gt;%
+  summarise(total_revenue = sum(revenue)) %&gt;%
+  top_n(5, total_revenue) %&gt;%
+  pull(original_media) -&gt;
+*top_5_media
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+media_franchises %&gt;%
+  group_by(original_media) %&gt;%
+  summarise(total_revenue = sum(revenue)) %&gt;%
+  top_n(5, total_revenue) %&gt;%
+  pull(original_media) -&gt;
+top_5_media
+*media_franchises
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 321 x 7
+     franchise revenue_category revenue year_created original_media creators
+     &lt;chr&gt;     &lt;chr&gt;              &lt;dbl&gt;        &lt;int&gt; &lt;chr&gt;          &lt;chr&gt;   
+   1 A Song o… Book sales        9.00e8         1996 Novel          George …
+   2 A Song o… Box Office        1.00e6         1996 Novel          George …
+   3 A Song o… Home Video/Ente…  2.80e8         1996 Novel          George …
+   4 A Song o… TV                4.00e9         1996 Novel          George …
+   5 A Song o… Video Games/Gam…  1.32e8         1996 Novel          George …
+   6 Aladdin   Box Office        7.60e8         1992 Animated film  Walt Di…
+   7 Aladdin   Home Video/Ente…  1.00e9         1992 Animated film  Walt Di…
+   8 Aladdin   Merchandise, Li…  5.00e8         1992 Animated film  Walt Di…
+   9 Aladdin   Music             4.47e8         1992 Animated film  Walt Di…
+  10 Aladdin   Video Games/Gam…  2.20e9         1992 Animated film  Walt Di…
+  # … with 311 more rows, and 1 more variable: owners &lt;chr&gt;
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+media_franchises %&gt;%
+  group_by(original_media) %&gt;%
+  summarise(total_revenue = sum(revenue)) %&gt;%
+  top_n(5, total_revenue) %&gt;%
+  pull(original_media) -&gt;
+top_5_media
+media_franchises %&gt;%
+* unique()
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 321 x 7
+     franchise revenue_category revenue year_created original_media creators
+     &lt;chr&gt;     &lt;chr&gt;              &lt;dbl&gt;        &lt;int&gt; &lt;chr&gt;          &lt;chr&gt;   
+   1 A Song o… Book sales        9.00e8         1996 Novel          George …
+   2 A Song o… Box Office        1.00e6         1996 Novel          George …
+   3 A Song o… Home Video/Ente…  2.80e8         1996 Novel          George …
+   4 A Song o… TV                4.00e9         1996 Novel          George …
+   5 A Song o… Video Games/Gam…  1.32e8         1996 Novel          George …
+   6 Aladdin   Box Office        7.60e8         1992 Animated film  Walt Di…
+   7 Aladdin   Home Video/Ente…  1.00e9         1992 Animated film  Walt Di…
+   8 Aladdin   Merchandise, Li…  5.00e8         1992 Animated film  Walt Di…
+   9 Aladdin   Music             4.47e8         1992 Animated film  Walt Di…
+  10 Aladdin   Video Games/Gam…  2.20e9         1992 Animated film  Walt Di…
+  # … with 311 more rows, and 1 more variable: owners &lt;chr&gt;
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+media_franchises %&gt;%
+  group_by(original_media) %&gt;%
+  summarise(total_revenue = sum(revenue)) %&gt;%
+  top_n(5, total_revenue) %&gt;%
+  pull(original_media) -&gt;
+top_5_media
+media_franchises %&gt;%
+  unique() %&gt;%
+* filter(original_media %in% top_5_media)
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 187 x 7
+     franchise revenue_category revenue year_created original_media creators
+     &lt;chr&gt;     &lt;chr&gt;              &lt;dbl&gt;        &lt;int&gt; &lt;chr&gt;          &lt;chr&gt;   
+   1 Aladdin   Box Office        7.60e8         1992 Animated film  Walt Di…
+   2 Aladdin   Home Video/Ente…  1.00e9         1992 Animated film  Walt Di…
+   3 Aladdin   Merchandise, Li…  5.00e8         1992 Animated film  Walt Di…
+   4 Aladdin   Music             4.47e8         1992 Animated film  Walt Di…
+   5 Aladdin   Video Games/Gam…  2.20e9         1992 Animated film  Walt Di…
+   6 Angry Bi… Box Office        3.53e8         2009 Video game     Jaakko …
+   7 Angry Bi… Home Video/Ente…  2.70e7         2009 Video game     Jaakko …
+   8 Angry Bi… Merchandise, Li…  8.00e9         2009 Video game     Jaakko …
+   9 Angry Bi… Video Games/Gam…  1.00e8         2009 Video game     Jaakko …
+  10 Anpanman  Box Office        6.70e7         1973 Manga          Takashi…
+  # … with 177 more rows, and 1 more variable: owners &lt;chr&gt;
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+media_franchises %&gt;%
+  group_by(original_media) %&gt;%
+  summarise(total_revenue = sum(revenue)) %&gt;%
+  top_n(5, total_revenue) %&gt;%
+  pull(original_media) -&gt;
+top_5_media
+media_franchises %&gt;%
+  unique() %&gt;%
+  filter(original_media %in% top_5_media) %&gt;%
+* mutate(revenue_category =
+*          recode(revenue_category,
+*                 "Merchandise, Licensing &amp; Retail" =
+*                   "Merchandise",
+*                 "Video Games/Games" =
+*                   "Games"))
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 187 x 7
+     franchise revenue_category revenue year_created original_media creators
+     &lt;chr&gt;     &lt;chr&gt;              &lt;dbl&gt;        &lt;int&gt; &lt;chr&gt;          &lt;chr&gt;   
+   1 Aladdin   Box Office        7.60e8         1992 Animated film  Walt Di…
+   2 Aladdin   Home Video/Ente…  1.00e9         1992 Animated film  Walt Di…
+   3 Aladdin   Merchandise       5.00e8         1992 Animated film  Walt Di…
+   4 Aladdin   Music             4.47e8         1992 Animated film  Walt Di…
+   5 Aladdin   Games             2.20e9         1992 Animated film  Walt Di…
+   6 Angry Bi… Box Office        3.53e8         2009 Video game     Jaakko …
+   7 Angry Bi… Home Video/Ente…  2.70e7         2009 Video game     Jaakko …
+   8 Angry Bi… Merchandise       8.00e9         2009 Video game     Jaakko …
+   9 Angry Bi… Games             1.00e8         2009 Video game     Jaakko …
+  10 Anpanman  Box Office        6.70e7         1973 Manga          Takashi…
+  # … with 177 more rows, and 1 more variable: owners &lt;chr&gt;
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+media_franchises %&gt;%
+  group_by(original_media) %&gt;%
+  summarise(total_revenue = sum(revenue)) %&gt;%
+  top_n(5, total_revenue) %&gt;%
+  pull(original_media) -&gt;
+top_5_media
+media_franchises %&gt;%
+  unique() %&gt;%
+  filter(original_media %in% top_5_media) %&gt;%
+  mutate(revenue_category =
+           recode(revenue_category,
+                  "Merchandise, Licensing &amp; Retail" =
+                    "Merchandise",
+                  "Video Games/Games" =
+                    "Games")) %&gt;%
+*     filter(original_media %in% top_5_media)
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 187 x 7
+     franchise revenue_category revenue year_created original_media creators
+     &lt;chr&gt;     &lt;chr&gt;              &lt;dbl&gt;        &lt;int&gt; &lt;chr&gt;          &lt;chr&gt;   
+   1 Aladdin   Box Office        7.60e8         1992 Animated film  Walt Di…
+   2 Aladdin   Home Video/Ente…  1.00e9         1992 Animated film  Walt Di…
+   3 Aladdin   Merchandise       5.00e8         1992 Animated film  Walt Di…
+   4 Aladdin   Music             4.47e8         1992 Animated film  Walt Di…
+   5 Aladdin   Games             2.20e9         1992 Animated film  Walt Di…
+   6 Angry Bi… Box Office        3.53e8         2009 Video game     Jaakko …
+   7 Angry Bi… Home Video/Ente…  2.70e7         2009 Video game     Jaakko …
+   8 Angry Bi… Merchandise       8.00e9         2009 Video game     Jaakko …
+   9 Angry Bi… Games             1.00e8         2009 Video game     Jaakko …
+  10 Anpanman  Box Office        6.70e7         1973 Manga          Takashi…
+  # … with 177 more rows, and 1 more variable: owners &lt;chr&gt;
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+media_franchises %&gt;%
+  group_by(original_media) %&gt;%
+  summarise(total_revenue = sum(revenue)) %&gt;%
+  top_n(5, total_revenue) %&gt;%
+  pull(original_media) -&gt;
+top_5_media
+media_franchises %&gt;%
+  unique() %&gt;%
+  filter(original_media %in% top_5_media) %&gt;%
+  mutate(revenue_category =
+           recode(revenue_category,
+                  "Merchandise, Licensing &amp; Retail" =
+                    "Merchandise",
+                  "Video Games/Games" =
+                    "Games")) %&gt;%
+      filter(original_media %in% top_5_media) %&gt;%
+*     mutate(categ = paste0(franchise, " (",
+*                           revenue_category, ")"))
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 187 x 8
+     franchise revenue_category revenue year_created original_media creators
+     &lt;chr&gt;     &lt;chr&gt;              &lt;dbl&gt;        &lt;int&gt; &lt;chr&gt;          &lt;chr&gt;   
+   1 Aladdin   Box Office        7.60e8         1992 Animated film  Walt Di…
+   2 Aladdin   Home Video/Ente…  1.00e9         1992 Animated film  Walt Di…
+   3 Aladdin   Merchandise       5.00e8         1992 Animated film  Walt Di…
+   4 Aladdin   Music             4.47e8         1992 Animated film  Walt Di…
+   5 Aladdin   Games             2.20e9         1992 Animated film  Walt Di…
+   6 Angry Bi… Box Office        3.53e8         2009 Video game     Jaakko …
+   7 Angry Bi… Home Video/Ente…  2.70e7         2009 Video game     Jaakko …
+   8 Angry Bi… Merchandise       8.00e9         2009 Video game     Jaakko …
+   9 Angry Bi… Games             1.00e8         2009 Video game     Jaakko …
+  10 Anpanman  Box Office        6.70e7         1973 Manga          Takashi…
+  # … with 177 more rows, and 2 more variables: owners &lt;chr&gt;, categ &lt;chr&gt;
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+media_franchises %&gt;%
+  group_by(original_media) %&gt;%
+  summarise(total_revenue = sum(revenue)) %&gt;%
+  top_n(5, total_revenue) %&gt;%
+  pull(original_media) -&gt;
+top_5_media
+media_franchises %&gt;%
+  unique() %&gt;%
+  filter(original_media %in% top_5_media) %&gt;%
+  mutate(revenue_category =
+           recode(revenue_category,
+                  "Merchandise, Licensing &amp; Retail" =
+                    "Merchandise",
+                  "Video Games/Games" =
+                    "Games")) %&gt;%
+      filter(original_media %in% top_5_media) %&gt;%
+      mutate(categ = paste0(franchise, " (",
+                            revenue_category, ")")) -&gt;
+*media_franchises_5
+```
+]]
+.column[.content[
+
+]]
+
+---
+
+# A sina plot of revenue versus media category
+
+
+---
+
+
+
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*ggplot(data = media_franchises_5)
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_top_5_1-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ggplot(data = media_franchises_5) +
+* aes(x = original_media)
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_top_5_2-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ggplot(data = media_franchises_5) +
+  aes(x = original_media) +
+* aes(y = revenue)
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_top_5_3-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ggplot(data = media_franchises_5) +
+  aes(x = original_media) +
+  aes(y = revenue) +
+* aes(fill = original_media)
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_top_5_4-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ggplot(data = media_franchises_5) +
+  aes(x = original_media) +
+  aes(y = revenue) +
+  aes(fill = original_media) +
+* geom_violin(alpha = 0.3)
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_top_5_5-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ggplot(data = media_franchises_5) +
+  aes(x = original_media) +
+  aes(y = revenue) +
+  aes(fill = original_media) +
+  geom_violin(alpha = 0.3) +
+* ggforce::geom_sina(color = "black",
+*                    size = 3, shape = 21)
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_top_5_7-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ggplot(data = media_franchises_5) +
+  aes(x = original_media) +
+  aes(y = revenue) +
+  aes(fill = original_media) +
+  geom_violin(alpha = 0.3) +
+  ggforce::geom_sina(color = "black",
+                     size = 3, shape = 21) +
+* aes(label = categ)
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_top_5_8-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ggplot(data = media_franchises_5) +
+  aes(x = original_media) +
+  aes(y = revenue) +
+  aes(fill = original_media) +
+  geom_violin(alpha = 0.3) +
+  ggforce::geom_sina(color = "black",
+                     size = 3, shape = 21) +
+  aes(label = categ) +
+* ggrepel::geom_label_repel(
+*   data = media_franchises_5 %&gt;%
+*     filter(revenue &gt; 19 * 10^9),
+*   color = "black", fill = "wheat",
+*   family = "mono", size = 4)
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_top_5_13-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ggplot(data = media_franchises_5) +
+  aes(x = original_media) +
+  aes(y = revenue) +
+  aes(fill = original_media) +
+  geom_violin(alpha = 0.3) +
+  ggforce::geom_sina(color = "black",
+                     size = 3, shape = 21) +
+  aes(label = categ) +
+  ggrepel::geom_label_repel(
+    data = media_franchises_5 %&gt;%
+      filter(revenue &gt; 19 * 10^9),
+    color = "black", fill = "wheat",
+    family = "mono", size = 4) +
+* guides(fill = FALSE, color = FALSE)
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_top_5_14-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ggplot(data = media_franchises_5) +
+  aes(x = original_media) +
+  aes(y = revenue) +
+  aes(fill = original_media) +
+  geom_violin(alpha = 0.3) +
+  ggforce::geom_sina(color = "black",
+                     size = 3, shape = 21) +
+  aes(label = categ) +
+  ggrepel::geom_label_repel(
+    data = media_franchises_5 %&gt;%
+      filter(revenue &gt; 19 * 10^9),
+    color = "black", fill = "wheat",
+    family = "mono", size = 4) +
+  guides(fill = FALSE, color = FALSE) +
+* labs(x = "Original Media", y = "Total revenue")
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_top_5_15-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ggplot(data = media_franchises_5) +
+  aes(x = original_media) +
+  aes(y = revenue) +
+  aes(fill = original_media) +
+  geom_violin(alpha = 0.3) +
+  ggforce::geom_sina(color = "black",
+                     size = 3, shape = 21) +
+  aes(label = categ) +
+  ggrepel::geom_label_repel(
+    data = media_franchises_5 %&gt;%
+      filter(revenue &gt; 19 * 10^9),
+    color = "black", fill = "wheat",
+    family = "mono", size = 4) +
+  guides(fill = FALSE, color = FALSE) +
+  labs(x = "Original Media", y = "Total revenue") +
+* scale_y_continuous(label = scales::dollar)
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_top_5_16-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ggplot(data = media_franchises_5) +
+  aes(x = original_media) +
+  aes(y = revenue) +
+  aes(fill = original_media) +
+  geom_violin(alpha = 0.3) +
+  ggforce::geom_sina(color = "black",
+                     size = 3, shape = 21) +
+  aes(label = categ) +
+  ggrepel::geom_label_repel(
+    data = media_franchises_5 %&gt;%
+      filter(revenue &gt; 19 * 10^9),
+    color = "black", fill = "wheat",
+    family = "mono", size = 4) +
+  guides(fill = FALSE, color = FALSE) +
+  labs(x = "Original Media", y = "Total revenue") +
+  scale_y_continuous(label = scales::dollar) +
+* ggthemes::theme_wsj()
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_top_5_17-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ggplot(data = media_franchises_5) +
+  aes(x = original_media) +
+  aes(y = revenue) +
+  aes(fill = original_media) +
+  geom_violin(alpha = 0.3) +
+  ggforce::geom_sina(color = "black",
+                     size = 3, shape = 21) +
+  aes(label = categ) +
+  ggrepel::geom_label_repel(
+    data = media_franchises_5 %&gt;%
+      filter(revenue &gt; 19 * 10^9),
+    color = "black", fill = "wheat",
+    family = "mono", size = 4) +
+  guides(fill = FALSE, color = FALSE) +
+  labs(x = "Original Media", y = "Total revenue") +
+  scale_y_continuous(label = scales::dollar) +
+  ggthemes::theme_wsj() +
+* labs(title = "Revenue generated for\nthe 5 most successful media")
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_top_5_18-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ggplot(data = media_franchises_5) +
+  aes(x = original_media) +
+  aes(y = revenue) +
+  aes(fill = original_media) +
+  geom_violin(alpha = 0.3) +
+  ggforce::geom_sina(color = "black",
+                     size = 3, shape = 21) +
+  aes(label = categ) +
+  ggrepel::geom_label_repel(
+    data = media_franchises_5 %&gt;%
+      filter(revenue &gt; 19 * 10^9),
+    color = "black", fill = "wheat",
+    family = "mono", size = 4) +
+  guides(fill = FALSE, color = FALSE) +
+  labs(x = "Original Media", y = "Total revenue") +
+  scale_y_continuous(label = scales::dollar) +
+  ggthemes::theme_wsj() +
+  labs(title = "Revenue generated for\nthe 5 most successful media") +
+* theme(title = element_text(size = 16))
+```
+]]
+.column[.content[
+&lt;img src="tidytuesday_highlights_files/figure-html/output_top_5_19-1.png" width="100%" /&gt;
+]]
+
+
+
+
+
+&lt;!-- --- --&gt;
+
+&lt;!-- # Presenting aggregate revenue for top 10 revenue categories --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- ```{r revenue, eval = T, echo = F} --&gt;
+&lt;!-- media_franchises %&gt;% --&gt;
+&lt;!--   group_by(revenue_category) %&gt;% --&gt;
+&lt;!--   summarise(total_revenue = sum(revenue)) %&gt;% --&gt;
+&lt;!--   top_n(10, total_revenue) %&gt;% --&gt;
+&lt;!--   pull(revenue_category) -&gt; --&gt;
+&lt;!-- top_10_categ --&gt;
+&lt;!-- media_franchises %&gt;% --&gt;
+&lt;!--   unique() %&gt;% --&gt;
+&lt;!--   mutate(revenue = revenue) %&gt;% --&gt;
+&lt;!--   filter(revenue_category %in%  --&gt;
+&lt;!--            top_10_categ) %&gt;% --&gt;
+&lt;!--   group_by(revenue_category) %&gt;% --&gt;
+&lt;!--   summarise(total_categ = sum(revenue)) %&gt;% --&gt;
+&lt;!--   ungroup() %&gt;% --&gt;
+&lt;!--   ggplot() + --&gt;
+&lt;!--   aes(x = reorder(revenue_category, total_categ)) + --&gt;
+&lt;!--   aes(y = total_categ) + --&gt;
+&lt;!--   geom_bar(stat = "identity",  --&gt;
+&lt;!--            # aes(fill = revenue_category),  --&gt;
+&lt;!--            fill = "plum4", --&gt;
+
+&lt;!--            color = "black") + --&gt;
+&lt;!--   guides(fill = FALSE, color = FALSE) + --&gt;
+&lt;!--   labs(x = "Original Media",  --&gt;
+&lt;!--        y = "Total revenue") + --&gt;
+&lt;!--   scale_y_continuous(label = scales::dollar,  --&gt;
+&lt;!--                      limits = c(0, 10e+11)) + --&gt;
+&lt;!--   ggthemes::theme_wsj() + --&gt;
+&lt;!--   labs(title = "Total revenue generated for the 10 most successful categories") + --&gt;
+&lt;!--   coord_flip() + --&gt;
+&lt;!--   geom_label(mapping =  --&gt;
+&lt;!--                aes( --&gt;
+&lt;!--                  label = paste0("$", --&gt;
+&lt;!--                                 round(total_categ / 1000000000), --&gt;
+&lt;!--                                 " Bn")),  --&gt;
+&lt;!--              fill = "wheat", color = "black",  --&gt;
+&lt;!--              size = 4, family = "mono",  --&gt;
+&lt;!--              nudge_y = 69000000000) + --&gt;
+&lt;!--   theme(plot.title = element_text(size = 12, face = "bold")) + --&gt;
+&lt;!--   theme(axis.text.x = element_text(size = 9)) -&gt; --&gt;
+&lt;!-- p2 --&gt;
+&lt;!-- ``` --&gt;
+
+&lt;!-- r apply_reveal("revenue")` --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- # Number of Franchises created by year --&gt;
+
+
+&lt;!-- --- --&gt;
+
+&lt;!-- ```{r timeline, eval = T, echo = F} --&gt;
+&lt;!-- # Timeline --&gt;
+&lt;!-- distinct(media_franchises, franchise, year_created) %&gt;% --&gt;
+&lt;!--   group_by(year_created) %&gt;% --&gt;
+&lt;!--   summarise(n_franchise = n_distinct(franchise)) %&gt;% --&gt;
+&lt;!--   ungroup() %&gt;% --&gt;
+&lt;!--   unique() %&gt;% --&gt;
+&lt;!--   ggplot() + --&gt;
+&lt;!--   aes(x = year_created) +  --&gt;
+&lt;!--   aes(y = n_franchise) + --&gt;
+&lt;!--   geom_bar(stat = "identity",  --&gt;
+&lt;!--            color = "black" , --&gt;
+&lt;!--            fill = "steelblue" --&gt;
+&lt;!--            ) + --&gt;
+&lt;!--   aes(fill = n_franchise) + --&gt;
+&lt;!--   scale_fill_viridis_c(direction = -1) + --&gt;
+&lt;!--   guides(fill = FALSE) + --&gt;
+&lt;!--   annotate(geom = "curve",  --&gt;
+&lt;!--            x = 1975, y = 5.2,  --&gt;
+&lt;!--            xend = 1993, yend = 6,  --&gt;
+&lt;!--            curvature = -0.3,  --&gt;
+&lt;!--            arrow = arrow(length = unit(2, "mm")),  --&gt;
+&lt;!--            color = "black") + --&gt;
+&lt;!--   annotate("label",  --&gt;
+&lt;!--            x = 1970, y = 5,  --&gt;
+&lt;!--            label = "6 franchises were created in 1994",  --&gt;
+&lt;!--            color = "black", fill = "wheat",  --&gt;
+&lt;!--            family = "mono") + --&gt;
+&lt;!--   labs(title = "Number of franchises created each year",  --&gt;
+&lt;!--        subtitle = "1994 was the most creative year",  --&gt;
+&lt;!--        caption = "\n Data from Wikipedia | plot by @david_carayon") + --&gt;
+&lt;!--   theme(plot.title = element_text(size = 14, face = "bold")) + --&gt;
+&lt;!--   theme(plot.subtitle = element_text(size = 12, face = "bold")) + --&gt;
+&lt;!--     ggthemes::theme_wsj()  -&gt; --&gt;
+&lt;!-- p3 --&gt;
+&lt;!-- ``` --&gt;
+
+&lt;!-- r apply_reveal("timeline")` --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- # Bringing it together with cowplot::plotgrid --&gt;
+
+
+
+&lt;!-- ```{r, fig.height= 11.83, fig.width=20} --&gt;
+&lt;!-- cowplot::plot_grid(p1, cowplot::plot_grid(p2, p3), ncol = 1, rel_heights = c(1.45, 1)) --&gt;
+&lt;!-- ``` --&gt;
+
+&lt;!-- --- --&gt;
+
+
+&lt;!-- ```{r, echo = F} --&gt;
+&lt;!-- ggsave("figures/media_tidytuesday.png", dpi = "retina", width = 20, height = 11.83) --&gt;
+&lt;!-- ``` --&gt;
 
 
 &lt;style type="text/css"&gt;
-.remark-code{line-height: 1.5; font-size: 75%}
+.remark-code{line-height: 1.5; font-size: 55%}
+&lt;/style&gt;
+
+---
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 65%}
 &lt;/style&gt;
     </textarea>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

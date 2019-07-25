@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>World Cup analysis</title>
+    <meta charset="utf-8">
+    <meta name="author" content="  Edited by Gina Reynolds, 2019" />
+    <link href="libs/remark-css-0.0.1/kunoichi.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# World Cup analysis
+## Ifeoma Egbogah | made with Xaringan
+### <br><br>Edited by Gina Reynolds, 2019
+### <br>
+
+---
+
+
+
+
+
+
+```r
+url &lt;- "https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-07-09/squads.csv"
+squads &lt;- readr::read_csv(file = url)
+```
+
+---
+
+
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*squads
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 552 x 9
+     squad_no country pos   player dob                   age  caps goals
+        &lt;int&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;  &lt;dttm&gt;              &lt;int&gt; &lt;int&gt; &lt;int&gt;
+   1        1 US      GK    Alyss… 1988-04-20 00:00:00    31    43     0
+   2        2 US      FW    Mallo… 1998-04-29 00:00:00    21    50    15
+   3        3 US      MF    Sam M… 1992-10-09 00:00:00    26    47     9
+   4        4 US      DF    Becky… 1985-06-06 00:00:00    34   155     0
+   5        5 US      DF    Kelle… 1988-08-04 00:00:00    30   115     2
+   6        6 US      MF    Morga… 1993-02-26 00:00:00    26    82     6
+   7        7 US      DF    Abby … 1993-05-13 00:00:00    26    37     0
+   8        8 US      MF    Julie… 1992-04-06 00:00:00    27    79    18
+   9        9 US      MF    Linds… 1994-05-26 00:00:00    25    66     8
+  10       10 US      FW    Carli… 1982-07-16 00:00:00    36   271   107
+  # … with 542 more rows, and 1 more variable: club &lt;chr&gt;
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+squads %&gt;%
+* mutate(pos = case_when(pos == "DF" ~ "Defense",
+*                        pos == "MF" ~ "Mid fielder",
+*                        pos == "GK" ~ "Goal keeper",
+*                        pos == "FW" ~ "Forward"))
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 552 x 9
+     squad_no country pos   player dob                   age  caps goals
+        &lt;int&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;  &lt;dttm&gt;              &lt;int&gt; &lt;int&gt; &lt;int&gt;
+   1        1 US      Goal… Alyss… 1988-04-20 00:00:00    31    43     0
+   2        2 US      Forw… Mallo… 1998-04-29 00:00:00    21    50    15
+   3        3 US      Mid … Sam M… 1992-10-09 00:00:00    26    47     9
+   4        4 US      Defe… Becky… 1985-06-06 00:00:00    34   155     0
+   5        5 US      Defe… Kelle… 1988-08-04 00:00:00    30   115     2
+   6        6 US      Mid … Morga… 1993-02-26 00:00:00    26    82     6
+   7        7 US      Defe… Abby … 1993-05-13 00:00:00    26    37     0
+   8        8 US      Mid … Julie… 1992-04-06 00:00:00    27    79    18
+   9        9 US      Mid … Linds… 1994-05-26 00:00:00    25    66     8
+  10       10 US      Forw… Carli… 1982-07-16 00:00:00    36   271   107
+  # … with 542 more rows, and 1 more variable: club &lt;chr&gt;
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+squads %&gt;%
+  mutate(pos = case_when(pos == "DF" ~ "Defense",
+                         pos == "MF" ~ "Mid fielder",
+                         pos == "GK" ~ "Goal keeper",
+                         pos == "FW" ~ "Forward")) %&gt;%
+* ggplot()
+```
+]]
+.column[.content[
+&lt;img src="soccer_files/figure-html/output_world_cup_6-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+squads %&gt;%
+  mutate(pos = case_when(pos == "DF" ~ "Defense",
+                         pos == "MF" ~ "Mid fielder",
+                         pos == "GK" ~ "Goal keeper",
+                         pos == "FW" ~ "Forward")) %&gt;%
+  ggplot() +
+* aes(x = caps)
+```
+]]
+.column[.content[
+&lt;img src="soccer_files/figure-html/output_world_cup_7-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+squads %&gt;%
+  mutate(pos = case_when(pos == "DF" ~ "Defense",
+                         pos == "MF" ~ "Mid fielder",
+                         pos == "GK" ~ "Goal keeper",
+                         pos == "FW" ~ "Forward")) %&gt;%
+  ggplot() +
+  aes(x = caps) +
+* aes(y = goals)
+```
+]]
+.column[.content[
+&lt;img src="soccer_files/figure-html/output_world_cup_8-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+squads %&gt;%
+  mutate(pos = case_when(pos == "DF" ~ "Defense",
+                         pos == "MF" ~ "Mid fielder",
+                         pos == "GK" ~ "Goal keeper",
+                         pos == "FW" ~ "Forward")) %&gt;%
+  ggplot() +
+  aes(x = caps) +
+  aes(y = goals) +
+* geom_point()
+```
+]]
+.column[.content[
+&lt;img src="soccer_files/figure-html/output_world_cup_9-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+squads %&gt;%
+  mutate(pos = case_when(pos == "DF" ~ "Defense",
+                         pos == "MF" ~ "Mid fielder",
+                         pos == "GK" ~ "Goal keeper",
+                         pos == "FW" ~ "Forward")) %&gt;%
+  ggplot() +
+  aes(x = caps) +
+  aes(y = goals) +
+  geom_point() +
+* geom_smooth(method = lm)
+```
+]]
+.column[.content[
+&lt;img src="soccer_files/figure-html/output_world_cup_10-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+squads %&gt;%
+  mutate(pos = case_when(pos == "DF" ~ "Defense",
+                         pos == "MF" ~ "Mid fielder",
+                         pos == "GK" ~ "Goal keeper",
+                         pos == "FW" ~ "Forward")) %&gt;%
+  ggplot() +
+  aes(x = caps) +
+  aes(y = goals) +
+  geom_point() +
+  geom_smooth(method = lm) +
+* aes(colour = pos)
+```
+]]
+.column[.content[
+&lt;img src="soccer_files/figure-html/output_world_cup_11-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+squads %&gt;%
+  mutate(pos = case_when(pos == "DF" ~ "Defense",
+                         pos == "MF" ~ "Mid fielder",
+                         pos == "GK" ~ "Goal keeper",
+                         pos == "FW" ~ "Forward")) %&gt;%
+  ggplot() +
+  aes(x = caps) +
+  aes(y = goals) +
+  geom_point() +
+  geom_smooth(method = lm) +
+  aes(colour = pos) +
+* scale_colour_viridis_d(option = "B", guide = F)
+```
+]]
+.column[.content[
+&lt;img src="soccer_files/figure-html/output_world_cup_12-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+squads %&gt;%
+  mutate(pos = case_when(pos == "DF" ~ "Defense",
+                         pos == "MF" ~ "Mid fielder",
+                         pos == "GK" ~ "Goal keeper",
+                         pos == "FW" ~ "Forward")) %&gt;%
+  ggplot() +
+  aes(x = caps) +
+  aes(y = goals) +
+  geom_point() +
+  geom_smooth(method = lm) +
+  aes(colour = pos) +
+  scale_colour_viridis_d(option = "B", guide = F) +
+* facet_wrap(~pos)
+```
+]]
+.column[.content[
+&lt;img src="soccer_files/figure-html/output_world_cup_13-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+squads %&gt;%
+  mutate(pos = case_when(pos == "DF" ~ "Defense",
+                         pos == "MF" ~ "Mid fielder",
+                         pos == "GK" ~ "Goal keeper",
+                         pos == "FW" ~ "Forward")) %&gt;%
+  ggplot() +
+  aes(x = caps) +
+  aes(y = goals) +
+  geom_point() +
+  geom_smooth(method = lm) +
+  aes(colour = pos) +
+  scale_colour_viridis_d(option = "B", guide = F) +
+  facet_wrap(~pos) +
+* labs(x = "Caps")
+```
+]]
+.column[.content[
+&lt;img src="soccer_files/figure-html/output_world_cup_14-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+squads %&gt;%
+  mutate(pos = case_when(pos == "DF" ~ "Defense",
+                         pos == "MF" ~ "Mid fielder",
+                         pos == "GK" ~ "Goal keeper",
+                         pos == "FW" ~ "Forward")) %&gt;%
+  ggplot() +
+  aes(x = caps) +
+  aes(y = goals) +
+  geom_point() +
+  geom_smooth(method = lm) +
+  aes(colour = pos) +
+  scale_colour_viridis_d(option = "B", guide = F) +
+  facet_wrap(~pos) +
+  labs(x = "Caps") +
+* labs(y = "Goals")
+```
+]]
+.column[.content[
+&lt;img src="soccer_files/figure-html/output_world_cup_15-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+squads %&gt;%
+  mutate(pos = case_when(pos == "DF" ~ "Defense",
+                         pos == "MF" ~ "Mid fielder",
+                         pos == "GK" ~ "Goal keeper",
+                         pos == "FW" ~ "Forward")) %&gt;%
+  ggplot() +
+  aes(x = caps) +
+  aes(y = goals) +
+  geom_point() +
+  geom_smooth(method = lm) +
+  aes(colour = pos) +
+  scale_colour_viridis_d(option = "B", guide = F) +
+  facet_wrap(~pos) +
+  labs(x = "Caps") +
+  labs(y = "Goals") +
+* labs(title = "Relationship Between Goals and Caps")
+```
+]]
+.column[.content[
+&lt;img src="soccer_files/figure-html/output_world_cup_16-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+squads %&gt;%
+  mutate(pos = case_when(pos == "DF" ~ "Defense",
+                         pos == "MF" ~ "Mid fielder",
+                         pos == "GK" ~ "Goal keeper",
+                         pos == "FW" ~ "Forward")) %&gt;%
+  ggplot() +
+  aes(x = caps) +
+  aes(y = goals) +
+  geom_point() +
+  geom_smooth(method = lm) +
+  aes(colour = pos) +
+  scale_colour_viridis_d(option = "B", guide = F) +
+  facet_wrap(~pos) +
+  labs(x = "Caps") +
+  labs(y = "Goals") +
+  labs(title = "Relationship Between Goals and Caps") +
+* labs(subtitle = "For ladies who featured in the 2019 FIFA women's world cup\nbased on players positon on the field")
+```
+]]
+.column[.content[
+&lt;img src="soccer_files/figure-html/output_world_cup_17-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+squads %&gt;%
+  mutate(pos = case_when(pos == "DF" ~ "Defense",
+                         pos == "MF" ~ "Mid fielder",
+                         pos == "GK" ~ "Goal keeper",
+                         pos == "FW" ~ "Forward")) %&gt;%
+  ggplot() +
+  aes(x = caps) +
+  aes(y = goals) +
+  geom_point() +
+  geom_smooth(method = lm) +
+  aes(colour = pos) +
+  scale_colour_viridis_d(option = "B", guide = F) +
+  facet_wrap(~pos) +
+  labs(x = "Caps") +
+  labs(y = "Goals") +
+  labs(title = "Relationship Between Goals and Caps") +
+  labs(subtitle = "For ladies who featured in the 2019 FIFA women's world cup\nbased on players positon on the field") +
+* labs(caption = "Source: data.world | Visualization: Ifeoma Egbogah")
+```
+]]
+.column[.content[
+&lt;img src="soccer_files/figure-html/output_world_cup_18-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+squads %&gt;%
+  mutate(pos = case_when(pos == "DF" ~ "Defense",
+                         pos == "MF" ~ "Mid fielder",
+                         pos == "GK" ~ "Goal keeper",
+                         pos == "FW" ~ "Forward")) %&gt;%
+  ggplot() +
+  aes(x = caps) +
+  aes(y = goals) +
+  geom_point() +
+  geom_smooth(method = lm) +
+  aes(colour = pos) +
+  scale_colour_viridis_d(option = "B", guide = F) +
+  facet_wrap(~pos) +
+  labs(x = "Caps") +
+  labs(y = "Goals") +
+  labs(title = "Relationship Between Goals and Caps") +
+  labs(subtitle = "For ladies who featured in the 2019 FIFA women's world cup\nbased on players positon on the field") +
+  labs(caption = "Source: data.world | Visualization: Ifeoma Egbogah") +
+* theme(plot.subtitle =
+*         element_text(size = 10,
+*                      color = "#939184",
+*                      margin =
+*                        margin(b = 0.1, t = -0.1,
+*                               l = 2, unit = "cm"),
+*                      face = "bold"))
+```
+]]
+.column[.content[
+&lt;img src="soccer_files/figure-html/output_world_cup_25-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+squads %&gt;%
+  mutate(pos = case_when(pos == "DF" ~ "Defense",
+                         pos == "MF" ~ "Mid fielder",
+                         pos == "GK" ~ "Goal keeper",
+                         pos == "FW" ~ "Forward")) %&gt;%
+  ggplot() +
+  aes(x = caps) +
+  aes(y = goals) +
+  geom_point() +
+  geom_smooth(method = lm) +
+  aes(colour = pos) +
+  scale_colour_viridis_d(option = "B", guide = F) +
+  facet_wrap(~pos) +
+  labs(x = "Caps") +
+  labs(y = "Goals") +
+  labs(title = "Relationship Between Goals and Caps") +
+  labs(subtitle = "For ladies who featured in the 2019 FIFA women's world cup\nbased on players positon on the field") +
+  labs(caption = "Source: data.world | Visualization: Ifeoma Egbogah") +
+  theme(plot.subtitle =
+          element_text(size = 10,
+                       color = "#939184",
+                       margin =
+                         margin(b = 0.1, t = -0.1,
+                                l = 2, unit = "cm"),
+                       face = "bold")) +
+* theme(plot.caption =
+*         element_text(size = 7,
+*                      hjust = .5,
+*                      margin =
+*                        margin(t = 0.2,
+*                               b = 0,
+*                               unit = "cm"),
+*                               color = "#939184"))
+```
+]]
+.column[.content[
+&lt;img src="soccer_files/figure-html/output_world_cup_33-1.png" width="100%" /&gt;
+]]
+
+
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 65%}
+&lt;/style&gt;
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightLines": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script>
+(function() {
+  var i, text, code, codes = document.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+})();
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

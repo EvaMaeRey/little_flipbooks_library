@@ -16,31 +16,31 @@
  *    - remarkjs wiki: https://github.com/gnab/remark/wiki
  *
  * ------------------------------------------------------- */
-@import url(https://fonts.googleapis.com/css?family=Montserrat:200,200i);
-@import url(https://fonts.googleapis.com/css?family=Josefin+Sans);
+@import url(https://fonts.googleapis.com/css?family=Libre+Baskerville:150,150i);
+@import url(https://fonts.googleapis.com/css?family=Libre+Baskerville);
 @import url(https://fonts.googleapis.com/css?family=Droid+Mono);
 
 
 body {
-  font-family: Montserrat, 'Palatino Linotype', 'Book Antiqua', Palatino, 'Microsoft YaHei', 'Songti SC', serif;
-  font-weight: 200;
+  font-family: Libre Baskerville, 'Palatino Linotype', 'Book Antiqua', Palatino, 'Microsoft YaHei', 'Songti SC', serif;
+  font-weight: 150;
   color: #13393A;
 }
 h1, h2, h3 {
-  font-family: Josefin Sans;
+  font-family: Libre Baskerville;
   font-weight: normal;
   color: #1c5253;
 }
 .remark-slide-content {
   background-color: #E8EDED;
-  font-size: .6cm;
+  font-size: .7cm;
   
   
   
   padding: 1em 4em 1em 4em;
 }
 .remark-slide-content h1 {
-    font-size: 55px;
+    font-size: .7cm;
 }
 .remark-slide-content h2 {
     font-size: 45px;
@@ -52,7 +52,7 @@ h1, h2, h3 {
   font-family: Droid Mono, 'Lucida Console', Monaco, monospace;
 }
 .remark-code {
-  font-size: .2cm;
+  font-size: .3cm;
 }
 .remark-inline-code {
   font-size: 1em;
