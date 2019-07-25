@@ -136,6 +136,6 @@ save_complete_plot_from_chunk <- function(chunk_name, filename = chunk_name, pat
 }
 
 make_html_picture_link <- function(path, link){
-cat(paste0('<a href="', link, '"><img src="', path, '"width="150" height="150" title="White flower" alt="Flower"></a>'))
+cat(paste0('<a href="', link, '"><img src="', path, '"width="150" height="150" title=',path,' alt=', path,'></a>'))
 }
 
