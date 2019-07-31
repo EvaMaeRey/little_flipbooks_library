@@ -15,7 +15,7 @@ parse_code <- function(code) {
     mutate(comment = paste0("  # ", comment)) %>%  
     mutate(comment = ifelse("  # NA" == comment, "", comment)) %>% 
     mutate(code = str_remove(code, "\\s+$")) %>% 
-    mutate(connector = str_extract(code, "%>%$|\\+$|->$|%+%")) %>% 
+    mutate(connector = str_extract(code, "%>%$|\\+$|->$|%\\+%")) %>% 
     mutate(connector = replace_na(connector, "")) %>% 
     mutate(code = str_remove(code, "%>%$|\\+$|->|%+%$")) %>% 
     mutate(num_open_par = str_count(code, "\\(|\\{|\\[")) %>% # Counting open parentheses
