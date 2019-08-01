@@ -228,7 +228,7 @@ party_votes %&gt;%
 
 ---
 
-# Step 3: Allocting seats
+# Step 3: Allocating seats
 
 Finally allocate seats using the D’Hondt/Jefferson Allocation method, we rank our "D'Hondt Outcomes", and hand out all available seats to the parties with the top D'Hondt outcomes. 
 
@@ -747,7 +747,7 @@ dhondt_calc %&gt;%
   mutate(position_t3 = 1:n()) %&gt;%
   mutate(position_t4 = ifelse(position_t3 &gt; num_seats,
                               NA, position_t3)) %&gt;%
-* tidyr::gather(key = "time",
+* tidyr::gather(key = "step",
 *               value = "position",
 *               position_t2:position_t4)
 ```
@@ -756,7 +756,7 @@ dhondt_calc %&gt;%
 
 ```
   # A tibble: 72 x 6
-     party    votes divisor dh_outcome time        position
+     party    votes divisor dh_outcome step        position
      &lt;chr&gt;    &lt;int&gt;   &lt;int&gt;      &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;
    1 equality  6822       1      6822  position_t2        1
    2 peace     6565       1      6565  position_t2       13
@@ -786,17 +786,17 @@ dhondt_calc %&gt;%
   mutate(position_t3 = 1:n()) %&gt;%
   mutate(position_t4 = ifelse(position_t3 &gt; num_seats,
                               NA, position_t3)) %&gt;%
-  tidyr::gather(key = "time",
+  tidyr::gather(key = "step",
                 value = "position",
                 position_t2:position_t4) %&gt;%
-* mutate(time = as.numeric(as.factor(time)))
+* mutate(step = as.numeric(as.factor(step)))
 ```
 ]]
 .column[.content[
 
 ```
   # A tibble: 72 x 6
-     party    votes divisor dh_outcome  time position
+     party    votes divisor dh_outcome  step position
      &lt;chr&gt;    &lt;int&gt;   &lt;int&gt;      &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;
    1 equality  6822       1      6822      2        1
    2 peace     6565       1      6565      2       13
@@ -826,10 +826,10 @@ dhondt_calc %&gt;%
   mutate(position_t3 = 1:n()) %&gt;%
   mutate(position_t4 = ifelse(position_t3 &gt; num_seats,
                               NA, position_t3)) %&gt;%
-  tidyr::gather(key = "time",
+  tidyr::gather(key = "step",
                 value = "position",
                 position_t2:position_t4) %&gt;%
-  mutate(time = as.numeric(as.factor(time))) -&gt;
+  mutate(step = as.numeric(as.factor(step))) -&gt;
 *animation_prep
 ```
 ]]
@@ -840,7 +840,7 @@ dhondt_calc %&gt;%
   
 ---
 
-# Build static plot for one time period
+# Build static plot for one time period, i.e. a single step in the method. 
 
 
 ---
@@ -862,7 +862,7 @@ count: false
 
 ```
   # A tibble: 72 x 6
-     party    votes divisor dh_outcome  time position
+     party    votes divisor dh_outcome  step position
      &lt;chr&gt;    &lt;int&gt;   &lt;int&gt;      &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;
    1 equality  6822       1      6822      2        1
    2 peace     6565       1      6565      2       13
@@ -885,14 +885,14 @@ count: false
 ```r
 animation_prep %&gt;%
 * # plotting single time period
-* filter(time == 2)
+* filter(step == 2)
 ```
 ]]
 .column[.content[
 
 ```
   # A tibble: 18 x 6
-     party    votes divisor dh_outcome  time position
+     party    votes divisor dh_outcome  step position
      &lt;chr&gt;    &lt;int&gt;   &lt;int&gt;      &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;
    1 equality  6822       1      6822      2        1
    2 peace     6565       1      6565      2       13
@@ -922,7 +922,7 @@ count: false
 ```r
 animation_prep %&gt;%
   # plotting single time period
-  filter(time == 2) %&gt;%
+  filter(step == 2) %&gt;%
 * ggplot()
 ```
 ]]
@@ -937,7 +937,7 @@ count: false
 ```r
 animation_prep %&gt;%
   # plotting single time period
-  filter(time == 2) %&gt;%
+  filter(step == 2) %&gt;%
   ggplot() +
 * aes(xmin = position + .4,
 *     xmax = position - .4,
@@ -945,7 +945,7 @@ animation_prep %&gt;%
 *     ymax = dh_outcome,
 *     fill = party,
 *     group = paste(party, divisor),
-*     alpha = as.numeric(time == 3))
+*     alpha = as.numeric(step == 3))
 ```
 ]]
 .column[.content[
@@ -959,7 +959,7 @@ count: false
 ```r
 animation_prep %&gt;%
   # plotting single time period
-  filter(time == 2) %&gt;%
+  filter(step == 2) %&gt;%
   ggplot() +
   aes(xmin = position + .4,
       xmax = position - .4,
@@ -967,7 +967,7 @@ animation_prep %&gt;%
       ymax = dh_outcome,
       fill = party,
       group = paste(party, divisor),
-      alpha = as.numeric(time == 3)) +
+      alpha = as.numeric(step == 3)) +
 * scale_fill_viridis_d()
 ```
 ]]
@@ -982,7 +982,7 @@ count: false
 ```r
 animation_prep %&gt;%
   # plotting single time period
-  filter(time == 2) %&gt;%
+  filter(step == 2) %&gt;%
   ggplot() +
   aes(xmin = position + .4,
       xmax = position - .4,
@@ -990,7 +990,7 @@ animation_prep %&gt;%
       ymax = dh_outcome,
       fill = party,
       group = paste(party, divisor),
-      alpha = as.numeric(time == 3)) +
+      alpha = as.numeric(step == 3)) +
   scale_fill_viridis_d() +
 * geom_rect(alpha = .7)
 ```
@@ -1006,7 +1006,7 @@ count: false
 ```r
 animation_prep %&gt;%
   # plotting single time period
-  filter(time == 2) %&gt;%
+  filter(step == 2) %&gt;%
   ggplot() +
   aes(xmin = position + .4,
       xmax = position - .4,
@@ -1014,7 +1014,7 @@ animation_prep %&gt;%
       ymax = dh_outcome,
       fill = party,
       group = paste(party, divisor),
-      alpha = as.numeric(time == 3)) +
+      alpha = as.numeric(step == 3)) +
   scale_fill_viridis_d() +
   geom_rect(alpha = .7) +
 * geom_vline(xintercept = 0.25,
@@ -1033,7 +1033,7 @@ count: false
 ```r
 animation_prep %&gt;%
   # plotting single time period
-  filter(time == 2) %&gt;%
+  filter(step == 2) %&gt;%
   ggplot() +
   aes(xmin = position + .4,
       xmax = position - .4,
@@ -1041,7 +1041,7 @@ animation_prep %&gt;%
       ymax = dh_outcome,
       fill = party,
       group = paste(party, divisor),
-      alpha = as.numeric(time == 3)) +
+      alpha = as.numeric(step == 3)) +
   scale_fill_viridis_d() +
   geom_rect(alpha = .7) +
   geom_vline(xintercept = 0.25,
@@ -1049,7 +1049,7 @@ animation_prep %&gt;%
              size = 1.25) +
 * geom_vline(xintercept = c(6.5, 12.5),
 *            col = "slategray",
-*            size = .5,
+*            size = 1,
 *            linetype = "dotted")
 ```
 ]]
@@ -1064,7 +1064,7 @@ count: false
 ```r
 animation_prep %&gt;%
   # plotting single time period
-  filter(time == 2) %&gt;%
+  filter(step == 2) %&gt;%
   ggplot() +
   aes(xmin = position + .4,
       xmax = position - .4,
@@ -1072,7 +1072,7 @@ animation_prep %&gt;%
       ymax = dh_outcome,
       fill = party,
       group = paste(party, divisor),
-      alpha = as.numeric(time == 3)) +
+      alpha = as.numeric(step == 3)) +
   scale_fill_viridis_d() +
   geom_rect(alpha = .7) +
   geom_vline(xintercept = 0.25,
@@ -1080,7 +1080,7 @@ animation_prep %&gt;%
              size = 1.25) +
   geom_vline(xintercept = c(6.5, 12.5),
              col = "slategray",
-             size = .5,
+             size = 1,
              linetype = "dotted") +
 * labs(title = "D’Hondt/Jefferson Seat Allocation")
 ```
@@ -1096,7 +1096,7 @@ count: false
 ```r
 animation_prep %&gt;%
   # plotting single time period
-  filter(time == 2) %&gt;%
+  filter(step == 2) %&gt;%
   ggplot() +
   aes(xmin = position + .4,
       xmax = position - .4,
@@ -1104,7 +1104,7 @@ animation_prep %&gt;%
       ymax = dh_outcome,
       fill = party,
       group = paste(party, divisor),
-      alpha = as.numeric(time == 3)) +
+      alpha = as.numeric(step == 3)) +
   scale_fill_viridis_d() +
   geom_rect(alpha = .7) +
   geom_vline(xintercept = 0.25,
@@ -1112,7 +1112,7 @@ animation_prep %&gt;%
              size = 1.25) +
   geom_vline(xintercept = c(6.5, 12.5),
              col = "slategray",
-             size = .5,
+             size = 1,
              linetype = "dotted") +
   labs(title = "D’Hondt/Jefferson Seat Allocation") +
 * labs(subtitle = "Data: Hypothetical parties and results")
@@ -1129,7 +1129,7 @@ count: false
 ```r
 animation_prep %&gt;%
   # plotting single time period
-  filter(time == 2) %&gt;%
+  filter(step == 2) %&gt;%
   ggplot() +
   aes(xmin = position + .4,
       xmax = position - .4,
@@ -1137,7 +1137,7 @@ animation_prep %&gt;%
       ymax = dh_outcome,
       fill = party,
       group = paste(party, divisor),
-      alpha = as.numeric(time == 3)) +
+      alpha = as.numeric(step == 3)) +
   scale_fill_viridis_d() +
   geom_rect(alpha = .7) +
   geom_vline(xintercept = 0.25,
@@ -1145,7 +1145,7 @@ animation_prep %&gt;%
              size = 1.25) +
   geom_vline(xintercept = c(6.5, 12.5),
              col = "slategray",
-             size = .5,
+             size = 1,
              linetype = "dotted") +
   labs(title = "D’Hondt/Jefferson Seat Allocation") +
   labs(subtitle = "Data: Hypothetical parties and results") +
@@ -1163,7 +1163,7 @@ count: false
 ```r
 animation_prep %&gt;%
   # plotting single time period
-  filter(time == 2) %&gt;%
+  filter(step == 2) %&gt;%
   ggplot() +
   aes(xmin = position + .4,
       xmax = position - .4,
@@ -1171,7 +1171,7 @@ animation_prep %&gt;%
       ymax = dh_outcome,
       fill = party,
       group = paste(party, divisor),
-      alpha = as.numeric(time == 3)) +
+      alpha = as.numeric(step == 3)) +
   scale_fill_viridis_d() +
   geom_rect(alpha = .7) +
   geom_vline(xintercept = 0.25,
@@ -1179,7 +1179,7 @@ animation_prep %&gt;%
              size = 1.25) +
   geom_vline(xintercept = c(6.5, 12.5),
              col = "slategray",
-             size = .5,
+             size = 1,
              linetype = "dotted") +
   labs(title = "D’Hondt/Jefferson Seat Allocation") +
   labs(subtitle = "Data: Hypothetical parties and results") +
@@ -1198,7 +1198,7 @@ count: false
 ```r
 animation_prep %&gt;%
   # plotting single time period
-  filter(time == 2) %&gt;%
+  filter(step == 2) %&gt;%
   ggplot() +
   aes(xmin = position + .4,
       xmax = position - .4,
@@ -1206,7 +1206,7 @@ animation_prep %&gt;%
       ymax = dh_outcome,
       fill = party,
       group = paste(party, divisor),
-      alpha = as.numeric(time == 3)) +
+      alpha = as.numeric(step == 3)) +
   scale_fill_viridis_d() +
   geom_rect(alpha = .7) +
   geom_vline(xintercept = 0.25,
@@ -1214,7 +1214,7 @@ animation_prep %&gt;%
              size = 1.25) +
   geom_vline(xintercept = c(6.5, 12.5),
              col = "slategray",
-             size = .5,
+             size = 1,
              linetype = "dotted") +
   labs(title = "D’Hondt/Jefferson Seat Allocation") +
   labs(subtitle = "Data: Hypothetical parties and results") +
@@ -1234,7 +1234,7 @@ count: false
 ```r
 animation_prep %&gt;%
   # plotting single time period
-  filter(time == 2) %&gt;%
+  filter(step == 2) %&gt;%
   ggplot() +
   aes(xmin = position + .4,
       xmax = position - .4,
@@ -1242,7 +1242,7 @@ animation_prep %&gt;%
       ymax = dh_outcome,
       fill = party,
       group = paste(party, divisor),
-      alpha = as.numeric(time == 3)) +
+      alpha = as.numeric(step == 3)) +
   scale_fill_viridis_d() +
   geom_rect(alpha = .7) +
   geom_vline(xintercept = 0.25,
@@ -1250,7 +1250,7 @@ animation_prep %&gt;%
              size = 1.25) +
   geom_vline(xintercept = c(6.5, 12.5),
              col = "slategray",
-             size = .5,
+             size = 1,
              linetype = "dotted") +
   labs(title = "D’Hondt/Jefferson Seat Allocation") +
   labs(subtitle = "Data: Hypothetical parties and results") +
@@ -1271,7 +1271,7 @@ count: false
 ```r
 animation_prep %&gt;%
   # plotting single time period
-  filter(time == 2) %&gt;%
+  filter(step == 2) %&gt;%
   ggplot() +
   aes(xmin = position + .4,
       xmax = position - .4,
@@ -1279,7 +1279,7 @@ animation_prep %&gt;%
       ymax = dh_outcome,
       fill = party,
       group = paste(party, divisor),
-      alpha = as.numeric(time == 3)) +
+      alpha = as.numeric(step == 3)) +
   scale_fill_viridis_d() +
   geom_rect(alpha = .7) +
   geom_vline(xintercept = 0.25,
@@ -1287,7 +1287,7 @@ animation_prep %&gt;%
              size = 1.25) +
   geom_vline(xintercept = c(6.5, 12.5),
              col = "slategray",
-             size = .5,
+             size = 1,
              linetype = "dotted") +
   labs(title = "D’Hondt/Jefferson Seat Allocation") +
   labs(subtitle = "Data: Hypothetical parties and results") +
@@ -1311,7 +1311,7 @@ count: false
 ```r
 animation_prep %&gt;%
   # plotting single time period
-  filter(time == 2) %&gt;%
+  filter(step == 2) %&gt;%
   ggplot() +
   aes(xmin = position + .4,
       xmax = position - .4,
@@ -1319,7 +1319,7 @@ animation_prep %&gt;%
       ymax = dh_outcome,
       fill = party,
       group = paste(party, divisor),
-      alpha = as.numeric(time == 3)) +
+      alpha = as.numeric(step == 3)) +
   scale_fill_viridis_d() +
   geom_rect(alpha = .7) +
   geom_vline(xintercept = 0.25,
@@ -1327,7 +1327,7 @@ animation_prep %&gt;%
              size = 1.25) +
   geom_vline(xintercept = c(6.5, 12.5),
              col = "slategray",
-             size = .5,
+             size = 1,
              linetype = "dotted") +
   labs(title = "D’Hondt/Jefferson Seat Allocation") +
   labs(subtitle = "Data: Hypothetical parties and results") +
@@ -1353,7 +1353,7 @@ count: false
 ```r
 animation_prep %&gt;%
   # plotting single time period
-  filter(time == 2) %&gt;%
+  filter(step == 2) %&gt;%
   ggplot() +
   aes(xmin = position + .4,
       xmax = position - .4,
@@ -1361,7 +1361,7 @@ animation_prep %&gt;%
       ymax = dh_outcome,
       fill = party,
       group = paste(party, divisor),
-      alpha = as.numeric(time == 3)) +
+      alpha = as.numeric(step == 3)) +
   scale_fill_viridis_d() +
   geom_rect(alpha = .7) +
   geom_vline(xintercept = 0.25,
@@ -1369,7 +1369,7 @@ animation_prep %&gt;%
              size = 1.25) +
   geom_vline(xintercept = c(6.5, 12.5),
              col = "slategray",
-             size = .5,
+             size = 1,
              linetype = "dotted") +
   labs(title = "D’Hondt/Jefferson Seat Allocation") +
   labs(subtitle = "Data: Hypothetical parties and results") +
@@ -1707,12 +1707,14 @@ count: false
 
 ```r
 *static_w_theme %+%
-* # use all the data %+% is a special ggplot operator
+* # use ALL the data.
+* # %+% is a special ggplot operator to
+* # reset ggplot global data
 * animation_prep
 ```
 ]]
 .column[.content[
-&lt;img src="dhondt_jefferson_allocation_files/figure-html/output_the_animation_3-1.png" width="100%" /&gt;
+&lt;img src="dhondt_jefferson_allocation_files/figure-html/output_the_animation_5-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
@@ -1721,15 +1723,25 @@ count: false
 
 ```r
 static_w_theme %+%
-  # use all the data %+% is a special ggplot operator
+  # use ALL the data.
+  # %+% is a special ggplot operator to
+  # reset ggplot global data
   animation_prep +
-* gganimate::transition_time(time = time) +
+* # add animation declarations
+* gganimate::transition_time(time = step) +
 * gganimate::ease_aes("exponential-in-out")
 ```
 ]]
 .column[.content[
-&lt;img src="dhondt_jefferson_allocation_files/figure-html/output_the_animation_5-1.gif" width="100%" /&gt;
+&lt;img src="dhondt_jefferson_allocation_files/figure-html/output_the_animation_8-1.gif" width="100%" /&gt;
 ]]
+
+---
+
+# Conclusion
+
+A seat is awarded for each party column left in the final step of the visualization.  
+
 
 ---
 

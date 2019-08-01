@@ -114,7 +114,7 @@ dhondt_calc
 
 ---
 
-# Step 3: Allocting seats
+# Step 3: Allocating seats
 
 Finally allocate seats using the D’Hondt/Jefferson Allocation method, we rank our "D'Hondt Outcomes", and hand out all available seats to the parties with the top D'Hondt outcomes. 
 
@@ -162,10 +162,10 @@ dhondt_calc %>%
   mutate(position_t3 = 1:n()) %>% 
   mutate(position_t4 = ifelse(position_t3 > num_seats, 
                               NA, position_t3)) %>%
-  tidyr::gather(key = "time", 
+  tidyr::gather(key = "step", 
                 value = "position", 
                 position_t2:position_t4) %>%
-  mutate(time = as.numeric(as.factor(time))) ->
+  mutate(step = as.numeric(as.factor(step))) ->
 animation_prep
 ```
   
@@ -176,7 +176,7 @@ animation_prep
   
 ---
 
-# Build static plot for one time period
+# Build static plot for one time period, i.e. a single step in the method. 
 
 
 ---
@@ -185,7 +185,7 @@ animation_prep
 ```{r static, echo = F, eval = T}
 animation_prep %>% 
   # plotting single time period
-  filter(time == 2) %>%  
+  filter(step == 2) %>%  
   ggplot() +
   aes(xmin = position + .4,
       xmax = position - .4,
@@ -193,7 +193,7 @@ animation_prep %>%
       ymax = dh_outcome, 
       fill = party, 
       group = paste(party, divisor),
-      alpha = as.numeric(time == 3)) +
+      alpha = as.numeric(step == 3)) +
   scale_fill_viridis_d() +
   geom_rect(alpha = .7) +
   geom_vline(xintercept = 0.25,
@@ -201,7 +201,7 @@ animation_prep %>%
              size = 1.25) +
   geom_vline(xintercept = c(6.5, 12.5),
              col = "slategray", 
-             size = .5,
+             size = 1,
              linetype = "dotted") +
   labs(title = "D’Hondt/Jefferson Seat Allocation") +
   labs(subtitle = "Data: Hypothetical parties and results") +
@@ -262,14 +262,24 @@ static_w_theme
 
 ```{r the_animation, echo = F, eval = F}
 static_w_theme %+%
-  # use all the data %+% is a special ggplot operator
+  # use ALL the data. 
+  # %+% is a special ggplot operator to
+  # reset ggplot global data
   animation_prep + #REVEAL
-  gganimate::transition_time(time = time) +
+  # add animation declarations
+  gganimate::transition_time(time = step) +
   gganimate::ease_aes("exponential-in-out") #REVEAL
 ```
 
 
 `r apply_reveal("the_animation", user_reveal_defined = T)`
+
+---
+
+# Conclusion
+
+A seat is awarded for each party column left in the final step of the visualization.  
+
 
 ---
 
