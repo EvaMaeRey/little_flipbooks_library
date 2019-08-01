@@ -26,7 +26,7 @@ options(table.width = Inf)
 
 # Introduction
 
-When awarding seats to parties in proportional representation systems, a dilemma is faced, as the seats available in a representitive body are unlikely to able to be perfectly apportioned --- only if fractions of seats were apportioned would that be possible.   
+When awarding seats to parties in proportional representation systems, a dilemma is faced, as the seats available in a representative body are unlikely to able to be perfectly apportioned --- only if fractions of seats were apportioned would that be possible.   
 
 ---
 
@@ -138,14 +138,14 @@ party_seats
 
 Now we have calculated the seat allocation for the election.    But it might be fun to also visualize this. 
 
-We'll represent the data associated with the parties with colored columns, the hight of which is the "D'hondt outcome". 
+We'll represent the data associated with the parties with colored columns, the height of which is the "D'Hondt outcome". 
 
 For each of the steps used in the method, specify positions for each of the calculation steps. The variables t1 through t4 are the positions at different steps.   
 
 - t1 will just show the total vote counts leaving space for those counts to be divided through by 1, 2,... [total number of votes].
-- t2 shows the resultant "dhont outcomes", grouped by party
-- t3 shows the rank among all the "D'hont outcomes"
-- t4 will show only the "D'hont outcomes" that are ranked high enough to earn a seat
+- t2 shows the resultant "D'Hondt outcomes", grouped by party
+- t3 shows the rank among all the "D'Hondt outcomes"
+- t4 will show only the "D'Hondt outcomes" that are ranked high enough to earn a seat
 
 
 ---
@@ -276,7 +276,7 @@ static_w_theme %+%
 # Implications
 
 
-In the opening lines of his 1973 paper, "The Relationship between Seats and Votes in Two-Party Systems", Eduard Tufte makes the observation:
+In the opening lines of his 1973 paper, "The Relationship between Seats and Votes in Two-Party Systems", Edward Tufte makes the observation:
 
 > *"An enduring fact of life in democratic electoral systems is that the party winning the largest share of the votes almost always receives a still larger share of the seats."*
 
