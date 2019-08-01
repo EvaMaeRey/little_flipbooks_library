@@ -1,0 +1,324 @@
+---
+title: "D'Hondt/Jefferson Allocation"
+subtitle: "flipbook | made with Xaringan"
+author: "<br><br>Gina Reynolds, July 2019"
+date: "<br>"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: ["kunoichi", "ninjutsu"]
+    nature:
+      ratio: "16:9"
+      highlightLines: true
+---
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(fig.height = 6, out.width = "100%", comment = " ", cache = F, message = F, warning = F, dpi = 300)
+library(gganimate) 
+options(gganimate.nframes = 80)
+source(file = "https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/xaringan_reveal_parentheses_balanced.R")
+options(table.width = Inf)
+```
+
+
+# Introduction
+
+When awarding seats to parties in proportional representation systems, a dilemma is faced, as the seats available in a representitive body are unlikely to able to be perfectly apportioned --- only if fractions of seats were apportioned would that be possible.   
+
+---
+
+# Plan of the book
+
+This book walks through the D'Hondt/Jefferson seat allocation method using dplyr and tidyr, using simulated data.  
+
+Then we create an animation of the steps of the method using ggplot and gganimate. 
+
+```{r}
+library(tidyverse)
+library(animation)
+set.seed(2020)
+```
+
+
+---
+
+# Step one: Collecting the facts
+
+To determine how many seats each party wins we need to know two things.  
+
+- The number of seats available
+- The number of votes won by each party
+
+
+---
+
+## Number of seats available
+
+We need to know the number of seats available.  Let's say 6.
+
+```{r}
+num_seats <- 6
+```
+
+
+---
+
+## Number of votes won by each party
+
+We also need to know how many votes were won by each party.  We'll simulate a number of seats won by 3 parties.  
+
+```{r}
+num_parties <- 3
+party <- c("equality", "justice", "peace", "liberty")[1:num_parties]
+votes <- sample(1000:10000, num_parties)
+party_votes <- tibble(party, votes)
+```
+
+---
+
+##  Number of votes won by each party
+
+Let's check out the table of party and votes won.
+
+```{r}
+party_votes
+```
+
+
+
+---
+
+# Step 2: Calculate the "D'Hondt Outcome"
+
+What I call "the D'Hondt Outcome"  is the number of votes won divided by 1, and 2, and 3, up to the total number of seats available for each party.  
+
+Notice how the function `crossing()` is used to set ourselves up to be able to do this in the next slide.  
+
+---
+
+
+
+```{r prep_data, echo = F, eval = T}
+party_votes %>% 
+  crossing(divisor = 1:num_seats) %>% 
+  mutate(dh_outcome = votes/divisor) ->
+dhondt_calc  
+```
+
+---
+
+`r apply_reveal("prep_data")`
+
+---
+
+# Step 3: Allocting seats
+
+Finally allocate seats using the D’Hondt/Jefferson Allocation method, we rank our "D'Hondt Outcomes", and hand out all available seats to the parties with the top D'Hondt outcomes. 
+
+```{r seat_allocation, echo = F, eval = T}
+dhondt_calc %>% 
+  arrange(-dh_outcome) %>% 
+  slice(1:num_seats) %>% 
+  count(party) %>% 
+  rename(seats_won = n) -> # Done!
+party_seats
+```
+
+---
+
+`r apply_reveal("seat_allocation")`
+
+
+---
+
+# Visualization
+
+Now we have calculated the seat allocation for the election.    But it might be fun to also visualize this. 
+
+We'll represent the data associated with the parties with colored columns, the hight of which is the "D'hondt outcome". 
+
+For each of the steps used in the method, specify positions for each of the calculation steps. The variables t1 through t4 are the positions at different steps.   
+
+- t1 will just show the total vote counts leaving space for those counts to be divided through by 1, 2,... [total number of votes].
+- t2 shows the resultant "dhont outcomes", grouped by party
+- t3 shows the rank among all the "D'hont outcomes"
+- t4 will show only the "D'hont outcomes" that are ranked high enough to earn a seat
+
+
+---
+
+
+
+```{r prep_for_animation, echo = F, eval = T}
+dhondt_calc %>% 
+  mutate(position_t2 = 1:n()) %>% 
+  group_by(party) %>% 
+  mutate(position_t1 = min(position_t2)) %>% 
+  ungroup() %>% 
+  arrange(-dh_outcome) %>% 
+  mutate(position_t3 = 1:n()) %>% 
+  mutate(position_t4 = ifelse(position_t3 > num_seats, 
+                              NA, position_t3)) %>%
+  tidyr::gather(key = "time", 
+                value = "position", 
+                position_t2:position_t4) %>%
+  mutate(time = as.numeric(as.factor(time))) ->
+animation_prep
+```
+  
+---
+
+`r apply_reveal("prep_for_animation")`
+
+  
+---
+
+# Build static plot for one time period
+
+
+---
+
+
+```{r static, echo = F, eval = T}
+animation_prep %>% 
+  # plotting single time period
+  filter(time == 2) %>%  
+  ggplot() +
+  aes(xmin = position + .4,
+      xmax = position - .4,
+      ymin = 0,
+      ymax = dh_outcome, 
+      fill = party, 
+      group = paste(party, divisor),
+      alpha = as.numeric(time == 3)) +
+  scale_fill_viridis_d() +
+  geom_rect(alpha = .7) +
+  geom_vline(xintercept = 0.25,
+             col = "slategray", 
+             size = 1.25) +
+  geom_vline(xintercept = c(6.5, 12.5),
+             col = "slategray", 
+             size = .5,
+             linetype = "dotted") +
+  labs(title = "D’Hondt/Jefferson Seat Allocation") +
+  labs(subtitle = "Data: Hypothetical parties and results") +
+  labs(caption = "Visualization: Gina Reynolds @EvaMaeRey in R with ggplot and gganimate") +
+  labs(x = "Number of Seats (divisor)") +
+  labs(y = "Number of Votes\ndivided by 1, 2, ..., N") +
+  scale_y_continuous(expand = c(.02, .02)) +
+  scale_x_continuous(breaks = 1:(num_parties * num_seats), 
+                     labels = rep(1:num_seats, num_parties),
+                     expand = c(.01, .01)) +
+  scale_alpha_continuous(range = c(0, 1), 
+                         guide = F) ->
+single_time_period_gg
+```
+
+
+
+`r apply_reveal("static")`
+
+---
+
+# Some theme fine tuning, if you please
+
+---
+
+```{r theme, echo = F, eval = T}
+single_time_period_gg +
+  theme(axis.ticks = element_blank()) +
+  theme(legend.background = element_rect(fill = "gainsboro")) +
+  theme(plot.background = element_rect(fill = "gainsboro")) +
+  theme(panel.background = element_rect(fill = "gainsboro")) +
+  theme(panel.grid = element_line(color = "plum4", size = .2)) +
+  theme(panel.grid.minor = element_blank()) +
+  theme(text = element_text(family = "Helvetica", size = 15)) +
+  theme(plot.title = element_text(face = "bold")) +
+  theme(legend.position = c(.85, .8)) + 
+  theme(legend.title = element_blank()) + 
+  theme(legend.key = element_rect(color = "gainsboro")) +
+  theme(axis.title.y = element_text(hjust = 1,
+                                    size = 10))  +
+  theme(axis.title.x = element_text(hjust = 0,
+                                    size = 10))  ->
+static_w_theme
+```
+
+
+
+
+`r apply_reveal("theme")`
+
+
+
+---
+
+# Animation
+
+---
+
+```{r the_animation, echo = F, eval = F}
+static_w_theme %+%
+  # use all the data %+% is a special ggplot operator
+  animation_prep + #REVEAL
+  gganimate::transition_time(time = time) +
+  gganimate::ease_aes("exponential-in-out") #REVEAL
+```
+
+
+`r apply_reveal("the_animation", user_reveal_defined = T)`
+
+---
+
+# Implications
+
+
+In the opening lines of his 1973 paper, "The Relationship between Seats and Votes in Two-Party Systems", Eduard Tufte makes the observation:
+
+> *"An enduring fact of life in democratic electoral systems is that the party winning the largest share of the votes almost always receives a still larger share of the seats."*
+
+While clearly qualified, Tufte "winner-takes-more" generalization is indeed true of D'Hondt seat allocation.  Let's compare the share of votes won in our example versus the share of seats won for each party in our hypothetical example.  
+
+
+```{r, out.width="45%", fig.show="hold", echo = F}
+party_votes %>% 
+  ggplot() +
+  aes(x = 1) +
+  aes(y = votes) +
+  geom_col() +
+  aes(fill = party) +
+  coord_polar(theta = "y") +
+  scale_fill_manual(values = c("plum4", "darkslategray4", "yellow"), 
+                     breaks = c("equality", "justice", "peace")) +
+  theme_void() +
+  theme(legend.title = element_blank()) +
+  labs(title = "Proportion Votes") ->
+votes_plot; votes_plot
+votes_plot %+% 
+  party_seats +
+  aes(y = seats_won) +
+  labs(title = "Proportion Seats") ->
+seats_plot; seats_plot
+```
+
+---
+
+# The End!
+
+Thanks for joining!  
+
+The code for this work lives [here](https://github.com/EvaMaeRey/little_flipbooks_library).  Open to suggestions. Send me a pull request.  
+
+Interested in building your own flipbook? It is fun! The code is still underdevelopment, and we'd love to have your feedback. A minimal example is [here]( https://evamaerey.github.io/little_flipbooks_library/tidytuesday_minimal_example/tidytuesday_minimal_example#1).  
+
+
+
+
+
+```{css, eval = TRUE, echo = F}
+.remark-code{line-height: 1.5; font-size: 60%}
+```
+
