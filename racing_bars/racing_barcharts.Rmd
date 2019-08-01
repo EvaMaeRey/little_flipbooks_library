@@ -130,7 +130,7 @@ My first implementation was with GDP per capita.  This resulted in less visually
 
 
 ```{css, eval = TRUE, echo = F}
-.remark-code{line-height: 1.5; font-size: 70%}
+.remark-code{line-height: 1.5; font-size: 60%}
 ```
 
 

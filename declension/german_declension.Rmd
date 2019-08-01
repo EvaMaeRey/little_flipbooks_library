@@ -1,0 +1,90 @@
+---
+title: "Declension, Gender"
+author: "Evangeline Reynolds"
+date: "5/28/2017"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+
+
+## R Markdown
+
+
+```{r}
+library(extrafont)
+library(tidyverse)
+
+gender <- fct_inorder(c("Feminine", "Plural", "Neuter", "Masculine"))
+case <- fct_inorder(c("Nominativ", "Akkusativ", "Genativ", "Dativ"))
+
+crossing(case, gender) %>% 
+  bind_cols(
+    tibble(
+      weight = c(1,1,2,3, 
+                 1,1,2,4,
+                 3,3,5,5,
+                 3,4,6,6),
+      noun = c("Frau","Menschen","Kind","Mann",
+               "Geschichte","Lügen","Geheimnis","Bericht",
+       "Mutter", "Eltern","Enkelkind","Vaters",
+       "Dame","Personen","Baby","Herrn"),
+      pronoun = c("sie","sie","es","er",
+           "sie","sie","es","ihn",
+           "ihr-","ihr-","sein-","sein-",
+           "ihr","ihnen","ihm","ihm"),
+      definite_article = c("die","die","das","der",
+                   "die","die","das","den",
+                   "der","der","des","des",
+                   "der","den","dem","dem"),
+       indefinite_article = c("eine","keine","einX","einX",
+                     "eine","keine","einX","einen",
+                     "einer","keiner","eines","eines",
+                     "einer","keinen","einem","einem"),
+      adjective = c("jung", "lustig", "klein", "stark",
+             "interessant", "verrückt","schrecklich", "schleckt",
+             "klug", "streng", "gut", "nett",
+             "elegant","laut","traurig", "gut"),
+      def_art_ending = c("e","en","e", "e",
+                "e", "en", "e", "en",
+                "en", "en","en", "en",
+                "en", "en","en", "en" ),
+      indef_art_ending = c("e","en","es", "er",
+                "e", "en", "es", "en",
+                "en", "en","en", "en",
+                "en", "en","en", "en" ),
+      null_art_ending = c("e","e","es", "er",
+                "e", "e", "es", "en",
+                "er", "er","en", "en",
+                "er", "en","em", "em" )
+      )
+  ) ->
+everything
+
+
+everything %>% 
+  gather(key = "part_of_speech", value = "string", -case, -gender) ->
+everything_long
+
+```  
+
+
+```{r, fig.height=8, fig.width=12}
+ggplot(data = everything) +
+  aes(x = gender) +
+  aes(y = fct_rev(case)) + 
+  aes(label = noun) +
+  geom_tile(mapping = aes(alpha = weight),
+            fill = "plum") + 
+  geom_text() +
+  theme_minimal() +
+  labs(title = "Third Person Gender and Case: Wer ezhählt wem was?") +
+  labs(subtitle = "Gina Reynolds, 2018") +
+  scale_alpha(guide = F)  +
+  aes(label = paste0(definite_article, " ", noun)) +
+  aes(label = paste0(definite_article, " ", adjective, def_art_ending, " ", noun)) + 
+  aes(label = paste0(indefinite_article, " ", adjective, indef_art_ending, " ", noun)) 
+
+```
+

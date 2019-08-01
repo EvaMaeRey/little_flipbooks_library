@@ -37,7 +37,8 @@ geom_point() + #REVEAL
 aes(color = 
 paste(\"continent\", 
 continent) 
-) ->  
+) %+%
+new_data ->  
 my_plot "
 
 

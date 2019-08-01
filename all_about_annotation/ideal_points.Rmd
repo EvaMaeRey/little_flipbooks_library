@@ -1,0 +1,122 @@
+---
+title: "annotation in ggplot"
+subtitle: "⚔<br/>made with xaringan"
+author: "Gina Reynolds"
+date: "2019/01/31"
+output:
+  xaringan::moon_reader:
+    chakra: libs/remark-latest.min.js
+    lib_dir: libs
+    css: ["kunoichi", "ninjutsu"]
+    nature:
+      ratio: "20:10"
+      highlightLines: true
+---
+
+
+
+```{r, message = F, warning= F}
+
+source("../xaringan_reveal_parenthetical.R")
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
+knitr::opts_chunk$set(fig.height = 6,  comment = " ", cache = T)
+
+```
+
+
+```{r, warning = F, message = F}
+library(ggplot2)
+library(countrycode)
+library(tidyverse)
+library(ggridges)
+
+df <-  foreign::read.dta("raw_data/IdealpointsPublished.dta") %>% 
+  mutate(`Percent agreement with US` = as.numeric(PctAgreeUS))
+countries = df %>% group_by(CountryName, ccode, CountryAbb, unsc_region) %>% 
+  summarise() %>% mutate(eu28 = countrycode(ccode, "cown", "eu28")) %>% 
+  mutate(continent = countrycode(ccode, "cown", "continent"))
+```
+
+
+
+---
+
+```{r, eval = T, echo = F}
+df_for_graph = df %>% left_join(countries) %>% 
+  filter(year %in% seq(1945, 2015, by = 5)) %>% 
+  mutate(Region = ifelse(!is.na(eu28), "group 1", "group 2")) %>% 
+  mutate(YearFct = fct_rev(as.factor(year))) 
+  
+df_for_us = df %>% 
+  left_join(countries) %>%
+  filter(year %in% seq(1945, 2015, by = 5) & 
+           CountryAbb == "USA")
+
+df_for_us %>% 
+  ggplot() +
+  aes(x = year, y = Idealpoint) +
+  geom_point() ->
+  g
+
+
+
+```  
+
+
+
+---
+
+```{r unga_ridges, echo = F, eval = F, fig.height=7}
+ggplot(df_for_graph) +
+  aes(y = YearFct) +
+  aes(x = Idealpoint) +
+  geom_density_ridges(mapping = aes(fill = paste(YearFct, 
+                                                 Region)), 
+                      alpha = .8, color = "white", 
+                      from = -4.5, to = 5) +
+  scale_y_discrete(expand = c(0.01, 0)) +
+  scale_x_continuous(expand = c(0.01, 0), 
+                     limits = c(-5,5)) +
+  scale_fill_cyclical(breaks = c("1950 group 1", "1950 group 2"), 
+                      labels = c(`1950 group 1` = "Current EU Countries", 
+                                 `1950 group 2` = "Non-EU Countries"), 
+                      values = c("#ff0000", "#0000ff", "#ff8080", "#8080ff"), 
+                      guide = "legend" ) +
+  geom_point(data = df_for_us, 
+             mapping = aes(y = factor(year), col = CountryAbb), 
+             col = "orange", size = 3, alpha = .6, type = 21) +
+  theme_ridges(grid = T) +
+  theme(legend.position = c(0.76, 0.75)) +
+  annotate(geom = "text", x = 4.2, y = 3.7, 
+           label = "estimated ideal  \npoints for U.S.   ") +
+  annotate(geom = "segment", x = 3.5, y = 3.9, 
+           xend = 3, yend = 5,  col = "gray50") +
+  annotate(geom = "segment", x = 3.5, y = 3.7, 
+           xend = 2.7, yend = 4, col = "gray50") +
+  annotate(geom = "segment", x = 3.5, y = 3.5, 
+           xend = 3.05, yend = 3,  col = "gray50") +
+  annotate(geom = "text", x = -3.25, y = 6.5, 
+           label = "Cold War to\npost-Cold War\nrealignment", 
+           hjust = "right") +
+  annotate(geom = "segment", 
+           x = -3, y = 5.5, 
+           xend = -3, yend = 7.5, 
+           lty = 2, lwd = .5, col = "gray34", 
+           arrow = arrow(ends = "both", angle = 90, 
+                         length =  unit(0.01, "npc"))) +
+  labs(fill = "") +
+  labs(x = "Estimated Ideal Point") +
+  labs(y = "Year") +
+  labs(title = "Country estimated ideal points calculation based on voting in the UN General Assembly") +
+  labs(subtitle = "US vs EU (includes UK) vs other UN member") +
+  labs(caption = "Visualization: Gina Reynolds (@evamaerey)\nEstimation: Voeten, Strezhnev, and Bailey, 2009") 
+```
+
+
+
+---
+
+`r apply_reveal("unga_ridges")`
+
+---
+

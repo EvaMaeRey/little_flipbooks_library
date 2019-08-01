@@ -1,0 +1,248 @@
+---
+title: "A rayshader flipbook"
+author: "Gina Reynolds, June 2019"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: ["kunoichi", "ninjutsu"]
+    nature:
+      ratio: 16:10
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, cache = F)
+```
+
+```{r}
+library(rayshader)
+library(tidyverse)
+options(digits = 4)
+library(rgl)
+source(file = "https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/xaringan_reveal_parentheses_balanced.R")
+```
+
+
+```{r}
+#Here, I load a map with the raster package.
+loadzip = tempfile() 
+download.file("https://tylermw.com/data/dem_01.tif.zip", loadzip)
+localtif = raster::raster(unzip(loadzip, "dem_01.tif"))
+unlink(loadzip)
+
+make_sparse <- function(x, by){
+  x[seq(1, nrow(x), by = by), seq(1, ncol(x), by = by) ]
+}
+
+#And convert it to a matrix:
+full_elmat <- matrix(raster::extract(localtif, raster::extent(localtif), buffer = 1000),
+               nrow = ncol(localtif), ncol = nrow(localtif)) 
+
+
+```
+
+---
+
+# We use another one of rayshader's built-in textures:
+
+
+```{r plot1}
+full_elmat %>% 
+  make_sparse(by = 80) ->
+elmat
+detect_water(heightmap = elmat) ->
+  dw
+ray_shade(heightmap = elmat) ->
+  rs
+ambient_shade(heightmap = elmat) ->
+  as
+elmat %>% 
+  sphere_shade(sunangle = 45, 
+               texture = "desert") %>%
+  add_water(watermap = dw,
+            color = "desert") %>%
+  add_shadow(shadowmap =
+               rs) %>%
+  add_shadow(shadowmap = 
+               as, 
+             max_darken = .5) %>% 
+  plot_map() 
+```
+
+
+
+---
+
+`r apply_reveal("plot1")`
+
+
+
+
+<!-- # And here we add an ambient occlusion shadow layer, which models  -->
+<!-- #lighting from atmospheric scattering: -->
+
+
+<!-- ```{r plot2} -->
+<!-- ambient_shade(montereybay) -> -->
+<!--   ambmat -->
+<!-- ray_shade(montereybay) -> -->
+<!--   raymat -->
+<!-- montereybay %>% -->
+<!--   sphere_shade(texture = "desert") %>% -->
+<!--   add_water(watermap = detect_water(montereybay), color = "desert") %>% -->
+<!--   add_shadow(hillshade = raymat) %>% -->
+<!--   add_shadow(shadowmap = ambmat) %>% -->
+<!--   plot_map() -->
+<!-- ``` -->
+
+
+
+<!-- --- -->
+
+<!-- r apply_reveal("plot2")` -->
+
+<!-- --- -->
+
+
+<!-- Rayshader also supports 3D mapping by passing a texture map (either external or one produced by rayshader) into the plot_3d function. -->
+
+<!-- ```{r plot3} -->
+<!-- elmat %>% -->
+<!--   sphere_shade(texture = "desert") %>% -->
+<!--   add_water(detect_water(elmat), color="desert") %>% -->
+<!--   add_shadow(ray_shade(elmat, zscale=3, maxsearch = 300),0.5) %>% -->
+<!--   add_shadow(ambmat,0.5) %>% -->
+<!--   plot_3d(elmat,zscale=10,  -->
+<!--           fov=0,theta=135,zoom=0.75, -->
+<!--           phi=45, windowsize = c(1000,800)) -->
+<!-- render_snapshot() -->
+<!-- rgl.close() -->
+<!-- ``` -->
+
+
+<!-- --- -->
+
+
+<!-- You can also easily add a water layer by setting water = TRUE in plot_3d() (and setting waterdepth if the water level is not 0), or by using the function render_water() after the 3D map has been rendered. You can customize the appearance and transparancy of the water layer via function arguments. Here’s an example using bathymetric/topographic data of Monterey Bay, CA (included with rayshader): -->
+
+
+<!-- ```{r plot4} -->
+<!-- mont_small <- make_sparse(montereybay, by = 5); dim(mont_small) -->
+<!-- montshadow = ray_shade(mont_small,zscale=50,lambert=FALSE) -->
+<!-- montamb = ambient_shade(mont_small,zscale=50) -->
+<!-- mont_small %>%  -->
+<!--     sphere_shade(zscale=10,texture = "imhof1") %>%  -->
+<!--     add_shadow(montshadow,0.5) %>% -->
+<!--     add_shadow(montamb) %>% -->
+<!--   plot_3d(montereybay,zscale=50, -->
+<!--           fov=0,theta=-45,phi=45,windowsize=c(1000,800), zoom=0.75, -->
+<!--             water=TRUE, waterdepth = 0, wateralpha = 0.5,watercolor = "lightblue", -->
+<!--             waterlinecolor = "white",waterlinealpha = 0.5)  -->
+<!-- render_snapshot() -->
+<!-- rgl.close() -->
+<!-- ``` -->
+
+<!-- ```{r, eval = F} -->
+
+<!-- ``` -->
+
+
+<!-- --- -->
+
+<!-- r apply_reveal("plot4")` -->
+
+<!-- --- -->
+
+
+<!-- Rayshader also has map shapes other than rectangular included c("hex", "circle"), and you can customize the map into any shape you want by setting the areas you do not want to display to NA. -->
+
+
+<!-- ```{r plot5} -->
+<!-- par(mfrow=c(1,2)) -->
+<!-- mont_small %>%  -->
+<!--     sphere_shade(zscale=10,texture = "imhof1") %>%  -->
+<!--     add_shadow(montshadow,0.5) %>% -->
+<!--     add_shadow(montamb) %>% -->
+<!--   plot_3d(mont_small,zscale=50,fov=0,theta=-45,phi=45, -->
+<!--           windowsize=c(1000,800),zoom=0.6, -->
+<!--             water=TRUE, waterdepth = 0, wateralpha = 0.5, -->
+<!--           watercolor = "blue", -->
+<!--             waterlinecolor = "white",waterlinealpha = 0.5, -->
+<!--           baseshape = "circle")  -->
+<!-- render_snapshot() -->
+<!-- rgl.close() -->
+<!-- ``` -->
+
+<!-- --- -->
+
+<!-- r apply_reveal("plot5")` -->
+
+<!-- --- -->
+
+
+<!-- ```{r plot6, eval = F} -->
+<!-- mont_small %>%  -->
+<!--     sphere_shade(zscale=10,texture = "imhof1") %>%  -->
+<!--     add_shadow(montshadow,0.5) %>% -->
+<!--     add_shadow(montamb) %>% -->
+<!--     plot_3d(montereybay,zscale=50,fov=0,theta=-45,phi=45,windowsize=c(1000,800),zoom=0.6, -->
+<!--             water=TRUE, waterdepth = 0, wateralpha = 0.5,watercolor = "lightblue", -->
+<!--             waterlinecolor = "white",waterlinealpha = 0.5,baseshape = "hex") -->
+<!-- rgl.close() -->
+<!-- ``` -->
+
+
+<!-- --- -->
+
+
+<!-- Adding text labels is done with the render_label() function, which also allows you to customize the line type, color, and size along with the font: -->
+
+
+<!-- ```{r plot7, eval = F} -->
+<!-- mont_small %>%  -->
+<!--     sphere_shade(zscale=10,texture = "imhof1") %>%  -->
+<!--     add_shadow(montshadow,0.5) %>% -->
+<!--     add_shadow(montamb) %>% -->
+<!--     plot_3d(mont_small,zscale=50,fov=0,theta=-100,phi=30, -->
+<!--             windowsize=c(1000,800),zoom=0.6, -->
+<!--             water=TRUE, waterdepth = 0, waterlinecolor = "white",  -->
+<!--             waterlinealpha = 0.5, -->
+<!--             wateralpha = 0.5,watercolor = "lightblue") -->
+<!-- render_label(mont_small,x=350/5,y=240/5, z=4000,zscale=50, -->
+<!--              text = "Moss Landing",textsize = 2,linewidth = 5) -->
+<!-- render_label(mont_small,x=220/5,y=330/5, z=6000,zscale=50, -->
+<!--              text = "Santa Cruz",color="darkred",textcolor = "darkred",textsize = 2,linewidth = 5) -->
+<!-- render_label(mont_small,x=300/5,y=130/5, z=4000,zscale=50/5, -->
+<!--              text = "Monterey",dashed = TRUE,textsize = 2,linewidth = 5) -->
+<!-- render_label(mont_small,x=50/5,y=130/5, z=1000,zscale=50, -->
+<!--              text = "Monterey Canyon",relativez=FALSE,textsize = 2,linewidth = 5) -->
+<!-- render_snapshot() -->
+<!-- rgl.close() -->
+<!-- ``` -->
+
+
+<!-- --- -->
+
+
+<!-- You can also apply a post-processing effect to the 3D maps to render maps with depth of field with the render_depth() function: -->
+
+
+<!-- ```{r plot8, eval = F} -->
+<!-- elmat %>% -->
+<!--   sphere_shade(texture = "desert") %>% -->
+<!--   add_water(detect_water(elmat), color="desert") %>% -->
+<!--   add_shadow(raymat,0.5) %>% -->
+<!--   add_shadow(ambmat,0.5) %>% -->
+<!--   plot_3d(elmat,zscale=10,fov=30,theta=-225,phi=25,windowsize=c(1000,800),zoom=0.3) -->
+<!-- render_depth(focus=0.6,focallength = 200) -->
+<!-- rgl.close() -->
+<!-- ``` -->
+
+<!-- --- -->
+
+
+```{css, eval = TRUE, echo = F}
+.remark-code{line-height: 1.5; font-size: 60%}
+```

@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>annotation in ggplot</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Gina Reynolds" />
+    <link href="libs/remark-css-0.0.1/kunoichi.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# annotation in ggplot
+## ⚔<br/>made with xaringan
+### Gina Reynolds
+### 2019/01/31
+
+---
+
+
+
+
+
+```r
+library(tidyverse)
+library(readxl)
+library(lubridate)
+df_0 &lt;- read_xlsx("raw_data/us_avg_tuition.xlsx") %&gt;% 
+  left_join(data_frame(state.abb, State = state.name))
+```
+
+
+
+```r
+library(ggthemes)
+library(ggrepel)
+```
+
+
+```r
+source("../xaringan_reveal_parenthetical.R")
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(fig.height = 6, out.width = "80%", comment = " ", cache = T, dpi = 300)
+```
+
+---
+
+&lt;img src="ggplot_tutorial_tuition_files/figure-html/tuition-1.png" width="60%" /&gt;
+
+---
+
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+*set.seed(2019)
+```
+]]
+.column[.content.center[
+
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+set.seed(2019)
+*ggplot(df_0)
+```
+]]
+.column[.content.center[
+&lt;img src="ggplot_tutorial_tuition_files/figure-html/output_tuition_2-1.png" width="80%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+set.seed(2019)
+ggplot(df_0) +
+* aes(x = `2004-05`)
+```
+]]
+.column[.content.center[
+&lt;img src="ggplot_tutorial_tuition_files/figure-html/output_tuition_3-1.png" width="80%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+set.seed(2019)
+ggplot(df_0) +
+  aes(x = `2004-05`) +
+* aes(y = `2014-15`)
+```
+]]
+.column[.content.center[
+&lt;img src="ggplot_tutorial_tuition_files/figure-html/output_tuition_4-1.png" width="80%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+set.seed(2019)
+ggplot(df_0) +
+  aes(x = `2004-05`) +
+  aes(y = `2014-15`) +
+* coord_equal()
+```
+]]
+.column[.content.center[
+&lt;img src="ggplot_tutorial_tuition_files/figure-html/output_tuition_5-1.png" width="80%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+set.seed(2019)
+ggplot(df_0) +
+  aes(x = `2004-05`) +
+  aes(y = `2014-15`) +
+  coord_equal() +
+* labs(x = "Tuition cost in 2004, USD")
+```
+]]
+.column[.content.center[
+&lt;img src="ggplot_tutorial_tuition_files/figure-html/output_tuition_6-1.png" width="80%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+set.seed(2019)
+ggplot(df_0) +
+  aes(x = `2004-05`) +
+  aes(y = `2014-15`) +
+  coord_equal() +
+  labs(x = "Tuition cost in 2004, USD") +
+* labs(y = "Tuition cost in 2014, USD")
+```
+]]
+.column[.content.center[
+&lt;img src="ggplot_tutorial_tuition_files/figure-html/output_tuition_7-1.png" width="80%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+set.seed(2019)
+ggplot(df_0) +
+  aes(x = `2004-05`) +
+  aes(y = `2014-15`) +
+  coord_equal() +
+  labs(x = "Tuition cost in 2004, USD") +
+  labs(y = "Tuition cost in 2014, USD") +
+* geom_segment(aes(xend = `2004-05`,
+*                  yend = `2004-05`,
+*                  col = "Increase from\n2004 to 2014"),
+*              alpha = .7)
+```
+]]
+.column[.content.center[
+&lt;img src="ggplot_tutorial_tuition_files/figure-html/output_tuition_11-1.png" width="80%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+set.seed(2019)
+ggplot(df_0) +
+  aes(x = `2004-05`) +
+  aes(y = `2014-15`) +
+  coord_equal() +
+  labs(x = "Tuition cost in 2004, USD") +
+  labs(y = "Tuition cost in 2014, USD") +
+  geom_segment(aes(xend = `2004-05`, 
+                   yend = `2004-05`, 
+                   col = "Increase from\n2004 to 2014"), 
+               alpha = .7) + 
+* geom_segment(aes(xend = `2004-05`,
+*                  y = 0, yend = `2004-05`,
+*                  col = "2004 Tuition Cost" ),
+*              alpha = .7)
+```
+]]
+.column[.content.center[
+&lt;img src="ggplot_tutorial_tuition_files/figure-html/output_tuition_15-1.png" width="80%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+set.seed(2019)
+ggplot(df_0) +
+  aes(x = `2004-05`) +
+  aes(y = `2014-15`) +
+  coord_equal() +
+  labs(x = "Tuition cost in 2004, USD") +
+  labs(y = "Tuition cost in 2014, USD") +
+  geom_segment(aes(xend = `2004-05`, 
+                   yend = `2004-05`, 
+                   col = "Increase from\n2004 to 2014"), 
+               alpha = .7) + 
+  geom_segment(aes(xend = `2004-05`, 
+                   y = 0, yend = `2004-05`, 
+                   col = "2004 Tuition Cost" ), 
+               alpha = .7) +
+* scale_color_manual(breaks = c("Increase from\n2004 to 2014",
+*                               "2004 Tuition Cost"),
+*                    values = c("grey70", "grey30"))
+```
+]]
+.column[.content.center[
+&lt;img src="ggplot_tutorial_tuition_files/figure-html/output_tuition_18-1.png" width="80%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+set.seed(2019)
+ggplot(df_0) +
+  aes(x = `2004-05`) +
+  aes(y = `2014-15`) +
+  coord_equal() +
+  labs(x = "Tuition cost in 2004, USD") +
+  labs(y = "Tuition cost in 2014, USD") +
+  geom_segment(aes(xend = `2004-05`, 
+                   yend = `2004-05`, 
+                   col = "Increase from\n2004 to 2014"), 
+               alpha = .7) + 
+  geom_segment(aes(xend = `2004-05`, 
+                   y = 0, yend = `2004-05`, 
+                   col = "2004 Tuition Cost" ), 
+               alpha = .7) +
+  scale_color_manual(breaks = c("Increase from\n2004 to 2014", 
+                                "2004 Tuition Cost"), 
+                     values = c("grey70", "grey30")) +
+* aes(label = state.abb)
+```
+]]
+.column[.content.center[
+&lt;img src="ggplot_tutorial_tuition_files/figure-html/output_tuition_19-1.png" width="80%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+set.seed(2019)
+ggplot(df_0) +
+  aes(x = `2004-05`) +
+  aes(y = `2014-15`) +
+  coord_equal() +
+  labs(x = "Tuition cost in 2004, USD") +
+  labs(y = "Tuition cost in 2014, USD") +
+  geom_segment(aes(xend = `2004-05`, 
+                   yend = `2004-05`, 
+                   col = "Increase from\n2004 to 2014"), 
+               alpha = .7) + 
+  geom_segment(aes(xend = `2004-05`, 
+                   y = 0, yend = `2004-05`, 
+                   col = "2004 Tuition Cost" ), 
+               alpha = .7) +
+  scale_color_manual(breaks = c("Increase from\n2004 to 2014", 
+                                "2004 Tuition Cost"), 
+                     values = c("grey70", "grey30")) +
+  aes(label = state.abb) +
+* geom_point(col = "grey30")
+```
+]]
+.column[.content.center[
+&lt;img src="ggplot_tutorial_tuition_files/figure-html/output_tuition_20-1.png" width="80%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+set.seed(2019)
+ggplot(df_0) +
+  aes(x = `2004-05`) +
+  aes(y = `2014-15`) +
+  coord_equal() +
+  labs(x = "Tuition cost in 2004, USD") +
+  labs(y = "Tuition cost in 2014, USD") +
+  geom_segment(aes(xend = `2004-05`, 
+                   yend = `2004-05`, 
+                   col = "Increase from\n2004 to 2014"), 
+               alpha = .7) + 
+  geom_segment(aes(xend = `2004-05`, 
+                   y = 0, yend = `2004-05`, 
+                   col = "2004 Tuition Cost" ), 
+               alpha = .7) +
+  scale_color_manual(breaks = c("Increase from\n2004 to 2014", 
+                                "2004 Tuition Cost"), 
+                     values = c("grey70", "grey30")) +
+  aes(label = state.abb) +
+  geom_point(col = "grey30") +
+* ggpmisc::stat_dens2d_filter(geom = "text_repel",
+*                             keep.fraction = 0.30,
+*                             size = 3.8)
+```
+]]
+.column[.content.center[
+&lt;img src="ggplot_tutorial_tuition_files/figure-html/output_tuition_23-1.png" width="80%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+set.seed(2019)
+ggplot(df_0) +
+  aes(x = `2004-05`) +
+  aes(y = `2014-15`) +
+  coord_equal() +
+  labs(x = "Tuition cost in 2004, USD") +
+  labs(y = "Tuition cost in 2014, USD") +
+  geom_segment(aes(xend = `2004-05`, 
+                   yend = `2004-05`, 
+                   col = "Increase from\n2004 to 2014"), 
+               alpha = .7) + 
+  geom_segment(aes(xend = `2004-05`, 
+                   y = 0, yend = `2004-05`, 
+                   col = "2004 Tuition Cost" ), 
+               alpha = .7) +
+  scale_color_manual(breaks = c("Increase from\n2004 to 2014", 
+                                "2004 Tuition Cost"), 
+                     values = c("grey70", "grey30")) +
+  aes(label = state.abb) +
+  geom_point(col = "grey30") +
+  ggpmisc::stat_dens2d_filter(geom = "text_repel", 
+                              keep.fraction = 0.30, 
+                              size = 3.8) +
+* lims(x = c(0,15000))
+```
+]]
+.column[.content.center[
+&lt;img src="ggplot_tutorial_tuition_files/figure-html/output_tuition_24-1.png" width="80%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+set.seed(2019)
+ggplot(df_0) +
+  aes(x = `2004-05`) +
+  aes(y = `2014-15`) +
+  coord_equal() +
+  labs(x = "Tuition cost in 2004, USD") +
+  labs(y = "Tuition cost in 2014, USD") +
+  geom_segment(aes(xend = `2004-05`, 
+                   yend = `2004-05`, 
+                   col = "Increase from\n2004 to 2014"), 
+               alpha = .7) + 
+  geom_segment(aes(xend = `2004-05`, 
+                   y = 0, yend = `2004-05`, 
+                   col = "2004 Tuition Cost" ), 
+               alpha = .7) +
+  scale_color_manual(breaks = c("Increase from\n2004 to 2014", 
+                                "2004 Tuition Cost"), 
+                     values = c("grey70", "grey30")) +
+  aes(label = state.abb) +
+  geom_point(col = "grey30") +
+  ggpmisc::stat_dens2d_filter(geom = "text_repel", 
+                              keep.fraction = 0.30, 
+                              size = 3.8) +
+  lims(x = c(0,15000)) +
+* lims(y = c(0,17000))
+```
+]]
+.column[.content.center[
+&lt;img src="ggplot_tutorial_tuition_files/figure-html/output_tuition_25-1.png" width="80%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+set.seed(2019)
+ggplot(df_0) +
+  aes(x = `2004-05`) +
+  aes(y = `2014-15`) +
+  coord_equal() +
+  labs(x = "Tuition cost in 2004, USD") +
+  labs(y = "Tuition cost in 2014, USD") +
+  geom_segment(aes(xend = `2004-05`, 
+                   yend = `2004-05`, 
+                   col = "Increase from\n2004 to 2014"), 
+               alpha = .7) + 
+  geom_segment(aes(xend = `2004-05`, 
+                   y = 0, yend = `2004-05`, 
+                   col = "2004 Tuition Cost" ), 
+               alpha = .7) +
+  scale_color_manual(breaks = c("Increase from\n2004 to 2014", 
+                                "2004 Tuition Cost"), 
+                     values = c("grey70", "grey30")) +
+  aes(label = state.abb) +
+  geom_point(col = "grey30") +
+  ggpmisc::stat_dens2d_filter(geom = "text_repel", 
+                              keep.fraction = 0.30, 
+                              size = 3.8) +
+  lims(x = c(0,15000)) +
+  lims(y = c(0,17000)) +
+* annotate(geom = "text",
+*          x = 1700, y = 1700,
+*          label = "Average Tuition\nCosts in 2004",
+*          angle = 45, size = 2.8)
+```
+]]
+.column[.content.center[
+&lt;img src="ggplot_tutorial_tuition_files/figure-html/output_tuition_29-1.png" width="80%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+set.seed(2019)
+ggplot(df_0) +
+  aes(x = `2004-05`) +
+  aes(y = `2014-15`) +
+  coord_equal() +
+  labs(x = "Tuition cost in 2004, USD") +
+  labs(y = "Tuition cost in 2014, USD") +
+  geom_segment(aes(xend = `2004-05`, 
+                   yend = `2004-05`, 
+                   col = "Increase from\n2004 to 2014"), 
+               alpha = .7) + 
+  geom_segment(aes(xend = `2004-05`, 
+                   y = 0, yend = `2004-05`, 
+                   col = "2004 Tuition Cost" ), 
+               alpha = .7) +
+  scale_color_manual(breaks = c("Increase from\n2004 to 2014", 
+                                "2004 Tuition Cost"), 
+                     values = c("grey70", "grey30")) +
+  aes(label = state.abb) +
+  geom_point(col = "grey30") +
+  ggpmisc::stat_dens2d_filter(geom = "text_repel", 
+                              keep.fraction = 0.30, 
+                              size = 3.8) +
+  lims(x = c(0,15000)) +
+  lims(y = c(0,17000)) +
+  annotate(geom = "text", 
+           x = 1700, y = 1700, 
+           label = "Average Tuition\nCosts in 2004", 
+           angle = 45, size = 2.8) +
+* annotate(geom = "text",
+*          x = 13300, y = 15200,
+*          label = "Increase", angle = 90, size = 2.8)
+```
+]]
+.column[.content.center[
+&lt;img src="ggplot_tutorial_tuition_files/figure-html/output_tuition_32-1.png" width="80%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+set.seed(2019)
+ggplot(df_0) +
+  aes(x = `2004-05`) +
+  aes(y = `2014-15`) +
+  coord_equal() +
+  labs(x = "Tuition cost in 2004, USD") +
+  labs(y = "Tuition cost in 2014, USD") +
+  geom_segment(aes(xend = `2004-05`, 
+                   yend = `2004-05`, 
+                   col = "Increase from\n2004 to 2014"), 
+               alpha = .7) + 
+  geom_segment(aes(xend = `2004-05`, 
+                   y = 0, yend = `2004-05`, 
+                   col = "2004 Tuition Cost" ), 
+               alpha = .7) +
+  scale_color_manual(breaks = c("Increase from\n2004 to 2014", 
+                                "2004 Tuition Cost"), 
+                     values = c("grey70", "grey30")) +
+  aes(label = state.abb) +
+  geom_point(col = "grey30") +
+  ggpmisc::stat_dens2d_filter(geom = "text_repel", 
+                              keep.fraction = 0.30, 
+                              size = 3.8) +
+  lims(x = c(0,15000)) +
+  lims(y = c(0,17000)) +
+  annotate(geom = "text", 
+           x = 1700, y = 1700, 
+           label = "Average Tuition\nCosts in 2004", 
+           angle = 45, size = 2.8) +
+  annotate(geom = "text", 
+           x = 13300, y = 15200, 
+           label = "Increase", angle = 90, size = 2.8) +
+* annotate(geom = "segment",
+*          x = 12900, y = 12900,
+*          xend = 12900, yend = 17000,
+*          arrow = arrow(length = unit(0.25, "cm")),
+*          col = "darkgrey")
+```
+]]
+.column[.content.center[
+&lt;img src="ggplot_tutorial_tuition_files/figure-html/output_tuition_37-1.png" width="80%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+set.seed(2019)
+ggplot(df_0) +
+  aes(x = `2004-05`) +
+  aes(y = `2014-15`) +
+  coord_equal() +
+  labs(x = "Tuition cost in 2004, USD") +
+  labs(y = "Tuition cost in 2014, USD") +
+  geom_segment(aes(xend = `2004-05`, 
+                   yend = `2004-05`, 
+                   col = "Increase from\n2004 to 2014"), 
+               alpha = .7) + 
+  geom_segment(aes(xend = `2004-05`, 
+                   y = 0, yend = `2004-05`, 
+                   col = "2004 Tuition Cost" ), 
+               alpha = .7) +
+  scale_color_manual(breaks = c("Increase from\n2004 to 2014", 
+                                "2004 Tuition Cost"), 
+                     values = c("grey70", "grey30")) +
+  aes(label = state.abb) +
+  geom_point(col = "grey30") +
+  ggpmisc::stat_dens2d_filter(geom = "text_repel", 
+                              keep.fraction = 0.30, 
+                              size = 3.8) +
+  lims(x = c(0,15000)) +
+  lims(y = c(0,17000)) +
+  annotate(geom = "text", 
+           x = 1700, y = 1700, 
+           label = "Average Tuition\nCosts in 2004", 
+           angle = 45, size = 2.8) +
+  annotate(geom = "text", 
+           x = 13300, y = 15200, 
+           label = "Increase", angle = 90, size = 2.8) +
+  annotate(geom = "segment", 
+           x = 12900, y = 12900, 
+           xend = 12900, yend = 17000, 
+           arrow = arrow(length = unit(0.25, "cm")), 
+           col = "darkgrey") +
+* annotate(geom = "segment",
+*          x = 12900, y = 12900,
+*          xend = 12900, yend = 0,
+*          arrow = arrow(ends = "both",
+*                        length = unit(0.15, "cm"),
+*                        angle = 90),
+*          col = "darkgrey")
+```
+]]
+.column[.content.center[
+&lt;img src="ggplot_tutorial_tuition_files/figure-html/output_tuition_44-1.png" width="80%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+set.seed(2019)
+ggplot(df_0) +
+  aes(x = `2004-05`) +
+  aes(y = `2014-15`) +
+  coord_equal() +
+  labs(x = "Tuition cost in 2004, USD") +
+  labs(y = "Tuition cost in 2014, USD") +
+  geom_segment(aes(xend = `2004-05`, 
+                   yend = `2004-05`, 
+                   col = "Increase from\n2004 to 2014"), 
+               alpha = .7) + 
+  geom_segment(aes(xend = `2004-05`, 
+                   y = 0, yend = `2004-05`, 
+                   col = "2004 Tuition Cost" ), 
+               alpha = .7) +
+  scale_color_manual(breaks = c("Increase from\n2004 to 2014", 
+                                "2004 Tuition Cost"), 
+                     values = c("grey70", "grey30")) +
+  aes(label = state.abb) +
+  geom_point(col = "grey30") +
+  ggpmisc::stat_dens2d_filter(geom = "text_repel", 
+                              keep.fraction = 0.30, 
+                              size = 3.8) +
+  lims(x = c(0,15000)) +
+  lims(y = c(0,17000)) +
+  annotate(geom = "text", 
+           x = 1700, y = 1700, 
+           label = "Average Tuition\nCosts in 2004", 
+           angle = 45, size = 2.8) +
+  annotate(geom = "text", 
+           x = 13300, y = 15200, 
+           label = "Increase", angle = 90, size = 2.8) +
+  annotate(geom = "segment", 
+           x = 12900, y = 12900, 
+           xend = 12900, yend = 17000, 
+           arrow = arrow(length = unit(0.25, "cm")), 
+           col = "darkgrey") +
+  annotate(geom = "segment", 
+           x = 12900, y = 12900, 
+           xend = 12900, yend = 0, 
+           arrow = arrow(ends = "both", 
+                         length = unit(0.15, "cm"), 
+                         angle = 90), 
+           col = "darkgrey") +
+* annotate(geom = "text",
+*          x = 13300, y = 8000,
+*          label = "Cost in 2004",
+*          angle = 90, size = 2.8)
+```
+]]
+.column[.content.center[
+&lt;img src="ggplot_tutorial_tuition_files/figure-html/output_tuition_48-1.png" width="80%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+set.seed(2019)
+ggplot(df_0) +
+  aes(x = `2004-05`) +
+  aes(y = `2014-15`) +
+  coord_equal() +
+  labs(x = "Tuition cost in 2004, USD") +
+  labs(y = "Tuition cost in 2014, USD") +
+  geom_segment(aes(xend = `2004-05`, 
+                   yend = `2004-05`, 
+                   col = "Increase from\n2004 to 2014"), 
+               alpha = .7) + 
+  geom_segment(aes(xend = `2004-05`, 
+                   y = 0, yend = `2004-05`, 
+                   col = "2004 Tuition Cost" ), 
+               alpha = .7) +
+  scale_color_manual(breaks = c("Increase from\n2004 to 2014", 
+                                "2004 Tuition Cost"), 
+                     values = c("grey70", "grey30")) +
+  aes(label = state.abb) +
+  geom_point(col = "grey30") +
+  ggpmisc::stat_dens2d_filter(geom = "text_repel", 
+                              keep.fraction = 0.30, 
+                              size = 3.8) +
+  lims(x = c(0,15000)) +
+  lims(y = c(0,17000)) +
+  annotate(geom = "text", 
+           x = 1700, y = 1700, 
+           label = "Average Tuition\nCosts in 2004", 
+           angle = 45, size = 2.8) +
+  annotate(geom = "text", 
+           x = 13300, y = 15200, 
+           label = "Increase", angle = 90, size = 2.8) +
+  annotate(geom = "segment", 
+           x = 12900, y = 12900, 
+           xend = 12900, yend = 17000, 
+           arrow = arrow(length = unit(0.25, "cm")), 
+           col = "darkgrey") +
+  annotate(geom = "segment", 
+           x = 12900, y = 12900, 
+           xend = 12900, yend = 0, 
+           arrow = arrow(ends = "both", 
+                         length = unit(0.15, "cm"), 
+                         angle = 90), 
+           col = "darkgrey") +
+  annotate(geom = "text", 
+           x = 13300, y = 8000, 
+           label = "Cost in 2004", 
+           angle = 90, size = 2.8) + 
+* labs(title = "Average in-state tuition fees at public 4-year: 2004 and 2014")
+```
+]]
+.column[.content.center[
+&lt;img src="ggplot_tutorial_tuition_files/figure-html/output_tuition_49-1.png" width="80%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+set.seed(2019)
+ggplot(df_0) +
+  aes(x = `2004-05`) +
+  aes(y = `2014-15`) +
+  coord_equal() +
+  labs(x = "Tuition cost in 2004, USD") +
+  labs(y = "Tuition cost in 2014, USD") +
+  geom_segment(aes(xend = `2004-05`, 
+                   yend = `2004-05`, 
+                   col = "Increase from\n2004 to 2014"), 
+               alpha = .7) + 
+  geom_segment(aes(xend = `2004-05`, 
+                   y = 0, yend = `2004-05`, 
+                   col = "2004 Tuition Cost" ), 
+               alpha = .7) +
+  scale_color_manual(breaks = c("Increase from\n2004 to 2014", 
+                                "2004 Tuition Cost"), 
+                     values = c("grey70", "grey30")) +
+  aes(label = state.abb) +
+  geom_point(col = "grey30") +
+  ggpmisc::stat_dens2d_filter(geom = "text_repel", 
+                              keep.fraction = 0.30, 
+                              size = 3.8) +
+  lims(x = c(0,15000)) +
+  lims(y = c(0,17000)) +
+  annotate(geom = "text", 
+           x = 1700, y = 1700, 
+           label = "Average Tuition\nCosts in 2004", 
+           angle = 45, size = 2.8) +
+  annotate(geom = "text", 
+           x = 13300, y = 15200, 
+           label = "Increase", angle = 90, size = 2.8) +
+  annotate(geom = "segment", 
+           x = 12900, y = 12900, 
+           xend = 12900, yend = 17000, 
+           arrow = arrow(length = unit(0.25, "cm")), 
+           col = "darkgrey") +
+  annotate(geom = "segment", 
+           x = 12900, y = 12900, 
+           xend = 12900, yend = 0, 
+           arrow = arrow(ends = "both", 
+                         length = unit(0.15, "cm"), 
+                         angle = 90), 
+           col = "darkgrey") +
+  annotate(geom = "text", 
+           x = 13300, y = 8000, 
+           label = "Cost in 2004", 
+           angle = 90, size = 2.8) + 
+  labs(title = "Average in-state tuition fees at public 4-year: 2004 and 2014") +
+* labs(subtitle = "Vis: Gina Reynolds | Data Source: onlinembapage.com")
+```
+]]
+.column[.content.center[
+&lt;img src="ggplot_tutorial_tuition_files/figure-html/output_tuition_50-1.png" width="80%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+set.seed(2019)
+ggplot(df_0) +
+  aes(x = `2004-05`) +
+  aes(y = `2014-15`) +
+  coord_equal() +
+  labs(x = "Tuition cost in 2004, USD") +
+  labs(y = "Tuition cost in 2014, USD") +
+  geom_segment(aes(xend = `2004-05`, 
+                   yend = `2004-05`, 
+                   col = "Increase from\n2004 to 2014"), 
+               alpha = .7) + 
+  geom_segment(aes(xend = `2004-05`, 
+                   y = 0, yend = `2004-05`, 
+                   col = "2004 Tuition Cost" ), 
+               alpha = .7) +
+  scale_color_manual(breaks = c("Increase from\n2004 to 2014", 
+                                "2004 Tuition Cost"), 
+                     values = c("grey70", "grey30")) +
+  aes(label = state.abb) +
+  geom_point(col = "grey30") +
+  ggpmisc::stat_dens2d_filter(geom = "text_repel", 
+                              keep.fraction = 0.30, 
+                              size = 3.8) +
+  lims(x = c(0,15000)) +
+  lims(y = c(0,17000)) +
+  annotate(geom = "text", 
+           x = 1700, y = 1700, 
+           label = "Average Tuition\nCosts in 2004", 
+           angle = 45, size = 2.8) +
+  annotate(geom = "text", 
+           x = 13300, y = 15200, 
+           label = "Increase", angle = 90, size = 2.8) +
+  annotate(geom = "segment", 
+           x = 12900, y = 12900, 
+           xend = 12900, yend = 17000, 
+           arrow = arrow(length = unit(0.25, "cm")), 
+           col = "darkgrey") +
+  annotate(geom = "segment", 
+           x = 12900, y = 12900, 
+           xend = 12900, yend = 0, 
+           arrow = arrow(ends = "both", 
+                         length = unit(0.15, "cm"), 
+                         angle = 90), 
+           col = "darkgrey") +
+  annotate(geom = "text", 
+           x = 13300, y = 8000, 
+           label = "Cost in 2004", 
+           angle = 90, size = 2.8) + 
+  labs(title = "Average in-state tuition fees at public 4-year: 2004 and 2014") +
+  labs(subtitle = "Vis: Gina Reynolds | Data Source: onlinembapage.com") +
+* labs(col = "")
+```
+]]
+.column[.content.center[
+&lt;img src="ggplot_tutorial_tuition_files/figure-html/output_tuition_51-1.png" width="80%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+set.seed(2019)
+ggplot(df_0) +
+  aes(x = `2004-05`) +
+  aes(y = `2014-15`) +
+  coord_equal() +
+  labs(x = "Tuition cost in 2004, USD") +
+  labs(y = "Tuition cost in 2014, USD") +
+  geom_segment(aes(xend = `2004-05`, 
+                   yend = `2004-05`, 
+                   col = "Increase from\n2004 to 2014"), 
+               alpha = .7) + 
+  geom_segment(aes(xend = `2004-05`, 
+                   y = 0, yend = `2004-05`, 
+                   col = "2004 Tuition Cost" ), 
+               alpha = .7) +
+  scale_color_manual(breaks = c("Increase from\n2004 to 2014", 
+                                "2004 Tuition Cost"), 
+                     values = c("grey70", "grey30")) +
+  aes(label = state.abb) +
+  geom_point(col = "grey30") +
+  ggpmisc::stat_dens2d_filter(geom = "text_repel", 
+                              keep.fraction = 0.30, 
+                              size = 3.8) +
+  lims(x = c(0,15000)) +
+  lims(y = c(0,17000)) +
+  annotate(geom = "text", 
+           x = 1700, y = 1700, 
+           label = "Average Tuition\nCosts in 2004", 
+           angle = 45, size = 2.8) +
+  annotate(geom = "text", 
+           x = 13300, y = 15200, 
+           label = "Increase", angle = 90, size = 2.8) +
+  annotate(geom = "segment", 
+           x = 12900, y = 12900, 
+           xend = 12900, yend = 17000, 
+           arrow = arrow(length = unit(0.25, "cm")), 
+           col = "darkgrey") +
+  annotate(geom = "segment", 
+           x = 12900, y = 12900, 
+           xend = 12900, yend = 0, 
+           arrow = arrow(ends = "both", 
+                         length = unit(0.15, "cm"), 
+                         angle = 90), 
+           col = "darkgrey") +
+  annotate(geom = "text", 
+           x = 13300, y = 8000, 
+           label = "Cost in 2004", 
+           angle = 90, size = 2.8) + 
+  labs(title = "Average in-state tuition fees at public 4-year: 2004 and 2014") +
+  labs(subtitle = "Vis: Gina Reynolds | Data Source: onlinembapage.com") +
+  labs(col = "") +
+* geom_abline(slope = 1, intercept = 0, lty = 2)
+```
+]]
+.column[.content.center[
+&lt;img src="ggplot_tutorial_tuition_files/figure-html/output_tuition_52-1.png" width="80%" /&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+set.seed(2019)
+ggplot(df_0) +
+  aes(x = `2004-05`) +
+  aes(y = `2014-15`) +
+  coord_equal() +
+  labs(x = "Tuition cost in 2004, USD") +
+  labs(y = "Tuition cost in 2014, USD") +
+  geom_segment(aes(xend = `2004-05`, 
+                   yend = `2004-05`, 
+                   col = "Increase from\n2004 to 2014"), 
+               alpha = .7) + 
+  geom_segment(aes(xend = `2004-05`, 
+                   y = 0, yend = `2004-05`, 
+                   col = "2004 Tuition Cost" ), 
+               alpha = .7) +
+  scale_color_manual(breaks = c("Increase from\n2004 to 2014", 
+                                "2004 Tuition Cost"), 
+                     values = c("grey70", "grey30")) +
+  aes(label = state.abb) +
+  geom_point(col = "grey30") +
+  ggpmisc::stat_dens2d_filter(geom = "text_repel", 
+                              keep.fraction = 0.30, 
+                              size = 3.8) +
+  lims(x = c(0,15000)) +
+  lims(y = c(0,17000)) +
+  annotate(geom = "text", 
+           x = 1700, y = 1700, 
+           label = "Average Tuition\nCosts in 2004", 
+           angle = 45, size = 2.8) +
+  annotate(geom = "text", 
+           x = 13300, y = 15200, 
+           label = "Increase", angle = 90, size = 2.8) +
+  annotate(geom = "segment", 
+           x = 12900, y = 12900, 
+           xend = 12900, yend = 17000, 
+           arrow = arrow(length = unit(0.25, "cm")), 
+           col = "darkgrey") +
+  annotate(geom = "segment", 
+           x = 12900, y = 12900, 
+           xend = 12900, yend = 0, 
+           arrow = arrow(ends = "both", 
+                         length = unit(0.15, "cm"), 
+                         angle = 90), 
+           col = "darkgrey") +
+  annotate(geom = "text", 
+           x = 13300, y = 8000, 
+           label = "Cost in 2004", 
+           angle = 90, size = 2.8) + 
+  labs(title = "Average in-state tuition fees at public 4-year: 2004 and 2014") +
+  labs(subtitle = "Vis: Gina Reynolds | Data Source: onlinembapage.com") +
+  labs(col = "") +
+  geom_abline(slope = 1, intercept = 0, lty = 2) +
+* theme_bw(base_family = "serif")
+```
+]]
+.column[.content.center[
+&lt;img src="ggplot_tutorial_tuition_files/figure-html/output_tuition_53-1.png" width="80%" /&gt;
+]]
+
+---
+
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 40%}
+&lt;/style&gt;
+    </textarea>
+<script src="libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "20:10",
+"highlightLines": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script>
+(function() {
+  var i, text, code, codes = document.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+})();
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

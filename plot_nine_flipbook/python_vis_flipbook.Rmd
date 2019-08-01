@@ -1,0 +1,64 @@
+---
+title: "Plot Nine?"
+author: "Evangeline Reynolds"
+date: "4/15/2019"
+output: html_document
+---
+
+
+```{r}
+# knitr::opts_chunk$set(eval = F)
+```
+
+
+
+```{python}
+import matplotlib.pyplot as plt
+year = [1950, 1970, 1990, 2010]
+pop = [2.519, 3, 5, 6]
+plt.plot(year, pop)
+
+plt.show()
+```
+
+
+
+https://plotnine.readthedocs.io/en/stable/
+
+Tutorial
+
+https://plotnine.readthedocs.io/en/stable/tutorials/miscellaneous-altering-colors.html
+
+```{r}
+reticulate::use_python("/Users/evangelinereynolds/anaconda3/bin/python", required = T)
+```
+
+
+```{python, eval = F}
+import pandas as pd
+import numpy as np
+import os
+for p in os.sys.path:
+  print(p)
+  
+from plotnine import *  
+```
+
+```{r}
+n = 10
+df = pd.DataFrame({'x': np.arange(n),
+                   'y': np.arange(n),
+                   'yfit': np.arange(n) + np.tile([-.2, .2], n//2),
+                   'cat': ['a', 'b']*(n//2)})
+
+(ggplot(df)
+ + geom_col(aes('x', 'y', fill='cat'))
+ + geom_point(aes('x', y='yfit', color='cat'))
+ + geom_path(aes('x', y='yfit', color='cat'))
+)
+```
+
+
+
+
+

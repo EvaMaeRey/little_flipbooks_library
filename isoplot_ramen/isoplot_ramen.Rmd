@@ -1,0 +1,137 @@
+---
+title: "Makeover Monday Whiskey"
+author: "Evangeline Reynolds"
+date: "1/2/2018"
+output: pdf_document
+---
+
+# Whiskey
+
+```{r}
+library(readxl)
+library(tidyverse)
+library(png)
+library(ggplot2)
+```
+
+## read in data, transform
+
+```{r}
+dta = read_xlsx("../raw_data/Irish Whiskey Sales by Volume.xlsx") %>%
+  filter(Country == "United States" | Country == "Ireland") %>% 
+  filter(Year %in% c(1992, 2000, 2008, 2016)) %>% 
+  group_by(Country, Year) %>% 
+  summarise(Cases = sum(Cases, na.rm = T)) %>% 
+  mutate(Cases100000 = Cases/100000 )
+
+max_observed <- ceiling(max(dta$Cases100000))
+n_col <- 4
+n_row <- ceiling(max_observed / n_col)
+
+
+
+```
+
+```{r}
+tibble(position = 1:(n_row*n_col), 
+       x_position = rep(1:n_col, n_row),
+       y_position = sort(rep(1:n_row, n_col))) %>% 
+  crossing(dta %>% select(Country, Year)) %>% 
+  full_join(dta) %>% 
+  filter(round(Cases100000) >= position) ->
+position_df
+
+
+
+ggplot(data = position_df) +
+  aes(x = x_position) + 
+  aes(y = y_position) +
+  # aes(alpha = round(Cases100000) >= position) +
+  aes(label = position) +
+  geom_text(col = "black") +
+  scale_y_reverse() +
+  facet_grid(Country ~ Year) +
+  theme_minimal() + 
+  coord_fixed(ratio = 1) +
+  theme(strip.text.x = element_text(hjust = 0)) +
+  theme(strip.text.y = element_text(angle = 0, vjust = .98, hjust = 0))
+```
+
+
+```{r}
+img <-  readPNG("raw_data/noun_Ramen_1445900.png")[000:600, 57:650, 1:4]
+pngCredit <- "Ramen by sahua d from the Noun Project"
+
+## info reduction
+info_reducution <- 4
+img = img[seq(1, dim(img)[1], by = info_reducution), 
+                          seq(1, dim(img)[2], by = info_reducution),1:4]
+dim(img)
+
+
+img_df <- tibble(z = as.vector(img[,,4]), 
+                     y =  -rep(1:dim(img)[1], dim(img)[2])/dim(img)[1], 
+                     x = sort(rep(1:dim(img)[2], dim(img)[1])/dim(img)[2]))
+
+img_df %>% 
+ggplot() +
+  aes(x = x,  y = y, fill = z) +
+  geom_raster()
+
+
+position_df %>% 
+  crossing(img_df) ->
+position_raster  
+
+ggplot(data = position_raster %>% 
+         filter(Country == "United States")) +
+  aes(x = x_position + x) + 
+  aes(y = y_position + -y) +
+  aes(fill = z) +
+  geom_raster() +
+  scale_y_reverse() +
+  scale_alpha_continuous(range = c(0,1)) + 
+  facet_grid(.~ Year) +
+  theme_minimal() + 
+  coord_fixed(ratio = 1) +
+  theme_void() +
+  theme(strip.text.x = element_text(hjust = 0)) +
+  theme(strip.text.y = element_text(angle = 0, vjust = .98, hjust = 0)) +
+  theme(panel.spacing.x = unit(1.25, "lines")) +
+  scale_alpha_continuous(guide = F) +
+  labs(subtitle = "      United States") ->
+  # theme(plot.background = 
+  #         element_rect(fill = "plum1", 
+  #                      color = "plum1", 
+  #                      size = 0)) +
+  #->
+g
+
+
+g %+% (position_raster %>% filter(Country == "Ireland")) +
+  labs(subtitle = "      Ireland") +
+  labs(caption = paste0("Visualization: Gina Reynolds w/ ggplot for #TidyTuesday\n",
+                        pngCredit)) ->
+  Ireland
+
+library(patchwork)
+# 
+# cowplot::align_plots()
+# 
+# g / Ireland
+# 
+# 
+# p1 <- ggplot(mpg, aes(manufacturer, hwy)) + stat_summary(fun.y="median", geom = "bar") +
+#          theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust= 1))
+# 
+# p2 <- ggplot(mpg, aes(manufacturer, displ)) + geom_point(color="red") +
+#  scale_y_continuous(position = "right") +
+#  theme(axis.text.x = element_blank())
+# 
+# aligned_plots <- cowplot::align_plots(p1, p2, align="hv", axis="tblr")
+
+g / Ireland + plot_layout(ncol = 1, heights = c(3, .6))
+
+
+ggsave("ramen_picto_w_facet.png")
+```

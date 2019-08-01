@@ -1,0 +1,155 @@
+---
+title: "Base R plots w/ Expressions"
+author: "Gina Reynolds, July 18 2019"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: ["xaringan-themer.css", "ninjutsu"]
+    nature:
+      highlightLines: yes
+      ratio: '16:9'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
+knitr::opts_chunk$set(fig.height = 6, out.width = "100%", comment = " ", cache = T, dpi = 300)
+source("https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/xaringan_reveal_parentheses_balanced.R")
+```
+
+
+
+The following is based on the R Documentation about plotmath, 
+*Mathematical Annotation in R*
+
+```{r xaringan-themer, include = FALSE}
+library(xaringanthemer)
+
+
+# xaringanthemer::write_xaringan_theme(text_font_size = ".75cm",
+#                                      text_color = "darkblue")
+
+xaringanthemer::mono_accent(
+  base_color = "#43418A",
+  header_font_google = google_font("Montserrat"),
+  text_font_google   = google_font("Montserrat", "200", "200i"),
+  code_font_google   = google_font("Droid Mono"),
+  text_font_size = ".7cm",
+  code_font_size = ".7cm")
+  
+
+```
+
+```{r base, include = F}
+seq(-4, 4, len = 101) ->
+  x
+cbind(sin(x), cos(x)) ->
+  y
+matplot(x, y, type = "l", xaxt = "n",
+        main = expression(
+          paste(plain(sin) * phi, 
+                "  and  ",
+                plain(cos) * phi)),
+        ylab = expression("sin" * phi, 
+                          "cos" * phi), # only 1st is taken
+        xlab = expression(paste("Phase Angle ", 
+                                phi)),
+        col.main = "blue")
+axis(1, 
+     at = c(-pi, -pi/2, 0, pi/2, pi),
+     labels = expression(-pi, -pi/2, 0, 
+                         pi/2, pi))
+```
+
+
+`r apply_reveal("base")`
+
+---
+
+```{r base_plot, include = F}
+plot(1:10, type="o", 
+     xlab="", ylab="", 
+     main = "plot math & numbers")
+theta <- 1.23 
+mtext(bquote(hat(theta) == 
+               .(theta)), line= .25)
+for(i in 2:9){
+  text(i, i+1, 
+       substitute(list(xi, eta) == 
+                    group("(",list(x,y),")"),
+                  list(x = i, y = i+1)))
+}
+text(1, 10,  "Derivatives:", adj = 0)
+text(1, 9.6, expression(
+ "             first: {f * minute}(x) " 
+ == {f * minute}(x)), adj = 0)
+text(1, 9.0, expression(
+ "     second: {f * second}(x) "        
+ == {f * second}(x)), adj = 0)
+```
+
+
+`r apply_reveal("base_plot")`
+
+
+
+---
+
+```{r another, include = F}
+plot(1:10, 1:10)
+text(4, 9, 
+     labels = 
+       expression(hat(beta) == 
+                  (X^t * X)^{-1} * X^t * y))
+text(4, 7, 
+     expression(bar(x) == 
+                  sum(frac(x[i], n), 
+                      i == 1, n)))
+text(8, 5, expression(
+  paste(frac(1, sigma*sqrt(2*pi)), 
+        " ",
+        plain(e)^{frac(-(x-mu)^2, 2*sigma^2)})),
+     cex = 1.2)
+```
+
+
+`r apply_reveal("another")`
+
+---
+
+```{r bquote, include = F}
+a <- 2
+bquote(a == a)
+quote(a == a)
+bquote(a == .(a))
+substitute(a == A, list(A = a))
+plot(1:10, a*(1:10), main = bquote(a == .(a)))
+default <- 1
+bquote( function(x, y = .(default)) x+y )
+```
+
+`r apply_reveal("bquote")`
+
+
+---
+
+```{r bquote2, include = F}
+cor <- -.321
+cor2 <- '-.321'
+par(mfrow = c(1, 2))
+plot(1:10, 1:10, 
+     main = bquote("Hello" ~ r[xy] ==
+                     .(cor) ~ "and" ~ B^2))
+plot(1:10, 1:10, 
+     main = bquote("Hello" ~ r[xy] ==
+                     .(cor2) ~ "and" ~ B^2))
+```
+
+
+`r apply_reveal("bquote2")`
+
+
+---
+
+```{css, eval = TRUE, echo = F}
+.remark-code{line-height: 1.5; font-size: 60%}
+```

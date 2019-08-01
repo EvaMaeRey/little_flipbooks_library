@@ -1,0 +1,107 @@
+---
+title: "diff-in-diff vis w ggplot"
+author: "Evangeline Reynolds"
+date: "5/18/2018"
+output:
+  xaringan::moon_reader:
+    chakra: libs/remark-latest.min.js
+    lib_dir: libs
+    css: ["kunoichi", "ninjutsu"]
+    nature:
+      ratio: "16:9"
+      highlightLines: true
+---
+
+Using a difference-in-difference framework to look at the effect of policy interventions is a popular research design.  A binary exlanatory variable that turns on and stays on lends itself to ease of interpretation!
+
+In the context of such a design, what is the essential visual inspections?  Below I suggest four plots that researchers and their audiences may find useful in visually inspecting the timing of interventions and the relationships between a policy intervention and outcomes.
+
+I use ggplot2 to implement the visualization. The ability to overwrite global aesthetics, using the aes() function, means that we move from one plot to another with little additional code.  A little over a year ago I learned about declaring the aes() on it's own line and maybe novelty bias is at work here, but I find the capability to be a lot of fun to play with!
+
+
+---
+
+The five plots are as follows:
+
+- two plots showing the timing of intervention and the cross-sectional cases (one aligning the interventions)
+- two plots showing how the intervention relates to the response variable of interest (one aligning the interventions)
+- a plot that breaks up the data into individual time-series for the response variable for each cross-sectional unit
+
+Another option for visualizing such data is using the new package [panelView](http://yiqingxu.org/software/panelView/panelView.html), which certainly gave me additional inspiration for this exercise and looks useful!  
+
+
+```{r}
+library(tidyverse)
+library(gapminder)
+source("../xaringan_reveal_parenthetical.R")
+```
+
+
+
+
+```{r}
+min_year <- min(gapminder$year)
+max_year <- max(gapminder$year)
+span <- max_year- min_year
+
+gapminder %>% 
+  select(country) %>% 
+  distinct() %>% 
+  sample_frac(.5) %>% 
+  mutate(intervention_year = 
+           runif(n = n(), min = min_year - span, 
+                 max = max_year)) %>% 
+  mutate(intervention_year = round(intervention_year)) ->
+synthetic_interventions
+```
+
+```{r}
+synthetic_interventions %>% 
+  full_join(gapminder) %>% 
+  mutate(treatment = case_when(year >= intervention_year ~ "treated",
+                             year < intervention_year ~ "not treated",
+                             is.na(intervention_year) ~ "not treated")) %>%
+  group_by(country) %>% 
+  mutate(mean_treated = mean(treatment == "treated")) %>% 
+  arrange(mean_treated) %>% 
+  ungroup() %>% 
+  mutate(country = fct_inorder(country)) -> 
+panel_prepped
+```
+
+
+```{r essential_plots}
+ggplot(panel_prepped) +
+  aes(x = year, y = country, group = country, col = treatment) +
+  labs(caption = "Four essential plots for diff-in-diff | Gina Reynolds") +
+  geom_line(alpha = .5) +
+  geom_point(size = 1.5) +
+  theme_minimal() +
+  scale_color_manual(values = c("lightgrey", "steelblue4" )) +
+  labs(y = "country") +
+  labs(title = "Plot 1: Treatment-control summary") +
+  labs(title = "") +
+  aes(y = gdpPercap) + 
+  scale_y_log10() +
+  labs(y = "GDP per cap") +
+  labs(title = "Plot 2: Treatment-control response overlaid summary") +
+  labs(title = "") +
+  aes(x = year - intervention_year) +
+  labs(title = "Plot 3: Treatment-control response overlaid summary, aligned intervention") +
+  labs(title = "")  +
+  aes(x = year) + 
+  scale_y_continuous() +
+  labs(title = "Plot 4: Treatment-Response faceted")# %+%
+  # (panel_prepped %>%
+  #    inner_join(panel_prepped %>% select(country) %>% distinct %>% sample_n(5))) +
+  # facet_wrap(~ as.character(country), scales = "free_y")
+```
+
+
+`r apply_reveal("essential_plots")`
+
+
+```{css, eval = TRUE, echo = F}
+.remark-code{line-height: 1.5; font-size: 50%}
+```
+

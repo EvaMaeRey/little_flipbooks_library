@@ -9,7 +9,7 @@ output: html_document
 
 
 ```{r}
-source("xaringan_reveal_parentheses_balanced.R")
+source(file = "https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/xaringan_reveal_parentheses_balanced.R")
 ```
 
 

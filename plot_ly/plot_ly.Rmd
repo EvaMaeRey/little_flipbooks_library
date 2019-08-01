@@ -1,0 +1,47 @@
+---
+title: "A rayshader flipbook"
+author: "Gina Reynolds, June 2019"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: ["kunoichi", "ninjutsu"]
+    nature:
+      ratio: 16:10
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, cache = F)
+```
+
+```{r}
+library(gapminder)
+library(tidyverse)
+source(file = "https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/xaringan_reveal_parentheses_balanced.R")
+```
+
+```{r}
+library(plotly)
+
+mtcars$am[which(mtcars$am == 0)] <- 'Automatic'
+mtcars$am[which(mtcars$am == 1)] <- 'Manual'
+mtcars$am <- as.factor(mtcars$am)
+
+p <- plot_ly(data = gapminder %>% filter(year == 2007), x = ~log(gdpPercap), y =  ~log(pop), z = ~lifeExp, color = ~continent, label = ~country) %>%
+  add_markers() %>% 
+p
+```
+
+```{r}
+library(plotly)
+p <- plot_ly(midwest, x = ~percollege, color = ~state, type = "box")
+p
+```
+
+
+
+```{css, eval = TRUE, echo = F}
+.remark-code{line-height: 1.5; font-size: 60%}
+```

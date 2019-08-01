@@ -69,8 +69,11 @@ gapminder %>%
 gapminder %>% #REVEAL
   data.table() %>% #REVEAL
   .[continent == "Asia", ] %>% #REVEAL
-  .[, c(1,3:5)] %>% #REVEAL
-  .[, .(x = sum(pop)), by = year] %>% #REVEAL
+  .[1:30,] %>% #REVEAL
+  .[, c(1,3:6)] %>% #REVEAL
+  .[, .(pop, year, gdpPercap)] %>% #REVEAL
+  # .[, .(world_pop = sum(pop)), by = year] %>% 
+  .[, gdp := gdpPercap * pop] %>% 
   .[year %in% 1952:1967, my_var := 2] %>% 
   .[] %>% #REVEAL
   .[, year := NULL] %>% 

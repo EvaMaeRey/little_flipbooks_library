@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Proposed code parsing for flipbooks</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Gina Reynolds, May 2019" />
+    <link href="libs/remark-css-0.0.1/kunoichi.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Proposed code parsing for flipbooks
+### Gina Reynolds, May 2019
+
+---
+
+
+
+
+
+
+
+
+---
+
+# Introduction
+
+This is a minimal example to demonstrate how to create a flipbook with data from #TidyTuesday.  It walks through data wrangling and plots pipelines made with the Tidyverse.  The functions that make this possible are the work of Emi Tanaka, Garrick Aden-Buie and myself, and are built for Xaringan, an Rmarkdown file type for creating presentation slides; the functions make use of the function `knitr:::knit_code$get()`.
+
+The code to create the flipbook is an .Rmd that you can download [**here**](https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/tidytuesday_minimal_example/tidytuesday_minimal_example.Rmd).
+
+---
+
+Interested in more flipbooks? Check out 
+
+- [the ggplot flipbook](https://evamaerey.github.io/ggplot_flipbook/ggplot_flipbook_xaringan.html)
+- [The Tidyverse in Action](https://evamaerey.github.io/tidyverse_in_action/tidyverse_in_action.html)
+
+For more about Xaringan:
+
+- [Xaringan presentation slides](https://slides.yihui.name/xaringan/)
+
+The sequential workflow of the Tidyverse makes incremental display of pipelines and ggplot statements ideal:  
+
+- [www.tidyverse.org](https://www.tidyverse.org/)
+
+
+---
+
+# Set up
+
+Okay. Let's load the the `reveal for xaringan` functions for "flipbooking" and the `tidyverse`.
+
+
+```r
+source(file = "../xaringan_reveal_parentheses_balanced.R")
+```
+
+And load the tidyverse.
+
+
+```r
+library(tidyverse)
+```
+
+And load the data from the tidytuesday github page. 
+
+
+
+---
+
+# Suppose we have some code
+
+
+```r
+1999
+gapminder %&gt;%             # the data #REVEAL
+  filter(year == (2000 + 7)) %&gt;%  # subset #REVEAL
+  ggplot() +              # pipe to ggplot 
+  aes(x = gdpPercap) +
+  aes(y = lifeExp) +  #REVEAL
+  geom_point() +
+  aes(color = 
+  paste("continent", 
+        continent) 
+          ) -&gt;  #REVEAL
+my_plot #REVEAL
+```
+
+---
+
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+*1999
+```
+]]
+.column[.content.center[
+
+```
+[1] 1999
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+*1999
+```
+]]
+.column[.content.center[
+
+```
+[1] 1999
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+*1999
+```
+]]
+.column[.content.center[
+
+```
+[1] 1999
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+*1999
+```
+]]
+.column[.content.center[
+
+```
+[1] 1999
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+*1999
+```
+]]
+.column[.content.center[
+
+```
+[1] 1999
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+*1999
+```
+]]
+.column[.content.center[
+
+```
+[1] 1999
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+*1999
+```
+]]
+.column[.content.center[
+
+```
+[1] 1999
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+*1999
+```
+]]
+.column[.content.center[
+
+```
+[1] 1999
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+*1999
+```
+]]
+.column[.content.center[
+
+```
+[1] 1999
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+*1999
+```
+]]
+.column[.content.center[
+
+```
+[1] 1999
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+*1999
+```
+]]
+.column[.content.center[
+
+```
+[1] 1999
+```
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+*1999
+```
+]]
+.column[.content.center[
+
+```
+[1] 1999
+```
+]]
+
+
+---
+
+
+```r
+parse_code(knitr:::knit_code$get("the_code"))
+```
+
+```
+# A tibble: 12 x 7
+   code  comment user_reveal connector num_open_par num_closed_par
+   &lt;chr&gt; &lt;chr&gt;   &lt;lgl&gt;       &lt;chr&gt;            &lt;int&gt;          &lt;int&gt;
+ 1 1999  ""      FALSE       ""                   0              0
+ 2 "gap… "  # t… TRUE        %&gt;%                  0              0
+ 3 "  f… "  # s… TRUE        %&gt;%                  2              2
+ 4 "  g… "  # p… FALSE       +                    1              1
+ 5 "  a… ""      FALSE       +                    1              1
+ 6 "  a… ""      TRUE        +                    1              1
+ 7 "  g… ""      FALSE       +                    1              1
+ 8 "  a… ""      FALSE       ""                   1              0
+ 9 "  p… ""      FALSE       ""                   1              0
+10 "   … ""      FALSE       ""                   0              1
+11 "   … ""      TRUE        -&gt;                   0              1
+12 my_p… ""      TRUE        ""                   0              0
+# … with 1 more variable: balanced_par &lt;lgl&gt;
+```
+
+
+# proposed parsing steps
+
+
+```r
+tibble(code = 
+         knitr:::knit_code$get("the_code")) %&gt;% 
+  mutate(user_reveal = 
+           str_detect(code, "#REVEAL")) %&gt;% # Handle user defined pause points
+  mutate(code = 
+           str_remove(code, "#REVEAL")) %&gt;% # pull out any comments
+  separate(col = code,                   
+           into = c("code", "comment"), 
+           sep = "#") %&gt;% 
+  mutate(comment = 
+           str_trim(comment)) %&gt;% 
+  mutate(comment = 
+           paste0("  # ", comment)) %&gt;%  
+  mutate(comment = 
+           ifelse("  # NA" == comment, 
+                  "", comment)) %&gt;% 
+  mutate(code = 
+           str_remove(code, "\\s+$")) %&gt;% 
+  mutate(connector = 
+           str_extract(code, "%&gt;%$|\\+$|-&gt;$")) %&gt;% 
+  mutate(connector = replace_na(connector, "")) %&gt;% 
+  mutate(code = 
+           str_remove(code, "%&gt;%$|\\+$|-&gt;$")) %&gt;% 
+  mutate(num_open_par =                       
+           str_count(code, "\\(|\\{|\\[")) %&gt;% # Counting open parentheses
+  mutate(num_closed_par = 
+           str_count(code, "\\)|\\}|\\]")) %&gt;%  # Counting closed parentheses
+  mutate(balanced_par = (cumsum(num_open_par) - 
+                           cumsum(num_closed_par)) == 0) -&gt;  # Check for balance
+parsed
+```
+
+---
+
+
+```r
+as_data_frame(parsed)
+```
+
+```
+# A tibble: 12 x 7
+   code  comment user_reveal connector num_open_par num_closed_par
+   &lt;chr&gt; &lt;chr&gt;   &lt;lgl&gt;       &lt;chr&gt;            &lt;int&gt;          &lt;int&gt;
+ 1 1999  ""      FALSE       ""                   0              0
+ 2 "gap… "  # t… TRUE        %&gt;%                  0              0
+ 3 "  f… "  # s… TRUE        %&gt;%                  2              2
+ 4 "  g… "  # p… FALSE       +                    1              1
+ 5 "  a… ""      FALSE       +                    1              1
+ 6 "  a… ""      TRUE        +                    1              1
+ 7 "  g… ""      FALSE       +                    1              1
+ 8 "  a… ""      FALSE       ""                   1              0
+ 9 "  p… ""      FALSE       ""                   1              0
+10 "   … ""      FALSE       ""                   0              1
+11 "   … ""      TRUE        -&gt;                   0              1
+12 my_p… ""      TRUE        ""                   0              0
+# … with 1 more variable: balanced_par &lt;lgl&gt;
+```
+
+
+
+---
+
+# Now build to different points: 
+
+
+```r
+4 -&gt; up_to
+parsed %&gt;% 
+  mutate(reveal = 1:n() &lt;= up_to) %&gt;% 
+  mutate(out = paste0(code, "", connector, "", comment)) %&gt;% 
+  filter(reveal) %&gt;% 
+  select(out) -&gt;
+up_to_result
+paste(up_to_result$out, collapse = "\\n") %&gt;% 
+  str_remove("%&gt;%$|\\+$|-&gt;$") %&gt;% 
+  cat()
+```
+
+```
+1999\ngapminder %&gt;%  # the data\n  filter(year == (2000 + 7)) %&gt;%  # subset\n  ggplot() +  # pipe to ggplot
+```
+
+
+---
+
+
+
+
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 30%}
+&lt;/style&gt;
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:10",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script>
+(function() {
+  var i, text, code, codes = document.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+})();
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

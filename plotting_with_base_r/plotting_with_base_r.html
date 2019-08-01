@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Base R plots w/ Expressions</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Gina Reynolds, July 18 2019" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Base R plots w/ Expressions
+### Gina Reynolds, July 18 2019
+
+---
+
+
+
+
+
+
+
+
+
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*seq(-4, 4, len = 101)
+```
+]]
+.column[.content[
+
+```
+    [1] -4.00 -3.92 -3.84 -3.76 -3.68 -3.60 -3.52 -3.44 -3.36 -3.28 -3.20
+   [12] -3.12 -3.04 -2.96 -2.88 -2.80 -2.72 -2.64 -2.56 -2.48 -2.40 -2.32
+   [23] -2.24 -2.16 -2.08 -2.00 -1.92 -1.84 -1.76 -1.68 -1.60 -1.52 -1.44
+   [34] -1.36 -1.28 -1.20 -1.12 -1.04 -0.96 -0.88 -0.80 -0.72 -0.64 -0.56
+   [45] -0.48 -0.40 -0.32 -0.24 -0.16 -0.08  0.00  0.08  0.16  0.24  0.32
+   [56]  0.40  0.48  0.56  0.64  0.72  0.80  0.88  0.96  1.04  1.12  1.20
+   [67]  1.28  1.36  1.44  1.52  1.60  1.68  1.76  1.84  1.92  2.00  2.08
+   [78]  2.16  2.24  2.32  2.40  2.48  2.56  2.64  2.72  2.80  2.88  2.96
+   [89]  3.04  3.12  3.20  3.28  3.36  3.44  3.52  3.60  3.68  3.76  3.84
+  [100]  3.92  4.00
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+seq(-4, 4, len = 101) -&gt;
+* x
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+seq(-4, 4, len = 101) -&gt;
+  x
+*cbind(sin(x), cos(x))
+```
+]]
+.column[.content[
+
+```
+                [,1]        [,2]
+    [1,]  0.75680250 -0.65364362
+    [2,]  0.70214629 -0.71203272
+    [3,]  0.64299874 -0.76586723
+    [4,]  0.57973820 -0.81480281
+    [5,]  0.51276931 -0.85852643
+    [6,]  0.44252044 -0.89675842
+    [7,]  0.36944096 -0.92925421
+    [8,]  0.29399831 -0.95580594
+    [9,]  0.21667508 -0.97624378
+   [10,]  0.13796587 -0.99043698
+   [11,]  0.05837414 -0.99829478
+   [12,] -0.02159098 -0.99976689
+   [13,] -0.10141799 -0.99484390
+   [14,] -0.18059627 -0.98355731
+   [15,] -0.25861935 -0.96597931
+   [16,] -0.33498815 -0.94222234
+   [17,] -0.40921417 -0.91243836
+   [18,] -0.48082261 -0.87681789
+   [19,] -0.54935544 -0.83558878
+   [20,] -0.61437426 -0.78901475
+   [21,] -0.67546318 -0.73739372
+   [22,] -0.73223144 -0.68105588
+   [23,] -0.78431593 -0.62036161
+   [24,] -0.83138346 -0.55569915
+   [25,] -0.87313298 -0.48748210
+   [26,] -0.90929743 -0.41614684
+   [27,] -0.93964547 -0.34214965
+   [28,] -0.96398300 -0.26596388
+   [29,] -0.98215432 -0.18807684
+   [30,] -0.99404320 -0.10898675
+   [31,] -0.99957360 -0.02919952
+   [32,] -0.99871014  0.05077448
+   [33,] -0.99145835  0.13042371
+   [34,] -0.97786460  0.20923867
+   [35,] -0.95801586  0.28671521
+   [36,] -0.93203909  0.36235775
+   [37,] -0.90010044  0.43568245
+   [38,] -0.86240423  0.50622026
+   [39,] -0.81919157  0.57351999
+   [40,] -0.77073888  0.63715114
+   [41,] -0.71735609  0.69670671
+   [42,] -0.65938467  0.75180573
+   [43,] -0.59719544  0.80209576
+   [44,] -0.53118620  0.84725511
+   [45,] -0.46177918  0.88699492
+   [46,] -0.38941834  0.92106099
+   [47,] -0.31456656  0.94923542
+   [48,] -0.23770263  0.97133797
+   [49,] -0.15931821  0.98722728
+   [50,] -0.07991469  0.99680171
+   [51,]  0.00000000  1.00000000
+   [52,]  0.07991469  0.99680171
+   [53,]  0.15931821  0.98722728
+   [54,]  0.23770263  0.97133797
+   [55,]  0.31456656  0.94923542
+   [56,]  0.38941834  0.92106099
+   [57,]  0.46177918  0.88699492
+   [58,]  0.53118620  0.84725511
+   [59,]  0.59719544  0.80209576
+   [60,]  0.65938467  0.75180573
+   [61,]  0.71735609  0.69670671
+   [62,]  0.77073888  0.63715114
+   [63,]  0.81919157  0.57351999
+   [64,]  0.86240423  0.50622026
+   [65,]  0.90010044  0.43568245
+   [66,]  0.93203909  0.36235775
+   [67,]  0.95801586  0.28671521
+   [68,]  0.97786460  0.20923867
+   [69,]  0.99145835  0.13042371
+   [70,]  0.99871014  0.05077448
+   [71,]  0.99957360 -0.02919952
+   [72,]  0.99404320 -0.10898675
+   [73,]  0.98215432 -0.18807684
+   [74,]  0.96398300 -0.26596388
+   [75,]  0.93964547 -0.34214965
+   [76,]  0.90929743 -0.41614684
+   [77,]  0.87313298 -0.48748210
+   [78,]  0.83138346 -0.55569915
+   [79,]  0.78431593 -0.62036161
+   [80,]  0.73223144 -0.68105588
+   [81,]  0.67546318 -0.73739372
+   [82,]  0.61437426 -0.78901475
+   [83,]  0.54935544 -0.83558878
+   [84,]  0.48082261 -0.87681789
+   [85,]  0.40921417 -0.91243836
+   [86,]  0.33498815 -0.94222234
+   [87,]  0.25861935 -0.96597931
+   [88,]  0.18059627 -0.98355731
+   [89,]  0.10141799 -0.99484390
+   [90,]  0.02159098 -0.99976689
+   [91,] -0.05837414 -0.99829478
+   [92,] -0.13796587 -0.99043698
+   [93,] -0.21667508 -0.97624378
+   [94,] -0.29399831 -0.95580594
+   [95,] -0.36944096 -0.92925421
+   [96,] -0.44252044 -0.89675842
+   [97,] -0.51276931 -0.85852643
+   [98,] -0.57973820 -0.81480281
+   [99,] -0.64299874 -0.76586723
+  [100,] -0.70214629 -0.71203272
+  [101,] -0.75680250 -0.65364362
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+seq(-4, 4, len = 101) -&gt;
+  x
+cbind(sin(x), cos(x)) -&gt;
+* y
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+seq(-4, 4, len = 101) -&gt;
+  x
+cbind(sin(x), cos(x)) -&gt;
+  y
+*matplot(x, y, type = "l", xaxt = "n",
+*       main = expression(
+*         paste(plain(sin) * phi,
+*               "  and  ",
+*               plain(cos) * phi)),
+*       ylab = expression("sin" * phi,
+*                         "cos" * phi),  # only 1st is taken
+*       xlab = expression(paste("Phase Angle ",
+*                               phi)),
+*       col.main = "blue")
+```
+]]
+.column[.content[
+&lt;img src="plotting_with_base_r_files/figure-html/output_base_14-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+seq(-4, 4, len = 101) -&gt;
+  x
+cbind(sin(x), cos(x)) -&gt;
+  y
+matplot(x, y, type = "l", xaxt = "n",
+        main = expression(
+          paste(plain(sin) * phi,
+                "  and  ",
+                plain(cos) * phi)),
+        ylab = expression("sin" * phi,
+                          "cos" * phi),  # only 1st is taken
+        xlab = expression(paste("Phase Angle ",
+                                phi)),
+        col.main = "blue")
+*axis(1,
+*    at = c(-pi, -pi/2, 0, pi/2, pi),
+*    labels = expression(-pi, -pi/2, 0,
+*                        pi/2, pi))
+```
+]]
+.column[.content[
+&lt;img src="plotting_with_base_r_files/figure-html/output_base_18-1.png" width="100%" /&gt;
+]]
+
+---
+
+
+
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*plot(1:10, type="o",
+*    xlab="", ylab="",
+*    main = "plot math &amp; numbers")
+```
+]]
+.column[.content[
+&lt;img src="plotting_with_base_r_files/figure-html/output_base_plot_3-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+plot(1:10, type="o",
+     xlab="", ylab="",
+     main = "plot math &amp; numbers")
+*theta &lt;- 1.23
+```
+]]
+.column[.content[
+&lt;img src="plotting_with_base_r_files/figure-html/output_base_plot_4-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+plot(1:10, type="o",
+     xlab="", ylab="",
+     main = "plot math &amp; numbers")
+theta &lt;- 1.23
+*mtext(bquote(hat(theta) ==
+*              .(theta)), line= .25)
+```
+]]
+.column[.content[
+&lt;img src="plotting_with_base_r_files/figure-html/output_base_plot_6-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+plot(1:10, type="o",
+     xlab="", ylab="",
+     main = "plot math &amp; numbers")
+theta &lt;- 1.23
+mtext(bquote(hat(theta) ==
+               .(theta)), line= .25)
+*for(i in 2:9){
+* text(i, i+1,
+*      substitute(list(xi, eta) ==
+*                   group("(",list(x,y),")"),
+*                 list(x = i, y = i+1)))
+}#&lt;&lt;
+```
+]]
+.column[.content[
+&lt;img src="plotting_with_base_r_files/figure-html/output_base_plot_12-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+plot(1:10, type="o",
+     xlab="", ylab="",
+     main = "plot math &amp; numbers")
+theta &lt;- 1.23
+mtext(bquote(hat(theta) ==
+               .(theta)), line= .25)
+for(i in 2:9){
+  text(i, i+1,
+       substitute(list(xi, eta) ==
+                    group("(",list(x,y),")"),
+                  list(x = i, y = i+1)))
+}
+*text(1, 10,  "Derivatives:", adj = 0)
+```
+]]
+.column[.content[
+&lt;img src="plotting_with_base_r_files/figure-html/output_base_plot_13-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+plot(1:10, type="o",
+     xlab="", ylab="",
+     main = "plot math &amp; numbers")
+theta &lt;- 1.23
+mtext(bquote(hat(theta) ==
+               .(theta)), line= .25)
+for(i in 2:9){
+  text(i, i+1,
+       substitute(list(xi, eta) ==
+                    group("(",list(x,y),")"),
+                  list(x = i, y = i+1)))
+}
+text(1, 10,  "Derivatives:", adj = 0)
+*text(1, 9.6, expression(
+*"             first: {f * minute}(x) "
+*== {f * minute}(x)), adj = 0)
+```
+]]
+.column[.content[
+&lt;img src="plotting_with_base_r_files/figure-html/output_base_plot_16-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+plot(1:10, type="o",
+     xlab="", ylab="",
+     main = "plot math &amp; numbers")
+theta &lt;- 1.23
+mtext(bquote(hat(theta) ==
+               .(theta)), line= .25)
+for(i in 2:9){
+  text(i, i+1,
+       substitute(list(xi, eta) ==
+                    group("(",list(x,y),")"),
+                  list(x = i, y = i+1)))
+}
+text(1, 10,  "Derivatives:", adj = 0)
+text(1, 9.6, expression(
+ "             first: {f * minute}(x) "
+ == {f * minute}(x)), adj = 0)
+*text(1, 9.0, expression(
+*"     second: {f * second}(x) "
+*== {f * second}(x)), adj = 0)
+```
+]]
+.column[.content[
+&lt;img src="plotting_with_base_r_files/figure-html/output_base_plot_19-1.png" width="100%" /&gt;
+]]
+
+
+
+---
+
+
+
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*plot(1:10, 1:10)
+```
+]]
+.column[.content[
+&lt;img src="plotting_with_base_r_files/figure-html/output_another_1-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+plot(1:10, 1:10)
+*text(4, 9,
+*    labels =
+*      expression(hat(beta) ==
+*                 (X^t * X)^{-1} * X^t * y))
+```
+]]
+.column[.content[
+&lt;img src="plotting_with_base_r_files/figure-html/output_another_5-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+plot(1:10, 1:10)
+text(4, 9,
+     labels =
+       expression(hat(beta) ==
+                  (X^t * X)^{-1} * X^t * y))
+*text(4, 7,
+*    expression(bar(x) ==
+*                 sum(frac(x[i], n),
+*                     i == 1, n)))
+```
+]]
+.column[.content[
+&lt;img src="plotting_with_base_r_files/figure-html/output_another_9-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+plot(1:10, 1:10)
+text(4, 9,
+     labels =
+       expression(hat(beta) ==
+                  (X^t * X)^{-1} * X^t * y))
+text(4, 7,
+     expression(bar(x) ==
+                  sum(frac(x[i], n),
+                      i == 1, n)))
+*text(8, 5, expression(
+* paste(frac(1, sigma*sqrt(2*pi)),
+*       " ",
+*       plain(e)^{frac(-(x-mu)^2, 2*sigma^2)})),
+*    cex = 1.2)
+```
+]]
+.column[.content[
+&lt;img src="plotting_with_base_r_files/figure-html/output_another_14-1.png" width="100%" /&gt;
+]]
+
+---
+
+
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*a &lt;- 2
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+a &lt;- 2
+*bquote(a == a)
+```
+]]
+.column[.content[
+
+```
+  a == a
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+a &lt;- 2
+bquote(a == a)
+*quote(a == a)
+```
+]]
+.column[.content[
+
+```
+  a == a
+```
+
+```
+  a == a
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+a &lt;- 2
+bquote(a == a)
+quote(a == a)
+*bquote(a == .(a))
+```
+]]
+.column[.content[
+
+```
+  a == a
+```
+
+```
+  a == a
+```
+
+```
+  a == 2
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+a &lt;- 2
+bquote(a == a)
+quote(a == a)
+bquote(a == .(a))
+*substitute(a == A, list(A = a))
+```
+]]
+.column[.content[
+
+```
+  a == a
+```
+
+```
+  a == a
+```
+
+```
+  a == 2
+```
+
+```
+  a == 2
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+a &lt;- 2
+bquote(a == a)
+quote(a == a)
+bquote(a == .(a))
+substitute(a == A, list(A = a))
+*plot(1:10, a*(1:10), main = bquote(a == .(a)))
+```
+]]
+.column[.content[
+
+```
+  a == a
+```
+
+```
+  a == a
+```
+
+```
+  a == 2
+```
+
+```
+  a == 2
+```
+
+&lt;img src="plotting_with_base_r_files/figure-html/output_bquote_6-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+a &lt;- 2
+bquote(a == a)
+quote(a == a)
+bquote(a == .(a))
+substitute(a == A, list(A = a))
+plot(1:10, a*(1:10), main = bquote(a == .(a)))
+*default &lt;- 1
+```
+]]
+.column[.content[
+
+```
+  a == a
+```
+
+```
+  a == a
+```
+
+```
+  a == 2
+```
+
+```
+  a == 2
+```
+
+&lt;img src="plotting_with_base_r_files/figure-html/output_bquote_7-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+a &lt;- 2
+bquote(a == a)
+quote(a == a)
+bquote(a == .(a))
+substitute(a == A, list(A = a))
+plot(1:10, a*(1:10), main = bquote(a == .(a)))
+default &lt;- 1
+*bquote( function(x, y = .(default)) x+y )
+```
+]]
+.column[.content[
+
+```
+  a == a
+```
+
+```
+  a == a
+```
+
+```
+  a == 2
+```
+
+```
+  a == 2
+```
+
+&lt;img src="plotting_with_base_r_files/figure-html/output_bquote_8-1.png" width="100%" /&gt;
+
+```
+  function(x, y = 1) x + y
+```
+]]
+
+
+---
+
+
+
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*cor &lt;- -.321
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cor &lt;- -.321
+*cor2 &lt;- '-.321'
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cor &lt;- -.321
+cor2 &lt;- '-.321'
+*par(mfrow = c(1, 2))
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cor &lt;- -.321
+cor2 &lt;- '-.321'
+par(mfrow = c(1, 2))
+*plot(1:10, 1:10,
+*    main = bquote("Hello" ~ r[xy] ==
+*                    .(cor) ~ "and" ~ B^2))
+```
+]]
+.column[.content[
+&lt;img src="plotting_with_base_r_files/figure-html/output_bquote2_6-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cor &lt;- -.321
+cor2 &lt;- '-.321'
+par(mfrow = c(1, 2))
+plot(1:10, 1:10,
+     main = bquote("Hello" ~ r[xy] ==
+                     .(cor) ~ "and" ~ B^2))
+*plot(1:10, 1:10,
+*    main = bquote("Hello" ~ r[xy] ==
+*                    .(cor2) ~ "and" ~ B^2))
+```
+]]
+.column[.content[
+&lt;img src="plotting_with_base_r_files/figure-html/output_bquote2_9-1.png" width="100%" /&gt;
+]]
+
+
+---
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 60%}
+&lt;/style&gt;
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightLines": true,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script>
+(function() {
+  var i, text, code, codes = document.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+})();
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -1,0 +1,476 @@
+---
+title: "purrr flipbook"
+subtitle: "data structures and functional programming with purrr | made with Xaringan"
+author: "<br><br>Gina Reynolds, April 2019"
+date: "<br>"
+output:
+  xaringan::moon_reader:
+    chakra: libs/remark-latest.min.js
+    lib_dir: libs
+    css: ["kunoichi", "ninjutsu"]
+    nature:
+      ratio: "16:9"
+      highlightLines: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(fig.height = 6, out.width = "100%", comment = " ", cache = T)
+
+source("xaringan_reveal.R")
+```
+
+
+# Introduction
+
+What about purrr.  The R package purrr feels hard to me, but it does have so much promise of providing a easy tidy, efficient workflow.  Maybe purrr feels hard to you too. I need some practice in it and maybe my practice could be a useful reference for you!  Let's flipbook it! 
+
+I recommend you starting with less complicated data structures that can be managed only with dplyr and tidyr, which are both also part of the tidyverse.  If you aren't familiar with these tools you might want to start there and practice those tools: [The Tidyverse in Action]( https://evamaerey.github.io/tidyverse_in_action/tidyverse_in_action.html#1)
+
+
+
+---
+# What is purrr
+
+I'm not really sure, so quoting from purrr.tidyverse.org:
+
+> purrr enhances R’s functional programming (FP) toolkit by providing a complete and consistent set of tools for working with functions and vectors. If you’ve never heard of FP before, the best place to start is the family of map() functions which allow you to replace many for loops with code that is both more succinct and easier to read. The best place to learn about the map() functions is the iteration chapter in R for data science.
+
+
+
+
+---
+
+# Getting started with R and RStudio
+
+The tools demonstrated in this book are implemented in the statistical software, R which is opensource and freely available.  RStudio, an integrated development environment (IDE), is a nice environment for working in R.  The following links may help you get R and RStudio up and running. 
+
+- [Install Windows](https://www.youtube.com/watch?v=aCRMhAWmtpw)
+- [Install Mac](https://www.youtube.com/watch?v=GLLZhc_5enQ)
+
+
+---
+
+# Acknowledgements
+
+I'm grateful to the tidyverse team for their tireless work on developing and maintaining this wonderful toolkit and to RStudio for supporting the development.  Emi Tanaka (@statsgen) and Garrick Aden-Buie (@grrrck) helped by writing code to made the flipbook style possible. I'm *very* grateful to them for their work on this as well as to Yihui Xie and others for their work on the Xaringan package --- the extraordinary platform for creating the slides for this book.  I'm thankful too to my students who refresh my perspective on teaching and learning new tools.  Finally, thanks to my family and friends who support data wrangling, plotting, modeling, and me. 
+
+
+
+---
+
+# Load the tidyverse and data
+
+To get started, you'll need to install the packages "tidyverse" and load data.  Execute this code in your console:
+
+```{r, eval = FALSE}
+install.packages("tidyverse")
+install.packages("gapminder")
+```
+
+Then, in an R script or .Rmd you can use and execute the following code: 
+
+```{r, message = F, warning=F, eval = T}
+options(scipen = 10) # adjust when scientific notation turns on
+library(tidyverse)
+```
+
+
+---
+# Data structures
+
+```{r simple_vector, eval = F, echo = F}
+c(1, 4, 2, 6) -> # c() is the "concatinate" function
+  my_vector # Now we've done the assignment
+
+my_vector[3]
+```
+
+`r apply_reveal("simple_vector")`
+
+---
+
+```{r counting_numbers_vector, eval = F, echo = F}
+5:12 ->
+  integer_sequence
+
+integer_sequence[c(1,3)]
+```
+
+
+`r apply_reveal("simple_vector")`
+
+---
+
+# Matrix
+
+```{r simple_matrix, eval = F, echo = F}
+matrix(1:15, nrow = 3)
+```
+
+`r apply_reveal("simple_matrix")`
+
+---
+
+# Simple lists
+
+```{r}
+list("apple", 1:5) ->
+  a_list_i_made
+
+a_list_i_made[[1]] # access elements with double brackets
+```
+
+---
+
+# Simple Named lists
+
+```{r}
+list(thing_1 = "a", thing_2 = matrix(data = 1:5, nrow = 2)) ->
+  my_named_list
+
+my_named_list$thing_1 # access via dollarsign
+```
+
+---
+
+# Lists containing lists (complex lists)
+
+```{r}
+list("a", 1:5, my_named_list) ->
+  lists_containing_lists
+lists_containing_lists[[3]]$thing_2 # accessing parts of a complex list
+```
+
+
+---
+# 
+
+```{r}
+list( c("mac", "granny"), 
+      c("naval", "blood"))[2]
+```
+
+```{r}
+list(apples = c("mac", "granny"), 
+     oranges = c("naval", "blood"))$oranges
+```
+
+
+---
+# From purrr cheatsheet
+
+
+> List column workflow
+
+- Make a list column
+- Work with list column
+- Simplify the list column
+
+
+
+
+
+
+```{r}
+# linear modeling function
+mod_fun <- function(df) lm(Sepal.Length ~ ., data = df) 
+# returnes coefficients of the model? 
+b_fun <- function(mod) coefficients(mod)[[1]]
+```
+
+
+
+```{r list_column_workflow, echo = F, eval = T}
+iris %>% 
+  group_by(Species) %>% 
+  nest() %>% # Make a list column
+  mutate(model = map(data, mod_fun)) %>% # lm(Sepal.Length ~ ., data = df) 
+  mutate(beta_0 = map_dbl(model, b_fun)) -> # coefficients(mod)[[1]]
+iris_mods
+```
+
+
+
+---
+
+`r apply_reveal("list_column_workflow")`
+
+
+---
+
+# Looking inside a list-column
+
+```{r}
+iris_mods$model 
+```
+
+---
+
+# Looking at an element in a list-column
+
+
+```{r}
+iris_mods$data[[3]]
+```
+
+
+---
+# Greater detail and examples
+
+> MAKE A LIST COLUMN - You can create list columns with functions in the tibble and dplyr packages, as well as tidyr’s nest()
+
+---
+
+> tibble::tribble(...)
+Makes list column when needed
+
+
+```{r}
+tribble( ~max, ~seq, 
+         3, 1:3,
+         4, 1:4, 
+         5, 1:5)
+```
+---
+
+> tibble::tibble(...)
+Saves list input as list columns
+
+```{r}
+tibble(max = c(3, 4, 5), 
+       seq = list(1:3, 1:4, 1:5))
+```
+
+---
+
+> tibble::enframe(x, name="name", value="value") Converts multi-level list to tibble with list cols
+
+
+```{r}
+enframe(list('3' = 1:3, '4' = 1:4, '5' = 1:5), 
+        'max', 'seq')
+```
+
+---
+
+dplyr::mutate(.data, ...) Also transmute() Returns list col when result returns list.
+
+```{r}
+mtcars %>% 
+  mutate(seq = map(cyl, seq))
+```
+
+
+---
+
+dplyr::summarise(.data, ...)
+Returns list col when result is wrapped with list()
+
+```{r}
+mtcars %>% 
+  group_by(cyl) %>% 
+  summarise(q = list(quantile(mpg)))
+```
+
+
+---
+## 2 WORK WITH LIST COLUMNS - Use the purrr functions map(), map2(), and pmap() to apply a function that returns a result element-wise to the cells of a list column. walk(), walk2(), and pwalk() work the same way, but return a side effect.
+
+---
+
+# set up
+```{r}
+n_iris <- iris %>% 
+  group_by(Species) %>% 
+  nest()
+mod_fun <- function(df) lm(Sepal.Length ~ ., data = df)
+m_iris <- n_iris %>%
+  mutate(model = map(data, mod_fun))
+```
+
+
+
+
+
+---
+
+
+purrr::map(.x, .f, ...)
+Apply .f element-wise to .x as .f(.x) 
+
+```{r wwlc1, echo= F, eval = F}
+n_iris %>% 
+  mutate(n = map(data, dim))
+```
+
+`r apply_reveal("wwlc1")`
+
+---
+
+purrr::map2(.x, .y, .f, ...)
+Apply .f element-wise to .x and .y as .f(.x, .y) 
+
+```{r wwlc2, echo= F, eval = F}
+m_iris %>% 
+  mutate(n = map2(data, model, list))
+```
+
+`r apply_reveal("wwlc2")`
+
+
+---
+
+
+purrr::pmap(.l, .f, ...)
+Apply .f element-wise to vectors saved in .l 
+
+```{r wwlc3, echo= F, eval = F}
+m_iris %>%
+  mutate(n = pmap(list(data, model, data), list))
+```  
+
+`r apply_reveal("wwlc3")`
+
+
+---
+
+
+3. SIMPLIFY THE LIST COLUMN (into a regular column)
+
+Use the purrr functions map_lgl(), map_int(), map_dbl(), map_chr(), as well as tidyr’s unnest() to reduce a list column into a regular column.
+
+---
+
+purrr::map_lgl(.x, .f, ...)
+Apply .f element-wise to .x, return a logical vector 
+
+```{r slc1, echo = F, eval = F}
+n_iris %>% 
+  transmute(n = map_lgl(data, is.matrix))
+```
+
+`r apply_reveal("slc1")`
+
+
+---
+
+purrr::map_int(.x, .f, ...)
+Apply .f element-wise to .x, return an integer vector 
+
+```{r slc2, echo = F, eval = F}
+n_iris %>% 
+  transmute(n = map_int(data, nrow))
+```
+
+`r apply_reveal("slc2")`
+
+
+---
+
+purrr::map_dbl(.x, .f, ...)
+Apply .f element-wise to .x, return a double vector
+
+```{r slc3, echo = F, eval = F}
+n_iris %>% 
+  transmute(n = map_dbl(data, nrow))
+```
+
+`r apply_reveal("slc3")`
+
+
+---
+
+
+
+purrr::map_chr(.x, .f, ...)
+Apply .f element-wise to .x, return a character vector 
+
+
+```{r slc4, echo = F, eval = F}
+n_iris %>% 
+  transmute(n = map_chr(data, nrow))
+```
+
+`r apply_reveal("slc4")`
+
+
+---
+
+
+
+```{r}
+mtcars %>% 
+  select(mpg, cyl) %>% 
+  distinct() %>% 
+  mutate(seq = map(cyl, seq)) %>% 
+  unnest()
+```
+
+```{r}
+mtcars %>% 
+  group_by(cyl) %>% 
+  summarise(quantiles = list(quantile(mpg))) %>% 
+  unnest()
+```
+
+
+
+
+
+```{r}
+iris %>%
+  group_by(Species) %>%
+  nest() %>% 
+  mutate(dimensions = map(data, dim)) %>% 
+  mutate(rows = dimensions[[1]][1]) %>% 
+  mutate(columns = dimensions[[1]][2]) %>% 
+  select(-data) %>% 
+  unnest()
+```
+
+---
+# List Column
+
+```{r}
+iris %>% 
+  group_by(Species) %>% 
+  nest() %>%
+  mutate(model = map(data, mod_fun))  %>% 
+  mutate(n = map2(data, model, list)) ->
+iris_more_mod
+
+iris_more_mod$n
+
+iris %>% 
+  group_by(Species) %>% 
+  nest() %>%
+  mutate(model = map(data, mod_fun)) %>%
+  mutate(n = pmap(list(data, model, data), list)) ->
+more_manipulations
+
+more_manipulations$n
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+```{css, eval = TRUE, echo = F}
+.remark-code{line-height: 1.5; font-size: 60%}
+```
+
+
+
+
+
+
+

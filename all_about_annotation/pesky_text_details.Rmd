@@ -1,0 +1,58 @@
+---
+title: "font_testing.Rmd"
+author: "Evangeline Reynolds"
+date: "6/26/2019"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+library(gapminder)
+
+
+gapminder %>% 
+  filter(year == 2007) %>% 
+  ggplot() +
+  aes(x = gdpPercap, y = lifeExp) +
+  geom_point() +
+  annotate(geom = "text", 
+           label = "Dresden\nRocks!",
+           x = 40000,
+           y = 50,
+           family = "Times")
+
+```
+
+```{r}
+gapminder %>% 
+  filter(year == 2007) %>% 
+  ggplot() +
+  aes(x = gdpPercap, y = lifeExp) +
+  geom_point() +
+  annotate(geom = "text", 
+           label = "italic(y) == c(`(Intercept)` = \"-8.2\") + c(x = \"3.1\") %.% italic(x) * \",\" ~ ~italic(r)^2 ~ \"=\" ~ \"0.841\"",
+           x = 40000,
+           y = 50,
+           family = "Times",
+           parse = T,
+           angle = 1) # change to 90 later
+```
+
+Try to use this text instead, bolding appropriate parts: 
+Global mean temperature change ( ̊C relative to 1986–2005)
+
+(so as in the BE plot.)
+
+```{r}
+gapminder %>% 
+  filter(year == 2007) %>% 
+  ggplot() +
+  aes(x = gdpPercap, y = lifeExp) +
+  geom_point() +
+  annotate(geom = "text", 
+           label = "bold(\"Global mean temperature change\") ~ \"( ̊C relative to 1986–2005)\"  * \",\" ~ ~italic(r)^2 ~ \"=\" ~ \"0.841\"",
+           x = 20000,
+           y = 50,
+           family = "Times",
+           parse = T)
+```

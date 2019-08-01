@@ -1,0 +1,170 @@
+---
+title: "a wbstats mini flipbook"
+author: "Gina Reynolds"
+date: "2019/03/05"
+output: html_notebook
+---
+
+
+# Introduction
+
+Note: Another package exists that Vincent made me aware of: [wbstats](https://cran.r-project.org/web/packages/wbstats/wbstats.pdf).  This package is another option for accessing the World Development indicators via the API.  
+
+The [WDI package](https://github.com/vincentarelbundock/WDI) written by Vincent Arel-Bundock accesses the the World Bank's World Development indicators via an API.  This mini flipbook walk you though some ways you might utilize this cool package. 
+
+
+```{r, echo = T}
+source("../xaringan_reveal_parenthetical.R")
+knitr::opts_chunk$set(cache = T)
+```
+
+
+---
+
+```{r}
+library(wbstats)
+library(tidyverse)
+```
+
+---
+
+```{r, eval = F}
+wbsearch("population growth")
+wbsearch("food")
+```
+# more detailed information...
+
+```{r, eval = F}
+wbindicators(lang = "en") %>% 
+  filter(indicatorID == "SP.POP.GROW" | 
+           indicatorID == "NY.GDP.PCAP.PP.CD" |
+           indicatorID == "SN.ITK.DEFC.ZS") ->
+  meta_data_wbindicators
+
+# meta_data_wbindicators %>% 
+#   filter(indicatorID == "SP.POP.GROW") %>% 
+#   select(indicatorDesc) 
+
+meta_data_wbindicators[1, "indicatorDesc"]
+meta_data_wbindicators[3, "indicatorDesc"]
+```
+
+
+---
+
+```{r request_data}
+wb(country = "countries_only", 
+   indicator = c("SP.POP.GROW", "NY.GDP.PCAP.PP.CD", "SN.ITK.DEFC.ZS"),
+   mrv = 30, 
+   return_wide = TRUE) %>%
+  rename(pop_grow = SP.POP.GROW) %>% 
+  rename(gdp_per_capita = NY.GDP.PCAP.PP.CD) %>% 
+  rename(malnutrition = SN.ITK.DEFC.ZS) %>% 
+  tibble() ->
+wb_data_request
+```
+
+---
+
+
+---
+
+```{r }
+library(countrycode)
+library(ggrepel)
+options(scipen = 10) # sci. notation turns on later
+```
+
+```{r gg_scatterplot}
+wb_data_request %>%
+  filter(date == 2014) %>%
+  mutate(continent =
+           countrycode(sourcevar = iso3c,
+                       origin = "iso3c",
+                       destination = "continent")) %>%
+  ggplot() +
+  aes(x = pop_grow) +
+  aes(y = malnutrition) +
+  geom_point() +
+  scale_x_log10() +
+  aes(color = continent) +
+  geom_smooth(method = "lm") +
+  facet_wrap(~ continent) +
+  scale_color_discrete(guide = F) +
+  aes(label = country) +
+  ggpmisc::stat_dens2d_filter(geom = "text_repel",
+                              keep.fraction = 1/5,
+                              size = 3)
+```
+
+---
+
+
+```{r}
+map_data("world") %>% 
+  ggplot() +
+  aes(x = long) +
+  aes(y = lat) +
+  geom_point(size = .001) +
+  coord_map("mollweide") + # area preserving projection
+  theme_void()
+```
+
+
+---
+
+```{r}
+map_data("world") %>% 
+  ggplot() +
+  aes(x = long) +
+  aes(y = lat) +
+  geom_polygon(fill = "blue", alpha = .5) +
+  aes(group = group)
+```
+
+
+
+
+```{r world_map_data}
+map_data("world") %>%
+  mutate(iso3c = countrycode(sourcevar = region, "country.name", "iso3c")) %>%
+  rename(polygon_regions = region) ->
+  world_map
+```
+
+---
+
+
+```{r joined_data}
+world_map %>%
+  full_join(wb_data_request %>% filter(date == 2014)) ->
+  world_map_wb_2014
+```
+
+
+
+---
+# cloropleth
+
+```{r plot_maps}
+world_map_wb_2014 %>%
+  filter(polygon_regions != "Antarctica") %>%
+  ggplot() +
+  aes(x = long, y = lat) +
+  geom_polygon() + 
+  aes(group = group) + 
+  aes(fill = malnutrition) +
+  coord_equal() +
+  theme_void() +
+  scale_fill_viridis_c(option = "magma")
+```
+
+
+
+
+---
+
+```{css, eval = TRUE, echo = F}
+.remark-code{line-height: 1.5; font-size: 50%}
+```
+

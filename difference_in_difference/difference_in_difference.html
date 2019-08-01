@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>diff-in-diff vis w ggplot</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Evangeline Reynolds" />
+    <link href="libs/remark-css-0.0.1/kunoichi.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# diff-in-diff vis w ggplot
+### Evangeline Reynolds
+### 5/18/2018
+
+---
+
+
+Using a difference-in-difference framework to look at the effect of policy interventions is a popular research design.  A binary exlanatory variable that turns on and stays on lends itself to ease of interpretation!
+
+In the context of such a design, what is the essential visual inspections?  Below I suggest four plots that researchers and their audiences may find useful in visually inspecting the timing of interventions and the relationships between a policy intervention and outcomes.
+
+I use ggplot2 to implement the visualization. The ability to overwrite global aesthetics, using the aes() function, means that we move from one plot to another with little additional code.  A little over a year ago I learned about declaring the aes() on it's own line and maybe novelty bias is at work here, but I find the capability to be a lot of fun to play with!
+
+
+---
+
+The five plots are as follows:
+
+- two plots showing the timing of intervention and the cross-sectional cases (one aligning the interventions)
+- two plots showing how the intervention relates to the response variable of interest (one aligning the interventions)
+- a plot that breaks up the data into individual time-series for the response variable for each cross-sectional unit
+
+Another option for visualizing such data is using the new package [panelView](http://yiqingxu.org/software/panelView/panelView.html), which certainly gave me additional inspiration for this exercise and looks useful!  
+
+
+
+```r
+library(tidyverse)
+```
+
+```
+## ── Attaching packages ────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
+```
+
+```
+## ✔ ggplot2 3.1.1     ✔ purrr   0.3.0
+## ✔ tibble  2.1.1     ✔ dplyr   0.7.8
+## ✔ tidyr   0.8.2     ✔ stringr 1.4.0
+## ✔ readr   1.1.1     ✔ forcats 0.3.0
+```
+
+```
+## Warning: package 'ggplot2' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'tibble' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'purrr' was built under R version 3.5.2
+```
+
+```
+## Warning: package 'stringr' was built under R version 3.5.2
+```
+
+```
+## ── Conflicts ───────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+```
+
+```r
+library(gapminder)
+source("../xaringan_reveal_parenthetical.R")
+```
+
+
+
+
+
+```r
+min_year &lt;- min(gapminder$year)
+max_year &lt;- max(gapminder$year)
+span &lt;- max_year- min_year
+
+gapminder %&gt;% 
+  select(country) %&gt;% 
+  distinct() %&gt;% 
+  sample_frac(.5) %&gt;% 
+  mutate(intervention_year = 
+           runif(n = n(), min = min_year - span, 
+                 max = max_year)) %&gt;% 
+  mutate(intervention_year = round(intervention_year)) -&gt;
+synthetic_interventions
+```
+
+
+```r
+synthetic_interventions %&gt;% 
+  full_join(gapminder) %&gt;% 
+  mutate(treatment = case_when(year &gt;= intervention_year ~ "treated",
+                             year &lt; intervention_year ~ "not treated",
+                             is.na(intervention_year) ~ "not treated")) %&gt;%
+  group_by(country) %&gt;% 
+  mutate(mean_treated = mean(treatment == "treated")) %&gt;% 
+  arrange(mean_treated) %&gt;% 
+  ungroup() %&gt;% 
+  mutate(country = fct_inorder(country)) -&gt; 
+panel_prepped
+```
+
+```
+## Joining, by = "country"
+```
+
+
+
+```r
+ggplot(panel_prepped) +
+  aes(x = year, y = country, group = country, col = treatment) +
+  labs(caption = "Four essential plots for diff-in-diff | Gina Reynolds") +
+  geom_line(alpha = .5) +
+  geom_point(size = 1.5) +
+  theme_minimal() +
+  scale_color_manual(values = c("lightgrey", "steelblue4" )) +
+  labs(y = "country") +
+  labs(title = "Plot 1: Treatment-control summary") +
+  labs(title = "") +
+  aes(y = gdpPercap) + 
+  scale_y_log10() +
+  labs(y = "GDP per cap") +
+  labs(title = "Plot 2: Treatment-control response overlaid summary") +
+  labs(title = "") +
+  aes(x = year - intervention_year) +
+  labs(title = "Plot 3: Treatment-control response overlaid summary, aligned intervention") +
+  labs(title = "") +
+  facet_wrap(~ fct_inorder(country), scales = "free_y") +  
+  aes(x = year) + 
+  scale_y_continuous() +
+  labs(title = "Plot 4: Treatment-Response faceted") 
+```
+
+```
+## Scale for 'y' is already present. Adding another scale for 'y', which
+## will replace the existing scale.
+```
+
+![](difference_in_difference_files/figure-html/essential_plots-1.png)&lt;!-- --&gt;
+
+
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+*ggplot(panel_prepped)
+```
+]]
+.column[.content.center[
+![](difference_in_difference_files/figure-html/output_essential_plots_1-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(panel_prepped) +
+* aes(x = year, y = country, group = country, col = treatment)
+```
+]]
+.column[.content.center[
+![](difference_in_difference_files/figure-html/output_essential_plots_2-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(panel_prepped) +
+  aes(x = year, y = country, group = country, col = treatment) +
+* labs(caption = "Four essential plots for diff-in-diff | Gina Reynolds")
+```
+]]
+.column[.content.center[
+![](difference_in_difference_files/figure-html/output_essential_plots_3-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(panel_prepped) +
+  aes(x = year, y = country, group = country, col = treatment) +
+  labs(caption = "Four essential plots for diff-in-diff | Gina Reynolds") +
+* geom_line(alpha = .5)
+```
+]]
+.column[.content.center[
+![](difference_in_difference_files/figure-html/output_essential_plots_4-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(panel_prepped) +
+  aes(x = year, y = country, group = country, col = treatment) +
+  labs(caption = "Four essential plots for diff-in-diff | Gina Reynolds") +
+  geom_line(alpha = .5) +
+* geom_point(size = 1.5)
+```
+]]
+.column[.content.center[
+![](difference_in_difference_files/figure-html/output_essential_plots_5-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(panel_prepped) +
+  aes(x = year, y = country, group = country, col = treatment) +
+  labs(caption = "Four essential plots for diff-in-diff | Gina Reynolds") +
+  geom_line(alpha = .5) +
+  geom_point(size = 1.5) +
+* theme_minimal()
+```
+]]
+.column[.content.center[
+![](difference_in_difference_files/figure-html/output_essential_plots_6-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(panel_prepped) +
+  aes(x = year, y = country, group = country, col = treatment) +
+  labs(caption = "Four essential plots for diff-in-diff | Gina Reynolds") +
+  geom_line(alpha = .5) +
+  geom_point(size = 1.5) +
+  theme_minimal() +
+* scale_color_manual(values = c("lightgrey", "steelblue4" ))
+```
+]]
+.column[.content.center[
+![](difference_in_difference_files/figure-html/output_essential_plots_7-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(panel_prepped) +
+  aes(x = year, y = country, group = country, col = treatment) +
+  labs(caption = "Four essential plots for diff-in-diff | Gina Reynolds") +
+  geom_line(alpha = .5) +
+  geom_point(size = 1.5) +
+  theme_minimal() +
+  scale_color_manual(values = c("lightgrey", "steelblue4" )) +
+* labs(y = "country")
+```
+]]
+.column[.content.center[
+![](difference_in_difference_files/figure-html/output_essential_plots_8-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(panel_prepped) +
+  aes(x = year, y = country, group = country, col = treatment) +
+  labs(caption = "Four essential plots for diff-in-diff | Gina Reynolds") +
+  geom_line(alpha = .5) +
+  geom_point(size = 1.5) +
+  theme_minimal() +
+  scale_color_manual(values = c("lightgrey", "steelblue4" )) +
+  labs(y = "country") +
+* labs(title = "Plot 1: Treatment-control summary")
+```
+]]
+.column[.content.center[
+![](difference_in_difference_files/figure-html/output_essential_plots_9-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(panel_prepped) +
+  aes(x = year, y = country, group = country, col = treatment) +
+  labs(caption = "Four essential plots for diff-in-diff | Gina Reynolds") +
+  geom_line(alpha = .5) +
+  geom_point(size = 1.5) +
+  theme_minimal() +
+  scale_color_manual(values = c("lightgrey", "steelblue4" )) +
+  labs(y = "country") +
+  labs(title = "Plot 1: Treatment-control summary") +
+* labs(title = "")
+```
+]]
+.column[.content.center[
+![](difference_in_difference_files/figure-html/output_essential_plots_10-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(panel_prepped) +
+  aes(x = year, y = country, group = country, col = treatment) +
+  labs(caption = "Four essential plots for diff-in-diff | Gina Reynolds") +
+  geom_line(alpha = .5) +
+  geom_point(size = 1.5) +
+  theme_minimal() +
+  scale_color_manual(values = c("lightgrey", "steelblue4" )) +
+  labs(y = "country") +
+  labs(title = "Plot 1: Treatment-control summary") +
+  labs(title = "") +
+* aes(y = gdpPercap)
+```
+]]
+.column[.content.center[
+![](difference_in_difference_files/figure-html/output_essential_plots_11-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(panel_prepped) +
+  aes(x = year, y = country, group = country, col = treatment) +
+  labs(caption = "Four essential plots for diff-in-diff | Gina Reynolds") +
+  geom_line(alpha = .5) +
+  geom_point(size = 1.5) +
+  theme_minimal() +
+  scale_color_manual(values = c("lightgrey", "steelblue4" )) +
+  labs(y = "country") +
+  labs(title = "Plot 1: Treatment-control summary") +
+  labs(title = "") +
+  aes(y = gdpPercap) + 
+* scale_y_log10()
+```
+]]
+.column[.content.center[
+![](difference_in_difference_files/figure-html/output_essential_plots_12-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(panel_prepped) +
+  aes(x = year, y = country, group = country, col = treatment) +
+  labs(caption = "Four essential plots for diff-in-diff | Gina Reynolds") +
+  geom_line(alpha = .5) +
+  geom_point(size = 1.5) +
+  theme_minimal() +
+  scale_color_manual(values = c("lightgrey", "steelblue4" )) +
+  labs(y = "country") +
+  labs(title = "Plot 1: Treatment-control summary") +
+  labs(title = "") +
+  aes(y = gdpPercap) + 
+  scale_y_log10() +
+* labs(y = "GDP per cap")
+```
+]]
+.column[.content.center[
+![](difference_in_difference_files/figure-html/output_essential_plots_13-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(panel_prepped) +
+  aes(x = year, y = country, group = country, col = treatment) +
+  labs(caption = "Four essential plots for diff-in-diff | Gina Reynolds") +
+  geom_line(alpha = .5) +
+  geom_point(size = 1.5) +
+  theme_minimal() +
+  scale_color_manual(values = c("lightgrey", "steelblue4" )) +
+  labs(y = "country") +
+  labs(title = "Plot 1: Treatment-control summary") +
+  labs(title = "") +
+  aes(y = gdpPercap) + 
+  scale_y_log10() +
+  labs(y = "GDP per cap") +
+* labs(title = "Plot 2: Treatment-control response overlaid summary")
+```
+]]
+.column[.content.center[
+![](difference_in_difference_files/figure-html/output_essential_plots_14-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(panel_prepped) +
+  aes(x = year, y = country, group = country, col = treatment) +
+  labs(caption = "Four essential plots for diff-in-diff | Gina Reynolds") +
+  geom_line(alpha = .5) +
+  geom_point(size = 1.5) +
+  theme_minimal() +
+  scale_color_manual(values = c("lightgrey", "steelblue4" )) +
+  labs(y = "country") +
+  labs(title = "Plot 1: Treatment-control summary") +
+  labs(title = "") +
+  aes(y = gdpPercap) + 
+  scale_y_log10() +
+  labs(y = "GDP per cap") +
+  labs(title = "Plot 2: Treatment-control response overlaid summary") +
+* labs(title = "")
+```
+]]
+.column[.content.center[
+![](difference_in_difference_files/figure-html/output_essential_plots_15-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(panel_prepped) +
+  aes(x = year, y = country, group = country, col = treatment) +
+  labs(caption = "Four essential plots for diff-in-diff | Gina Reynolds") +
+  geom_line(alpha = .5) +
+  geom_point(size = 1.5) +
+  theme_minimal() +
+  scale_color_manual(values = c("lightgrey", "steelblue4" )) +
+  labs(y = "country") +
+  labs(title = "Plot 1: Treatment-control summary") +
+  labs(title = "") +
+  aes(y = gdpPercap) + 
+  scale_y_log10() +
+  labs(y = "GDP per cap") +
+  labs(title = "Plot 2: Treatment-control response overlaid summary") +
+  labs(title = "") +
+* aes(x = year - intervention_year)
+```
+]]
+.column[.content.center[
+
+```
+## Warning: Removed 852 rows containing missing values (geom_path).
+```
+
+```
+## Warning: Removed 852 rows containing missing values (geom_point).
+```
+
+![](difference_in_difference_files/figure-html/output_essential_plots_16-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(panel_prepped) +
+  aes(x = year, y = country, group = country, col = treatment) +
+  labs(caption = "Four essential plots for diff-in-diff | Gina Reynolds") +
+  geom_line(alpha = .5) +
+  geom_point(size = 1.5) +
+  theme_minimal() +
+  scale_color_manual(values = c("lightgrey", "steelblue4" )) +
+  labs(y = "country") +
+  labs(title = "Plot 1: Treatment-control summary") +
+  labs(title = "") +
+  aes(y = gdpPercap) + 
+  scale_y_log10() +
+  labs(y = "GDP per cap") +
+  labs(title = "Plot 2: Treatment-control response overlaid summary") +
+  labs(title = "") +
+  aes(x = year - intervention_year) +
+* labs(title = "Plot 3: Treatment-control response overlaid summary, aligned intervention")
+```
+]]
+.column[.content.center[
+
+```
+## Warning: Removed 852 rows containing missing values (geom_path).
+```
+
+```
+## Warning: Removed 852 rows containing missing values (geom_point).
+```
+
+![](difference_in_difference_files/figure-html/output_essential_plots_17-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(panel_prepped) +
+  aes(x = year, y = country, group = country, col = treatment) +
+  labs(caption = "Four essential plots for diff-in-diff | Gina Reynolds") +
+  geom_line(alpha = .5) +
+  geom_point(size = 1.5) +
+  theme_minimal() +
+  scale_color_manual(values = c("lightgrey", "steelblue4" )) +
+  labs(y = "country") +
+  labs(title = "Plot 1: Treatment-control summary") +
+  labs(title = "") +
+  aes(y = gdpPercap) + 
+  scale_y_log10() +
+  labs(y = "GDP per cap") +
+  labs(title = "Plot 2: Treatment-control response overlaid summary") +
+  labs(title = "") +
+  aes(x = year - intervention_year) +
+  labs(title = "Plot 3: Treatment-control response overlaid summary, aligned intervention") +
+* labs(title = "")
+```
+]]
+.column[.content.center[
+
+```
+## Warning: Removed 852 rows containing missing values (geom_path).
+```
+
+```
+## Warning: Removed 852 rows containing missing values (geom_point).
+```
+
+![](difference_in_difference_files/figure-html/output_essential_plots_18-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(panel_prepped) +
+  aes(x = year, y = country, group = country, col = treatment) +
+  labs(caption = "Four essential plots for diff-in-diff | Gina Reynolds") +
+  geom_line(alpha = .5) +
+  geom_point(size = 1.5) +
+  theme_minimal() +
+  scale_color_manual(values = c("lightgrey", "steelblue4" )) +
+  labs(y = "country") +
+  labs(title = "Plot 1: Treatment-control summary") +
+  labs(title = "") +
+  aes(y = gdpPercap) + 
+  scale_y_log10() +
+  labs(y = "GDP per cap") +
+  labs(title = "Plot 2: Treatment-control response overlaid summary") +
+  labs(title = "") +
+  aes(x = year - intervention_year) +
+  labs(title = "Plot 3: Treatment-control response overlaid summary, aligned intervention") +
+  labs(title = "") +
+* facet_wrap(~ fct_inorder(country), scales = "free_y") +
+* aes(x = year)
+```
+]]
+.column[.content.center[
+![](difference_in_difference_files/figure-html/output_essential_plots_20-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(panel_prepped) +
+  aes(x = year, y = country, group = country, col = treatment) +
+  labs(caption = "Four essential plots for diff-in-diff | Gina Reynolds") +
+  geom_line(alpha = .5) +
+  geom_point(size = 1.5) +
+  theme_minimal() +
+  scale_color_manual(values = c("lightgrey", "steelblue4" )) +
+  labs(y = "country") +
+  labs(title = "Plot 1: Treatment-control summary") +
+  labs(title = "") +
+  aes(y = gdpPercap) + 
+  scale_y_log10() +
+  labs(y = "GDP per cap") +
+  labs(title = "Plot 2: Treatment-control response overlaid summary") +
+  labs(title = "") +
+  aes(x = year - intervention_year) +
+  labs(title = "Plot 3: Treatment-control response overlaid summary, aligned intervention") +
+  labs(title = "") +
+  facet_wrap(~ fct_inorder(country), scales = "free_y") +  
+  aes(x = year) + 
+* scale_y_continuous()
+```
+]]
+.column[.content.center[
+
+```
+## Scale for 'y' is already present. Adding another scale for 'y', which
+## will replace the existing scale.
+```
+
+![](difference_in_difference_files/figure-html/output_essential_plots_21-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+
+.column[.content[
+
+```r
+ggplot(panel_prepped) +
+  aes(x = year, y = country, group = country, col = treatment) +
+  labs(caption = "Four essential plots for diff-in-diff | Gina Reynolds") +
+  geom_line(alpha = .5) +
+  geom_point(size = 1.5) +
+  theme_minimal() +
+  scale_color_manual(values = c("lightgrey", "steelblue4" )) +
+  labs(y = "country") +
+  labs(title = "Plot 1: Treatment-control summary") +
+  labs(title = "") +
+  aes(y = gdpPercap) + 
+  scale_y_log10() +
+  labs(y = "GDP per cap") +
+  labs(title = "Plot 2: Treatment-control response overlaid summary") +
+  labs(title = "") +
+  aes(x = year - intervention_year) +
+  labs(title = "Plot 3: Treatment-control response overlaid summary, aligned intervention") +
+  labs(title = "") +
+  facet_wrap(~ fct_inorder(country), scales = "free_y") +  
+  aes(x = year) + 
+  scale_y_continuous() +
+* labs(title = "Plot 4: Treatment-Response faceted")
+```
+]]
+.column[.content.center[
+
+```
+## Scale for 'y' is already present. Adding another scale for 'y', which
+## will replace the existing scale.
+```
+
+![](difference_in_difference_files/figure-html/output_essential_plots_22-1.png)&lt;!-- --&gt;
+]]
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 50%}
+&lt;/style&gt;
+    </textarea>
+<script src="libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightLines": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script>
+(function() {
+  var i, text, code, codes = document.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+})();
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

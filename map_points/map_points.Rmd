@@ -1,0 +1,66 @@
+---
+title: "maps as points"
+author: "Evangeline Reynolds"
+date: "7/17/2019"
+output: html_document
+---
+
+```{r, fig.height=20, fig.width=20}
+library(tidyverse)
+ramen_ratings <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-06-04/ramen_ratings.csv")
+
+ramen_ratings %>% 
+  mutate(country = recode(country, 
+                          "Phlippines" = "Philippines")) %>% 
+  group_by(country) %>% 
+  summarise(mean_stars = mean(stars),
+            num_rated = n()) %>% 
+  mutate(country_name = 
+           countrycode::countrycode(
+             country, "country.name", "country.name"
+             )) %>% 
+  filter(!is.na(country_name)) ->
+country_summary
+```  
+
+
+```{r}
+ggplot2::map_data("world") %>% 
+  mutate(country_name = 
+           countrycode::countrycode(
+             region, "country.name", "country.name"
+             )) %>% 
+  inner_join(country_summary) %>% 
+  group_by(region) %>% 
+  mutate(sd_max = max(c(sd(lat), sd(long)))) %>% 
+  mutate(y = (lat - mean(lat))/sd_max) %>% 
+  mutate(x = (long - mean(long))/sd_max ) ->
+prepped
+prepped %>% 
+  ggplot() +
+  aes(group = paste(country,group)) +
+  geom_polygon( fill = "steelblue",
+                size = .01,
+                col = "white") +
+  aes(x = x*10 + num_rated) +
+  aes(y = y*10/200 + mean_stars) +
+  coord_fixed(ratio = 200) +
+  theme_minimal() +
+  geom_point(data = country_summary,
+             aes(x = num_rated,
+                 y = mean_stars,
+                 group = NULL),
+             size = 1,
+             shape = 21,
+             fill = "white",
+             col = "grey") +
+  aes(label = country) +
+  ggrepel::geom_text_repel(data = country_summary,
+             aes(x = num_rated,
+                 y = mean_stars,
+                 group = NULL),
+             size = 1)
+
+ggsave("test.png")
+```
+

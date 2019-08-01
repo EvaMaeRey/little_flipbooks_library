@@ -1,0 +1,140 @@
+---
+title: "A rayshader flipbook"
+author: "Gina Reynolds, June 2019"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: ["kunoichi", "ninjutsu"]
+    nature:
+      ratio: 16:10
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, cache = F)
+```
+
+```{r}
+library(rayshader)
+library(tidyverse)
+source(file = "https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/xaringan_reveal_parentheses_balanced.R")
+```
+
+
+----------
+
+# Coming soon: ggplot rayshaded
+
+```{r diamonds, eval = F, echo = F}
+ggplot(gapminder::gapminder) +
+  aes(x = year) +
+  aes(y = lifeExp) + 
+  aes(fill = gdpPercap) +
+  geom_tile(width = .1, height = 2) +
+  facet_wrap(continent ~ .) +
+  scale_fill_viridis_c(option = "magma")+
+  scale_x_log10() ->
+myplot ; myplot
+plot_gg(myplot, width = 5, height = 4, scale = 300, multicore = TRUE, windowsize = c(1000, 1000))
+
+render_snapshot(clear = TRUE)
+```
+
+
+---
+
+`r apply_reveal("diamonds")
+
+---
+
+```{r, eval = F}
+library(tidyverse)
+library(rayshader)
+
+tribble(
+  ~slice, ~angle,
+  "Sky", 280,
+  "Shady side of pyramid", 20,
+  "Sunny side of pyramid", 60
+) %>% 
+  mutate(slice = fct_inorder(slice),
+         angle = angle / 360) ->
+pyramid_picture 
+
+ggplot(pyramid_picture) +
+  aes(x = "", y = angle) +
+  geom_col() + 
+   aes(fill = as.numeric(slice)) +
+  scale_fill_gradientn(colors = 
+                         c("deepskyblue2", 
+                           "goldenrod2", 
+                           "yellow")) +
+  coord_polar(theta = "y", start = pi * 1.22) +
+  labs(fill = "") +
+  theme_void() ->
+plot_pyramid
+plot_gg(plot_pyramid, width = 5, height = 4, scale = 300, multicore = TRUE, windowsize = c(1000, 1000))
+render_snapshot(clear = TRUE)
+```
+
+
+
+----------
+
+# Coming soon: ggplot rayshaded
+
+```{r, eval = F}
+
+library(ggplot2)
+ggdiamonds = ggplot(diamonds) +
+  stat_density_2d(aes(x = x, y = depth, fill = stat(nlevel)), 
+                  geom = "polygon", n = 100, bins = 10, contour = TRUE) +
+  facet_wrap(clarity~.) +
+  scale_fill_viridis_c(option = "A")
+
+par(mfrow = c(1, 2))
+
+plot_gg(ggdiamonds, width = 5, height = 5, raytrace = FALSE, preview = TRUE)
+plot_gg(ggdiamonds, width = 5, height = 5, 
+        multicore = TRUE, scale = 250, 
+        zoom = 0.5, theta = 10, phi = 30, 
+        windowsize = c(800, 800))
+render_snapshot(clear = TRUE)
+```
+
+
+```{r}
+library(tidyverse)
+library(rayshader)
+
+tribble(
+  ~slice, ~angle,
+  "Sky", 280,
+  "Shady side of pyramid", 20,
+  "Sunny side of pyramid", 60
+) %>% 
+  mutate(slice = fct_inorder(slice),
+         angle = angle / 360) ->
+pyramid_picture 
+
+ggplot(pyramid_picture) +
+  aes(x = "", y = angle) +
+  geom_col() + 
+   aes(fill = as.numeric(slice)) +
+  scale_fill_gradientn(colors = c("deepskyblue2", "goldenrod2", "yellow")) +
+  # I got pi * 1.22 by trial and error :)
+  coord_polar(theta = "y", start = pi * 1.22) +
+  labs(fill = "") +
+  theme_void() ->
+plot_pyramid
+
+plot_gg(plot_pyramid, width = 5, height = 4, scale = 300, multicore = TRUE, windowsize = c(1000, 1000))
+```
+
+
+
+```{css, eval = TRUE, echo = F}
+.remark-code{line-height: 1.5; font-size: 60%}
+```

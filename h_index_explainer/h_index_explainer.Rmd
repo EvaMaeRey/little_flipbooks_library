@@ -1,0 +1,117 @@
+---
+title: "explaining the h-index"
+author: "Gina Reynolds, June 2019"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: ["xaringan-themer.css", "ninjutsu"]
+    nature:
+      highlightLines: yes
+      ratio: '16:9'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
+knitr::opts_chunk$set(fig.height = 6, out.width = "100%", comment = " ", cache = T)
+source("https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/xaringan_reveal_parentheses_balanced.R")
+```
+
+
+```{r xaringan-themer, include = FALSE}
+library(xaringanthemer)
+
+# xaringanthemer::write_xaringan_theme(text_font_size = ".75cm",
+#                                      text_color = "darkblue")
+
+xaringanthemer::mono_light(
+  base_color = "#1c5253",
+  header_font_google = google_font("Josefin Sans"),
+  text_font_google   = google_font("Montserrat", "200", "200i"),
+  code_font_google   = google_font("Droid Mono"),
+  text_font_size = ".7cm",
+  code_font_size = ".7cm")
+  
+```
+
+```{r}
+library(tidyverse)
+set.seed(2019)
+tibble(citations = round(runif(25, 1, 3.3)^4)) ->
+  success
+
+
+success %>% 
+  ggplot() +
+  aes(x = citations) +
+  geom_histogram() +
+  geom_rug()
+```
+
+---
+
+
+```{r}
+success %>% 
+  arrange(-citations) %>% 
+  mutate(rank = 1:n()) %>% 
+  mutate(counts_for_h_index = citations >= rank) %>% 
+  group_by(counts_for_h_index) %>% 
+  tally()
+```
+
+---
+
+# Visual interpretation
+
+```{r, fig.width=12}
+success %>% 
+  arrange(-citations) %>% 
+  mutate(rank = 1:n()) %>% 
+  mutate(counts_for_h_index = citations >= rank) %>% 
+  ggplot() +
+  aes(x = citations) +
+  aes(y = rank) +
+  geom_point() +
+  geom_segment(aes(yend = rank, xend = 0), 
+               linetype = "dashed", alpha = .2) +
+  geom_abline(slope = -1, intercept = 0, 
+              linetype = "dashed", col = "blue") +
+  annotate(geom = "text", 
+           label = "line of equivelence\n(rank and citation are equal)",
+           x = 90, y = 90, angle = -45, lineheight = .8) +
+    geom_point() +
+  coord_equal(ylim = c(30, 0)) +
+  geom_area(data = tibble(citations = c(0, 120), 
+                          rank = c(0, 120)), 
+            alpha = .3,
+            fill = "blue") +
+  geom_point(data = success %>% 
+               arrange(-citations) %>% 
+               mutate(rank = 1:n()) %>% 
+               filter(citations >= rank), 
+             col = "goldenrod", 
+             size = 3) +
+  geom_point() + 
+  annotate(geom = "text", 
+           x = 80, y = 30, 
+           label = "Paper's number\n of citations exceeds\n paper's citations rank\n(Count in H index)",
+           lineheight = .8) +
+  geom_ribbon(data = tibble(citations = c(0, 120),
+                          rank = c(0, 120)),
+            aes(ymin = 125, ymax = rank),
+            alpha = .8,
+            fill = "black") +
+  annotate(geom = "text", x = 30, y = 80, 
+           label = "Papers whose ranks\nexceed their number\nof citations\n(Do not count)",
+           color = "white", lineheight = .8) +
+  scale_y_reverse() +
+  scale_x_continuous(position = "top", breaks = 1:10*10) +
+  theme_minimal() +
+  labs(x = "Paper's number of citations") +
+  labs(y = "Paper's rank by citations")
+
+  
+```
+
+
+

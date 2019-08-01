@@ -1,0 +1,174 @@
+---
+title: "Proposed code parsing for flipbooks"
+author: "Gina Reynolds, May 2019"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: ["kunoichi", "ninjutsu"]
+    nature:
+      ratio: 16:10
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+```{r setup, include=F}
+knitr::opts_chunk$set(fig.width = 6, message = F, warning = F, 
+                      comment = "", cache = F)
+```
+
+
+
+
+---
+
+# Introduction
+
+This is a minimal example to demonstrate how to create a flipbook with data from #TidyTuesday.  It walks through data wrangling and plots pipelines made with the Tidyverse.  The functions that make this possible are the work of Emi Tanaka, Garrick Aden-Buie and myself, and are built for Xaringan, an Rmarkdown file type for creating presentation slides; the functions make use of the function `knitr:::knit_code$get()`.
+
+The code to create the flipbook is an .Rmd that you can download [**here**](https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/tidytuesday_minimal_example/tidytuesday_minimal_example.Rmd).
+
+---
+
+Interested in more flipbooks? Check out 
+
+- [the ggplot flipbook](https://evamaerey.github.io/ggplot_flipbook/ggplot_flipbook_xaringan.html)
+- [The Tidyverse in Action](https://evamaerey.github.io/tidyverse_in_action/tidyverse_in_action.html)
+
+For more about Xaringan:
+
+- [Xaringan presentation slides](https://slides.yihui.name/xaringan/)
+
+The sequential workflow of the Tidyverse makes incremental display of pipelines and ggplot statements ideal:  
+
+- [www.tidyverse.org](https://www.tidyverse.org/)
+
+
+---
+
+# Set up
+
+Okay. Let's load the the `reveal for xaringan` functions for "flipbooking" and the `tidyverse`.
+
+```{r}
+source(file = "../xaringan_reveal_parentheses_balanced.R")
+```
+
+And load the tidyverse.
+
+```{r}
+library(tidyverse)
+```
+
+And load the data from the tidytuesday github page. 
+
+```{r}
+library(gapminder)
+library(tidyverse)
+```
+
+
+---
+
+# Suppose we have some code
+
+```{r the_code, eval = F}
+gapminder %>%             # the data 
+  filter(year == (2000 + 7)) %>%  # subset 
+  ggplot() +              # pipe to ggplot 
+  aes(x = gdpPercap) +
+  aes(y = lifeExp) +  
+  geom_point() +
+  aes(color = 
+  paste("continent", 
+        continent) 
+          ) ->  
+my_plot 
+```
+
+---
+
+`r apply_reveal("the_code")`
+
+
+---
+
+```{r}
+parse_code(knitr:::knit_code$get("the_code"))
+```
+
+
+# proposed parsing steps
+
+```{r parse}
+tibble(code = 
+         knitr:::knit_code$get("the_code")) %>% 
+  mutate(user_reveal = 
+           str_detect(code, "#REVEAL")) %>% # Handle user defined pause points
+  mutate(code = 
+           str_remove(code, "#REVEAL")) %>% # pull out any comments
+  separate(col = code,                   
+           into = c("code", "comment"), 
+           sep = "#") %>% 
+  mutate(comment = 
+           str_trim(comment)) %>% 
+  mutate(comment = 
+           paste0("  # ", comment)) %>%  
+  mutate(comment = 
+           ifelse("  # NA" == comment, 
+                  "", comment)) %>% 
+  mutate(code = 
+           str_remove(code, "\\s+$")) %>% 
+  mutate(connector = 
+           str_extract(code, "%>%$|\\+$|->$")) %>% 
+  mutate(connector = replace_na(connector, "")) %>% 
+  mutate(code = 
+           str_remove(code, "%>%$|\\+$|->$")) %>% 
+  mutate(num_open_par =                       
+           str_count(code, "\\(|\\{|\\[")) %>% # Counting open parentheses
+  mutate(num_closed_par = 
+           str_count(code, "\\)|\\}|\\]")) %>%  # Counting closed parentheses
+  mutate(balanced_par = (cumsum(num_open_par) - 
+                           cumsum(num_closed_par)) == 0) ->  # Check for balance
+parsed
+```
+
+---
+
+```{r}
+as_data_frame(parsed)
+```
+
+
+
+---
+
+# Now build to different points: 
+
+```{r build}
+4 -> up_to
+parsed %>% 
+  mutate(reveal = 1:n() <= up_to) %>% 
+  mutate(out = paste0(code, "", connector, "", comment)) %>% 
+  filter(reveal) %>% 
+  select(out) ->
+up_to_result
+paste(up_to_result$out, collapse = "\\n") %>% 
+  str_remove("%>%$|\\+$|->$") %>% 
+  cat()
+```  
+
+
+---
+
+
+
+
+
+
+```{css, eval = TRUE, echo = F}
+.remark-code{line-height: 1.5; font-size: 30%}
+```
+
+
