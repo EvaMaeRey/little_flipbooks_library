@@ -23,8 +23,6 @@ knitr::opts_chunk$set(cache = T, echo = F, warning = F, message = F, cache = T, 
 
 Visual superimposition of new code on previous code and new output on previous output yields a ["blink comparator"](https://en.wikipedia.org/wiki/Blink_comparator){target="_blank"} type experience, and incrementalism assists viewers in linking specific components of code with resultant behavior.  Click on the example below. Then you should be able to "flip" (left and right arrows) through the book to see how to make an animated racing bar chart.   
 
-Code painlessly create flipbooks have been under development since October 2018.  
-
 ```{r}
 knitr::include_url("https://evamaerey.github.io/little_flipbooks_library/racing_bars/racing_barcharts.html#1")
 ```
