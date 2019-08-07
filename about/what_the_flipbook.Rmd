@@ -21,7 +21,9 @@ knitr::opts_chunk$set(cache = T, echo = F, warning = F, message = F, cache = T, 
 
 "Flipbooks" implement a presentation of side-by-side, aligned, incremental code-output evolution via automated code parsing and reconstruction.
 
-Visual superimposition of new code on previous code and new output on previous output yeilds a ["blink comparator"](https://en.wikipedia.org/wiki/Blink_comparator){target="_blank"} type experience, and incrementalism assists viewers in linking specific components of code with resultant behavior.  
+Visual superimposition of new code on previous code and new output on previous output yeilds a ["blink comparator"](https://en.wikipedia.org/wiki/Blink_comparator){target="_blank"} type experience, and incrementalism assists viewers in linking specific components of code with resultant behavior.  Click on the example below. Then you should be able to "flip" through the book to see how to make a racing bar chart.   
+
+They have been under development since October 2018.  
 
 ```{r}
 knitr::include_url("https://evamaerey.github.io/little_flipbooks_library/racing_bars/racing_barcharts.html#1")
@@ -30,7 +32,7 @@ knitr::include_url("https://evamaerey.github.io/little_flipbooks_library/racing_
 
 ## Origins
 
-In mid 2018 Garrick Aden-Buie created and debud a side-by-side format for code and figure output in the slide-show format, Xaringan, an RMarkdown tool.  He demonstrated in incremental steps how someone might build up a plot using the popular R Stats package ggplot2.  In August 2018, I emulated this work, but used an entirely sequential and more incremental work flow.  In September, Emi Tanaka implemented a similar sequential workflow demonstration, that was partially automated.  After I approached Aden-Buie and Tanaka in October, about working together to create a "flipbook" of exemplary data visualizations, we quickly had a fully automated framework to parse and reconstruct code!  The working code was applied to a collection of plots that I created over about about a year and a half in learning ggplot.  After several months of preparation, including rewritting code in a "slow" ggplot style, and providing written description to introduce the plots, I publicized the work in February, 2019; the book was met the an enthusiastic reception.  Since then, small changes have been made to the foundation code; the code automating the code-walk through has been updated to "pause" at more "connectors" in the code, and to allow code wrapping. The usability of flipbooks is also being improved by creating tools for the creation of visual table of contents, from which users can link to specific visualizations to view code-plot evolution.   
+In mid 2018 Garrick Aden-Buie, a data scientist at the Moffitt Cancer Center, created and debued a side-by-side format for code and figure output in the slide-show format, Xaringan, an RMarkdown tool.  He demonstrated in incremental steps how someone might build up a plot using the popular R Stats package ggplot2.  In August 2018, I emulated this work, but used an entirely sequential and more incremental work flow, which I termed "slow ggplot".  In September, Emi Tanaka, a Lecturer in Statistics at the University of Sydney, implemented a similar sequential workflow demonstration, that was partially automated.  After I approached Aden-Buie and Tanaka in October, about working together to create a "flipbook" of exemplary data visualizations, we quickly had a fully automated framework to parse and reconstruct code!  The working code was applied to a collection of plots that I created over about about a year and a half in learning ggplot.  After several months of preparation, including rewritting code in a "slow" ggplot style, and providing written description to introduce the plots, I publicized the work in February, 2019; the flipbook was met the an enthusiastic reception.  Since then, small changes have been made to the foundation code; the code automating the code-walk through has been updated to "pause" at more "connectors" in the code, and to allow code wrapping. The usability of flipbooks is also being improved by creating tools for the creation of visual table of contents, from which users can link to specific visualizations to view code-plot evolution.   
 
 <!-- ## Origins - the ideas hose -->
 
@@ -80,7 +82,7 @@ Additionally, I'm working on and testing materials to help people create their o
 
 Given the third party success with the current code, we're confident that an R package with the flipbook functions can be useful to a wide audience.  
 
-### Paper 
+### Academic Paper  
 
 I'm currently working on a paper to describe the format and describing the implementation, as well as articulating its merits. 
 
@@ -91,9 +93,9 @@ I'm currently working on a paper to describe the format and describing the imple
 The feedback on the flipbook format has been tremendously encouraging, and a big motivation to keep working on this project.  The flipbook was a [top story on Hacker News](https://news.ycombinator.com/item?id=19356354) and was featured as a highlight in the [R Weekly](https://www.r-craft.org/r-news/r-weekly-2019-07-flipbook-package-building/) newsletter.
 
 
-Some of the most encouraging feedback about flipbooks has come from individuals, via Twitter.  Ther comments can be viewed [here]().
-https://evamaerey.github.io/little_flipbooks_library/about/testimonials_value_added
-OriThey come from around the world 
+Some of the most encouraging feedback about flipbooks has come from individuals, via Twitter.  Ther comments can be viewed [here](https://evamaerey.github.io/little_flipbooks_library/about/testimonials_value_added).
+
+Feedback comes from around the world including the following locations!
 
 ```{r, results='asis'}
 library(tidyverse)
