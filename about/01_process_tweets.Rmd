@@ -1,0 +1,47 @@
+---
+title: "Process Tweets"
+author: "Evangeline Reynolds"
+date: "8/7/2019"
+output: html_document
+---
+
+
+```{r}
+library(tidyverse)
+tibble(lines = readLines(con = "raw_data/tweets_appreciation")) %>% 
+  filter(str_detect(lines, "^<blockquote")) %>% 
+  mutate(handle = str_remove_all(str_extract(lines, "\\(@.+\\)"), "\\(|\\)|@")) %>% 
+  mutate(id = NA) %>% 
+  mutate(date = str_extract(lines, "\\w+ \\d+, \\d{4}")) %>% 
+  mutate(date = lubridate::mdy(date)) %>% 
+  arrange(-as.numeric(date)) ->
+df
+```
+
+
+```{r, include=F}
+for (i in 1:nrow(df)) try( {
+  
+  
+home <- readLines(paste0("https://twitter.com/", df$handle[i]), n = 80)
+
+df$id[i] <- home[grep("meta name", home)][2] %>% 
+  str_extract("Die neuesten Tweets von .+") %>% 
+  str_remove("Die neuesten Tweets von ") %>% 
+  str_remove("..$")
+
+Sys.sleep(.25)
+})
+
+df %>% 
+  mutate(location = stringi::stri_reverse(id)) %>% 
+  mutate(location = str_extract(location, "^.+?\\.")) %>% 
+  mutate(location = stringi::stri_reverse(location)) %>% 
+  mutate(location = str_remove(location, "\\. ")) %>% 
+  mutate(location = ifelse(str_detect(location, "@|&|#|ofende|Political|interests"), NA, location)) ->
+df
+
+
+save(df, file = "data_products/tweets.Rdata")
+```
+
