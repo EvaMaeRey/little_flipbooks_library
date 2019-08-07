@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Scales</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Gina Reynolds, July 2019" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Scales
+### Gina Reynolds, July 2019
+
+---
+
+
+
+
+
+
+
+
+
+
+---
+
+name: scales
+
+## Modifiers: Asking for modification with scales\_\*\_\* 
+
+&gt; Please, sir, can I have some more?
+
+With the aes() statement.
+
+But we can then go back and ask for more with scales\_\* statements.  These statements provide a quick way to update our preferences for all the mapped aesthetics.   
+
+Start with an scales_x_* and look at the variety of scale options associated with the x position aesthetic.  
+
+
+---
+
+## Scales
+
+
+First let's have look at a variety of scaling options that come with the x position aesthetic:  
+
+- scale_x_log10()
+- scale_x_reverse()
+- scale_x_sqrt()
+
+
+---
+
+
+
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*gapminder %&gt;%
+* filter(year == 2002) %&gt;%
+* ggplot() +
+* aes(x = gdpPercap) +
+* aes(y = lifeExp) +
+* geom_point()   # this much is familiar
+```
+]]
+.column[.content[
+&lt;img src="scales_files/figure-html/output_x_scales_6-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+gapminder %&gt;%
+  filter(year == 2002) %&gt;%
+  ggplot() +
+  aes(x = gdpPercap) +
+  aes(y = lifeExp) +
+  geom_point() +  # this much is familiar
+* scale_x_log10()   # overrides default
+```
+]]
+.column[.content[
+&lt;img src="scales_files/figure-html/output_x_scales_7-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+gapminder %&gt;%
+  filter(year == 2002) %&gt;%
+  ggplot() +
+  aes(x = gdpPercap) +
+  aes(y = lifeExp) +
+  geom_point() +  # this much is familiar
+  scale_x_log10() +  # overrides default
+* scale_x_reverse()   # overrides log10
+```
+]]
+.column[.content[
+&lt;img src="scales_files/figure-html/output_x_scales_8-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+gapminder %&gt;%
+  filter(year == 2002) %&gt;%
+  ggplot() +
+  aes(x = gdpPercap) +
+  aes(y = lifeExp) +
+  geom_point() +  # this much is familiar
+  scale_x_log10() +  # overrides default
+  scale_x_reverse() +  # overrides log10
+* scale_x_sqrt()   # overrides reverse
+```
+]]
+.column[.content[
+&lt;img src="scales_files/figure-html/output_x_scales_9-1.png" width="100%" /&gt;
+]]
+
+
+---
+
+### More aesthetic scale modifications
+
+Analogously, we can use scale\_\*\_\* statements to modify other aesthetic scales.  Here are some examples
+
+&lt;!-- I think people find it easy to think about x and y position and adjusting those scales, and related adjustment like labs() and scale_*, but we teachers need to help extend these logics to the other aesthetics.  --&gt;
+
+
+- scale_x_log10() 
+- scale_y_reverse(limits = c(100, 0)) 
+- scale_color_viridis_d() 
+- scale_shape_discrete(solid = F) 
+- scale_size_continuous(breaks = c(100, 1000, 10000, 100000)) 
+- scale_alpha(range = c(.5, 1)) # full transparency is 0
+
+
+Let's tour several of those to get a taste.  
+
+---
+
+
+  
+class: split-40
+count: false
+.column[.content[
+
+```r
+*ggplot(mpg, aes(displ, hwy))
+```
+]]
+.column[.content[
+&lt;img src="scales_files/figure-html/output_scales_1-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ggplot(mpg, aes(displ, hwy)) +
+* geom_point()
+```
+]]
+.column[.content[
+&lt;img src="scales_files/figure-html/output_scales_2-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ggplot(mpg, aes(displ, hwy)) +
+  geom_point() +
+* scale_x_continuous(name = "Engine displacement (L)")
+```
+]]
+.column[.content[
+&lt;img src="scales_files/figure-html/output_scales_3-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ggplot(mpg, aes(displ, hwy)) +
+  geom_point() +
+  scale_x_continuous(name = "Engine displacement (L)") +
+* scale_y_continuous(name = "Highway MPG")
+```
+]]
+.column[.content[
+&lt;img src="scales_files/figure-html/output_scales_4-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ggplot(mpg, aes(displ, hwy)) +
+  geom_point() +
+  scale_x_continuous(name = "Engine displacement (L)") +
+  scale_y_continuous(name = "Highway MPG") +
+* labs(x = NULL, y = NULL)
+```
+]]
+.column[.content[
+&lt;img src="scales_files/figure-html/output_scales_5-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ggplot(mpg, aes(displ, hwy)) +
+  geom_point() +
+  scale_x_continuous(name = "Engine displacement (L)") +
+  scale_y_continuous(name = "Highway MPG") +
+  labs(x = NULL, y = NULL) +
+* scale_x_continuous(limits = c(2, 6))
+```
+]]
+.column[.content[
+&lt;img src="scales_files/figure-html/output_scales_6-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ggplot(mpg, aes(displ, hwy)) +
+  geom_point() +
+  scale_x_continuous(name = "Engine displacement (L)") +
+  scale_y_continuous(name = "Highway MPG") +
+  labs(x = NULL, y = NULL) +
+  scale_x_continuous(limits = c(2, 6)) +
+* scale_x_continuous(limits = c(0, 10))
+```
+]]
+.column[.content[
+&lt;img src="scales_files/figure-html/output_scales_7-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ggplot(mpg, aes(displ, hwy)) +
+  geom_point() +
+  scale_x_continuous(name = "Engine displacement (L)") +
+  scale_y_continuous(name = "Highway MPG") +
+  labs(x = NULL, y = NULL) +
+  scale_x_continuous(limits = c(2, 6)) +
+  scale_x_continuous(limits = c(0, 10)) +
+* scale_x_continuous(breaks = c(2, 4, 6))
+```
+]]
+.column[.content[
+&lt;img src="scales_files/figure-html/output_scales_8-1.png" width="100%" /&gt;
+]]
+
+---
+  
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*set.seed(2019)
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+set.seed(2019)
+*data.frame(
+* x = rnorm(10) * 100000,
+* y = seq(0, 1, length.out = 10)
+*) 
+```
+]]
+.column[.content[
+
+```
+              x         y
+  1    73852.27 0.0000000
+  2   -51476.05 0.1111111
+  3  -164018.13 0.2222222
+  4    91603.68 0.3333333
+  5  -126748.20 0.4444444
+  6    73824.78 0.5555556
+  7   -78262.28 0.6666667
+  8    50929.59 0.7777778
+  9  -148993.91 0.8888889
+  10  -31917.93 1.0000000
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+set.seed(2019)
+data.frame(
+  x = rnorm(10) * 100000,
+  y = seq(0, 1, length.out = 10)
+) %&gt;%
+* ggplot()
+```
+]]
+.column[.content[
+&lt;img src="scales_files/figure-html/output_scales2_6-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+set.seed(2019)
+data.frame(
+  x = rnorm(10) * 100000,
+  y = seq(0, 1, length.out = 10)
+) %&gt;%
+  ggplot() +
+* aes(x, y)
+```
+]]
+.column[.content[
+&lt;img src="scales_files/figure-html/output_scales2_7-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+set.seed(2019)
+data.frame(
+  x = rnorm(10) * 100000,
+  y = seq(0, 1, length.out = 10)
+) %&gt;%
+  ggplot() +
+  aes(x, y) +
+* geom_point()
+```
+]]
+.column[.content[
+&lt;img src="scales_files/figure-html/output_scales2_8-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+set.seed(2019)
+data.frame(
+  x = rnorm(10) * 100000,
+  y = seq(0, 1, length.out = 10)
+) %&gt;%
+  ggplot() +
+  aes(x, y) +
+  geom_point() +
+* scale_y_continuous(labels = scales::percent)   # scales package
+```
+]]
+.column[.content[
+&lt;img src="scales_files/figure-html/output_scales2_9-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+set.seed(2019)
+data.frame(
+  x = rnorm(10) * 100000,
+  y = seq(0, 1, length.out = 10)
+) %&gt;%
+  ggplot() +
+  aes(x, y) +
+  geom_point() +
+  scale_y_continuous(labels = scales::percent) +  # scales package
+* scale_y_continuous(labels = scales::dollar)
+```
+]]
+.column[.content[
+&lt;img src="scales_files/figure-html/output_scales2_10-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+set.seed(2019)
+data.frame(
+  x = rnorm(10) * 100000,
+  y = seq(0, 1, length.out = 10)
+) %&gt;%
+  ggplot() +
+  aes(x, y) +
+  geom_point() +
+  scale_y_continuous(labels = scales::percent) +  # scales package
+  scale_y_continuous(labels = scales::dollar) +
+* scale_x_continuous(labels = scales::comma)
+```
+]]
+.column[.content[
+&lt;img src="scales_files/figure-html/output_scales2_11-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+set.seed(2019)
+data.frame(
+  x = rnorm(10) * 100000,
+  y = seq(0, 1, length.out = 10)
+) %&gt;%
+  ggplot() +
+  aes(x, y) +
+  geom_point() +
+  scale_y_continuous(labels = scales::percent) +  # scales package
+  scale_y_continuous(labels = scales::dollar) +
+  scale_x_continuous(labels = scales::comma) +
+* scale_y_continuous(trans = scales::reciprocal_trans())
+```
+]]
+.column[.content[
+&lt;img src="scales_files/figure-html/output_scales2_12-1.png" width="100%" /&gt;
+]]
+
+---
+
+
+
+```js
+d3.select("body").append("svg:svg") b .data([[1, 1.2, 1.7, 1.5, .7]]) .attr("width", 150)
+.attr("height", 150)
+  .selectAll("path")
+    .data(d3.layout.pie())
+  .enter().append("svg:path")
+    .attr("transform", "translate(75,75)")
+    .attr("d", d3.svg.arc().outerRadius(70));
+```
+
+
+&lt;script type="text/javascript"&gt;
+d3.select("body").append("svg:svg") b .data([[1, 1.2, 1.7, 1.5, .7]]) .attr("width", 150)
+.attr("height", 150)
+  .selectAll("path")
+    .data(d3.layout.pie())
+  .enter().append("svg:path")
+    .attr("transform", "translate(75,75)")
+    .attr("d", d3.svg.arc().outerRadius(70));
+&lt;/script&gt;
+
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 65%}
+&lt;/style&gt;
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightLines": true,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script>
+(function() {
+  var i, text, code, codes = document.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+})();
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

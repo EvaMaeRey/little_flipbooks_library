@@ -1,5 +1,6 @@
 ---
 title: "Flipbooks"
+author: Evangeline Reynolds, August 7, 2019
 output:
   html_document:
     df_print: paged
@@ -90,9 +91,11 @@ I'm currently working on a paper to describe the format and describing the imple
 The feedback on the flipbook format has been tremendously encouraging, and a big motivation to keep working on this project.  The flipbook was a [top story on Hacker News](https://news.ycombinator.com/item?id=19356354) and was featured as a highlight in the [R Weekly](https://www.r-craft.org/r-news/r-weekly-2019-07-flipbook-package-building/) newsletter.
 
 
-Some of the most encouraging feedback about flipbooks has come from individuals, via Twitter.  They come from around the world, seen below, and their comments can be viewed [here] 
+Some of the most encouraging feedback about flipbooks has come from individuals, via Twitter.  Ther comments can be viewed [here]().
+https://evamaerey.github.io/little_flipbooks_library/about/testimonials_value_added
+OriThey come from around the world 
 
-().```{r, results='asis'}
+```{r, results='asis'}
 library(tidyverse)
 load("data_products/tweets.Rdata")
 df %>% 

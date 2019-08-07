@@ -1,0 +1,184 @@
+---
+title: "Hex Stickers"
+author: "Gina Reynolds, May 2019"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: ["kunoichi", "ninjutsu"]
+    nature:
+      ratio: 34:10
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+```{r setup, include=F}
+knitr::opts_chunk$set(fig.width = 2, message = F, warning = F, 
+                      comment = "", cache = F, fig.align = "center")
+options(tibble.print_max = 20) 
+```
+
+
+
+
+---
+
+# Introduction
+
+This is a minimal example to demonstrate how to create a flipbook that will walk through data wrangling and plots pipelines made with the Tidyverse.  The functions that make this possible are the work of Emi Tanaka, Garrick Aden-Buie and myself, and are built for Xaringan, an Rmarkdown file type for creating presentation slides; the functions make use of the function `knitr:::knit_code$get()`.
+
+Interested in more flipbooks? Check out 
+
+- [the ggplot flipbook](https://evamaerey.github.io/ggplot_flipbook/ggplot_flipbook_xaringan.html)
+- [The Tidyverse in Action](https://evamaerey.github.io/tidyverse_in_action/tidyverse_in_action.html)
+
+For more about Xaringan:
+
+- [Xaringan presentation slides](https://slides.yihui.name/xaringan/)
+
+The sequential workflow of the Tidyverse makes incremental display of pipelines ideal:  
+
+- [www.tidyverse.org](https://www.tidyverse.org/)
+
+
+---
+
+# Set up
+
+Okay. Let's load the the `reveal for xaringan` functions for "flipbooking" and the `tidyverse`.
+
+```{r, cache = F}
+source(file = "https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/xaringan_reveal_parentheses_balanced.R")
+
+library(tidyverse)
+```
+
+
+
+
+
+
+---
+
+# Where we are going: 
+
+We'll create this plot.  I have **echo** set to FALSE in the code chunk options here so that you don't see the code, and **eval** to TRUE so that the plot output is produced.  The code chunk is given the name "gapminder2007", and this is used in the in apply_reveal function, which breaks down code by wrangling and plot statements. 
+
+```{r gapminder2007, echo = F, eval = T, fig.height=5}
+library(magick)
+library(bunny)
+url <- "https://raw.githubusercontent.com/dmi3kno/bbox/master/data-raw/fantasy-4065903_1920.jpg"
+image_read(path = url) %>%  
+  image_convert("png") ->
+p2_clouds
+```
+ 
+
+ 
+---
+
+# How do we get there?
+
+In the next slide, we'll walk through the code that produces this plot, and the output along the way. We use the code `apply_reveal("gapminder2007")` in-line to access the code from the code chunk called *gapminder2007*.
+ 
+---
+
+`r apply_reveal("gapminder2007")`
+
+
+---
+
+# Other pipeline connectors
+
+The reveal functions are also written to recognize the pipe, `%>%`, and reverse assignment operator `->`, at the end of a line as reveal break points.  An example follows. 
+
+```{r gapminder2007pipe, echo = F, eval = T, fig.height=5}
+p2_clouds %>% 
+  image_crop("1200x900+0+0") %>% 
+  image_convert(colorspace = "Gray") %>% 
+  image_threshold("white", "40%") %>% 
+  image_threshold("black", "30%") ->
+up_hand
+p2_clouds %>% 
+  image_crop("1200x1200+750+870") %>% 
+  image_convert(colorspace = "Gray") %>% 
+  image_threshold("white", "40%") %>% 
+  image_threshold("black", "30%") ->
+down_hand
+image_canvas_hex(border_color="#0d4448", 
+                 border_size = 2, 
+                 fill_color = "#ede6f2") ->
+hex_canvas
+image_canvas_hexborder(border_color="#0d4448", 
+                       border_size = 4) ->
+hex_border
+up_hand %>% 
+    image_colorize(50, "grey") %>% 
+    image_blur(20,10) ->
+up_hand_shadow
+down_hand %>% 
+    image_colorize(50, "grey") %>% 
+    image_blur(20,10) ->
+down_hand_shadow
+```
+
+
+---
+
+`r apply_reveal("gapminder2007pipe")`
+
+---
+
+# Hide code
+
+You might be interested in showing the evolution of a plot, without focusing on the code. Let's see an example of this.  
+
+Consider the case where you want to show the x-axis, then add the y-axis, show one data point, and then add the rest of the data.  
+
+Building up plots slowly in presentations has been a technique employed by Hans Rosling and Mona Chalabi.  Matthew Blackwell tweeted this advice in 2018 -- it resonated with a lot of folks!
+
+
+---
+
+To do this, we prep a code chunk with our plot, defining where we want breaks in display to come with the statement **#REVEAL** at the end of the key lines.  
+
+
+```{r, gapminder2007plotonly, eval = F}
+hex_canvas %>% 
+  bunny::image_compose(up_hand_shadow, 
+                       offset="+40+460", 
+                       gravity = "northwest")%>% 
+  bunny::image_compose(down_hand_shadow, 
+                       offset="+30+390", 
+                       gravity = "southeast")%>% 
+  bunny::image_compose(up_hand, 
+                       offset="+20+440", 
+                       gravity = "northwest")%>% 
+  bunny::image_compose(down_hand, 
+                       offset="+20+380", 
+                       gravity = "southeast")%>% 
+  image_annotate("bbox", size=450, 
+                 gravity = "center", 
+                 font = "Aller", 
+                 color = "#0d4448") %>% 
+  bunny::image_compose(hex_border, 
+                       gravity = "center", 
+                       operator = "Over") ->
+img_hex
+```
+---
+
+Then, we'll use the name of this code chunk in a reveal function "apply_reveal", with `show_code` set to F, and `user_reveal_defined` set to T.  
+
+---
+
+`r apply_reveal(chunk_name = "gapminder2007plotonly")`
+
+
+
+```{css, eval = TRUE, echo = F}
+.remark-code{line-height: 1.5; font-size: 70%}
+```
+
+

@@ -1,0 +1,181 @@
+---
+title: "Scales"
+author: "Gina Reynolds, July 2019"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: ["xaringan-themer.css", "ninjutsu"]
+    nature:
+      highlightLines: yes
+      ratio: '16:9'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
+knitr::opts_chunk$set(fig.height = 6, out.width = "100%", comment = " ", cache = T, dpi = 300)
+source("https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/xaringan_reveal_parentheses_balanced.R")
+library(gapminder)
+library(tidyverse)
+```
+
+
+```{r xaringan-themer, include = FALSE}
+library(xaringanthemer)
+
+
+# xaringanthemer::write_xaringan_theme(text_font_size = ".75cm",
+#                                      text_color = "darkblue")
+
+xaringanthemer::mono_accent(
+  base_color = "#43418A",
+  header_font_google = google_font("Montserrat"),
+  text_font_google   = google_font("Montserrat", "200", "200i"),
+  code_font_google   = google_font("Droid Mono"),
+  text_font_size = ".7cm",
+  code_font_size = ".7cm")
+  
+
+# write_xaringan_theme(
+#   extra_css = list(
+#     ".box-right" = list(
+#       "height" = "300px",
+#       "width" = "300px",
+#       "position" = "absolute",
+#       "top" = "33%",
+#       "left" = "55%"
+#     )
+#   )
+# )
+
+```
+
+
+
+
+---
+
+name: scales
+
+## Modifiers: Asking for modification with scales\_\*\_\* 
+
+> Please, sir, can I have some more?
+
+With the aes() statement.
+
+But we can then go back and ask for more with scales\_\* statements.  These statements provide a quick way to update our preferences for all the mapped aesthetics.   
+
+Start with an scales_x_* and look at the variety of scale options associated with the x position aesthetic.  
+
+
+---
+
+## Scales
+
+
+First let's have look at a variety of scaling options that come with the x position aesthetic:  
+
+- scale_x_log10()
+- scale_x_reverse()
+- scale_x_sqrt()
+
+
+---
+
+
+```{r x_scales, eval = F, echo = F}
+gapminder %>% 
+  filter(year == 2002) %>% 
+  ggplot() +
+  aes(x = gdpPercap) +
+  aes(y = lifeExp) +
+  geom_point() +  # this much is familiar #REVEAL
+  scale_x_log10() + # overrides default  #REVEAL
+  scale_x_reverse() + # overrides log10  #REVEAL
+  scale_x_sqrt() + # overrides reverse  #REVEAL
+  scale_x_continuous(
+                    position = "top",
+                    
+                     expand = c(0,0),
+                     name = "hi", 
+                     minor_breaks = 35000,
+                     breaks = 2:4*10000,
+                     labels = 1:3,
+                     ) 
+```
+
+`r apply_reveal("x_scales", user_reveal_defined = T)`
+
+
+---
+
+### More aesthetic scale modifications
+
+Analogously, we can use scale\_\*\_\* statements to modify other aesthetic scales.  Here are some examples
+
+<!-- I think people find it easy to think about x and y position and adjusting those scales, and related adjustment like labs() and scale_*, but we teachers need to help extend these logics to the other aesthetics.  -->
+
+
+- scale_x_log10() 
+- scale_y_reverse(limits = c(100, 0)) 
+- scale_color_viridis_d() 
+- scale_shape_discrete(solid = F) 
+- scale_size_continuous(breaks = c(100, 1000, 10000, 100000)) 
+- scale_alpha(range = c(.5, 1)) # full transparency is 0
+
+
+Let's tour several of those to get a taste.  
+
+---
+
+```{r scales, eval = F, echo = F}
+ggplot(mpg, aes(displ, hwy)) +
+  geom_point() +
+  scale_x_continuous(name = "Engine displacement (L)") +
+  scale_y_continuous(name = "Highway MPG") + 
+  labs(x = NULL, y = NULL) +
+  scale_x_continuous(limits = c(2, 6)) +
+  scale_x_continuous(limits = c(0, 10)) + 
+  scale_x_continuous(breaks = c(2, 4, 6)) +
+  scale_x_continuous(
+  breaks = c(2, 4, 6),
+  label = c("two", "four", "six")
+```  
+  
+`r apply_reveal("scales")`
+
+---
+  
+```{r scales2, eval = F, echo = F}
+set.seed(2019)
+data.frame(
+  x = rnorm(10) * 100000,
+  y = seq(0, 1, length.out = 10)
+) %>% 
+  ggplot() +
+  aes(x, y) + 
+  geom_point() +
+  scale_y_continuous(labels = scales::percent) + # scales package
+  scale_y_continuous(labels = scales::dollar) + 
+  scale_x_continuous(labels = scales::comma) + 
+  scale_y_continuous(trans = scales::reciprocal_trans())
+```
+`r apply_reveal("scales2")`
+
+---
+
+
+```{js}
+d3.select("body").append("svg:svg") b .data([[1, 1.2, 1.7, 1.5, .7]]) .attr("width", 150)
+.attr("height", 150)
+  .selectAll("path")
+    .data(d3.layout.pie())
+  .enter().append("svg:path")
+    .attr("transform", "translate(75,75)")
+    .attr("d", d3.svg.arc().outerRadius(70));
+```
+
+
+
+```{css, eval = TRUE, echo = F}
+.remark-code{line-height: 1.5; font-size: 65%}
+```

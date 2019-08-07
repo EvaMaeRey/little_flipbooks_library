@@ -6,7 +6,6 @@ The incremental code/result reveal provided by flipbooks may help you digest lon
 - [leaflet for R (interactive maps)](https://evamaerey.github.io/little_flipbooks_library/leaflet/leaflet#1)
 - [ggplot themes](https://evamaerey.github.io/little_flipbooks_library/taming_themes_in_ggplot/taming_ggplot_themes.html)
 - [racing barchart](https://evamaerey.github.io/little_flipbooks_library/racing_bars/racing_barcharts.html)
-- [#tidytuesday highlights](https://evamaerey.github.io/little_flipbooks_library/tidytuesday_highlights/tidytuesday_highlights.html)
 - [easing gallery for gganimate](https://evamaerey.github.io/easing_gganimate/easing_examples.html)
 
 
