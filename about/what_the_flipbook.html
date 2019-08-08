@@ -1643,13 +1643,21 @@ summary {
 <div id="what-are-flipbooks" class="section level2">
 <h2>What are flipbooks?</h2>
 <p>“Flipbooks” implement a presentation of side-by-side, aligned, incremental code-output evolution via automated code parsing and reconstruction.</p>
-<p>Visual superimposition of new code on previous code and new output on previous output yields a <a href="https://en.wikipedia.org/wiki/Blink_comparator" target="_blank">“blink comparator”</a> type experience, and incrementalism assists viewers in linking specific components of code with resultant behavior. Click on the example below. Then you should be able to “flip” (left and right arrows) through the book to see how to make an animated racing bar chart.</p>
+<p>Visual superimposition of new code on previous code and new output on previous output yields a <a href="https://en.wikipedia.org/wiki/Blink_comparator" target="_blank">“blink comparator”</a> type experience, and incrementalism assists viewers in linking specific components of code with resultant behavior. I believe that flipbooks are very promising as communication, educational, and reference medium.</p>
+<p>Click on the example below. Then you should be able to “flip” (left and right arrows) through the book to see how to make an animated racing bar chart.</p>
 <iframe src="https://evamaerey.github.io/little_flipbooks_library/racing_bars/racing_barcharts.html#1" width="672" height="400px">
 </iframe>
 </div>
 <div id="origins" class="section level2">
 <h2>Origins</h2>
-<p>In mid 2018 Garrick Aden-Buie, a data scientist at the Moffitt Cancer Center, created and debuted a side-by-side format for code and figure output in the slide-show format, Xaringan, an RMarkdown tool. He demonstrated in incremental steps how someone might build up a plot using the popular R Stats package ggplot2. In August 2018, I emulated this work, but used an entirely sequential and more incremental work flow, which I termed “slow ggplot”. In September, Emi Tanaka, a Lecturer in Statistics at the University of Sydney, implemented a similar sequential workflow demonstration, that was partially automated. After I approached Aden-Buie and Tanaka in October, about working together to create a “flipbook” of exemplary data visualizations, we quickly had a fully automated framework to parse and reconstruct code! The working code was applied to a collection of plots that I created over about about a year and a half in learning ggplot. After several months of preparation, including rewriting code in a “slow” ggplot style, and providing written description to introduce the plots, I publicized the work in February, 2019; the flipbook was met the an enthusiastic reception. Since then, small changes have been made to the foundation code; the code automating the code-walk through has been updated to “pause” at more “connectors” in the code, and to allow code wrapping. The usability of flipbooks is also being improved by creating tools for the creation of visual table of contents, from which users can link to specific visualizations to view code-plot evolution.</p>
+<p>In mid 2018 Garrick Aden-Buie, a data scientist at the Moffitt Cancer Center, created and debuted a side-by-side format for code and figure output in the slide-show format, Xaringan, an RMarkdown tool. He demonstrated in incremental steps how someone might build up a plot using the popular R Stats package ggplot2. In August 2018, I emulated this work, but used an entirely sequential and more incremental work flow that I’d been working on and had termed “slow ggplot”. In September, Emi Tanaka, a Lecturer in Statistics at the University of Sydney, implemented a similar sequential workflow demonstration, that was partially automated. After I approached Garrick and Emi in October about working together to create a “flipbook” of exemplary data visualizations, we soon had a fully automated framework to parse code, and present its reconstruction along with associated output! The code designed to parse and reconstruct code was applied to a collection of plots that I created over about about a year and a half in learning ggplot. After several months of preparation, including rewriting code in a “slow” ggplot style, and providing written description to introduce the plots, I publicized the work in February, 2019; the flipbook was met the an enthusiastic reception. Since then, a number changes have been made to the foundational code to improve the tool and to enhance its usefulness.</p>
+<!-- https://www.garrickadenbuie.com/blog/decouple-code-and-output-in-xaringan-slides/ -->
+<!-- https://emitanaka.rbind.io/post/knitr-knitr-code/ -->
+<!-- - the code automating the code-walk through has been updated to "pause" at more "connectors" in the code -->
+<!-- - to allow code wrapping -->
+<!-- - allow the user to indicate at what point walk-through should be "paused" -->
+<!-- - adding balanced parentheses as a condition of   -->
+<p><!-- The usability of flipbooks is also being improved by creating tools for the creation of visual table of contents, from which users can link to specific visualizations to view code-plot evolution.    --></p>
 <!-- ## Origins - the ideas hose -->
 <!-- <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Good ideas! Very <a href="https://twitter.com/hashtag/ggplot?src=hash&amp;ref_src=twsrc%5Etfw">#ggplot</a>. A layered presentation of graphics. <a href="https://t.co/M4tRB9bGS5">https://t.co/M4tRB9bGS5</a></p>&mdash; Gina Reynolds (@EvaMaeRey) <a href="https://twitter.com/EvaMaeRey/status/991269331257487366?ref_src=twsrc%5Etfw">May 1, 2018</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> -->
 <!-- <blockquote class="twitter-tweet"><p lang="en" dir="ltr">I like this implementation even better. I&#39;m using aes() outside of the ggplot() function or a geom function seems not to be conventional. I just tried and see that it works in this case as I was hoping. But, should it be avoided? bad style? <a href="https://twitter.com/StatGarrett?ref_src=twsrc%5Etfw">@StatGarrett</a> <a href="https://t.co/GxUGo1agHU">pic.twitter.com/GxUGo1agHU</a></p>&mdash; Gina Reynolds (@EvaMaeRey) <a href="https://twitter.com/EvaMaeRey/status/992341968125493248?ref_src=twsrc%5Etfw">May 4, 2018</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> -->
@@ -1681,17 +1689,27 @@ summary {
 <p>Additionally, I’m working on and testing materials to help people create their own books with minimal hassle. A guide exists in the <a href="https://evamaerey.github.io/little_flipbooks_library/tidytuesday_minimal_example/tidytuesday_minimal_example" target="_blank">minimal example #1</a> and the <a href="https://evamaerey.github.io/little_flipbooks_library/checkerboard/checkerboard.html" target="_blank">checkerboard</a>. In a June 2019 workshop participants at the University of Illinois, successfully produced their own flipbook using the minimal example as a guide.</p>
 <p>Given the third party success with the current code, we’re confident that an R package with the flipbook functions can be useful to a wide audience.</p>
 </div>
-<div id="academic-paper" class="section level3">
-<h3>Academic Paper</h3>
-<p>I’m currently working on a paper to describe the format and describing the implementation, as well as articulating its merits.</p>
+<div id="theortical-description" class="section level3">
+<h3>Theortical description</h3>
+<p>I’m currently working on a manuscript thinking about flipbooks from a theoretical perspective including a discussion of human cognition, describing the format and our particular implementation, as well as articulating its merits.</p>
+</div>
+<div id="extention-to-non-sequential-code" class="section level3">
+<h3>Extention to non sequential code</h3>
+<p>Sequentially revealing code is the current implementation of flipbooks. However, there are certainly circumstances in which it would make more sense to reveal things out of order to better communicate about code input and subsequent output behavior. Tackling non sequential reveal is therefore on the to do list.</p>
 </div>
 </div>
 <div id="reception" class="section level2">
 <h2>Reception</h2>
 <p>The feedback on the flipbook format has been tremendously encouraging, and a big motivation to keep working on this project. The flipbook was a <a href="https://news.ycombinator.com/item?id=19356354">top story on Hacker News</a> and was featured as a highlight in the <a href="https://www.r-craft.org/r-news/r-weekly-2019-07-flipbook-package-building/">R Weekly</a> newsletter.</p>
 <p>Some of the most encouraging feedback about flipbooks has come from individuals, via Twitter. Their comments can be viewed <a href="https://evamaerey.github.io/little_flipbooks_library/about/cheers_for_flipbooks">here</a>.</p>
-<p>Feedback comes from around the world including the following locations!</p>
+<p>Feedback comes from individuals around the world including the following locations!</p>
 <p>Houston, TX | Strijtem, Flanders (Belgium) | Rotterdam, The Netherlands | Utah, USA | Buenos Aires | Utah, USA | Chicago, IL | España | Washington, DC | España | Chicago | Baltimore, MD | South Africa | Aalborg, Denmark | Dresden, Germany | Orlando, FL | Philadelphia, PA | Oslo, Norway | Omaha, NE | Rotterdam, The Netherlands | UK | Switzerland | Turners Falls, MA | Montpellier, France | San Francisco, CA | San Francisco, CA | Hong Kong | Fairfax, Virginia USA | Bundoora,Victoria, Australia | Ile-de-France, France | Bundoora,Victoria, Australia | On Your Left || Bridge 4 | Chicago | Lansing, MI | Austin, TX | New York, NY | United States | United Kingdom | Chicago | Palmerston North, New Zealand | Coventry/Birmingham | Cambridge, MA | Strasbourg, France | Sydney, New South Wales | Dublin City, Ireland | RTP, NC | Tallahassee, Florida, USA | Princeton, NJ | Carrboro, NC | Yokohama City Tsurumi Ward | Rio | Boston | Sheffield/Leeds | moon | Singapore | London, England | Lisbon, Portugal | Ghana. | Vancouver, BC | Santa Barbara, CA | Houston, TX | Waco, Texas | Victoria, British Columbia | Austin, TX | Quincy, MA | Chicago, IL | Dallas, TX | Canada | Utrecht | Paris, France | Philadelphia, PA | Sydney, New South Wales | Toronto, Canada | Utrecht, The Netherlands | Ho Chi Minh, Viet Nam | Lima, Peru | Sydney | Sydney, Australia | roFL</p>
+<!-- ```{r, out.width="48%"} -->
+<!-- knitr::include_url("https://evamaerey.github.io/ggplot_flipbook/ggplot_flipbook_xaringan.html") -->
+<!-- knitr::include_url("https://evamaerey.github.io/tidyverse_in_action/tidyverse_in_action.html") -->
+<!-- knitr::include_url("https://evamaerey.github.io/ggplot2_grammar_guide/ggplot2_grammar_guide") -->
+<!-- knitr::include_url("https://evamaerey.github.io/tidytuesday_walk_through/tidytuesday_highlights.html") -->
+<!-- ``` -->
 </div>
 
 
