@@ -77,8 +77,8 @@ Since then, a number of changes have been made to the foundational code to impro
 
 The big debut of the flipbook technique was unveiling in its application to a substantial collection of data visualization code: [the ggplot flipbook](https://evamaerey.github.io/ggplot_flipbook/ggplot_flipbook_xaringan.html){target="_blank"} in February of 2019.  Shortly thereafter, the reveal code was extended to handle data manipulation pipelines which allowed for the creation of [The Tidyverse in Action](https://evamaerey.github.io/tidyverse_in_action/tidyverse_in_action.html){target="_blank"}.   
 
-Since then flipbook tool has been applied in explaining how to create visualizations important to statistical pedagogy, ([The Galton Board flipbook](https://evamaerey.github.io/little_flipbooks_library/galton_board/galton_board.html){target="_blank"}
-); political decision rules [D’Hondt/Jefferson Allocation](https://evamaerey.github.io/little_flipbooks_library/dhondt_jefferson_allocation/dhondt_jefferson_allocation){target="_blank"}; and custom plot types like [a racing barchart](https://evamaerey.github.io/little_flipbooks_library/racing_bars/racing_barcharts.html){target="_blank"}.
+Since then flipbook tool has been applied in explaining how to create visualizations important to statistical pedagogy, as in [The Galton Board flipbook](https://evamaerey.github.io/little_flipbooks_library/galton_board/galton_board.html){target="_blank"}
+; political decision rules as in [D’Hondt/Jefferson Allocation](https://evamaerey.github.io/little_flipbooks_library/dhondt_jefferson_allocation/dhondt_jefferson_allocation){target="_blank"}; and custom plot types, as in [a racing barchart](https://evamaerey.github.io/little_flipbooks_library/racing_bars/racing_barcharts.html){target="_blank"}.
 
 Returning to the initial focus of data visualization using ggplot, new resources have been created focusing on more providing systematic and theoretical foundations for understanding ggplot2 -- the implementation of the powerful grammar of graphics framework in R -- including [a ggplot grammar guide](https://evamaerey.github.io/ggplot2_grammar_guide/ggplot2_grammar_guide#1){target="_blank"} and [ggplot themes](https://evamaerey.github.io/little_flipbooks_library/taming_themes_in_ggplot/taming_ggplot_themes.html){target="_blank"}.  
 
@@ -86,7 +86,7 @@ Use of the framework has also been explored outside of its ["Tidyverse"](https:/
 
 ### Use in traditional presentations
 
-An additional adaptation of the parsing and reveal code allows users to slowly reveal the components of a plot without also featuring the code to produce the plot in [minimal example #2](https://evamaerey.github.io/little_flipbooks_library/minimal_example/minimal_example){target="_blank"}, a strategy that Hans Rosling used in his stunning presentations, and a technique that is recommended by data journalist Mona Chalabi and Harvard  Professor of Government Matthew Blackwell. 
+An additional adaptation of the parsing and reveal code allows users to slowly reveal the components of a plot without also featuring the code to produce the plot in [A flipbook minimal example](https://evamaerey.github.io/little_flipbooks_library/minimal_example/minimal_example){target="_blank"}, a strategy that Hans Rosling used in his stunning presentations, and a technique that is recommended by data journalist Mona Chalabi and Harvard  Professor of Government Matthew Blackwell. 
 
 
 ## What's next
@@ -97,7 +97,7 @@ A code repository for the smaller flipbooks projects "lives" in one place, [here
 
 The next frontier is making the technique easy to use.  One step to this end was to use others' code to create Flipbooks as was done in [#TidyTuesday walk through](https://evamaerey.github.io/tidytuesday_walk_through/tidytuesday_highlights.html){target="_blank"}.  Four visualizers generously allowed me to use their beautiful work.  Problems with the code parsing was indeed discovered and addressed through this process!
 
-Additionally, I'm working on and testing materials to help people create their own books with minimal hassle.  A guide exists in the [minimal example #1](https://evamaerey.github.io/little_flipbooks_library/tidytuesday_minimal_example/tidytuesday_minimal_example){target="_blank"} and the [checkerboard](https://evamaerey.github.io/little_flipbooks_library/checkerboard/checkerboard.html){target="_blank"}.  In a June 2019 workshop participants at the University of Illinois, successfully produced their own flipbook using the minimal example as a guide.  
+Additionally, I'm working on and testing materials to help people create their own books with minimal hassle.  A guide exists in the [A flipbook minimal example](https://evamaerey.github.io/little_flipbooks_library/tidytuesday_minimal_example/tidytuesday_minimal_example){target="_blank"} and the [The checkerboard example](https://evamaerey.github.io/little_flipbooks_library/checkerboard/checkerboard.html){target="_blank"}.  In a June 2019 workshop participants at the University of Illinois, successfully produced their own flipbook using the minimal example as a guide.  
 
 Given the third party success with the current code, we're confident that an R package with the flipbook functions can be useful to a wide audience.  
 
