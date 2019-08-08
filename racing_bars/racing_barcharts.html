@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
   <head>
     <title>Racing Barchart with gganimate</title>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <meta name="author" content="  Gina Reynolds, April 2019" />
     <link href="libs/remark-css-0.0.1/kunoichi.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
@@ -46,14 +46,13 @@ library(tidyverse)
 
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 *gapminder
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ```
   # A tibble: 1,704 x 6
@@ -75,15 +74,14 @@ count: false
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-gapminder %&gt;% 
+gapminder %&gt;%
 * select(country, pop, year, continent)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ```
   # A tibble: 1,704 x 4
@@ -105,16 +103,15 @@ gapminder %&gt;%
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-gapminder %&gt;% 
-  select(country, pop, year, continent) %&gt;% 
-* group_by(year) # for each year we assign a rank
+gapminder %&gt;%
+  select(country, pop, year, continent) %&gt;%
+* group_by(year)   # for each year we assign a rank
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ```
   # A tibble: 1,704 x 4
@@ -137,17 +134,16 @@ gapminder %&gt;%
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-gapminder %&gt;% 
-  select(country, pop, year, continent) %&gt;% 
-  group_by(year) %&gt;% # for each year we assign a rank
+gapminder %&gt;%
+  select(country, pop, year, continent) %&gt;%
+  group_by(year) %&gt;%  # for each year we assign a rank
 * arrange(year, -pop)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ```
   # A tibble: 1,704 x 4
@@ -170,18 +166,17 @@ gapminder %&gt;%
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-gapminder %&gt;% 
-  select(country, pop, year, continent) %&gt;% 
-  group_by(year) %&gt;% # for each year we assign a rank
-  arrange(year, -pop) %&gt;% 
-* mutate(rank = 1:n()) # assign ranking
+gapminder %&gt;%
+  select(country, pop, year, continent) %&gt;%
+  group_by(year) %&gt;%  # for each year we assign a rank
+  arrange(year, -pop) %&gt;%
+* mutate(rank = 1:n())   # assign ranking
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ```
   # A tibble: 1,704 x 5
@@ -204,19 +199,18 @@ gapminder %&gt;%
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-gapminder %&gt;% 
-  select(country, pop, year, continent) %&gt;% 
-  group_by(year) %&gt;% # for each year we assign a rank
-  arrange(year, -pop) %&gt;% 
-  mutate(rank = 1:n()) %&gt;% # assign ranking
+gapminder %&gt;%
+  select(country, pop, year, continent) %&gt;%
+  group_by(year) %&gt;%  # for each year we assign a rank
+  arrange(year, -pop) %&gt;%
+  mutate(rank = 1:n()) %&gt;%  # assign ranking
 * filter(rank &lt;= 10)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ```
   # A tibble: 120 x 5
@@ -239,20 +233,19 @@ gapminder %&gt;%
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-gapminder %&gt;% 
-  select(country, pop, year, continent) %&gt;% 
-  group_by(year) %&gt;% # for each year we assign a rank
-  arrange(year, -pop) %&gt;% 
-  mutate(rank = 1:n()) %&gt;% # assign ranking
+gapminder %&gt;%
+  select(country, pop, year, continent) %&gt;%
+  group_by(year) %&gt;%  # for each year we assign a rank
+  arrange(year, -pop) %&gt;%
+  mutate(rank = 1:n()) %&gt;%  # assign ranking
   filter(rank &lt;= 10) -&gt;
 *ranked_by_year
 ```
 ]]
-.column[.content.center[
+.column[.content[
 
 ]]
 
@@ -266,9 +259,9 @@ my_theme &lt;- theme_classic(base_family = "Times") +
   theme(axis.text.y = element_blank()) +
   theme(axis.ticks.y = element_blank()) +
   theme(axis.line.y = element_blank()) +
-  theme(legend.background = element_rect(fill = "linen")) +
-  theme(plot.background = element_rect(fill = "linen")) +
-  theme(panel.background = element_rect(fill = "linen"))
+  theme(legend.background = element_rect(fill = "gainsboro")) +
+  theme(plot.background = element_rect(fill = "gainsboro")) +
+  theme(panel.background = element_rect(fill = "gainsboro"))
 ```
   
 ---
@@ -279,20 +272,18 @@ my_theme &lt;- theme_classic(base_family = "Times") +
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 *ggplot(data = ranked_by_year)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="racing_barcharts_files/figure-html/output_static_bar_1-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -300,13 +291,12 @@ ggplot(data = ranked_by_year) +
 * aes(group = country, fill = continent)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="racing_barcharts_files/figure-html/output_static_bar_2-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -316,134 +306,128 @@ ggplot(data = ranked_by_year) +
 *     xmax = pop / 1000000)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="racing_barcharts_files/figure-html/output_static_bar_4-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 ggplot(data = ranked_by_year) +
   aes(group = country, fill = continent) +
-  aes(xmin = 0 , 
+  aes(xmin = 0 ,
       xmax = pop / 1000000) +
 * aes(ymin = rank - .45,
 *     ymax = rank + .45)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="racing_barcharts_files/figure-html/output_static_bar_6-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 ggplot(data = ranked_by_year) +
   aes(group = country, fill = continent) +
-  aes(xmin = 0 , 
+  aes(xmin = 0 ,
       xmax = pop / 1000000) +
-  aes(ymin = rank - .45, 
+  aes(ymin = rank - .45,
       ymax = rank + .45) +
 * scale_y_reverse()
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="racing_barcharts_files/figure-html/output_static_bar_7-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 ggplot(data = ranked_by_year) +
   aes(group = country, fill = continent) +
-  aes(xmin = 0 , 
+  aes(xmin = 0 ,
       xmax = pop / 1000000) +
-  aes(ymin = rank - .45, 
+  aes(ymin = rank - .45,
       ymax = rank + .45) +
   scale_y_reverse() +
 * scale_x_continuous(
-*   limits = c(-300, 1400),
+*   limits = c(-350, 1400),
 *   breaks = c(0, 400, 800, 1200),
 *   labels = c(0, 400, 800, 1200))
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="racing_barcharts_files/figure-html/output_static_bar_11-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 ggplot(data = ranked_by_year) +
   aes(group = country, fill = continent) +
-  aes(xmin = 0 , 
+  aes(xmin = 0 ,
       xmax = pop / 1000000) +
-  aes(ymin = rank - .45, 
+  aes(ymin = rank - .45,
       ymax = rank + .45) +
   scale_y_reverse() +
   scale_x_continuous(
-    limits = c(-300, 1400),
+    limits = c(-350, 1400),
     breaks = c(0, 400, 800, 1200),
     labels = c(0, 400, 800, 1200)) +
 * labs(fill = "")
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="racing_barcharts_files/figure-html/output_static_bar_12-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 ggplot(data = ranked_by_year) +
   aes(group = country, fill = continent) +
-  aes(xmin = 0 , 
+  aes(xmin = 0 ,
       xmax = pop / 1000000) +
-  aes(ymin = rank - .45, 
+  aes(ymin = rank - .45,
       ymax = rank + .45) +
   scale_y_reverse() +
   scale_x_continuous(
-    limits = c(-300, 1400),
+    limits = c(-350, 1400),
     breaks = c(0, 400, 800, 1200),
     labels = c(0, 400, 800, 1200)) +
   labs(fill = "") +
 * geom_rect(alpha = .7)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="racing_barcharts_files/figure-html/output_static_bar_13-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 ggplot(data = ranked_by_year) +
   aes(group = country, fill = continent) +
-  aes(xmin = 0 , 
+  aes(xmin = 0 ,
       xmax = pop / 1000000) +
-  aes(ymin = rank - .45, 
+  aes(ymin = rank - .45,
       ymax = rank + .45) +
   scale_y_reverse() +
   scale_x_continuous(
-    limits = c(-300, 1400),
+    limits = c(-350, 1400),
     breaks = c(0, 400, 800, 1200),
     labels = c(0, 400, 800, 1200)) +
   labs(fill = "") +
@@ -451,25 +435,24 @@ ggplot(data = ranked_by_year) +
 * labs(x = 'Population (millions)')
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="racing_barcharts_files/figure-html/output_static_bar_14-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 ggplot(data = ranked_by_year) +
   aes(group = country, fill = continent) +
-  aes(xmin = 0 , 
+  aes(xmin = 0 ,
       xmax = pop / 1000000) +
-  aes(ymin = rank - .45, 
+  aes(ymin = rank - .45,
       ymax = rank + .45) +
   scale_y_reverse() +
   scale_x_continuous(
-    limits = c(-300, 1400),
+    limits = c(-350, 1400),
     breaks = c(0, 400, 800, 1200),
     labels = c(0, 400, 800, 1200)) +
   labs(fill = "") +
@@ -478,25 +461,24 @@ ggplot(data = ranked_by_year) +
 * aes(label = country, y = rank)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="racing_barcharts_files/figure-html/output_static_bar_15-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 ggplot(data = ranked_by_year) +
   aes(group = country, fill = continent) +
-  aes(xmin = 0 , 
+  aes(xmin = 0 ,
       xmax = pop / 1000000) +
-  aes(ymin = rank - .45, 
+  aes(ymin = rank - .45,
       ymax = rank + .45) +
   scale_y_reverse() +
   scale_x_continuous(
-    limits = c(-300, 1400),
+    limits = c(-350, 1400),
     breaks = c(0, 400, 800, 1200),
     labels = c(0, 400, 800, 1200)) +
   labs(fill = "") +
@@ -508,100 +490,97 @@ ggplot(data = ranked_by_year) +
 *           x = -50)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="racing_barcharts_files/figure-html/output_static_bar_18-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 ggplot(data = ranked_by_year) +
   aes(group = country, fill = continent) +
-  aes(xmin = 0 , 
+  aes(xmin = 0 ,
       xmax = pop / 1000000) +
-  aes(ymin = rank - .45, 
+  aes(ymin = rank - .45,
       ymax = rank + .45) +
   scale_y_reverse() +
   scale_x_continuous(
-    limits = c(-300, 1400),
+    limits = c(-350, 1400),
     breaks = c(0, 400, 800, 1200),
     labels = c(0, 400, 800, 1200)) +
   labs(fill = "") +
   geom_rect(alpha = .7) +
   labs(x = 'Population (millions)') +
   aes(label = country, y = rank) +
-  geom_text(col = "gray13", 
-            hjust = "right", 
-            x = -50) + 
+  geom_text(col = "gray13",
+            hjust = "right",
+            x = -50) +
 * labs(y = "")
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="racing_barcharts_files/figure-html/output_static_bar_19-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 ggplot(data = ranked_by_year) +
   aes(group = country, fill = continent) +
-  aes(xmin = 0 , 
+  aes(xmin = 0 ,
       xmax = pop / 1000000) +
-  aes(ymin = rank - .45, 
+  aes(ymin = rank - .45,
       ymax = rank + .45) +
   scale_y_reverse() +
   scale_x_continuous(
-    limits = c(-300, 1400),
+    limits = c(-350, 1400),
     breaks = c(0, 400, 800, 1200),
     labels = c(0, 400, 800, 1200)) +
   labs(fill = "") +
   geom_rect(alpha = .7) +
   labs(x = 'Population (millions)') +
   aes(label = country, y = rank) +
-  geom_text(col = "gray13", 
-            hjust = "right", 
-            x = -50) + 
+  geom_text(col = "gray13",
+            hjust = "right",
+            x = -50) +
   labs(y = "") +
 * scale_fill_viridis_d(option = "magma",
 *                      direction = -1)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="racing_barcharts_files/figure-html/output_static_bar_21-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 ggplot(data = ranked_by_year) +
   aes(group = country, fill = continent) +
-  aes(xmin = 0 , 
+  aes(xmin = 0 ,
       xmax = pop / 1000000) +
-  aes(ymin = rank - .45, 
+  aes(ymin = rank - .45,
       ymax = rank + .45) +
   scale_y_reverse() +
   scale_x_continuous(
-    limits = c(-300, 1400),
+    limits = c(-350, 1400),
     breaks = c(0, 400, 800, 1200),
     labels = c(0, 400, 800, 1200)) +
   labs(fill = "") +
   geom_rect(alpha = .7) +
   labs(x = 'Population (millions)') +
   aes(label = country, y = rank) +
-  geom_text(col = "gray13", 
-            hjust = "right", 
-            x = -50) + 
+  geom_text(col = "gray13",
+            hjust = "right",
+            x = -50) +
   labs(y = "") +
-  scale_fill_viridis_d(option = "magma", 
+  scale_fill_viridis_d(option = "magma",
                        direction = -1) +
 * geom_text(x = 1000 , y = -10,
 *           family = "Times",
@@ -609,46 +588,82 @@ ggplot(data = ranked_by_year) +
 *           size = 30, col = "grey18")
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="racing_barcharts_files/figure-html/output_static_bar_25-1.png" width="100%" /&gt;
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
 ggplot(data = ranked_by_year) +
   aes(group = country, fill = continent) +
-  aes(xmin = 0 , 
+  aes(xmin = 0 ,
       xmax = pop / 1000000) +
-  aes(ymin = rank - .45, 
+  aes(ymin = rank - .45,
       ymax = rank + .45) +
   scale_y_reverse() +
   scale_x_continuous(
-    limits = c(-300, 1400),
+    limits = c(-350, 1400),
     breaks = c(0, 400, 800, 1200),
     labels = c(0, 400, 800, 1200)) +
   labs(fill = "") +
   geom_rect(alpha = .7) +
   labs(x = 'Population (millions)') +
   aes(label = country, y = rank) +
-  geom_text(col = "gray13", 
-            hjust = "right", 
-            x = -50) + 
+  geom_text(col = "gray13",
+            hjust = "right",
+            x = -50) +
   labs(y = "") +
-  scale_fill_viridis_d(option = "magma", 
+  scale_fill_viridis_d(option = "magma",
                        direction = -1) +
-  geom_text(x = 1000 , y = -10, 
-            family = "Times", 
-            aes(label = as.character(year)), 
+  geom_text(x = 1000 , y = -10,
+            family = "Times",
+            aes(label = as.character(year)),
             size = 30, col = "grey18") +
-* my_theme -&gt;
-*g 
+* my_theme
 ```
 ]]
-.column[.content.center[
+.column[.content[
+&lt;img src="racing_barcharts_files/figure-html/output_static_bar_26-1.png" width="100%" /&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ggplot(data = ranked_by_year) +
+  aes(group = country, fill = continent) +
+  aes(xmin = 0 ,
+      xmax = pop / 1000000) +
+  aes(ymin = rank - .45,
+      ymax = rank + .45) +
+  scale_y_reverse() +
+  scale_x_continuous(
+    limits = c(-350, 1400),
+    breaks = c(0, 400, 800, 1200),
+    labels = c(0, 400, 800, 1200)) +
+  labs(fill = "") +
+  geom_rect(alpha = .7) +
+  labs(x = 'Population (millions)') +
+  aes(label = country, y = rank) +
+  geom_text(col = "gray13",
+            hjust = "right",
+            x = -50) +
+  labs(y = "") +
+  scale_fill_viridis_d(option = "magma",
+                       direction = -1) +
+  geom_text(x = 1000 , y = -10,
+            family = "Times",
+            aes(label = as.character(year)),
+            size = 30, col = "grey18") +
+  my_theme -&gt;
+*my_plot
+```
+]]
+.column[.content[
 
 ]]
 
@@ -670,29 +685,24 @@ options(gganimate.nframes = 20)
 
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-*g + gganimate::transition_time(year)
+*my_plot + gganimate::transition_time(year)
 ```
 ]]
-.column[.content.center[
+.column[.content[
 &lt;img src="racing_barcharts_files/figure-html/output_ani_final_1-1.gif" width="100%" /&gt;
 ]]
 
 
----
-
-# A lessons learned about racing barcharts.
-
-My first implementation was with GDP per capita.  This resulted in less visually pleasing because of rank changing beyond adjacent neighbors between time periods.  The version of the data used is only every five years, so such dramatic switching between time periods isn't surprising.  Using population gave a better result. 
 
 
 &lt;style type="text/css"&gt;
-.remark-code{line-height: 1.5; font-size: 70%}
+.remark-code{line-height: 1.5; font-size: 60%}
 &lt;/style&gt;
     </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="libs/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
 "ratio": "16:9",
@@ -701,16 +711,57 @@ My first implementation was with GDP per capita.  This resulted in less visually
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
 });
-(function() {
-  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
   if (!r) return;
   s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
   d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
 })();</script>
 
 <script>
 (function() {
-  var i, text, code, codes = document.getElementsByTagName('code');
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
   for (i = 0; i < codes.length;) {
     code = codes[i];
     if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
@@ -724,7 +775,8 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     }
     i++;
   }
-})();
+};
+slideshow._releaseMath(document);
 </script>
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
