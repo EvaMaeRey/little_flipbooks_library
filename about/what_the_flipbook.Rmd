@@ -24,7 +24,7 @@ knitr::opts_chunk$set(cache = T, echo = F, warning = F, message = F, cache = T, 
 
 Visual superimposition of new code on previous code and new output on previous output yields a ["blink comparator"](https://en.wikipedia.org/wiki/Blink_comparator){target="_blank"} type experience, and incrementalism assists viewers in linking specific components of code with resultant behavior.  Flipbooks are promising as communication, educational, and reference medium.
 
-Click on the example below. Then you should be able to "flip" (left and right arrows) through the book to see how to make an animated racing bar chart of population size in the most populous countries over time.   
+Click once in the box the below; then use the right and left arrow to "flip" through the book to see how to make an animated "racing" bar chart of the population size of the most populous countries over time.   
 
 ```{r}
 knitr::include_url("https://evamaerey.github.io/little_flipbooks_library/racing_bars/racing_barcharts.html#1")
@@ -95,15 +95,15 @@ An additional adaptation of the parsing and reveal code allows users to slowly r
 
 A code repository for the smaller flipbooks projects "lives" in one place, [here](https://github.com/EvaMaeRey/little_flipbooks_library), for reference.   Larger projects' code is also open access and is available for examination and emulation.
 
-The next frontier is making the technique easy to use.  One step to this end was to use others' code to create Flipbooks as was done in [#TidyTuesday walk through](https://evamaerey.github.io/tidytuesday_walk_through/tidytuesday_highlights.html){target="_blank"}.  Four visualizer's enerously allowed me to use their beautiful work.  Problems with the code parsing was indeed discovered and addressed through this process!
+The next frontier is making the technique easy to use.  One step to this end was to use others' code to create Flipbooks as was done in [#TidyTuesday walk through](https://evamaerey.github.io/tidytuesday_walk_through/tidytuesday_highlights.html){target="_blank"}.  Four visualizers generously allowed me to use their beautiful work.  Problems with the code parsing was indeed discovered and addressed through this process!
 
 Additionally, I'm working on and testing materials to help people create their own books with minimal hassle.  A guide exists in the [minimal example #1](https://evamaerey.github.io/little_flipbooks_library/tidytuesday_minimal_example/tidytuesday_minimal_example){target="_blank"} and the [checkerboard](https://evamaerey.github.io/little_flipbooks_library/checkerboard/checkerboard.html){target="_blank"}.  In a June 2019 workshop participants at the University of Illinois, successfully produced their own flipbook using the minimal example as a guide.  
 
 Given the third party success with the current code, we're confident that an R package with the flipbook functions can be useful to a wide audience.  
 
-### Theorticeal description
+### Theoretical description
 
-I'm currently working on a manuscript thinking about flipbooks from a theoretical perspective including a discussion of humnition, describing the format and our particular implementation, as well as articulating its merits. 
+I'm currently working on a manuscript thinking about flipbooks from a theoretical perspective including a discussion of cognition, describing the format and our particular implementation, as well as articulating its merits. 
 
 ### Extension to non sequential code
 
