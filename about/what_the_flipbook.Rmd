@@ -105,7 +105,7 @@ Given the third party success with the current code, we're confident that an R p
 
 I'm currently working on a manuscript thinking about flipbooks from a theoretical perspective including a discussion of human cognition, describing the format and our particular implementation, as well as articulating its merits. 
 
-### Extention to non sequential code
+### Extension to non sequential code
 
 Sequentially revealing code is the current implementation of flipbooks. However, there are certainly circumstances in which it would make more sense to reveal things out of order to better communicate about code input and subsequent output behavior.  Tackling non sequential reveal is therefore on the to do list.   
 
