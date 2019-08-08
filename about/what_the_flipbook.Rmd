@@ -1,6 +1,7 @@
 ---
 title: "Flipbooks"
-author: Evangeline Reynolds, August 7, 2019
+author: Evangeline Reynolds, Korbel School of International Studies
+date: August 8, 2019
 output:
   html_document:
     df_print: paged
@@ -21,7 +22,7 @@ knitr::opts_chunk$set(cache = T, echo = F, warning = F, message = F, cache = T, 
 
 "Flipbooks" implement a presentation of side-by-side, aligned, incremental code-output evolution via automated code parsing and reconstruction.
 
-Visual superimposition of new code on previous code and new output on previous output yields a ["blink comparator"](https://en.wikipedia.org/wiki/Blink_comparator){target="_blank"} type experience, and incrementalism assists viewers in linking specific components of code with resultant behavior.  I believe that flipbooks are very promising as communication, educational, and reference medium.
+Visual superimposition of new code on previous code and new output on previous output yields a ["blink comparator"](https://en.wikipedia.org/wiki/Blink_comparator){target="_blank"} type experience, and incrementalism assists viewers in linking specific components of code with resultant behavior.  Flipbooks are promising as communication, educational, and reference medium.
 
 Click on the example below. Then you should be able to "flip" (left and right arrows) through the book to see how to make an animated racing bar chart of at population size in the most populous countries over time.   
 
@@ -32,7 +33,11 @@ knitr::include_url("https://evamaerey.github.io/little_flipbooks_library/racing_
 
 ## Origins
 
-In mid 2018 Garrick Aden-Buie, a data scientist at the Moffitt Cancer Center, created and debuted a side-by-side format for code and figure output in the slide-show format, Xaringan, an RMarkdown tool.  He demonstrated in incremental steps how someone might build up a plot using the popular R Stats package ggplot2.  In August 2018, I emulated this work, but used an entirely sequential and more incremental work flow that I'd been working on and had termed "slow ggplot".  In September, Emi Tanaka, a Lecturer in Statistics at the University of Sydney, implemented a similar sequential workflow demonstration, that was partially automated.  After I approached Garrick and Emi in October about working together to create a "flipbook" of exemplary data visualizations, we soon had a fully automated framework to parse code, and present its reconstruction along with associated output!  The code designed to parse and reconstruct code was applied to a collection of plots that I created over about about a year and a half in learning ggplot.  After several months of preparation, including rewriting code in a "slow" ggplot style, and providing written description to introduce the plots, I publicized the work in February, 2019; the flipbook was met the an enthusiastic reception.  Since then, a number changes have been made to the foundational code to improve the tool and to enhance its usefulness. 
+In mid 2018 Garrick Aden-Buie, a data scientist at the Moffitt Cancer Center, created and debuted a side-by-side format for code and figure output in the slide-show tool, Xaringan, an RMarkdown tool.  He demonstrated in incremental steps how someone might build up a plot using the popular R Stats package ggplot2.  In August 2018, I emulated this work, but used an entirely sequential and more incremental work flow that I'd been working on and had termed "slow ggplot".  In September, Emi Tanaka, a Lecturer in Statistics at the University of Sydney, implemented a similar sequential workflow demonstration, that was partially automated.  
+
+I aproached Garrick and Emi in October about working together to create a "flipbook" of exemplary data visualizations.  We soon had a fully automated framework to parse code, and present its reconstruction along with associated output!  
+
+The code designed to parse and reconstruct code was then tested in small projects and refined.  Then I applied to a collection of plots that I created over about about a year and a half in learning ggplot.  After rewriting this code in a "slow" ggplot style, and providing written description to introduce the plots, I publicized the work in February, 2019; the flipbook was met the an enthusiastic reception.  Since then, a number changes have been made to the foundational code to improve the tool and to enhance its usefulness. 
 
 
 
