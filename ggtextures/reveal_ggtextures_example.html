@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>core tidyverse downloads isotype plot</title>
+    <meta charset="utf-8" />
+    <link href="libs/remark-css-0.0.1/kunoichi.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# core tidyverse downloads isotype plot
+## using ggtextures - Gina Reynolds
+### <br>2018/09/16
+
+---
+
+
+
+
+
+
+
+---
+
+# Let's make this plot
+
+&lt;img src="figures/isoplot.png" width="65%" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+# Tidyverse packages used
+
+There are in fact a number of ["core" tidyverse packages](https://www.tidyverse.org/) used in this demo!
+
+- tibble
+- ggplot
+- stringr
+- tidyr
+- dplyr
+
+
+Let's load these packages, with the `tidyverse` wrapper package that loads them all. 
+
+
+```r
+library(tidyverse)
+```
+
+
+---
+# ggtextures
+
+ggtextures is a new package under development by Claus Wilke which is available on github. 
+
+https://github.com/clauswilke/ggtextures
+
+It can be installed using devtools:
+
+
+```r
+devtools::install_github("clauswilke/ggtextures")
+```
+
+We load this one, and a few others.
+
+
+```r
+library(ggtextures)
+library(grid)
+library(magick)
+```
+
+---
+# Creating a tibble with the core tidyverse hex stickers
+
+
+---
+
+
+
+
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*# vector of core tidyverse package names
+*c("ggplot2", "dplyr", "tidyr", "readr", "purrr",
+* "tibble", "stringr", "forcats", "tidyverse")
+```
+]]
+.column[.content[
+
+```
+## [1] "ggplot2"   "dplyr"     "tidyr"     "readr"     "purrr"     "tibble"   
+## [7] "stringr"   "forcats"   "tidyverse"
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ # vector of core tidyverse package names
+c("ggplot2", "dplyr", "tidyr", "readr", "purrr", 
+  "tibble", "stringr", "forcats", "tidyverse") -&gt; 
+*package
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ # vector of core tidyverse package names
+c("ggplot2", "dplyr", "tidyr", "readr", "purrr", 
+  "tibble", "stringr", "forcats", "tidyverse") -&gt; 
+package 
+*# the paths of the hex stickers online
+*paste0("https://raw.githubusercontent.com/rstudio/hex-stickers/master/SVG/",
+*      package, ".svg")
+```
+]]
+.column[.content[
+
+```
+## [1] "https://raw.githubusercontent.com/rstudio/hex-stickers/master/SVG/ggplot2.svg"  
+## [2] "https://raw.githubusercontent.com/rstudio/hex-stickers/master/SVG/dplyr.svg"    
+## [3] "https://raw.githubusercontent.com/rstudio/hex-stickers/master/SVG/tidyr.svg"    
+## [4] "https://raw.githubusercontent.com/rstudio/hex-stickers/master/SVG/readr.svg"    
+## [5] "https://raw.githubusercontent.com/rstudio/hex-stickers/master/SVG/purrr.svg"    
+## [6] "https://raw.githubusercontent.com/rstudio/hex-stickers/master/SVG/tibble.svg"   
+## [7] "https://raw.githubusercontent.com/rstudio/hex-stickers/master/SVG/stringr.svg"  
+## [8] "https://raw.githubusercontent.com/rstudio/hex-stickers/master/SVG/forcats.svg"  
+## [9] "https://raw.githubusercontent.com/rstudio/hex-stickers/master/SVG/tidyverse.svg"
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ # vector of core tidyverse package names
+c("ggplot2", "dplyr", "tidyr", "readr", "purrr", 
+  "tibble", "stringr", "forcats", "tidyverse") -&gt; 
+package 
+ # the paths of the hex stickers online
+paste0("https://raw.githubusercontent.com/rstudio/hex-stickers/master/SVG/", 
+       package, ".svg") -&gt; 
+* hex_url
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ # vector of core tidyverse package names
+c("ggplot2", "dplyr", "tidyr", "readr", "purrr", 
+  "tibble", "stringr", "forcats", "tidyverse") -&gt; 
+package 
+ # the paths of the hex stickers online
+paste0("https://raw.githubusercontent.com/rstudio/hex-stickers/master/SVG/", 
+       package, ".svg") -&gt; 
+  hex_url 
+*tibble(package,
+*      hex = list(magick::image_read_svg(hex_url[1]),
+*                 magick::image_read_svg(hex_url[2]),
+*                 magick::image_read_svg(hex_url[3]),
+*                 magick::image_read_svg(hex_url[4]),
+*                 magick::image_read_svg(hex_url[5]),
+*                 magick::image_read_svg(hex_url[6]),
+*                 magick::image_read_svg(hex_url[7]),
+*                 magick::image_read_svg(hex_url[8]),
+*                 magick::image_read_svg(hex_url[9])))
+```
+]]
+.column[.content[
+
+```
+## # A tibble: 9 x 2
+##   package   hex       
+##   &lt;chr&gt;     &lt;list&gt;    
+## 1 ggplot2   &lt;magck-mg&gt;
+## 2 dplyr     &lt;magck-mg&gt;
+## 3 tidyr     &lt;magck-mg&gt;
+## 4 readr     &lt;magck-mg&gt;
+## 5 purrr     &lt;magck-mg&gt;
+## 6 tibble    &lt;magck-mg&gt;
+## 7 stringr   &lt;magck-mg&gt;
+## 8 forcats   &lt;magck-mg&gt;
+## 9 tidyverse &lt;magck-mg&gt;
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ # vector of core tidyverse package names
+c("ggplot2", "dplyr", "tidyr", "readr", "purrr", 
+  "tibble", "stringr", "forcats", "tidyverse") -&gt; 
+package 
+ # the paths of the hex stickers online
+paste0("https://raw.githubusercontent.com/rstudio/hex-stickers/master/SVG/", 
+       package, ".svg") -&gt; 
+  hex_url 
+tibble(package, 
+       hex = list(magick::image_read_svg(hex_url[1]), 
+                  magick::image_read_svg(hex_url[2]), 
+                  magick::image_read_svg(hex_url[3]), 
+                  magick::image_read_svg(hex_url[4]), 
+                  magick::image_read_svg(hex_url[5]), 
+                  magick::image_read_svg(hex_url[6]), 
+                  magick::image_read_svg(hex_url[7]), 
+                  magick::image_read_svg(hex_url[8]), 
+                  magick::image_read_svg(hex_url[9]))) -&gt; 
+*core_w_hex_sticker
+```
+]]
+.column[.content[
+
+]]
+
+
+
+---
+# Data preparation and plotting
+
+Get the package download data for September 10, 2018 from cran-logs.rstudio.com.
+
+
+```r
+package_download_2018_09_10 &lt;-
+  read_csv("http://cran-logs.rstudio.com/2018/2018-09-10.csv.gz")
+```
+
+
+
+---
+
+
+
+
+
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*package_download_2018_09_10
+```
+]]
+.column[.content[
+
+```
+## # A tibble: 2,042,951 x 10
+##    date       time       size r_version r_arch r_os  package version
+##    &lt;date&gt;     &lt;time&gt;    &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;  
+##  1 2018-09-10 05:17:46 7.50e4 3.5.1     x86_64 ming… cairoD… 2.25   
+##  2 2018-09-10 05:17:29 1.09e5 3.5.1     x86_64 ming… glue    1.3.0  
+##  3 2018-09-10 05:17:32 1.56e5 3.5.1     x86_64 ming… magrit… 1.5    
+##  4 2018-09-10 05:17:48 4.42e6 3.4.4     i386   ming… Rcpp    0.12.18
+##  5 2018-09-10 05:17:49 3.42e4 3.5.1     x86_64 darw… miniUI  0.1.1.1
+##  6 2018-09-10 05:17:51 1.36e6 3.5.1     x86_64 darw… webshot 0.5.0  
+##  7 2018-09-10 05:17:55 9.31e5 3.5.1     x86_64 darw… xml2    1.2.0  
+##  8 2018-09-10 05:17:52 9.69e5 3.4.4     x86_64 ming… SparseM 1.77   
+##  9 2018-09-10 05:17:40 3.93e5 3.4.1     x86_64 linu… plyr    1.8.4  
+## 10 2018-09-10 05:17:56 1.03e5 3.5.1     x86_64 darw… cellra… 1.1.0  
+## # … with 2,042,941 more rows, and 2 more variables: country &lt;chr&gt;,
+## #   ip_id &lt;dbl&gt;
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+package_download_2018_09_10 %&gt;% 
+* group_by(package)
+```
+]]
+.column[.content[
+
+```
+## # A tibble: 2,042,951 x 10
+## # Groups:   package [13,272]
+##    date       time       size r_version r_arch r_os  package version
+##    &lt;date&gt;     &lt;time&gt;    &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;  
+##  1 2018-09-10 05:17:46 7.50e4 3.5.1     x86_64 ming… cairoD… 2.25   
+##  2 2018-09-10 05:17:29 1.09e5 3.5.1     x86_64 ming… glue    1.3.0  
+##  3 2018-09-10 05:17:32 1.56e5 3.5.1     x86_64 ming… magrit… 1.5    
+##  4 2018-09-10 05:17:48 4.42e6 3.4.4     i386   ming… Rcpp    0.12.18
+##  5 2018-09-10 05:17:49 3.42e4 3.5.1     x86_64 darw… miniUI  0.1.1.1
+##  6 2018-09-10 05:17:51 1.36e6 3.5.1     x86_64 darw… webshot 0.5.0  
+##  7 2018-09-10 05:17:55 9.31e5 3.5.1     x86_64 darw… xml2    1.2.0  
+##  8 2018-09-10 05:17:52 9.69e5 3.4.4     x86_64 ming… SparseM 1.77   
+##  9 2018-09-10 05:17:40 3.93e5 3.4.1     x86_64 linu… plyr    1.8.4  
+## 10 2018-09-10 05:17:56 1.03e5 3.5.1     x86_64 darw… cellra… 1.1.0  
+## # … with 2,042,941 more rows, and 2 more variables: country &lt;chr&gt;,
+## #   ip_id &lt;dbl&gt;
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+package_download_2018_09_10 %&gt;% 
+  group_by(package) %&gt;% 
+* summarise(num_downloads = n())
+```
+]]
+.column[.content[
+
+```
+## # A tibble: 13,272 x 2
+##    package     num_downloads
+##    &lt;chr&gt;               &lt;int&gt;
+##  1 A3                     30
+##  2 abbyyR                 20
+##  3 abc                    51
+##  4 abc.data               48
+##  5 ABC.RAP                 9
+##  6 ABCanalysis            10
+##  7 abcdeFBA                9
+##  8 ABCExtremes             1
+##  9 ABCoptim               15
+## 10 ABCp2                  11
+## # … with 13,262 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+package_download_2018_09_10 %&gt;% 
+  group_by(package) %&gt;% 
+  summarise(num_downloads = n()) %&gt;% 
+* right_join(core_w_hex_sticker)
+```
+]]
+.column[.content[
+
+```
+## # A tibble: 9 x 3
+##   package   num_downloads hex       
+##   &lt;chr&gt;             &lt;int&gt; &lt;list&gt;    
+## 1 ggplot2           23622 &lt;magck-mg&gt;
+## 2 dplyr             19116 &lt;magck-mg&gt;
+## 3 tidyr             11450 &lt;magck-mg&gt;
+## 4 readr             12388 &lt;magck-mg&gt;
+## 5 purrr             15070 &lt;magck-mg&gt;
+## 6 tibble            21043 &lt;magck-mg&gt;
+## 7 stringr           22257 &lt;magck-mg&gt;
+## 8 forcats            9005 &lt;magck-mg&gt;
+## 9 tidyverse          7129 &lt;magck-mg&gt;
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+package_download_2018_09_10 %&gt;% 
+  group_by(package) %&gt;% 
+  summarise(num_downloads = n()) %&gt;% 
+  right_join(core_w_hex_sticker) %&gt;% 
+*ggplot()
+```
+]]
+.column[.content[
+![](reveal_ggtextures_example_files/figure-html/output_plot_5-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+package_download_2018_09_10 %&gt;% 
+  group_by(package) %&gt;% 
+  summarise(num_downloads = n()) %&gt;% 
+  right_join(core_w_hex_sticker) %&gt;% 
+ggplot() + 
+* aes(x = reorder(x = package, X = -num_downloads))
+```
+]]
+.column[.content[
+![](reveal_ggtextures_example_files/figure-html/output_plot_6-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+package_download_2018_09_10 %&gt;% 
+  group_by(package) %&gt;% 
+  summarise(num_downloads = n()) %&gt;% 
+  right_join(core_w_hex_sticker) %&gt;% 
+ggplot() + 
+  aes(x = reorder(x = package, X = -num_downloads)) + 
+*# each sticker represents many downloads
+* aes(y = round(num_downloads / 4000, 0))
+```
+]]
+.column[.content[
+![](reveal_ggtextures_example_files/figure-html/output_plot_8-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+package_download_2018_09_10 %&gt;% 
+  group_by(package) %&gt;% 
+  summarise(num_downloads = n()) %&gt;% 
+  right_join(core_w_hex_sticker) %&gt;% 
+ggplot() + 
+  aes(x = reorder(x = package, X = -num_downloads)) + 
+ # each sticker represents many downloads
+  aes(y = round(num_downloads / 4000, 0)) + 
+* aes(image = hex)  # hex column is list!
+```
+]]
+.column[.content[
+![](reveal_ggtextures_example_files/figure-html/output_plot_9-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+package_download_2018_09_10 %&gt;% 
+  group_by(package) %&gt;% 
+  summarise(num_downloads = n()) %&gt;% 
+  right_join(core_w_hex_sticker) %&gt;% 
+ggplot() + 
+  aes(x = reorder(x = package, X = -num_downloads)) + 
+ # each sticker represents many downloads
+  aes(y = round(num_downloads / 4000, 0)) + 
+  aes(image = hex) + # hex column is list!
+*# a column filled with the image
+* ggtextures::geom_isotype_col()
+```
+]]
+.column[.content[
+![](reveal_ggtextures_example_files/figure-html/output_plot_11-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+package_download_2018_09_10 %&gt;% 
+  group_by(package) %&gt;% 
+  summarise(num_downloads = n()) %&gt;% 
+  right_join(core_w_hex_sticker) %&gt;% 
+ggplot() + 
+  aes(x = reorder(x = package, X = -num_downloads)) + 
+ # each sticker represents many downloads
+  aes(y = round(num_downloads / 4000, 0)) + 
+  aes(image = hex) + # hex column is list!
+ # a column filled with the image
+  ggtextures::geom_isotype_col() + 
+* labs(title = "Number of core tidyverse packages downloaded Sept 10, 2018")
+```
+]]
+.column[.content[
+![](reveal_ggtextures_example_files/figure-html/output_plot_12-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+package_download_2018_09_10 %&gt;% 
+  group_by(package) %&gt;% 
+  summarise(num_downloads = n()) %&gt;% 
+  right_join(core_w_hex_sticker) %&gt;% 
+ggplot() + 
+  aes(x = reorder(x = package, X = -num_downloads)) + 
+ # each sticker represents many downloads
+  aes(y = round(num_downloads / 4000, 0)) + 
+  aes(image = hex) + # hex column is list!
+ # a column filled with the image
+  ggtextures::geom_isotype_col() + 
+  labs(title = "Number of core tidyverse packages downloaded Sept 10, 2018") + 
+* labs(subtitle = "Each icon represents 4000 downloads, rounding to nearest 4000\nData: cran-logs.rstudio.com")
+```
+]]
+.column[.content[
+![](reveal_ggtextures_example_files/figure-html/output_plot_13-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+package_download_2018_09_10 %&gt;% 
+  group_by(package) %&gt;% 
+  summarise(num_downloads = n()) %&gt;% 
+  right_join(core_w_hex_sticker) %&gt;% 
+ggplot() + 
+  aes(x = reorder(x = package, X = -num_downloads)) + 
+ # each sticker represents many downloads
+  aes(y = round(num_downloads / 4000, 0)) + 
+  aes(image = hex) + # hex column is list!
+ # a column filled with the image
+  ggtextures::geom_isotype_col() + 
+  labs(title = "Number of core tidyverse packages downloaded Sept 10, 2018") + 
+  labs(subtitle = "Each icon represents 4000 downloads, rounding to nearest 4000\nData: cran-logs.rstudio.com") + 
+* labs(caption = "Vis: Gina Reynolds for #TidyTuesday w/ ggtextures")
+```
+]]
+.column[.content[
+![](reveal_ggtextures_example_files/figure-html/output_plot_14-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+package_download_2018_09_10 %&gt;% 
+  group_by(package) %&gt;% 
+  summarise(num_downloads = n()) %&gt;% 
+  right_join(core_w_hex_sticker) %&gt;% 
+ggplot() + 
+  aes(x = reorder(x = package, X = -num_downloads)) + 
+ # each sticker represents many downloads
+  aes(y = round(num_downloads / 4000, 0)) + 
+  aes(image = hex) + # hex column is list!
+ # a column filled with the image
+  ggtextures::geom_isotype_col() + 
+  labs(title = "Number of core tidyverse packages downloaded Sept 10, 2018") + 
+  labs(subtitle = "Each icon represents 4000 downloads, rounding to nearest 4000\nData: cran-logs.rstudio.com") + 
+  labs(caption = "Vis: Gina Reynolds for #TidyTuesday w/ ggtextures") + 
+* theme_void(base_family = "")
+```
+]]
+.column[.content[
+![](reveal_ggtextures_example_files/figure-html/output_plot_15-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+package_download_2018_09_10 %&gt;% 
+  group_by(package) %&gt;% 
+  summarise(num_downloads = n()) %&gt;% 
+  right_join(core_w_hex_sticker) %&gt;% 
+ggplot() + 
+  aes(x = reorder(x = package, X = -num_downloads)) + 
+ # each sticker represents many downloads
+  aes(y = round(num_downloads / 4000, 0)) + 
+  aes(image = hex) + # hex column is list!
+ # a column filled with the image
+  ggtextures::geom_isotype_col() + 
+  labs(title = "Number of core tidyverse packages downloaded Sept 10, 2018") + 
+  labs(subtitle = "Each icon represents 4000 downloads, rounding to nearest 4000\nData: cran-logs.rstudio.com") + 
+  labs(caption = "Vis: Gina Reynolds for #TidyTuesday w/ ggtextures") + 
+  theme_void(base_family = "") + 
+* theme(plot.background =
+*         element_rect(fill = "gainsboro"))
+```
+]]
+.column[.content[
+![](reveal_ggtextures_example_files/figure-html/output_plot_17-1.png)&lt;!-- --&gt;
+]]
+
+
+---
+
+# End
+
+
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 70%}
+&lt;/style&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightLines": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
