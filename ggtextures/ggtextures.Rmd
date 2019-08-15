@@ -17,7 +17,7 @@ source("https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/mas
 ```
 
 ```{r, include = F}
-knitr::opts_chunk$set(warning = F, message = F, cache = F, fig.width = 7, fig.height = 5.5)
+knitr::opts_chunk$set(warning = F, message = F, cache = F, fig.width = 7, fig.height = 5.5, dpi = 300)
 ```
 
 ---
