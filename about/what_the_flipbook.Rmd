@@ -20,11 +20,16 @@ knitr::opts_chunk$set(cache = T, echo = F, warning = F, message = F, cache = T, 
 
 ## What are flipbooks?  
 
-"Flipbooks" are a new tool that present side-by-side, aligned, incremental code-output evolution via automated code parsing and reconstruction.
+The flipbook is a new tool for presenting stepwise code-pipeline and output evolution.  
 
-Visual superimposition of new code on previous code and new output on previous output yields a ["blink comparator"](https://en.wikipedia.org/wiki/Blink_comparator){target="_blank"} type experience, and incrementalism assists viewers in linking specific components of code with resultant behavior.  Flipbooks are promising as communication, educational, and reference medium.
+Increasingly in quantitative analyses, scholars are encouraged to adopt a reproducible workflow in which documents each step of data manipulation and analysis --- in code rather than in software with a graphical user interface.  Accomplishing new or unpracticed tasks is less burdensome with the availability of good examples.  Tools for communicating examples have improved in recent years.  Especially embraced are tools that show code and its resultant output immediately thereafter --- the case of `Jupytr` notebooks and `Rmarkdown` documents.   Nevertheless, these tools present the creators with a trade-off between big-picture demonstration or narrow-focus demonstration.  Creators tend to either demo a complete, realistic code pipeline that accomplishes a realistic task or instead demonstrate a minimal example which makes clear the behavior of a particular function.
+
+Flipbooks help address this problem, allowing the creator to present a full demonstration which accomplishes a task, and gives the *user* the opportunity to focus more narrowly on particular unfamiliar steps of the work pipeline. Flipbooks parse code in a pipeline of data manipulation or visualization and then build it back up incrementally.  Each of the a sequence of steps can be examined as needed by the viewer. Visual superimposition of new code atop previous code and new output on previous output makes it easy to identify how each code change triggers changes in output. Currently, the implementation is designed to handle *R*, a popular statistical computing language.   
+
+Essentially, flipbooks seek to minimizing guesswork about how code input and its output relate in settings where a chain of data manipulations or visualization modifications are made.  As such flipbooks hold much promise as communication, educational, and reference medium. 
 
 Click once in the box the below; then use the right and left arrow to "flip" through the book to see how to make an animated "racing" bar chart of the population size of the most populous countries over time.   
+
 
 ```{r}
 knitr::include_url("https://evamaerey.github.io/little_flipbooks_library/racing_bars/racing_barcharts.html#1")
@@ -33,15 +38,19 @@ knitr::include_url("https://evamaerey.github.io/little_flipbooks_library/racing_
 
 ## Origins
 
-In mid 2018 Garrick Aden-Buie, a data scientist at the Moffitt Cancer Center, created and debuted a side-by-side format for code and figure output in the slide-show tool, Xaringan, an RMarkdown tool.  He demonstrated in incremental steps how someone might build up a plot using the popular R Stats package ggplot2.  In August 2018, I emulated this work, but with an entirely sequential and more incremental workflow that I call "slow ggplotting".  In September, Emi Tanaka, a Lecturer in Statistics at the University of Sydney, implemented a similar sequential workflow demonstration, that was partially automated.  
+In mid 2018 Garrick Aden-Buie, a data scientist at the Moffitt Cancer Center, created and debuted a side-by-side format for code and figure output in the slide-show tool, Xaringan, an RMarkdown tool.  He demonstrated in incremental steps how someone might build up a plot using the popular R visualization package ggplot2.  In August 2018, I emulated this work, but using a code style I developed which I called "slow ggplotting", which works entirely sequentially and more incrementally than the typical workflow.  In September, Emi Tanaka, a Lecturer in Statistics at the University of Sydney, implemented a similar sequential workflow demonstration, that was partially automated.  
 
 I approached Garrick and Emi in October about working together to create a "flipbook" of exemplary data visualizations.  We soon had a fully automated framework to parse code, and present its reconstruction along with associated output!  
 
 The code designed to parse and reconstruct code was then tested in small projects and refined.  Then I created a flipbook of a sizable collection of plots that I had coded over about about a year and a half in learning ggplot.  After rewriting this code in a "slow" ggplot style, and providing written description to introduce the plots, I publicized the work in February, 2019; the flipbook was met an enthusiastic reception.  
 
-Since then, a number of changes have been made to the foundational code to improve the tool and to enhance its usefulness. 
+Since then, I've taken the development lead in making a number of changes to the foundational code to improve the tool and to enhance its usefulness. 
 
 
+<!-- - [x] Adding more "connector" operators for pausing code (%>%, ->, %+%) to enable presentation beyond data visualization -->
+<!-- - [x] Allowing code wrapping (breaks occur not necessarily at the end of lines) -->
+<!-- - [x] Determining partial code completeness based on paretheses balancing -->
+<!-- - [x] Using code parser rather than regular expressions to identify role of text segments -->
 
 <!-- https://www.garrickadenbuie.com/blog/decouple-code-and-output-in-xaringan-slides/ -->
 <!-- https://emitanaka.rbind.io/post/knitr-knitr-code/ -->
@@ -75,7 +84,7 @@ Since then, a number of changes have been made to the foundational code to impro
 
 ### Code/output demonstration
 
-The big debut of the flipbook technique was unveiling in its application to a substantial collection of data visualization code: [the ggplot flipbook](https://evamaerey.github.io/ggplot_flipbook/ggplot_flipbook_xaringan.html){target="_blank"} in February of 2019.  Shortly thereafter, the reveal code was extended to handle data manipulation pipelines which allowed for the creation of [The Tidyverse in Action](https://evamaerey.github.io/tidyverse_in_action/tidyverse_in_action.html){target="_blank"}.   
+The big debut of the flipbook technique was unveiling in its application to a substantial collection of my data visualization code: [the ggplot flipbook](https://evamaerey.github.io/ggplot_flipbook/ggplot_flipbook_xaringan.html){target="_blank"} in February of 2019.  Shortly thereafter, the reveal code was extended to handle data manipulation pipelines which allowed for the creation of [The Tidyverse in Action](https://evamaerey.github.io/tidyverse_in_action/tidyverse_in_action.html){target="_blank"}.   
 
 Since then flipbook tool has been applied in explaining how to create visualizations important to statistical pedagogy, as in [The Galton Board flipbook](https://evamaerey.github.io/little_flipbooks_library/galton_board/galton_board.html){target="_blank"}
 ; political decision rules as in [D’Hondt/Jefferson Allocation](https://evamaerey.github.io/little_flipbooks_library/dhondt_jefferson_allocation/dhondt_jefferson_allocation){target="_blank"}; and custom plot types, as in [a racing barchart](https://evamaerey.github.io/little_flipbooks_library/racing_bars/racing_barcharts.html){target="_blank"}.
@@ -103,15 +112,15 @@ Given the third party success with the current code, we're confident that an R p
 
 ### Theoretical description
 
-I'm currently working on a manuscript thinking about flipbooks from a theoretical perspective including a discussion of cognition, describing the format and our particular implementation, as well as articulating its merits. 
+I'm currently working on a manuscript thinking about flipbooks from a theoretical perspective, describing the format and our particular implementation, as well as articulating its merits. 
 
-### Extension to non sequential code
+### Extension to non-sequential code
 
-Sequentially revealing code is the current implementation of flipbooks. However, there are certainly circumstances in which it would make more sense to reveal things out of order to better communicate about code input and subsequent output behavior.  Tackling non sequential reveal is therefore on the to do list.   
+Sequentially revealing code is the current implementation of flipbooks. However, there are certainly circumstances in which it would make more sense to reveal things out of order to better communicate about code input and subsequent output behavior.  Tackling non-sequential reveal is therefore on the to do-list.   
 
 ## Reception
 
-The feedback on the flipbook format has been tremendously encouraging, and a big motivation to keep working on this project.  The flipbook was a [top story on Hacker News](https://news.ycombinator.com/item?id=19356354) and was featured as a highlight in the [R Weekly](https://www.r-craft.org/r-news/r-weekly-2019-07-flipbook-package-building/) newsletter.
+The feedback on the flipbook format has been very encouraging and a big motivation to keep working on this project.  The flipbook was a [top story on Hacker News](https://news.ycombinator.com/item?id=19356354) and was featured as a highlight in the [R Weekly](https://www.r-craft.org/r-news/r-weekly-2019-07-flipbook-package-building/) newsletter.
 
 
 Some of the most encouraging feedback about flipbooks has come from individuals, via Twitter.  Their comments can be viewed [here](https://evamaerey.github.io/little_flipbooks_library/about/cheers_for_flipbooks).
