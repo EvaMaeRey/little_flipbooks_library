@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
   <head>
     <title>A Minimal #TidyTuesday Flipbook</title>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <meta name="author" content="Gina Reynolds, May 2019" />
     <link href="libs/remark-css-0.0.1/kunoichi.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
@@ -126,7 +126,7 @@ nobel_winners &lt;- readr::read_csv("https://raw.githubusercontent.com/rfordatas
 
 # Where we are going: 
 
-We'll create this plot.  I have **echo** set to FALSE in the code chunk options here so that you don't see the code, and **eval** to TRUE so that the plot output is produced.  The code chunk is given the name "gapminder2007", and this is used in the in apply_reveal function, which breaks down code by wrangling and plot statements. 
+We'll create this plot.  I have **echo** set to FALSE in the code chunk options here so that you don't see the code, and **eval** to TRUE so that the plot output is produced.  The code chunk is given the name "nobel", and this is used in the in apply_reveal function, which breaks down code by wrangling and plot statements. 
 
 ![](tidytuesday_minimal_example_files/figure-html/nobel-1.png)&lt;!-- --&gt;
  
@@ -136,13 +136,12 @@ We'll create this plot.  I have **echo** set to FALSE in the code chunk options 
 
 # How do we get there?
 
-In the next slide, we'll walk through the code that produces this plot, and the output along the way. We use the code `apply_reveal("gapminder2007")` in-line to access the code from the code chunk called *gapminder2007*.
+In the next slide, we'll walk through the code that produces this plot, and the output along the way. We use the code `apply_reveal("nobel")` in-line to access the code from the code chunk called *nobel*.
  
 ---
 
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -154,7 +153,7 @@ count: false
 ```
 # A tibble: 969 x 18
    prize_year category prize motivation prize_share laureate_id
-        &lt;int&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;             &lt;int&gt;
+        &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;             &lt;dbl&gt;
  1       1901 Chemist… The … "\"in rec… 1/1                 160
  2       1901 Literat… The … "\"in spe… 1/1                 569
  3       1901 Medicine The … "\"for hi… 1/1                 293
@@ -175,11 +174,10 @@ count: false
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-nobel_winners %&gt;%
+nobel_winners %&gt;% 
 * mutate(age_at_win = prize_year -
 *          lubridate::year(birth_date))
 ```
@@ -189,7 +187,7 @@ nobel_winners %&gt;%
 ```
 # A tibble: 969 x 19
    prize_year category prize motivation prize_share laureate_id
-        &lt;int&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;             &lt;int&gt;
+        &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;             &lt;dbl&gt;
  1       1901 Chemist… The … "\"in rec… 1/1                 160
  2       1901 Literat… The … "\"in spe… 1/1                 569
  3       1901 Medicine The … "\"for hi… 1/1                 293
@@ -211,13 +209,12 @@ nobel_winners %&gt;%
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-nobel_winners %&gt;%
-  mutate(age_at_win = prize_year -
-           lubridate::year(birth_date)) %&gt;%
+nobel_winners %&gt;% 
+  mutate(age_at_win = prize_year - 
+           lubridate::year(birth_date)) %&gt;% 
 *ggplot()
 ```
 ]]
@@ -227,15 +224,14 @@ nobel_winners %&gt;%
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-nobel_winners %&gt;%
-  mutate(age_at_win = prize_year -
-           lubridate::year(birth_date)) %&gt;%
-ggplot() +
-* aes(x = prize_year)   # x axis
+nobel_winners %&gt;% 
+  mutate(age_at_win = prize_year - 
+           lubridate::year(birth_date)) %&gt;% 
+ggplot() + 
+* aes(x = prize_year)  # x axis
 ```
 ]]
 .column[.content[
@@ -244,16 +240,15 @@ ggplot() +
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-nobel_winners %&gt;%
-  mutate(age_at_win = prize_year -
-           lubridate::year(birth_date)) %&gt;%
-ggplot() +
-  aes(x = prize_year) +  # x axis
-* aes(y = age_at_win)   # y axis
+nobel_winners %&gt;% 
+  mutate(age_at_win = prize_year - 
+           lubridate::year(birth_date)) %&gt;% 
+ggplot() + 
+  aes(x = prize_year) + # x axis
+* aes(y = age_at_win)  # y axis
 ```
 ]]
 .column[.content[
@@ -262,16 +257,15 @@ ggplot() +
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-nobel_winners %&gt;%
-  mutate(age_at_win = prize_year -
-           lubridate::year(birth_date)) %&gt;%
-ggplot() +
-  aes(x = prize_year) +  # x axis
-  aes(y = age_at_win) +  # y axis
+nobel_winners %&gt;% 
+  mutate(age_at_win = prize_year - 
+           lubridate::year(birth_date)) %&gt;% 
+ggplot() + 
+  aes(x = prize_year) + # x axis
+  aes(y = age_at_win) + # y axis
 * geom_point()
 ```
 ]]
@@ -281,18 +275,17 @@ ggplot() +
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-nobel_winners %&gt;%
-  mutate(age_at_win = prize_year -
-           lubridate::year(birth_date)) %&gt;%
-ggplot() +
-  aes(x = prize_year) +  # x axis
-  aes(y = age_at_win) +  # y axis
-  geom_point() +
-* geom_smooth()   # loess smoothing
+nobel_winners %&gt;% 
+  mutate(age_at_win = prize_year - 
+           lubridate::year(birth_date)) %&gt;% 
+ggplot() + 
+  aes(x = prize_year) + # x axis
+  aes(y = age_at_win) + # y axis
+  geom_point() + 
+* geom_smooth()  # loess smoothing
 ```
 ]]
 .column[.content[
@@ -301,18 +294,17 @@ ggplot() +
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-nobel_winners %&gt;%
-  mutate(age_at_win = prize_year -
-           lubridate::year(birth_date)) %&gt;%
-ggplot() +
-  aes(x = prize_year) +  # x axis
-  aes(y = age_at_win) +  # y axis
-  geom_point() +
-  geom_smooth() +  # loess smoothing
+nobel_winners %&gt;% 
+  mutate(age_at_win = prize_year - 
+           lubridate::year(birth_date)) %&gt;% 
+ggplot() + 
+  aes(x = prize_year) + # x axis
+  aes(y = age_at_win) + # y axis
+  geom_point() + 
+  geom_smooth() + # loess smoothing
 * theme_minimal()
 ```
 ]]
@@ -322,19 +314,18 @@ ggplot() +
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-nobel_winners %&gt;%
-  mutate(age_at_win = prize_year -
-           lubridate::year(birth_date)) %&gt;%
-ggplot() +
-  aes(x = prize_year) +  # x axis
-  aes(y = age_at_win) +  # y axis
-  geom_point() +
-  geom_smooth() +  # loess smoothing
-  theme_minimal() +
+nobel_winners %&gt;% 
+  mutate(age_at_win = prize_year - 
+           lubridate::year(birth_date)) %&gt;% 
+ggplot() + 
+  aes(x = prize_year) + # x axis
+  aes(y = age_at_win) + # y axis
+  geom_point() + 
+  geom_smooth() + # loess smoothing
+  theme_minimal() + 
 * labs(x = "Year of prize")
 ```
 ]]
@@ -344,20 +335,19 @@ ggplot() +
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-nobel_winners %&gt;%
-  mutate(age_at_win = prize_year -
-           lubridate::year(birth_date)) %&gt;%
-ggplot() +
-  aes(x = prize_year) +  # x axis
-  aes(y = age_at_win) +  # y axis
-  geom_point() +
-  geom_smooth() +  # loess smoothing
-  theme_minimal() +
-  labs(x = "Year of prize") +
+nobel_winners %&gt;% 
+  mutate(age_at_win = prize_year - 
+           lubridate::year(birth_date)) %&gt;% 
+ggplot() + 
+  aes(x = prize_year) + # x axis
+  aes(y = age_at_win) + # y axis
+  geom_point() + 
+  geom_smooth() + # loess smoothing
+  theme_minimal() + 
+  labs(x = "Year of prize") + 
 * labs(y = "Age at Win")
 ```
 ]]
@@ -367,21 +357,20 @@ ggplot() +
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-nobel_winners %&gt;%
-  mutate(age_at_win = prize_year -
-           lubridate::year(birth_date)) %&gt;%
-ggplot() +
-  aes(x = prize_year) +  # x axis
-  aes(y = age_at_win) +  # y axis
-  geom_point() +
-  geom_smooth() +  # loess smoothing
-  theme_minimal() +
-  labs(x = "Year of prize") +
-  labs(y = "Age at Win") +
+nobel_winners %&gt;% 
+  mutate(age_at_win = prize_year - 
+           lubridate::year(birth_date)) %&gt;% 
+ggplot() + 
+  aes(x = prize_year) + # x axis
+  aes(y = age_at_win) + # y axis
+  geom_point() + 
+  geom_smooth() + # loess smoothing
+  theme_minimal() + 
+  labs(x = "Year of prize") + 
+  labs(y = "Age at Win") + 
 * labs(caption = "Vis: Gina Reynolds for TidyTuesday")
 ```
 ]]
@@ -391,22 +380,21 @@ ggplot() +
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-nobel_winners %&gt;%
-  mutate(age_at_win = prize_year -
-           lubridate::year(birth_date)) %&gt;%
-ggplot() +
-  aes(x = prize_year) +  # x axis
-  aes(y = age_at_win) +  # y axis
-  geom_point() +
-  geom_smooth() +  # loess smoothing
-  theme_minimal() +
-  labs(x = "Year of prize") +
-  labs(y = "Age at Win") +
-  labs(caption = "Vis: Gina Reynolds for TidyTuesday") +
+nobel_winners %&gt;% 
+  mutate(age_at_win = prize_year - 
+           lubridate::year(birth_date)) %&gt;% 
+ggplot() + 
+  aes(x = prize_year) + # x axis
+  aes(y = age_at_win) + # y axis
+  geom_point() + 
+  geom_smooth() + # loess smoothing
+  theme_minimal() + 
+  labs(x = "Year of prize") + 
+  labs(y = "Age at Win") + 
+  labs(caption = "Vis: Gina Reynolds for TidyTuesday") + 
 * labs(title = "Nobel Prize award year vs. age of winner")
 ```
 ]]
@@ -416,23 +404,22 @@ ggplot() +
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-nobel_winners %&gt;%
-  mutate(age_at_win = prize_year -
-           lubridate::year(birth_date)) %&gt;%
-ggplot() +
-  aes(x = prize_year) +  # x axis
-  aes(y = age_at_win) +  # y axis
-  geom_point() +
-  geom_smooth() +  # loess smoothing
-  theme_minimal() +
-  labs(x = "Year of prize") +
-  labs(y = "Age at Win") +
-  labs(caption = "Vis: Gina Reynolds for TidyTuesday") +
-  labs(title = "Nobel Prize award year vs. age of winner") +
+nobel_winners %&gt;% 
+  mutate(age_at_win = prize_year - 
+           lubridate::year(birth_date)) %&gt;% 
+ggplot() + 
+  aes(x = prize_year) + # x axis
+  aes(y = age_at_win) + # y axis
+  geom_point() + 
+  geom_smooth() + # loess smoothing
+  theme_minimal() + 
+  labs(x = "Year of prize") + 
+  labs(y = "Age at Win") + 
+  labs(caption = "Vis: Gina Reynolds for TidyTuesday") + 
+  labs(title = "Nobel Prize award year vs. age of winner") + 
 * labs(subtitle = "Data: \"A dataset of publication records for Nobel laureates\" \nLi, Jichao; Yin, Yian; Fortunato, Santo; Wang Dashun, 2018 ")
 ```
 ]]
@@ -456,7 +443,6 @@ If you'd like, you can also save your manipulated data and then plot, using the 
 
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -468,7 +454,7 @@ count: false
 ```
 # A tibble: 969 x 18
    prize_year category prize motivation prize_share laureate_id
-        &lt;int&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;             &lt;int&gt;
+        &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;             &lt;dbl&gt;
  1       1901 Chemist… The … "\"in rec… 1/1                 160
  2       1901 Literat… The … "\"in spe… 1/1                 569
  3       1901 Medicine The … "\"for hi… 1/1                 293
@@ -489,11 +475,10 @@ count: false
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-nobel_winners %&gt;%
+nobel_winners %&gt;% 
 * mutate(age_at_win = prize_year -
 *          lubridate::year(birth_date))
 ```
@@ -503,7 +488,7 @@ nobel_winners %&gt;%
 ```
 # A tibble: 969 x 19
    prize_year category prize motivation prize_share laureate_id
-        &lt;int&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;             &lt;int&gt;
+        &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;             &lt;dbl&gt;
  1       1901 Chemist… The … "\"in rec… 1/1                 160
  2       1901 Literat… The … "\"in spe… 1/1                 569
  3       1901 Medicine The … "\"for hi… 1/1                 293
@@ -525,13 +510,12 @@ nobel_winners %&gt;%
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-nobel_winners %&gt;%
-  mutate(age_at_win = prize_year -
-           lubridate::year(birth_date)) -&gt;
+nobel_winners %&gt;% 
+  mutate(age_at_win = prize_year - 
+           lubridate::year(birth_date)) -&gt; 
 * nobel_winners_w_age
 ```
 ]]
@@ -541,20 +525,19 @@ nobel_winners %&gt;%
 
 ---
 
-# Plotting the transformed data
+# Plotting the transformed data (and *not* revealing your plot in advance -- *just* showing the build).
 
-Now you can use the transformed data to start the plot.
+Now you can use the transformed data to start the plot.  
 
----
-
-![](tidytuesday_minimal_example_files/figure-html/plot_nobel_again-1.png)&lt;!-- --&gt;
-
+Note that you also might prefer a behavior where you don't show a preview of the finished plot in advance.  I show an example of this below. I don't evaluate the code chunk (i.e. I've set eval to FALSE) and I don't echo it (i.e. echo is set to false). This means that the code chunk itself won't yeild any output (code or plot) to be put on a slide.  This means that I don't need to use the dashes, \-\-\- to separate the code chunk from the `apply_reveal()` statement, which differs from previous set-ups where a slide separator directly preceded the `apply_reveal()` call. 
 
 ---
+
+
+
 
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
@@ -567,12 +550,11 @@ count: false
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-ggplot(data = nobel_winners_w_age) +
-* aes(x = prize_year)   # x axis
+ggplot(data = nobel_winners_w_age) + 
+* aes(x = prize_year)  # x axis
 ```
 ]]
 .column[.content[
@@ -581,13 +563,12 @@ ggplot(data = nobel_winners_w_age) +
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-ggplot(data = nobel_winners_w_age) +
-  aes(x = prize_year) +  # x axis
-* aes(y = age_at_win)   # y axis
+ggplot(data = nobel_winners_w_age) + 
+  aes(x = prize_year) + # x axis
+* aes(y = age_at_win)  # y axis
 ```
 ]]
 .column[.content[
@@ -596,13 +577,12 @@ ggplot(data = nobel_winners_w_age) +
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-ggplot(data = nobel_winners_w_age) +
-  aes(x = prize_year) +  # x axis
-  aes(y = age_at_win) +  # y axis
+ggplot(data = nobel_winners_w_age) + 
+  aes(x = prize_year) + # x axis
+  aes(y = age_at_win) + # y axis
 * geom_point()
 ```
 ]]
@@ -612,15 +592,14 @@ ggplot(data = nobel_winners_w_age) +
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-ggplot(data = nobel_winners_w_age) +
-  aes(x = prize_year) +  # x axis
-  aes(y = age_at_win) +  # y axis
-  geom_point() +
-* geom_smooth()   # loess smoothing
+ggplot(data = nobel_winners_w_age) + 
+  aes(x = prize_year) + # x axis
+  aes(y = age_at_win) + # y axis
+  geom_point() + 
+* geom_smooth()  # loess smoothing
 ```
 ]]
 .column[.content[
@@ -629,15 +608,14 @@ ggplot(data = nobel_winners_w_age) +
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-ggplot(data = nobel_winners_w_age) +
-  aes(x = prize_year) +  # x axis
-  aes(y = age_at_win) +  # y axis
-  geom_point() +
-  geom_smooth() +  # loess smoothing
+ggplot(data = nobel_winners_w_age) + 
+  aes(x = prize_year) + # x axis
+  aes(y = age_at_win) + # y axis
+  geom_point() + 
+  geom_smooth() + # loess smoothing
 * theme_minimal()
 ```
 ]]
@@ -647,16 +625,15 @@ ggplot(data = nobel_winners_w_age) +
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-ggplot(data = nobel_winners_w_age) +
-  aes(x = prize_year) +  # x axis
-  aes(y = age_at_win) +  # y axis
-  geom_point() +
-  geom_smooth() +  # loess smoothing
-  theme_minimal() +
+ggplot(data = nobel_winners_w_age) + 
+  aes(x = prize_year) + # x axis
+  aes(y = age_at_win) + # y axis
+  geom_point() + 
+  geom_smooth() + # loess smoothing
+  theme_minimal() + 
 * labs(x = "Year of prize")
 ```
 ]]
@@ -666,17 +643,16 @@ ggplot(data = nobel_winners_w_age) +
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-ggplot(data = nobel_winners_w_age) +
-  aes(x = prize_year) +  # x axis
-  aes(y = age_at_win) +  # y axis
-  geom_point() +
-  geom_smooth() +  # loess smoothing
-  theme_minimal() +
-  labs(x = "Year of prize") +
+ggplot(data = nobel_winners_w_age) + 
+  aes(x = prize_year) + # x axis
+  aes(y = age_at_win) + # y axis
+  geom_point() + 
+  geom_smooth() + # loess smoothing
+  theme_minimal() + 
+  labs(x = "Year of prize") + 
 * labs(y = "Age at Win")
 ```
 ]]
@@ -686,18 +662,17 @@ ggplot(data = nobel_winners_w_age) +
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-ggplot(data = nobel_winners_w_age) +
-  aes(x = prize_year) +  # x axis
-  aes(y = age_at_win) +  # y axis
-  geom_point() +
-  geom_smooth() +  # loess smoothing
-  theme_minimal() +
-  labs(x = "Year of prize") +
-  labs(y = "Age at Win") +
+ggplot(data = nobel_winners_w_age) + 
+  aes(x = prize_year) + # x axis
+  aes(y = age_at_win) + # y axis
+  geom_point() + 
+  geom_smooth() + # loess smoothing
+  theme_minimal() + 
+  labs(x = "Year of prize") + 
+  labs(y = "Age at Win") + 
 * labs(x = "Year of prize")
 ```
 ]]
@@ -707,19 +682,18 @@ ggplot(data = nobel_winners_w_age) +
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-ggplot(data = nobel_winners_w_age) +
-  aes(x = prize_year) +  # x axis
-  aes(y = age_at_win) +  # y axis
-  geom_point() +
-  geom_smooth() +  # loess smoothing
-  theme_minimal() +
-  labs(x = "Year of prize") +
-  labs(y = "Age at Win") +
-  labs(x = "Year of prize") +
+ggplot(data = nobel_winners_w_age) + 
+  aes(x = prize_year) + # x axis
+  aes(y = age_at_win) + # y axis
+  geom_point() + 
+  geom_smooth() + # loess smoothing
+  theme_minimal() + 
+  labs(x = "Year of prize") + 
+  labs(y = "Age at Win") + 
+  labs(x = "Year of prize") + 
 * labs(y = "Age at Win")
 ```
 ]]
@@ -729,20 +703,19 @@ ggplot(data = nobel_winners_w_age) +
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-ggplot(data = nobel_winners_w_age) +
-  aes(x = prize_year) +  # x axis
-  aes(y = age_at_win) +  # y axis
-  geom_point() +
-  geom_smooth() +  # loess smoothing
-  theme_minimal() +
-  labs(x = "Year of prize") +
-  labs(y = "Age at Win") +
-  labs(x = "Year of prize") +
-  labs(y = "Age at Win") +
+ggplot(data = nobel_winners_w_age) + 
+  aes(x = prize_year) + # x axis
+  aes(y = age_at_win) + # y axis
+  geom_point() + 
+  geom_smooth() + # loess smoothing
+  theme_minimal() + 
+  labs(x = "Year of prize") + 
+  labs(y = "Age at Win") + 
+  labs(x = "Year of prize") + 
+  labs(y = "Age at Win") + 
 * labs(caption = "Vis: Gina Reynolds for TidyTuesday")
 ```
 ]]
@@ -752,21 +725,20 @@ ggplot(data = nobel_winners_w_age) +
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-ggplot(data = nobel_winners_w_age) +
-  aes(x = prize_year) +  # x axis
-  aes(y = age_at_win) +  # y axis
-  geom_point() +
-  geom_smooth() +  # loess smoothing
-  theme_minimal() +
-  labs(x = "Year of prize") +
-  labs(y = "Age at Win") +
-  labs(x = "Year of prize") +
-  labs(y = "Age at Win") +
-  labs(caption = "Vis: Gina Reynolds for TidyTuesday") +
+ggplot(data = nobel_winners_w_age) + 
+  aes(x = prize_year) + # x axis
+  aes(y = age_at_win) + # y axis
+  geom_point() + 
+  geom_smooth() + # loess smoothing
+  theme_minimal() + 
+  labs(x = "Year of prize") + 
+  labs(y = "Age at Win") + 
+  labs(x = "Year of prize") + 
+  labs(y = "Age at Win") + 
+  labs(caption = "Vis: Gina Reynolds for TidyTuesday") + 
 * labs(title = "Nobel Prize award year vs. age of winner")
 ```
 ]]
@@ -776,22 +748,21 @@ ggplot(data = nobel_winners_w_age) +
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-ggplot(data = nobel_winners_w_age) +
-  aes(x = prize_year) +  # x axis
-  aes(y = age_at_win) +  # y axis
-  geom_point() +
-  geom_smooth() +  # loess smoothing
-  theme_minimal() +
-  labs(x = "Year of prize") +
-  labs(y = "Age at Win") +
-  labs(x = "Year of prize") +
-  labs(y = "Age at Win") +
-  labs(caption = "Vis: Gina Reynolds for TidyTuesday") +
-  labs(title = "Nobel Prize award year vs. age of winner") +
+ggplot(data = nobel_winners_w_age) + 
+  aes(x = prize_year) + # x axis
+  aes(y = age_at_win) + # y axis
+  geom_point() + 
+  geom_smooth() + # loess smoothing
+  theme_minimal() + 
+  labs(x = "Year of prize") + 
+  labs(y = "Age at Win") + 
+  labs(x = "Year of prize") + 
+  labs(y = "Age at Win") + 
+  labs(caption = "Vis: Gina Reynolds for TidyTuesday") + 
+  labs(title = "Nobel Prize award year vs. age of winner") + 
 * labs(subtitle = "Data: \"A dataset of publication records for Nobel laureates\" \nLi, Jichao; Yin, Yian; Fortunato, Santo; Wang Dashun, 2018 ")
 ```
 ]]
@@ -805,6 +776,7 @@ ggplot(data = nobel_winners_w_age) +
 .remark-code{line-height: 1.5; font-size: 80%}
 &lt;/style&gt;
     </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
 "ratio": "16:10",
@@ -815,16 +787,57 @@ ggplot(data = nobel_winners_w_age) +
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
 });
-(function() {
-  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
   if (!r) return;
   s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
   d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
 })();</script>
 
 <script>
 (function() {
-  var i, text, code, codes = document.getElementsByTagName('code');
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
   for (i = 0; i < codes.length;) {
     code = codes[i];
     if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
@@ -838,7 +851,8 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     }
     i++;
   }
-})();
+};
+slideshow._releaseMath(document);
 </script>
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

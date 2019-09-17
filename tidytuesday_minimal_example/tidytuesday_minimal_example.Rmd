@@ -120,7 +120,7 @@ nobel_winners <- readr::read_csv("https://raw.githubusercontent.com/rfordatascie
 
 # Where we are going: 
 
-We'll create this plot.  I have **echo** set to FALSE in the code chunk options here so that you don't see the code, and **eval** to TRUE so that the plot output is produced.  The code chunk is given the name "gapminder2007", and this is used in the in apply_reveal function, which breaks down code by wrangling and plot statements. 
+We'll create this plot.  I have **echo** set to FALSE in the code chunk options here so that you don't see the code, and **eval** to TRUE so that the plot output is produced.  The code chunk is given the name "nobel", and this is used in the in apply_reveal function, which breaks down code by wrangling and plot statements. 
 
 ```{r nobel, echo = F, eval = T, fig.height=5}
 nobel_winners %>% 
@@ -145,7 +145,7 @@ ggplot() +
 
 # How do we get there?
 
-In the next slide, we'll walk through the code that produces this plot, and the output along the way. We use the code `apply_reveal("gapminder2007")` in-line to access the code from the code chunk called *gapminder2007*.
+In the next slide, we'll walk through the code that produces this plot, and the output along the way. We use the code `apply_reveal("nobel")` in-line to access the code from the code chunk called *nobel*.
  
 ---
 
@@ -174,13 +174,15 @@ nobel_winners %>%
 
 ---
 
-# Plotting the transformed data
+# Plotting the transformed data (and *not* revealing your plot in advance -- *just* showing the build).
 
-Now you can use the transformed data to start the plot.
+Now you can use the transformed data to start the plot.  
+
+Note that you also might prefer a behavior where you don't show a preview of the finished plot in advance.  I show an example of this below. I don't evaluate the code chunk (i.e. I've set eval to FALSE) and I don't echo it (i.e. echo is set to false). This means that the code chunk itself won't yeild any output (code or plot) to be put on a slide.  This means that I don't need to use the dashes, \-\-\- to separate the code chunk from the `apply_reveal()` statement, which differs from previous set-ups where a slide separator directly preceded the `apply_reveal()` call. 
 
 ---
 
-```{r plot_nobel_again, echo = F, eval = T, fig.height=5}
+```{r plot_nobel_again, echo = F, eval = FALSE, fig.height=5}
 ggplot(data = nobel_winners_w_age) + 
   aes(x = prize_year) +  # x axis 
   aes(y = age_at_win) +  # y axis
@@ -196,8 +198,6 @@ ggplot(data = nobel_winners_w_age) +
   labs(subtitle = "Data: \"A dataset of publication records for Nobel laureates\" \nLi, Jichao; Yin, Yian; Fortunato, Santo; Wang Dashun, 2018 ")
 ```
 
-
----
 
 `r apply_reveal("plot_nobel_again")`
 
