@@ -1658,7 +1658,7 @@ summary {
 <!-- Visual superimposition of new code on previous code and new output on previous output yields a ["blink comparator"](https://en.wikipedia.org/wiki/Blink_comparator){target="_blank"} type experience, and incrementalism assists viewers in linking specific components of code with resultant behavior.  Flipbooks are promising as communication, educational, and reference medium. -->
 <!-- Click on the example below. Then you should be able to "flip" (left and right arrows) through the book to see how to make an animated racing bar chart of population size in the most populous countries over time.   -->
 <p>The flipbook is a new tool for dynamically presenting code along side output.</p>
-<p>Good examples facilitate accomplishing new or unpracticed tasks in a programmatic workflow. Tools for communicating examples have improved in recent years. Especially embraced are “dynamic document” tools that show code and its resultant output immediately thereafter — the case of <code>Jupytr</code> notebooks and <code>Rmarkdown</code> documents. But creators using these tools often must choose between big-picture or narrow-focus demonstration; creators tend to either demo a complete code pipeline that accomplishes a realistic task or instead demonstrate a minimal example which makes clear the behavior of a particular function, but how it might be used in a larger project isn’t clear. Flipbooks help address this problem, allowing the creator to present a full demonstration which accomplishes a real task, and gives the viewer the opportunity to focus on unfamiliar steps. A set of flipbook building functions parse code in a data manipulation or visualization pipeline and then build it back up incrementally. Aligned superimposition of new code and output atop previous code and output makes it easy to identify how each code change triggers changes in output.</p>
+<p>Good examples help guide users accomplish unfamiliar tasks with code. Tools for communicating examples have improved in recent years. Especially embraced are “dynamic document” tools that show code and resultant output immediately thereafter — the case of <code>Jupytr</code> notebooks and <code>Rmarkdown</code> documents. But creators using these tools often must choose between big-picture or narrow-focus demonstration; creators tend to either demo a complete code pipeline that accomplishes a realistic task or instead demonstrate a minimal example which clarifies the behavior of a particular function, but how it might be used in a larger project isn’t clear. Flipbooks help address this problem, allowing the creator to present a full demonstration which accomplishes a real task, and gives the viewer the opportunity to focus on unfamiliar steps. The flipbook building tools parse code in a data manipulation or visualization pipeline and then build it back up incrementally. Aligned superimposition of new code and output atop previous code and output makes it easy to identify how each code change triggers changes in output.</p>
 <p>Essentially, <em>flipbooks</em> seek to minimizing guesswork about how code input and its output relate. As such flipbooks hold much promise as an educational, communication, and reference medium.</p>
 <!-- Scholars using a reproducible workflow in which they document each step of data manipulation and analysis in code rather than using software with a graphical user interface.   Accomplishing new or unpracticed tasks when using such a programmatic workflow is less burdensome with the availability of good examples.  Tools for communicating examples have improved in recent years.  Especially embraced are tools that show code and its resultant output immediately thereafter --- the case of `Jupytr` notebooks and `Rmarkdown` documents.   Nevertheless, creators  using these tools must choose between big-picture or narrow-focus demonstration; creators tend to either demo a complete code pipeline that accomplishes a realistic task or instead demonstrate a minimal example which makes clear the behavior of a particular function, but how it might be used in a larger project isn't clear. -->
 <!-- Flipbooks help address this problem, allowing the creator to present a full demonstration which accomplishes a task, and gives the *user* the opportunity to focus on unfamiliar steps of the work pipeline. Flipbooks parse code in a pipeline of data manipulation or visualization and then build it back up incrementally.  Each of the a sequence of steps can be examined as needed by the viewer. Visual superimposition of new code and output atop previous code and output makes it easy to identify how each code change triggers changes in output. Currently, the implementation is designed to handle the *R* programming language, which is popular in the field of statistical analysis.    -->
@@ -1667,9 +1667,8 @@ summary {
 <p>“Flipbooks” are a new tool that present side-by-side, aligned, incremental code-output evolution via automated code parsing and reconstruction.</p>
 <p>Aligned superimposition of new code on previous code along side the new output on previous output means that readers identify differences easily via motion detection. This contrast with comparisons where there is spatial displacement - which imposes a greater cognitive burden.</p>
 </div>
-</div>
-<div id="example" class="section level1">
-<h1>Example</h1>
+<div id="example" class="section level3">
+<h3>Example</h3>
 <p>Click once in the box the below; then use the right and left arrow to “flip” through the book to see how to make an animated “racing” bar chart of the population size of the most populous countries over time.</p>
 <!-- --- -->
 <!-- Submission Title -->
@@ -1682,6 +1681,8 @@ summary {
 <!-- --- -->
 <iframe src="https://evamaerey.github.io/little_flipbooks_library/racing_bars/racing_barcharts.html#1" width="672" height="400px">
 </iframe>
+</div>
+</div>
 <div id="origins" class="section level2">
 <h2>Origins</h2>
 <p>In mid 2018 Garrick Aden-Buie, a data scientist at the Moffitt Cancer Center, created and debuted a side-by-side format for code and figure output in the slide-show tool, Xaringan, an RMarkdown tool. He demonstrated in incremental steps how someone might build up a plot using the popular R visualization package ggplot2. In August 2018, I emulated this work, but using a code style I developed which I called “slow ggplotting”, which is entirely sequential and is even more incrementally than typical workflows. In September, Emi Tanaka, a Lecturer in Statistics at the University of Sydney, implemented a similar sequential workflow demonstration, that was partially automated.</p>
@@ -1751,7 +1752,6 @@ summary {
 <!-- knitr::include_url("https://evamaerey.github.io/ggplot2_grammar_guide/ggplot2_grammar_guide") -->
 <!-- knitr::include_url("https://evamaerey.github.io/tidytuesday_walk_through/tidytuesday_highlights.html") -->
 <!-- ``` -->
-</div>
 </div>
 
 
