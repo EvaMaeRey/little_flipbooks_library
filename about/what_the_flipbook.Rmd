@@ -44,25 +44,30 @@ knitr::opts_chunk$set(cache = T, echo = F, warning = F, message = F, cache = T, 
 <!-- Click on the example below. Then you should be able to "flip" (left and right arrows) through the book to see how to make an animated racing bar chart of population size in the most populous countries over time.   -->
 
 
-The flipbook is a new tool for dynamically presenting code along side output.  
+<!-- The flipbook is a new tool for dynamically presenting code alongside output.   -->
 
-Good examples help guide users accomplish unfamiliar tasks with code. Tools for communicating examples have improved in recent years. Especially embraced are "dynamic document" tools that show code and resultant output immediately thereafter --- the case of `Jupytr` notebooks and `Rmarkdown` documents. But creators using these tools often must choose between big-picture or narrow-focus demonstration; creators tend to either demo a complete code pipeline that accomplishes a realistic task or instead demonstrate a minimal example which clarifies the behavior of a particular function, but how it might be used in a larger project isn't clear. Flipbooks help address this problem, allowing the creator to present a full demonstration which accomplishes a real task, and gives the viewer the opportunity to focus on unfamiliar steps. The flipbook building tools parse code in a data manipulation or visualization pipeline and then build it back up incrementally. Aligned superimposition of new code and output atop previous code and output makes it easy to identify how each code change triggers changes in output. 
+"Flipbooks" are tools that present side-by-side, aligned, incremental code-output evolution via automated code parsing and reconstruction.
 
-Essentially, *flipbooks* seek to minimizing guesswork about how code input and its output relate.  As such flipbooks hold much promise as an educational, communication, and reference medium. 
+Good examples of code behavior help programmers accomplish unfamiliar tasks. Tools for communicating code behavior have improved in recent years.  "Dynamic document" tools show chunks of code and its resultant output, like a graph or a data table, immediately thereafter. But creators using these tools often must choose between big-picture or narrow-focus demonstration. Creators tend to either demonstrate a complete code pipeline that accomplishes a realistic task or instead demonstrate a minimal example which clarifies the behavior of a particular function, but how it might be used in a larger project isn't clear. Flipbooks help address this problem, allowing creators to build a real work product and consumer to walk incrementally through a code pipeline, focusing on any unfamiliar steps. 
+
+
+<!-- The flipbook building tools parse code in a data manipulation or visualization pipeline and then build it back up incrementally. Aligned superimposition of new code and output atop previous code and output makes it easy to identify how each code addition triggers changes in output.  -->
+
+Essentially, *flipbooks* seek to minimize guesswork about how code input and its output relate.  As such flipbooks hold much promise as an educational, communication, and reference medium. 
 
 <!-- Scholars using a reproducible workflow in which they document each step of data manipulation and analysis in code rather than using software with a graphical user interface.   Accomplishing new or unpracticed tasks when using such a programmatic workflow is less burdensome with the availability of good examples.  Tools for communicating examples have improved in recent years.  Especially embraced are tools that show code and its resultant output immediately thereafter --- the case of `Jupytr` notebooks and `Rmarkdown` documents.   Nevertheless, creators  using these tools must choose between big-picture or narrow-focus demonstration; creators tend to either demo a complete code pipeline that accomplishes a realistic task or instead demonstrate a minimal example which makes clear the behavior of a particular function, but how it might be used in a larger project isn't clear. -->
 
 <!-- Flipbooks help address this problem, allowing the creator to present a full demonstration which accomplishes a task, and gives the *user* the opportunity to focus on unfamiliar steps of the work pipeline. Flipbooks parse code in a pipeline of data manipulation or visualization and then build it back up incrementally.  Each of the a sequence of steps can be examined as needed by the viewer. Visual superimposition of new code and output atop previous code and output makes it easy to identify how each code change triggers changes in output. Currently, the implementation is designed to handle the *R* programming language, which is popular in the field of statistical analysis.    -->
 
-### In technical terms?
+<!-- ### In technical terms? -->
 
-"Flipbooks" are a new tool that present side-by-side, aligned, incremental code-output evolution via automated code parsing and reconstruction.
 
-Aligned superimposition of new code on previous code along side the new output on previous output means that readers identify differences easily via motion detection.  This contrast with comparisons where there is spatial displacement - which imposes a greater cognitive burden.
+
+<!-- Aligned superimposition of new code on previous code alongside the new output on previous output means that readers identify differences easily via motion detection.  This contrast with comparisons where there is spatial displacement - which imposes a greater cognitive burden. -->
 
 ### Example
 
-Click once in the box the below; then use the right and left arrow to "flip" through the book to see how to make an animated "racing" bar chart of the population size of the most populous countries over time.   
+Click once in the box the below to initiate the session; then use the right and left arrow to "flip" through the book to see how to make an animated "racing" bar chart of the population size of the most populous countries over time.   
 
 
 
