@@ -60,7 +60,7 @@ chunk_as_text <- function(chunk_name){
 
 
 # example
-parse_code(code = local_code)
+# parse_code(code = local_code)
 
 
 parse_chunk <- function(chunk_name){
@@ -97,8 +97,8 @@ reveal_code <- function(code, upto = 3, highlight = 1:3) {
 }
 
 # example
-reveal_code(code = local_code)
-reveal_code(code = local_code, 5, 3:5)
+# reveal_code(code = local_code)
+# reveal_code(code = local_code, 5, 3:5)
 
 
 reveal_chunk <- function(chunk_name, upto = 3, highlight = 1:3){
@@ -129,7 +129,7 @@ for (i in 1:length(breaks)) {
 }
 
 # example
-calc_highlight(c(1,5,7,10))
+# calc_highlight(c(1,5,7,10))
 
 
 
@@ -236,7 +236,7 @@ build_partial_code_plot <- function(code, upto = 8, highlight = 1:8){
 }
 
 # example 
-print(build_partial_code_plot(code = ggplot_local_code, upto = 8)[[1]])
+# print(build_partial_code_plot(code = ggplot_local_code, upto = 8)[[1]])
 
 
 prep_code_to_plot_as_text <- function(code, upto = 3, highlight = 1:3){
@@ -253,7 +253,7 @@ prep_code_to_plot_as_text <- function(code, upto = 3, highlight = 1:3){
 }
 
 # example
-prep_code_to_plot_as_text(ggplot_local_code)
+# prep_code_to_plot_as_text(ggplot_local_code)
 
 
 build_partial_code_text_plot <- function(code, 
@@ -287,11 +287,11 @@ build_partial_code_text_plot <- function(code,
 }
 
 # example
-build_partial_code_text_plot(code = ggplot_local_code, 
-                             upto = 8, 
-                             highlight = 1:8, 
-                             highlight_color = "plum4", 
-                             font_size = 4)
+# build_partial_code_text_plot(code = ggplot_local_code, 
+#                              upto = 8, 
+#                              highlight = 1:8, 
+#                              highlight_color = "plum4", 
+#                              font_size = 4)
 
 
 # putting plots together
@@ -328,8 +328,8 @@ bind_and_title_code_output_pngs <-
 
 
 # example
-bind_and_title_code_output_pngs(code = local_code, upto = 3, highlight = 1:3) -> g ; g
-bind_and_title_code_output_pngs(code = local_code) -> g ; g
+# bind_and_title_code_output_pngs(code = local_code, upto = 3, highlight = 1:3) -> g ; g
+# bind_and_title_code_output_pngs(code = local_code) -> g ; g
 
 
 create_frames <- function(code, name = "mini",  flipbook_dir = paste0("temp_", name), 
@@ -361,7 +361,7 @@ create_frames <- function(code, name = "mini",  flipbook_dir = paste0("temp_", n
 
 
 # example
-create_frames(code = ggplot_local_code)
+# create_frames(code = ggplot_local_code)
 
 
 pngs_to_gif <- function(path, file_out){
@@ -382,8 +382,8 @@ pngs_to_gif <- function(path, file_out){
 }
 
 # example
-pngs_to_gif(path = "temp_mini", 
-            file_out = "temp_mini/mini.gif")
+# pngs_to_gif(path = "temp_mini", 
+#             file_out = "temp_mini/mini.gif")
 
 create_frames_original <- function(chunk_name, chunk_dir = paste0("temp_", chunk_name), 
                           user_reveal_defined = F, title = "A flipbook mini", 
