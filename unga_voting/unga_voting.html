@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>UNGA Votes</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gina Reynolds, May 2019" />
+    <link href="libs/remark-css-0.0.1/kunoichi.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# UNGA Votes
+### Gina Reynolds, May 2019
+
+---
+
+
+
+
+
+The flipbook functions are here:
+
+
+```r
+source(file = "https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/xaringan_reveal_parentheses_balanced.R")
+```
+
+
+---
+
+# Data wrangling with dplyr and tidyr
+
+---
+
+
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*library(tidyverse)
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(tidyverse)  
+*library(unvotes)
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(tidyverse)  
+library(unvotes)  
+*un_roll_calls
+```
+]]
+.column[.content[
+
+```
+# A tibble: 5,429 x 9
+    rcid session importantvote date       unres  amend  para short  descr  
+   &lt;int&gt;   &lt;dbl&gt;         &lt;dbl&gt; &lt;date&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;  
+ 1     3       1             0 1946-01-01 R/1/66     1     0 AMEND… TO ADO…
+ 2     4       1             0 1946-01-02 R/1/79     0     0 SECUR… TO ADO…
+ 3     5       1             0 1946-01-04 R/1/98     0     0 VOTIN… "TO AD…
+ 4     6       1             0 1946-01-04 R/1/1…     0     0 DECLA… TO ADO…
+ 5     7       1             0 1946-01-02 R/1/2…     1     0 GENER… "TO AD…
+ 6     8       1             0 1946-01-05 R/1/2…     1     0 ECOSO… TO ADO…
+ 7     9       1             0 1946-02-05 R/1/3…     0     0 POST-… TO OPE…
+ 8    10       1             0 1946-02-05 R/1/3…     1     1 U.N. … "TO AD…
+ 9    11       1             0 1946-02-05 R/1/3…     0     0 TRUST… TO ADO…
+10    12       1             0 1946-02-06 R/1/3…     1     1 COUNC… TO ADO…
+# … with 5,419 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(tidyverse)  
+library(unvotes)  
+un_roll_calls %&gt;%  
+* mutate(year = lubridate::year(date))
+```
+]]
+.column[.content[
+
+```
+# A tibble: 5,429 x 10
+    rcid session importantvote date       unres amend  para short descr
+   &lt;int&gt;   &lt;dbl&gt;         &lt;dbl&gt; &lt;date&gt;     &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;
+ 1     3       1             0 1946-01-01 R/1/…     1     0 AMEN… TO A…
+ 2     4       1             0 1946-01-02 R/1/…     0     0 SECU… TO A…
+ 3     5       1             0 1946-01-04 R/1/…     0     0 VOTI… "TO …
+ 4     6       1             0 1946-01-04 R/1/…     0     0 DECL… TO A…
+ 5     7       1             0 1946-01-02 R/1/…     1     0 GENE… "TO …
+ 6     8       1             0 1946-01-05 R/1/…     1     0 ECOS… TO A…
+ 7     9       1             0 1946-02-05 R/1/…     0     0 POST… TO O…
+ 8    10       1             0 1946-02-05 R/1/…     1     1 U.N.… "TO …
+ 9    11       1             0 1946-02-05 R/1/…     0     0 TRUS… TO A…
+10    12       1             0 1946-02-06 R/1/…     1     1 COUN… TO A…
+# … with 5,419 more rows, and 1 more variable: year &lt;dbl&gt;
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(tidyverse)  
+library(unvotes)  
+un_roll_calls %&gt;%  
+  mutate(year = lubridate::year(date)) %&gt;%  
+* mutate(month = lubridate::month(date))
+```
+]]
+.column[.content[
+
+```
+# A tibble: 5,429 x 11
+    rcid session importantvote date       unres amend  para short descr
+   &lt;int&gt;   &lt;dbl&gt;         &lt;dbl&gt; &lt;date&gt;     &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;
+ 1     3       1             0 1946-01-01 R/1/…     1     0 AMEN… TO A…
+ 2     4       1             0 1946-01-02 R/1/…     0     0 SECU… TO A…
+ 3     5       1             0 1946-01-04 R/1/…     0     0 VOTI… "TO …
+ 4     6       1             0 1946-01-04 R/1/…     0     0 DECL… TO A…
+ 5     7       1             0 1946-01-02 R/1/…     1     0 GENE… "TO …
+ 6     8       1             0 1946-01-05 R/1/…     1     0 ECOS… TO A…
+ 7     9       1             0 1946-02-05 R/1/…     0     0 POST… TO O…
+ 8    10       1             0 1946-02-05 R/1/…     1     1 U.N.… "TO …
+ 9    11       1             0 1946-02-05 R/1/…     0     0 TRUS… TO A…
+10    12       1             0 1946-02-06 R/1/…     1     1 COUN… TO A…
+# … with 5,419 more rows, and 2 more variables: year &lt;dbl&gt;, month &lt;dbl&gt;
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(tidyverse)  
+library(unvotes)  
+un_roll_calls %&gt;%  
+  mutate(year = lubridate::year(date)) %&gt;%  
+  mutate(month = lubridate::month(date)) %&gt;%  
+* mutate(indicator = 1)
+```
+]]
+.column[.content[
+
+```
+# A tibble: 5,429 x 12
+    rcid session importantvote date       unres amend  para short descr
+   &lt;int&gt;   &lt;dbl&gt;         &lt;dbl&gt; &lt;date&gt;     &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;
+ 1     3       1             0 1946-01-01 R/1/…     1     0 AMEN… TO A…
+ 2     4       1             0 1946-01-02 R/1/…     0     0 SECU… TO A…
+ 3     5       1             0 1946-01-04 R/1/…     0     0 VOTI… "TO …
+ 4     6       1             0 1946-01-04 R/1/…     0     0 DECL… TO A…
+ 5     7       1             0 1946-01-02 R/1/…     1     0 GENE… "TO …
+ 6     8       1             0 1946-01-05 R/1/…     1     0 ECOS… TO A…
+ 7     9       1             0 1946-02-05 R/1/…     0     0 POST… TO O…
+ 8    10       1             0 1946-02-05 R/1/…     1     1 U.N.… "TO …
+ 9    11       1             0 1946-02-05 R/1/…     0     0 TRUS… TO A…
+10    12       1             0 1946-02-06 R/1/…     1     1 COUN… TO A…
+# … with 5,419 more rows, and 3 more variables: year &lt;dbl&gt;, month &lt;dbl&gt;,
+#   indicator &lt;dbl&gt;
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(tidyverse)  
+library(unvotes)  
+un_roll_calls %&gt;%  
+  mutate(year = lubridate::year(date)) %&gt;%  
+  mutate(month = lubridate::month(date)) %&gt;%  
+  mutate(indicator = 1) %&gt;%  
+* group_by(year, month)
+```
+]]
+.column[.content[
+
+```
+# A tibble: 5,429 x 12
+# Groups:   year, month [288]
+    rcid session importantvote date       unres amend  para short descr
+   &lt;int&gt;   &lt;dbl&gt;         &lt;dbl&gt; &lt;date&gt;     &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;
+ 1     3       1             0 1946-01-01 R/1/…     1     0 AMEN… TO A…
+ 2     4       1             0 1946-01-02 R/1/…     0     0 SECU… TO A…
+ 3     5       1             0 1946-01-04 R/1/…     0     0 VOTI… "TO …
+ 4     6       1             0 1946-01-04 R/1/…     0     0 DECL… TO A…
+ 5     7       1             0 1946-01-02 R/1/…     1     0 GENE… "TO …
+ 6     8       1             0 1946-01-05 R/1/…     1     0 ECOS… TO A…
+ 7     9       1             0 1946-02-05 R/1/…     0     0 POST… TO O…
+ 8    10       1             0 1946-02-05 R/1/…     1     1 U.N.… "TO …
+ 9    11       1             0 1946-02-05 R/1/…     0     0 TRUS… TO A…
+10    12       1             0 1946-02-06 R/1/…     1     1 COUN… TO A…
+# … with 5,419 more rows, and 3 more variables: year &lt;dbl&gt;, month &lt;dbl&gt;,
+#   indicator &lt;dbl&gt;
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(tidyverse)  
+library(unvotes)  
+un_roll_calls %&gt;%  
+  mutate(year = lubridate::year(date)) %&gt;%  
+  mutate(month = lubridate::month(date)) %&gt;%  
+  mutate(indicator = 1) %&gt;%  
+  group_by(year, month) %&gt;%  
+* summarise(number_of_role_calls =
+*             sum(indicator, na.rm = T))
+```
+]]
+.column[.content[
+
+```
+# A tibble: 288 x 3
+# Groups:   year [69]
+    year month number_of_role_calls
+   &lt;dbl&gt; &lt;dbl&gt;                &lt;dbl&gt;
+ 1  1946     1                    6
+ 2  1946     2                   11
+ 3  1946    12                   26
+ 4  1947     5                    6
+ 5  1947     9                    1
+ 6  1947    10                    5
+ 7  1947    11                   26
+ 8  1948     5                    7
+ 9  1948     9                    2
+10  1948    10                    1
+# … with 278 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(tidyverse)  
+library(unvotes)  
+un_roll_calls %&gt;%  
+  mutate(year = lubridate::year(date)) %&gt;%  
+  mutate(month = lubridate::month(date)) %&gt;%  
+  mutate(indicator = 1) %&gt;%  
+  group_by(year, month) %&gt;%  
+  summarise(number_of_role_calls =  
+              sum(indicator, na.rm = T)) %&gt;%  
+* full_join(crossing(month = 1:12,
+*                    year = 1946:2015))
+```
+]]
+.column[.content[
+
+```
+# A tibble: 840 x 3
+# Groups:   year [70]
+    year month number_of_role_calls
+   &lt;dbl&gt; &lt;dbl&gt;                &lt;dbl&gt;
+ 1  1946     1                    6
+ 2  1946     2                   11
+ 3  1946    12                   26
+ 4  1947     5                    6
+ 5  1947     9                    1
+ 6  1947    10                    5
+ 7  1947    11                   26
+ 8  1948     5                    7
+ 9  1948     9                    2
+10  1948    10                    1
+# … with 830 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(tidyverse)  
+library(unvotes)  
+un_roll_calls %&gt;%  
+  mutate(year = lubridate::year(date)) %&gt;%  
+  mutate(month = lubridate::month(date)) %&gt;%  
+  mutate(indicator = 1) %&gt;%  
+  group_by(year, month) %&gt;%  
+  summarise(number_of_role_calls =  
+              sum(indicator, na.rm = T)) %&gt;%  
+  full_join(crossing(month = 1:12,  
+                     year = 1946:2015)) %&gt;%  
+* mutate(number_of_role_calls = replace_na(number_of_role_calls, 0))
+```
+]]
+.column[.content[
+
+```
+# A tibble: 840 x 3
+# Groups:   year [70]
+    year month number_of_role_calls
+   &lt;dbl&gt; &lt;dbl&gt;                &lt;dbl&gt;
+ 1  1946     1                    6
+ 2  1946     2                   11
+ 3  1946    12                   26
+ 4  1947     5                    6
+ 5  1947     9                    1
+ 6  1947    10                    5
+ 7  1947    11                   26
+ 8  1948     5                    7
+ 9  1948     9                    2
+10  1948    10                    1
+# … with 830 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(tidyverse)  
+library(unvotes)  
+un_roll_calls %&gt;%  
+  mutate(year = lubridate::year(date)) %&gt;%  
+  mutate(month = lubridate::month(date)) %&gt;%  
+  mutate(indicator = 1) %&gt;%  
+  group_by(year, month) %&gt;%  
+  summarise(number_of_role_calls =  
+              sum(indicator, na.rm = T)) %&gt;%  
+  full_join(crossing(month = 1:12,  
+                     year = 1946:2015)) %&gt;%  
+  mutate(number_of_role_calls = replace_na(number_of_role_calls, 0)) %&gt;%  
+* mutate(decade = str_replace(year, "\\d$", "0"))
+```
+]]
+.column[.content[
+
+```
+# A tibble: 840 x 4
+# Groups:   year [70]
+    year month number_of_role_calls decade
+   &lt;dbl&gt; &lt;dbl&gt;                &lt;dbl&gt; &lt;chr&gt; 
+ 1  1946     1                    6 1940  
+ 2  1946     2                   11 1940  
+ 3  1946    12                   26 1940  
+ 4  1947     5                    6 1940  
+ 5  1947     9                    1 1940  
+ 6  1947    10                    5 1940  
+ 7  1947    11                   26 1940  
+ 8  1948     5                    7 1940  
+ 9  1948     9                    2 1940  
+10  1948    10                    1 1940  
+# … with 830 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(tidyverse)  
+library(unvotes)  
+un_roll_calls %&gt;%  
+  mutate(year = lubridate::year(date)) %&gt;%  
+  mutate(month = lubridate::month(date)) %&gt;%  
+  mutate(indicator = 1) %&gt;%  
+  group_by(year, month) %&gt;%  
+  summarise(number_of_role_calls =  
+              sum(indicator, na.rm = T)) %&gt;%  
+  full_join(crossing(month = 1:12,  
+                     year = 1946:2015)) %&gt;%  
+  mutate(number_of_role_calls = replace_na(number_of_role_calls, 0)) %&gt;%  
+  mutate(decade = str_replace(year, "\\d$", "0")) %&gt;%  
+* mutate(decade = paste0(decade, "'s"))
+```
+]]
+.column[.content[
+
+```
+# A tibble: 840 x 4
+# Groups:   year [70]
+    year month number_of_role_calls decade
+   &lt;dbl&gt; &lt;dbl&gt;                &lt;dbl&gt; &lt;chr&gt; 
+ 1  1946     1                    6 1940's
+ 2  1946     2                   11 1940's
+ 3  1946    12                   26 1940's
+ 4  1947     5                    6 1940's
+ 5  1947     9                    1 1940's
+ 6  1947    10                    5 1940's
+ 7  1947    11                   26 1940's
+ 8  1948     5                    7 1940's
+ 9  1948     9                    2 1940's
+10  1948    10                    1 1940's
+# … with 830 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(tidyverse)  
+library(unvotes)  
+un_roll_calls %&gt;%  
+  mutate(year = lubridate::year(date)) %&gt;%  
+  mutate(month = lubridate::month(date)) %&gt;%  
+  mutate(indicator = 1) %&gt;%  
+  group_by(year, month) %&gt;%  
+  summarise(number_of_role_calls =  
+              sum(indicator, na.rm = T)) %&gt;%  
+  full_join(crossing(month = 1:12,  
+                     year = 1946:2015)) %&gt;%  
+  mutate(number_of_role_calls = replace_na(number_of_role_calls, 0)) %&gt;%  
+  mutate(decade = str_replace(year, "\\d$", "0")) %&gt;%  
+  mutate(decade = paste0(decade, "'s")) -&gt;  
+*by_month
+```
+]]
+.column[.content[
+
+]]
+
+---
+
+# Data Visualization
+
+---
+
+
+
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*ggplot(by_month)
+```
+]]
+.column[.content[
+![](unga_voting_files/figure-html/output_visualization_1-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ggplot(by_month) +  
+* aes(x = month)
+```
+]]
+.column[.content[
+![](unga_voting_files/figure-html/output_visualization_2-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ggplot(by_month) +  
+  aes(x = month) +  
+* aes(y = number_of_role_calls)
+```
+]]
+.column[.content[
+![](unga_voting_files/figure-html/output_visualization_3-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ggplot(by_month) +  
+  aes(x = month) +  
+  aes(y = number_of_role_calls) +  
+* aes(col = year)
+```
+]]
+.column[.content[
+![](unga_voting_files/figure-html/output_visualization_4-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ggplot(by_month) +  
+  aes(x = month) +  
+  aes(y = number_of_role_calls) +  
+  aes(col = year) +  
+* aes(group = year)
+```
+]]
+.column[.content[
+![](unga_voting_files/figure-html/output_visualization_5-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ggplot(by_month) +  
+  aes(x = month) +  
+  aes(y = number_of_role_calls) +  
+  aes(col = year) +  
+  aes(group = year) +  
+* geom_line(alpha = .3)
+```
+]]
+.column[.content[
+![](unga_voting_files/figure-html/output_visualization_6-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ggplot(by_month) +  
+  aes(x = month) +  
+  aes(y = number_of_role_calls) +  
+  aes(col = year) +  
+  aes(group = year) +  
+  geom_line(alpha = .3) +  
+* scale_color_viridis_c()
+```
+]]
+.column[.content[
+![](unga_voting_files/figure-html/output_visualization_7-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ggplot(by_month) +  
+  aes(x = month) +  
+  aes(y = number_of_role_calls) +  
+  aes(col = year) +  
+  aes(group = year) +  
+  geom_line(alpha = .3) +  
+  scale_color_viridis_c() +  
+* scale_x_continuous(breaks = 1:12,
+*                    expand = c(0.01,0.01),
+*                    label = c(" jan","feb", "march",
+*                              "april", "may", "june",
+*                              "july", "aug", "sept",
+*                              "oct", "nov", "dec  "))
+```
+]]
+.column[.content[
+![](unga_voting_files/figure-html/output_visualization_13-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ggplot(by_month) +  
+  aes(x = month) +  
+  aes(y = number_of_role_calls) +  
+  aes(col = year) +  
+  aes(group = year) +  
+  geom_line(alpha = .3) +  
+  scale_color_viridis_c() +  
+  scale_x_continuous(breaks = 1:12,  
+                     expand = c(0.01,0.01),  
+                     label = c(" jan","feb", "march",  
+                               "april", "may", "june",  
+                               "july", "aug", "sept",  
+                               "oct", "nov", "dec  ")) +  
+* scale_y_continuous(expand = c(.02, .03))
+```
+]]
+.column[.content[
+![](unga_voting_files/figure-html/output_visualization_14-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ggplot(by_month) +  
+  aes(x = month) +  
+  aes(y = number_of_role_calls) +  
+  aes(col = year) +  
+  aes(group = year) +  
+  geom_line(alpha = .3) +  
+  scale_color_viridis_c() +  
+  scale_x_continuous(breaks = 1:12,  
+                     expand = c(0.01,0.01),  
+                     label = c(" jan","feb", "march",  
+                               "april", "may", "june",  
+                               "july", "aug", "sept",  
+                               "oct", "nov", "dec  ")) +  
+  scale_y_continuous(expand = c(.02, .03)) +  
+* labs(y = "number of votes")
+```
+]]
+.column[.content[
+![](unga_voting_files/figure-html/output_visualization_15-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ggplot(by_month) +  
+  aes(x = month) +  
+  aes(y = number_of_role_calls) +  
+  aes(col = year) +  
+  aes(group = year) +  
+  geom_line(alpha = .3) +  
+  scale_color_viridis_c() +  
+  scale_x_continuous(breaks = 1:12,  
+                     expand = c(0.01,0.01),  
+                     label = c(" jan","feb", "march",  
+                               "april", "may", "june",  
+                               "july", "aug", "sept",  
+                               "oct", "nov", "dec  ")) +  
+  scale_y_continuous(expand = c(.02, .03)) +  
+  labs(y = "number of votes") +  
+* labs(x = NULL)
+```
+]]
+.column[.content[
+![](unga_voting_files/figure-html/output_visualization_16-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ggplot(by_month) +  
+  aes(x = month) +  
+  aes(y = number_of_role_calls) +  
+  aes(col = year) +  
+  aes(group = year) +  
+  geom_line(alpha = .3) +  
+  scale_color_viridis_c() +  
+  scale_x_continuous(breaks = 1:12,  
+                     expand = c(0.01,0.01),  
+                     label = c(" jan","feb", "march",  
+                               "april", "may", "june",  
+                               "july", "aug", "sept",  
+                               "oct", "nov", "dec  ")) +  
+  scale_y_continuous(expand = c(.02, .03)) +  
+  labs(y = "number of votes") +  
+  labs(x = NULL) +  
+* labs(col = NULL)
+```
+]]
+.column[.content[
+![](unga_voting_files/figure-html/output_visualization_17-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ggplot(by_month) +  
+  aes(x = month) +  
+  aes(y = number_of_role_calls) +  
+  aes(col = year) +  
+  aes(group = year) +  
+  geom_line(alpha = .3) +  
+  scale_color_viridis_c() +  
+  scale_x_continuous(breaks = 1:12,  
+                     expand = c(0.01,0.01),  
+                     label = c(" jan","feb", "march",  
+                               "april", "may", "june",  
+                               "july", "aug", "sept",  
+                               "oct", "nov", "dec  ")) +  
+  scale_y_continuous(expand = c(.02, .03)) +  
+  labs(y = "number of votes") +  
+  labs(x = NULL) +  
+  labs(col = NULL) +  
+* labs(title = "Activity ramps up in the UN General Assembly ")
+```
+]]
+.column[.content[
+![](unga_voting_files/figure-html/output_visualization_18-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ggplot(by_month) +  
+  aes(x = month) +  
+  aes(y = number_of_role_calls) +  
+  aes(col = year) +  
+  aes(group = year) +  
+  geom_line(alpha = .3) +  
+  scale_color_viridis_c() +  
+  scale_x_continuous(breaks = 1:12,  
+                     expand = c(0.01,0.01),  
+                     label = c(" jan","feb", "march",  
+                               "april", "may", "june",  
+                               "july", "aug", "sept",  
+                               "oct", "nov", "dec  ")) +  
+  scale_y_continuous(expand = c(.02, .03)) +  
+  labs(y = "number of votes") +  
+  labs(x = NULL) +  
+  labs(col = NULL) +  
+  labs(title = "Activity ramps up in the UN General Assembly ") +  
+* labs(subtitle = "Role call votes by month, 1946-2015")
+```
+]]
+.column[.content[
+![](unga_voting_files/figure-html/output_visualization_19-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ggplot(by_month) +  
+  aes(x = month) +  
+  aes(y = number_of_role_calls) +  
+  aes(col = year) +  
+  aes(group = year) +  
+  geom_line(alpha = .3) +  
+  scale_color_viridis_c() +  
+  scale_x_continuous(breaks = 1:12,  
+                     expand = c(0.01,0.01),  
+                     label = c(" jan","feb", "march",  
+                               "april", "may", "june",  
+                               "july", "aug", "sept",  
+                               "oct", "nov", "dec  ")) +  
+  scale_y_continuous(expand = c(.02, .03)) +  
+  labs(y = "number of votes") +  
+  labs(x = NULL) +  
+  labs(col = NULL) +  
+  labs(title = "Activity ramps up in the UN General Assembly ") +  
+  labs(subtitle = "Role call votes by month, 1946-2015") +  
+* labs(caption = "Data: Erik Voeten Data and Analyses of Voting in the UN General Assembly via un_votes package in R\nViz: @evamaerey w ggplot2")
+```
+]]
+.column[.content[
+![](unga_voting_files/figure-html/output_visualization_20-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ggplot(by_month) +  
+  aes(x = month) +  
+  aes(y = number_of_role_calls) +  
+  aes(col = year) +  
+  aes(group = year) +  
+  geom_line(alpha = .3) +  
+  scale_color_viridis_c() +  
+  scale_x_continuous(breaks = 1:12,  
+                     expand = c(0.01,0.01),  
+                     label = c(" jan","feb", "march",  
+                               "april", "may", "june",  
+                               "july", "aug", "sept",  
+                               "oct", "nov", "dec  ")) +  
+  scale_y_continuous(expand = c(.02, .03)) +  
+  labs(y = "number of votes") +  
+  labs(x = NULL) +  
+  labs(col = NULL) +  
+  labs(title = "Activity ramps up in the UN General Assembly ") +  
+  labs(subtitle = "Role call votes by month, 1946-2015") +  
+  labs(caption = "Data: Erik Voeten Data and Analyses of Voting in the UN General Assembly via un_votes package in R\nViz: @evamaerey w ggplot2") +  
+* ggdark::dark_theme_grey(base_family = "Times",
+*          base_size = 13 )
+```
+]]
+.column[.content[
+![](unga_voting_files/figure-html/output_visualization_22-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ggplot(by_month) +  
+  aes(x = month) +  
+  aes(y = number_of_role_calls) +  
+  aes(col = year) +  
+  aes(group = year) +  
+  geom_line(alpha = .3) +  
+  scale_color_viridis_c() +  
+  scale_x_continuous(breaks = 1:12,  
+                     expand = c(0.01,0.01),  
+                     label = c(" jan","feb", "march",  
+                               "april", "may", "june",  
+                               "july", "aug", "sept",  
+                               "oct", "nov", "dec  ")) +  
+  scale_y_continuous(expand = c(.02, .03)) +  
+  labs(y = "number of votes") +  
+  labs(x = NULL) +  
+  labs(col = NULL) +  
+  labs(title = "Activity ramps up in the UN General Assembly ") +  
+  labs(subtitle = "Role call votes by month, 1946-2015") +  
+  labs(caption = "Data: Erik Voeten Data and Analyses of Voting in the UN General Assembly via un_votes package in R\nViz: @evamaerey w ggplot2") +  
+  ggdark::dark_theme_grey(base_family = "Times",  
+           base_size = 13 ) +  
+* theme(legend.position = c(.9, .75))
+```
+]]
+.column[.content[
+![](unga_voting_files/figure-html/output_visualization_23-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ggplot(by_month) +  
+  aes(x = month) +  
+  aes(y = number_of_role_calls) +  
+  aes(col = year) +  
+  aes(group = year) +  
+  geom_line(alpha = .3) +  
+  scale_color_viridis_c() +  
+  scale_x_continuous(breaks = 1:12,  
+                     expand = c(0.01,0.01),  
+                     label = c(" jan","feb", "march",  
+                               "april", "may", "june",  
+                               "july", "aug", "sept",  
+                               "oct", "nov", "dec  ")) +  
+  scale_y_continuous(expand = c(.02, .03)) +  
+  labs(y = "number of votes") +  
+  labs(x = NULL) +  
+  labs(col = NULL) +  
+  labs(title = "Activity ramps up in the UN General Assembly ") +  
+  labs(subtitle = "Role call votes by month, 1946-2015") +  
+  labs(caption = "Data: Erik Voeten Data and Analyses of Voting in the UN General Assembly via un_votes package in R\nViz: @evamaerey w ggplot2") +  
+  ggdark::dark_theme_grey(base_family = "Times",  
+           base_size = 13 ) +  
+  theme(legend.position = c(.9, .75)) +  
+* theme(legend.background = element_blank())
+```
+]]
+.column[.content[
+![](unga_voting_files/figure-html/output_visualization_24-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ggplot(by_month) +  
+  aes(x = month) +  
+  aes(y = number_of_role_calls) +  
+  aes(col = year) +  
+  aes(group = year) +  
+  geom_line(alpha = .3) +  
+  scale_color_viridis_c() +  
+  scale_x_continuous(breaks = 1:12,  
+                     expand = c(0.01,0.01),  
+                     label = c(" jan","feb", "march",  
+                               "april", "may", "june",  
+                               "july", "aug", "sept",  
+                               "oct", "nov", "dec  ")) +  
+  scale_y_continuous(expand = c(.02, .03)) +  
+  labs(y = "number of votes") +  
+  labs(x = NULL) +  
+  labs(col = NULL) +  
+  labs(title = "Activity ramps up in the UN General Assembly ") +  
+  labs(subtitle = "Role call votes by month, 1946-2015") +  
+  labs(caption = "Data: Erik Voeten Data and Analyses of Voting in the UN General Assembly via un_votes package in R\nViz: @evamaerey w ggplot2") +  
+  ggdark::dark_theme_grey(base_family = "Times",  
+           base_size = 13 ) +  
+  theme(legend.position = c(.9, .75)) +  
+  theme(legend.background = element_blank()) +  
+* theme(plot.margin = unit(c(.75,1,.75,.5), "cm"))
+```
+]]
+.column[.content[
+![](unga_voting_files/figure-html/output_visualization_25-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+ggplot(by_month) +  
+  aes(x = month) +  
+  aes(y = number_of_role_calls) +  
+  aes(col = year) +  
+  aes(group = year) +  
+  geom_line(alpha = .3) +  
+  scale_color_viridis_c() +  
+  scale_x_continuous(breaks = 1:12,  
+                     expand = c(0.01,0.01),  
+                     label = c(" jan","feb", "march",  
+                               "april", "may", "june",  
+                               "july", "aug", "sept",  
+                               "oct", "nov", "dec  ")) +  
+  scale_y_continuous(expand = c(.02, .03)) +  
+  labs(y = "number of votes") +  
+  labs(x = NULL) +  
+  labs(col = NULL) +  
+  labs(title = "Activity ramps up in the UN General Assembly ") +  
+  labs(subtitle = "Role call votes by month, 1946-2015") +  
+  labs(caption = "Data: Erik Voeten Data and Analyses of Voting in the UN General Assembly via un_votes package in R\nViz: @evamaerey w ggplot2") +  
+  ggdark::dark_theme_grey(base_family = "Times",  
+           base_size = 13 ) +  
+  theme(legend.position = c(.9, .75)) +  
+  theme(legend.background = element_blank()) +  
+  theme(plot.margin = unit(c(.75,1,.75,.5), "cm")) -&gt;  
+*g 
+```
+]]
+.column[.content[
+
+]]
+
+
+---
+
+
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*g 
+```
+]]
+.column[.content[
+![](unga_voting_files/figure-html/output_small_multiples_1-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+g +  
+* facet_wrap(~ decade)
+```
+]]
+.column[.content[
+![](unga_voting_files/figure-html/output_small_multiples_2-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+g +  
+  facet_wrap(~ decade) +  
+* aes(col = NULL)
+```
+]]
+.column[.content[
+![](unga_voting_files/figure-html/output_small_multiples_3-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+g +  
+  facet_wrap(~ decade) +  
+  aes(col = NULL) +  
+* scale_x_continuous(breaks = 1:12,
+*                    expand = c(0.01,0.01),
+*                    label = c(" jan","feb", "march",
+*                              "april", "may", "june",
+*                              "july", "aug", "sept",
+*                              "oct", "nov", "dec  "))
+```
+]]
+.column[.content[
+![](unga_voting_files/figure-html/output_small_multiples_9-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+g +  
+  facet_wrap(~ decade) +  
+  aes(col = NULL) +  
+  scale_x_continuous(breaks = 1:12,  
+                     expand = c(0.01,0.01),  
+                     label = c(" jan","feb", "march",  
+                               "april", "may", "june",  
+                               "july", "aug", "sept",  
+                               "oct", "nov", "dec  ")) +  
+* labs(title = NULL)
+```
+]]
+.column[.content[
+![](unga_voting_files/figure-html/output_small_multiples_10-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+g +  
+  facet_wrap(~ decade) +  
+  aes(col = NULL) +  
+  scale_x_continuous(breaks = 1:12,  
+                     expand = c(0.01,0.01),  
+                     label = c(" jan","feb", "march",  
+                               "april", "may", "june",  
+                               "july", "aug", "sept",  
+                               "oct", "nov", "dec  ")) +  
+  labs(title = NULL) -&gt;  
+*gg
+```
+]]
+.column[.content[
+
+]]
+
+---
+
+
+
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*gg
+```
+]]
+.column[.content[
+![](unga_voting_files/figure-html/output_and_back_1-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+gg +  
+* facet_null()
+```
+]]
+.column[.content[
+![](unga_voting_files/figure-html/output_and_back_2-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+gg +  
+  facet_null() +  
+* aes(col = year)
+```
+]]
+.column[.content[
+![](unga_voting_files/figure-html/output_and_back_3-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+gg +  
+  facet_null() +  
+  aes(col = year) +  
+* labs(col = NULL)
+```
+]]
+.column[.content[
+![](unga_voting_files/figure-html/output_and_back_4-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+gg +  
+  facet_null() +  
+  aes(col = year) +  
+  labs(col = NULL) +  
+* scale_x_continuous(breaks = 1:12,
+*                    expand = c(0.01,0.01),
+*                    label = c(" jan"," ", " ",
+*                              "april", " ", " ",
+*                              "july", " ", " ",
+*                              "oct", " ", "dec  "))
+```
+]]
+.column[.content[
+![](unga_voting_files/figure-html/output_and_back_10-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+gg +  
+  facet_null() +  
+  aes(col = year) +  
+  labs(col = NULL) +  
+  scale_x_continuous(breaks = 1:12,  
+                     expand = c(0.01,0.01),  
+                     label = c(" jan"," ", " ",  
+                               "april", " ", " ",  
+                               "july", " ", " ",  
+                               "oct", " ", "dec  ")) +  
+* labs(title = "Activity ramps up in the UN General Assembly ")
+```
+]]
+.column[.content[
+![](unga_voting_files/figure-html/output_and_back_11-1.png)&lt;!-- --&gt;
+]]
+
+---
+
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 60%}
+&lt;/style&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:10",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
