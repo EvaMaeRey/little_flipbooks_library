@@ -35,6 +35,7 @@ source(file = "https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_libr
 library(tidyverse)
 library(unvotes)
 un_roll_calls %>% 
+  select(rcid, date) %>% 
   mutate(year = lubridate::year(date)) %>% 
   mutate(month = lubridate::month(date)) %>% 
   mutate(indicator = 1) %>% 
@@ -53,7 +54,7 @@ by_month
 
 ---
 
-# Data Visualization
+# Building up to a first plot...
 
 ---
 
@@ -92,6 +93,10 @@ g
 
 ---
 
+# "Lateral moves"/"backstepping" to second plot - small multiples...
+
+---
+
 ```{r small_multiples, echo = F, eval = T}
 g +
   facet_wrap(~ decade) + 
@@ -110,6 +115,9 @@ gg
 
 ---
 
+# And now from the second plot back to the first...
+
+---
 
 ```{r and_back, echo = F, eval = F}
 gg +
@@ -118,16 +126,18 @@ gg +
   labs(col = NULL) +
   scale_x_continuous(breaks = 1:12, 
                      expand = c(0.01,0.01),
-                     label = c(" jan"," ", " ", 
-                               "april", " ", " ", 
-                               "july", " ", " ", 
-                               "oct", " ", "dec  ")) +
+                     label = c(" jan","feb", "march", 
+                               "april", "may", "june", 
+                               "july", "aug", "sept", 
+                               "oct", "nov", "dec  ")) +
   labs(title = "Activity ramps up in the UN General Assembly ") 
 ```
 
 `r apply_reveal("and_back")`
 
 ---
+
+
 
 
 

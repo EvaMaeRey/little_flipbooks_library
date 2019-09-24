@@ -99,26 +99,26 @@ count: false
 library(tidyverse)  
 library(unvotes)  
 un_roll_calls %&gt;%  
-* mutate(year = lubridate::year(date))
+* select(rcid, date)
 ```
 ]]
 .column[.content[
 
 ```
-# A tibble: 5,429 x 10
-    rcid session importantvote date       unres amend  para short descr
-   &lt;int&gt;   &lt;dbl&gt;         &lt;dbl&gt; &lt;date&gt;     &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;
- 1     3       1             0 1946-01-01 R/1/…     1     0 AMEN… TO A…
- 2     4       1             0 1946-01-02 R/1/…     0     0 SECU… TO A…
- 3     5       1             0 1946-01-04 R/1/…     0     0 VOTI… "TO …
- 4     6       1             0 1946-01-04 R/1/…     0     0 DECL… TO A…
- 5     7       1             0 1946-01-02 R/1/…     1     0 GENE… "TO …
- 6     8       1             0 1946-01-05 R/1/…     1     0 ECOS… TO A…
- 7     9       1             0 1946-02-05 R/1/…     0     0 POST… TO O…
- 8    10       1             0 1946-02-05 R/1/…     1     1 U.N.… "TO …
- 9    11       1             0 1946-02-05 R/1/…     0     0 TRUS… TO A…
-10    12       1             0 1946-02-06 R/1/…     1     1 COUN… TO A…
-# … with 5,419 more rows, and 1 more variable: year &lt;dbl&gt;
+# A tibble: 5,429 x 2
+    rcid date      
+   &lt;int&gt; &lt;date&gt;    
+ 1     3 1946-01-01
+ 2     4 1946-01-02
+ 3     5 1946-01-04
+ 4     6 1946-01-04
+ 5     7 1946-01-02
+ 6     8 1946-01-05
+ 7     9 1946-02-05
+ 8    10 1946-02-05
+ 9    11 1946-02-05
+10    12 1946-02-06
+# … with 5,419 more rows
 ```
 ]]
 ---
@@ -130,6 +130,39 @@ count: false
 library(tidyverse)  
 library(unvotes)  
 un_roll_calls %&gt;%  
+  select(rcid, date) %&gt;%  
+* mutate(year = lubridate::year(date))
+```
+]]
+.column[.content[
+
+```
+# A tibble: 5,429 x 3
+    rcid date        year
+   &lt;int&gt; &lt;date&gt;     &lt;dbl&gt;
+ 1     3 1946-01-01  1946
+ 2     4 1946-01-02  1946
+ 3     5 1946-01-04  1946
+ 4     6 1946-01-04  1946
+ 5     7 1946-01-02  1946
+ 6     8 1946-01-05  1946
+ 7     9 1946-02-05  1946
+ 8    10 1946-02-05  1946
+ 9    11 1946-02-05  1946
+10    12 1946-02-06  1946
+# … with 5,419 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(tidyverse)  
+library(unvotes)  
+un_roll_calls %&gt;%  
+  select(rcid, date) %&gt;%  
   mutate(year = lubridate::year(date)) %&gt;%  
 * mutate(month = lubridate::month(date))
 ```
@@ -137,20 +170,20 @@ un_roll_calls %&gt;%
 .column[.content[
 
 ```
-# A tibble: 5,429 x 11
-    rcid session importantvote date       unres amend  para short descr
-   &lt;int&gt;   &lt;dbl&gt;         &lt;dbl&gt; &lt;date&gt;     &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;
- 1     3       1             0 1946-01-01 R/1/…     1     0 AMEN… TO A…
- 2     4       1             0 1946-01-02 R/1/…     0     0 SECU… TO A…
- 3     5       1             0 1946-01-04 R/1/…     0     0 VOTI… "TO …
- 4     6       1             0 1946-01-04 R/1/…     0     0 DECL… TO A…
- 5     7       1             0 1946-01-02 R/1/…     1     0 GENE… "TO …
- 6     8       1             0 1946-01-05 R/1/…     1     0 ECOS… TO A…
- 7     9       1             0 1946-02-05 R/1/…     0     0 POST… TO O…
- 8    10       1             0 1946-02-05 R/1/…     1     1 U.N.… "TO …
- 9    11       1             0 1946-02-05 R/1/…     0     0 TRUS… TO A…
-10    12       1             0 1946-02-06 R/1/…     1     1 COUN… TO A…
-# … with 5,419 more rows, and 2 more variables: year &lt;dbl&gt;, month &lt;dbl&gt;
+# A tibble: 5,429 x 4
+    rcid date        year month
+   &lt;int&gt; &lt;date&gt;     &lt;dbl&gt; &lt;dbl&gt;
+ 1     3 1946-01-01  1946     1
+ 2     4 1946-01-02  1946     1
+ 3     5 1946-01-04  1946     1
+ 4     6 1946-01-04  1946     1
+ 5     7 1946-01-02  1946     1
+ 6     8 1946-01-05  1946     1
+ 7     9 1946-02-05  1946     2
+ 8    10 1946-02-05  1946     2
+ 9    11 1946-02-05  1946     2
+10    12 1946-02-06  1946     2
+# … with 5,419 more rows
 ```
 ]]
 ---
@@ -162,6 +195,7 @@ count: false
 library(tidyverse)  
 library(unvotes)  
 un_roll_calls %&gt;%  
+  select(rcid, date) %&gt;%  
   mutate(year = lubridate::year(date)) %&gt;%  
   mutate(month = lubridate::month(date)) %&gt;%  
 * mutate(indicator = 1)
@@ -170,21 +204,20 @@ un_roll_calls %&gt;%
 .column[.content[
 
 ```
-# A tibble: 5,429 x 12
-    rcid session importantvote date       unres amend  para short descr
-   &lt;int&gt;   &lt;dbl&gt;         &lt;dbl&gt; &lt;date&gt;     &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;
- 1     3       1             0 1946-01-01 R/1/…     1     0 AMEN… TO A…
- 2     4       1             0 1946-01-02 R/1/…     0     0 SECU… TO A…
- 3     5       1             0 1946-01-04 R/1/…     0     0 VOTI… "TO …
- 4     6       1             0 1946-01-04 R/1/…     0     0 DECL… TO A…
- 5     7       1             0 1946-01-02 R/1/…     1     0 GENE… "TO …
- 6     8       1             0 1946-01-05 R/1/…     1     0 ECOS… TO A…
- 7     9       1             0 1946-02-05 R/1/…     0     0 POST… TO O…
- 8    10       1             0 1946-02-05 R/1/…     1     1 U.N.… "TO …
- 9    11       1             0 1946-02-05 R/1/…     0     0 TRUS… TO A…
-10    12       1             0 1946-02-06 R/1/…     1     1 COUN… TO A…
-# … with 5,419 more rows, and 3 more variables: year &lt;dbl&gt;, month &lt;dbl&gt;,
-#   indicator &lt;dbl&gt;
+# A tibble: 5,429 x 5
+    rcid date        year month indicator
+   &lt;int&gt; &lt;date&gt;     &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;
+ 1     3 1946-01-01  1946     1         1
+ 2     4 1946-01-02  1946     1         1
+ 3     5 1946-01-04  1946     1         1
+ 4     6 1946-01-04  1946     1         1
+ 5     7 1946-01-02  1946     1         1
+ 6     8 1946-01-05  1946     1         1
+ 7     9 1946-02-05  1946     2         1
+ 8    10 1946-02-05  1946     2         1
+ 9    11 1946-02-05  1946     2         1
+10    12 1946-02-06  1946     2         1
+# … with 5,419 more rows
 ```
 ]]
 ---
@@ -196,6 +229,7 @@ count: false
 library(tidyverse)  
 library(unvotes)  
 un_roll_calls %&gt;%  
+  select(rcid, date) %&gt;%  
   mutate(year = lubridate::year(date)) %&gt;%  
   mutate(month = lubridate::month(date)) %&gt;%  
   mutate(indicator = 1) %&gt;%  
@@ -205,22 +239,21 @@ un_roll_calls %&gt;%
 .column[.content[
 
 ```
-# A tibble: 5,429 x 12
+# A tibble: 5,429 x 5
 # Groups:   year, month [288]
-    rcid session importantvote date       unres amend  para short descr
-   &lt;int&gt;   &lt;dbl&gt;         &lt;dbl&gt; &lt;date&gt;     &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;
- 1     3       1             0 1946-01-01 R/1/…     1     0 AMEN… TO A…
- 2     4       1             0 1946-01-02 R/1/…     0     0 SECU… TO A…
- 3     5       1             0 1946-01-04 R/1/…     0     0 VOTI… "TO …
- 4     6       1             0 1946-01-04 R/1/…     0     0 DECL… TO A…
- 5     7       1             0 1946-01-02 R/1/…     1     0 GENE… "TO …
- 6     8       1             0 1946-01-05 R/1/…     1     0 ECOS… TO A…
- 7     9       1             0 1946-02-05 R/1/…     0     0 POST… TO O…
- 8    10       1             0 1946-02-05 R/1/…     1     1 U.N.… "TO …
- 9    11       1             0 1946-02-05 R/1/…     0     0 TRUS… TO A…
-10    12       1             0 1946-02-06 R/1/…     1     1 COUN… TO A…
-# … with 5,419 more rows, and 3 more variables: year &lt;dbl&gt;, month &lt;dbl&gt;,
-#   indicator &lt;dbl&gt;
+    rcid date        year month indicator
+   &lt;int&gt; &lt;date&gt;     &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;
+ 1     3 1946-01-01  1946     1         1
+ 2     4 1946-01-02  1946     1         1
+ 3     5 1946-01-04  1946     1         1
+ 4     6 1946-01-04  1946     1         1
+ 5     7 1946-01-02  1946     1         1
+ 6     8 1946-01-05  1946     1         1
+ 7     9 1946-02-05  1946     2         1
+ 8    10 1946-02-05  1946     2         1
+ 9    11 1946-02-05  1946     2         1
+10    12 1946-02-06  1946     2         1
+# … with 5,419 more rows
 ```
 ]]
 ---
@@ -232,6 +265,7 @@ count: false
 library(tidyverse)  
 library(unvotes)  
 un_roll_calls %&gt;%  
+  select(rcid, date) %&gt;%  
   mutate(year = lubridate::year(date)) %&gt;%  
   mutate(month = lubridate::month(date)) %&gt;%  
   mutate(indicator = 1) %&gt;%  
@@ -269,6 +303,7 @@ count: false
 library(tidyverse)  
 library(unvotes)  
 un_roll_calls %&gt;%  
+  select(rcid, date) %&gt;%  
   mutate(year = lubridate::year(date)) %&gt;%  
   mutate(month = lubridate::month(date)) %&gt;%  
   mutate(indicator = 1) %&gt;%  
@@ -308,6 +343,7 @@ count: false
 library(tidyverse)  
 library(unvotes)  
 un_roll_calls %&gt;%  
+  select(rcid, date) %&gt;%  
   mutate(year = lubridate::year(date)) %&gt;%  
   mutate(month = lubridate::month(date)) %&gt;%  
   mutate(indicator = 1) %&gt;%  
@@ -348,6 +384,7 @@ count: false
 library(tidyverse)  
 library(unvotes)  
 un_roll_calls %&gt;%  
+  select(rcid, date) %&gt;%  
   mutate(year = lubridate::year(date)) %&gt;%  
   mutate(month = lubridate::month(date)) %&gt;%  
   mutate(indicator = 1) %&gt;%  
@@ -389,6 +426,7 @@ count: false
 library(tidyverse)  
 library(unvotes)  
 un_roll_calls %&gt;%  
+  select(rcid, date) %&gt;%  
   mutate(year = lubridate::year(date)) %&gt;%  
   mutate(month = lubridate::month(date)) %&gt;%  
   mutate(indicator = 1) %&gt;%  
@@ -431,6 +469,7 @@ count: false
 library(tidyverse)  
 library(unvotes)  
 un_roll_calls %&gt;%  
+  select(rcid, date) %&gt;%  
   mutate(year = lubridate::year(date)) %&gt;%  
   mutate(month = lubridate::month(date)) %&gt;%  
   mutate(indicator = 1) %&gt;%  
@@ -451,7 +490,7 @@ un_roll_calls %&gt;%
 
 ---
 
-# Data Visualization
+# Building up to a first plot...
 
 ---
 
@@ -961,6 +1000,10 @@ ggplot(by_month) +
 
 ---
 
+# "Lateral moves"/"backstepping" to second plot - small multiples...
+
+---
+
 
 
 class: split-40
@@ -1067,6 +1110,9 @@ g +
 
 ---
 
+# And now from the second plot back to the first...
+
+---
 
 
 
@@ -1135,10 +1181,10 @@ gg +
   labs(col = NULL) +  
 * scale_x_continuous(breaks = 1:12,
 *                    expand = c(0.01,0.01),
-*                    label = c(" jan"," ", " ",
-*                              "april", " ", " ",
-*                              "july", " ", " ",
-*                              "oct", " ", "dec  "))
+*                    label = c(" jan","feb", "march",
+*                              "april", "may", "june",
+*                              "july", "aug", "sept",
+*                              "oct", "nov", "dec  "))
 ```
 ]]
 .column[.content[
@@ -1156,10 +1202,10 @@ gg +
   labs(col = NULL) +  
   scale_x_continuous(breaks = 1:12,  
                      expand = c(0.01,0.01),  
-                     label = c(" jan"," ", " ",  
-                               "april", " ", " ",  
-                               "july", " ", " ",  
-                               "oct", " ", "dec  ")) +  
+                     label = c(" jan","feb", "march",  
+                               "april", "may", "june",  
+                               "july", "aug", "sept",  
+                               "oct", "nov", "dec  ")) +  
 * labs(title = "Activity ramps up in the UN General Assembly ")
 ```
 ]]
