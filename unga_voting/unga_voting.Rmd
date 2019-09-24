@@ -1,6 +1,6 @@
 ---
 title: "UNGA Votes"
-author: "Gina Reynolds, May 2019"
+author: "Gina Reynolds, September 2019"
 output:
   xaringan::moon_reader:
     lib_dir: libs
