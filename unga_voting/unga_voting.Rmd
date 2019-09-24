@@ -103,10 +103,10 @@ g +
   aes(col = NULL) +
   scale_x_continuous(breaks = 1:12, 
                      expand = c(0.01,0.01),
-                     label = c(" jan","feb", "march", 
-                               "april", "may", "june", 
-                               "july", "aug", "sept", 
-                               "oct", "nov", "dec  ")) +
+                     label = c(" jan","", "", 
+                               "april", "", "", 
+                               "july", "", "", 
+                               "oct", "", "dec  ")) +
   labs(title = NULL) ->
 gg
 ```
