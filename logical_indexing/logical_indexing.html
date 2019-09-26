@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>the logic of logical indexing and data wrangling with base R</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gina Reynolds, September 2019" />
+    <link href="libs/remark-css-0.0.1/kunoichi.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# the logic of logical indexing and data wrangling with base R
+### Gina Reynolds, September 2019
+
+---
+
+
+
+
+
+The flipbook functions are here:
+
+
+```r
+source(file = "https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/xaringan_reveal_parentheses_balanced.R")
+```
+
+
+---
+
+# Data wrangling with dplyr and tidyr
+
+---
+
+
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*library(magrittr)
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(magrittr)  
+*library(gapminder)
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(magrittr)  
+library(gapminder)  
+*gapminder
+```
+]]
+.column[.content[
+
+```
+# A tibble: 1,704 x 6
+   country     continent  year lifeExp      pop gdpPercap
+   &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+ 1 Afghanistan Asia       1952    28.8  8425333      779.
+ 2 Afghanistan Asia       1957    30.3  9240934      821.
+ 3 Afghanistan Asia       1962    32.0 10267083      853.
+ 4 Afghanistan Asia       1967    34.0 11537966      836.
+ 5 Afghanistan Asia       1972    36.1 13079460      740.
+ 6 Afghanistan Asia       1977    38.4 14880372      786.
+ 7 Afghanistan Asia       1982    39.9 12881816      978.
+ 8 Afghanistan Asia       1987    40.8 13867957      852.
+ 9 Afghanistan Asia       1992    41.7 16317921      649.
+10 Afghanistan Asia       1997    41.8 22227415      635.
+# … with 1,694 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(magrittr)  
+library(gapminder)  
+gapminder %&gt;%  
+* .[, c("year", "country", "pop", "gdpPercap")]
+```
+]]
+.column[.content[
+
+```
+# A tibble: 1,704 x 4
+    year country          pop gdpPercap
+   &lt;int&gt; &lt;fct&gt;          &lt;int&gt;     &lt;dbl&gt;
+ 1  1952 Afghanistan  8425333      779.
+ 2  1957 Afghanistan  9240934      821.
+ 3  1962 Afghanistan 10267083      853.
+ 4  1967 Afghanistan 11537966      836.
+ 5  1972 Afghanistan 13079460      740.
+ 6  1977 Afghanistan 14880372      786.
+ 7  1982 Afghanistan 12881816      978.
+ 8  1987 Afghanistan 13867957      852.
+ 9  1992 Afghanistan 16317921      649.
+10  1997 Afghanistan 22227415      635.
+# … with 1,694 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(magrittr)  
+library(gapminder)  
+gapminder %&gt;%  
+  .[, c("year", "country", "pop", "gdpPercap")] %&gt;%  
+* .[gapminder$year == 2002, ]
+```
+]]
+.column[.content[
+
+```
+# A tibble: 142 x 4
+    year country           pop gdpPercap
+   &lt;int&gt; &lt;fct&gt;           &lt;int&gt;     &lt;dbl&gt;
+ 1  2002 Afghanistan  25268405      727.
+ 2  2002 Albania       3508512     4604.
+ 3  2002 Algeria      31287142     5288.
+ 4  2002 Angola       10866106     2773.
+ 5  2002 Argentina    38331121     8798.
+ 6  2002 Australia    19546792    30688.
+ 7  2002 Austria       8148312    32418.
+ 8  2002 Bahrain        656397    23404.
+ 9  2002 Bangladesh  135656790     1136.
+10  2002 Belgium      10311970    30486.
+# … with 132 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(magrittr)  
+library(gapminder)  
+gapminder %&gt;%  
+  .[, c("year", "country", "pop", "gdpPercap")] %&gt;%  
+  .[gapminder$year == 2002, ] %&gt;%  
+* .[, -1]
+```
+]]
+.column[.content[
+
+```
+# A tibble: 142 x 3
+   country           pop gdpPercap
+   &lt;fct&gt;           &lt;int&gt;     &lt;dbl&gt;
+ 1 Afghanistan  25268405      727.
+ 2 Albania       3508512     4604.
+ 3 Algeria      31287142     5288.
+ 4 Angola       10866106     2773.
+ 5 Argentina    38331121     8798.
+ 6 Australia    19546792    30688.
+ 7 Austria       8148312    32418.
+ 8 Bahrain        656397    23404.
+ 9 Bangladesh  135656790     1136.
+10 Belgium      10311970    30486.
+# … with 132 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(magrittr)  
+library(gapminder)  
+gapminder %&gt;%  
+  .[, c("year", "country", "pop", "gdpPercap")] %&gt;%  
+  .[gapminder$year == 2002, ] %&gt;%  
+  .[, -1] -&gt;  
+*gm_2002
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(magrittr)  
+library(gapminder)  
+gapminder %&gt;%  
+  .[, c("year", "country", "pop", "gdpPercap")] %&gt;%  
+  .[gapminder$year == 2002, ] %&gt;%  
+  .[, -1] -&gt;  
+gm_2002  
+*with(gm_2002, pop * gdpPercap)
+```
+]]
+.column[.content[
+
+```
+  [1] 1.836341e+10 1.615393e+10 1.654477e+11 3.013483e+10 3.372234e+11
+  [6] 5.998472e+11 2.641488e+11 1.536203e+10 1.541591e+11 3.143695e+11
+ [11] 9.645995e+09 2.882546e+10 2.507154e+10 1.793969e+10 1.462921e+12
+ [16] 5.897116e+10 1.271241e+10 3.134234e+09 1.158525e+10 3.080878e+10
+ [21] 1.063270e+12 2.990229e+09 1.021572e+10 1.670393e+11 3.993927e+12
+ [26] 2.360130e+11 6.609593e+08 1.335573e+10 1.159773e+10 2.961891e+10
+ [31] 2.679751e+10 5.210704e+10 7.118643e+10 1.804719e+11 1.728851e+11
+ [36] 8.537864e+08 3.947841e+10 7.459486e+10 3.485722e+11 3.400216e+10
+ [41] 3.818061e+09 3.378917e+09 3.601544e+10 1.464675e+11 1.733394e+12
+ [46] 1.626951e+10 9.629792e+08 2.473468e+12 2.285212e+10 2.387381e+11
+ [51] 5.430977e+10 8.328528e+09 7.671029e+08 9.664493e+09 2.069790e+10
+ [56] 2.042877e+11 1.496760e+11 8.975937e+09 1.806461e+12 6.065681e+11
+ [61] 6.182793e+11 1.053852e+11 1.321902e+11 1.320804e+11 1.620108e+12
+ [66] 1.863869e+10 3.634667e+12 2.040678e+10 4.041102e+10 3.658333e+10
+ [71] 9.226381e+11 7.413713e+10 3.425462e+10 2.610012e+09 1.495937e+09
+ [76] 5.118773e+10 1.473778e+10 7.868292e+09 2.313143e+11 1.006608e+10
+ [81] 4.466822e+09 1.082804e+10 1.100885e+12 5.724838e+09 4.722688e+09
+ [86] 1.015601e+11 1.170532e+10 2.786043e+10 8.031247e+09 2.735407e+10
+ [91] 5.437385e+11 9.062660e+10 1.273613e+10 6.696364e+09 1.936749e+11
+ [96] 2.026682e+11 5.365827e+10 3.210295e+11 2.200097e+10 2.226500e+10
+[101] 1.581811e+11 2.200134e+11 4.635982e+11 2.083738e+11 7.277521e+10
+[106] 4.699107e+09 1.766663e+11 6.169268e+09 2.305291e+08 4.658854e+11
+[111] 1.651849e+10 7.316800e+10 3.748630e+09 1.512169e+11 7.378650e+10
+[116] 4.155757e+10 6.839054e+09 3.426253e+11 9.972067e+11 5.903142e+10
+[121] 7.393574e+10 4.665883e+09 2.627301e+11 2.538404e+11 7.018315e+10
+[126] 5.217337e+11 3.110237e+10 3.713881e+11 4.411055e+09 1.262766e+10
+[131] 5.591598e+10 4.380523e+11 2.295170e+10 1.766159e+12 1.124728e+13
+[136] 2.598656e+10 2.089966e+11 1.427589e+11 1.530560e+10 4.179396e+10
+[141] 1.135462e+10 8.015111e+09
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(magrittr)  
+library(gapminder)  
+gapminder %&gt;%  
+  .[, c("year", "country", "pop", "gdpPercap")] %&gt;%  
+  .[gapminder$year == 2002, ] %&gt;%  
+  .[, -1] -&gt;  
+gm_2002  
+with(gm_2002, pop * gdpPercap) -&gt;  
+* gm_2002$gdp ; gm_2002
+```
+]]
+.column[.content[
+
+```
+# A tibble: 142 x 4
+   country           pop gdpPercap           gdp
+   &lt;fct&gt;           &lt;int&gt;     &lt;dbl&gt;         &lt;dbl&gt;
+ 1 Afghanistan  25268405      727.  18363410424.
+ 2 Albania       3508512     4604.  16153932130.
+ 3 Algeria      31287142     5288. 165447670333.
+ 4 Angola       10866106     2773.  30134833901.
+ 5 Argentina    38331121     8798. 337223430800.
+ 6 Australia    19546792    30688. 599847158654.
+ 7 Austria       8148312    32418. 264148781752.
+ 8 Bahrain        656397    23404.  15362026094.
+ 9 Bangladesh  135656790     1136. 154159077921.
+10 Belgium      10311970    30486. 314369518653.
+# … with 132 more rows
+```
+]]
+
+---
+
+
+
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*18:1
+```
+]]
+.column[.content[
+
+```
+ [1] 18 17 16 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+18:1 %&gt;%  
+* .[c(1,10,18)]
+```
+]]
+.column[.content[
+
+```
+[1] 18  9  1
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+18:1 %&gt;%  
+  .[c(1,10,18)] %&gt;%  
+* data.frame(y = rep("hi", 3),
+*            q = 1:3,
+*            hi = 7:9)
+```
+]]
+.column[.content[
+
+```
+   .  y q hi
+1 18 hi 1  7
+2  9 hi 2  8
+3  1 hi 3  9
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+18:1 %&gt;%  
+  .[c(1,10,18)] %&gt;%  
+  data.frame(y = rep("hi", 3),  
+             q = 1:3,  
+             hi = 7:9) %&gt;%  
+* .[2:3, ]
+```
+]]
+.column[.content[
+
+```
+  .  y q hi
+2 9 hi 2  8
+3 1 hi 3  9
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+18:1 %&gt;%  
+  .[c(1,10,18)] %&gt;%  
+  data.frame(y = rep("hi", 3),  
+             q = 1:3,  
+             hi = 7:9) %&gt;%  
+  .[2:3, ] -&gt;  
+*my_data
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+18:1 %&gt;%  
+  .[c(1,10,18)] %&gt;%  
+  data.frame(y = rep("hi", 3),  
+             q = 1:3,  
+             hi = 7:9) %&gt;%  
+  .[2:3, ] -&gt;  
+my_data  
+*"var1"
+```
+]]
+.column[.content[
+
+```
+[1] "var1"
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+18:1 %&gt;%  
+  .[c(1,10,18)] %&gt;%  
+  data.frame(y = rep("hi", 3),  
+             q = 1:3,  
+             hi = 7:9) %&gt;%  
+  .[2:3, ] -&gt;  
+my_data  
+"var1" -&gt;  
+* names(my_data)[1] ; my_data
+```
+]]
+.column[.content[
+
+```
+  var1  y q hi
+2    9 hi 2  8
+3    1 hi 3  9
+```
+]]
+
+---
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 60%}
+&lt;/style&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:10",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

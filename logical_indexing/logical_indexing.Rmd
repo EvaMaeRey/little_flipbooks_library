@@ -1,0 +1,71 @@
+---
+title: "the logic of logical indexing and data wrangling with base R"
+author: "Gina Reynolds, September 2019"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: ["kunoichi", "ninjutsu"]
+    nature:
+      ratio: 16:10
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+```{r setup, include=F}
+knitr::opts_chunk$set(fig.width = 8, message = F, warning = F, 
+                      comment = "", cache = F)
+```
+
+The flipbook functions are here:
+
+```{r, echo = T}
+source(file = "https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/xaringan_reveal_parentheses_balanced.R")
+```
+
+
+---
+
+# Data wrangling with dplyr and tidyr
+
+---
+
+```{r load_packages_manipulation, echo = F, eval = F}
+library(magrittr)
+library(gapminder)
+gapminder %>% 
+  .[, c("year", "country", "pop", "gdpPercap")] %>% 
+  .[gapminder$year == 2002, ] %>% 
+  .[, -1] ->
+gm_2002
+with(gm_2002, pop * gdpPercap) ->
+  gm_2002$gdp ; gm_2002
+```
+
+`r apply_reveal("load_packages_manipulation")`
+
+---
+
+
+```{r free_form, echo = F, eval = F}
+18:1 %>% 
+  .[c(1,10,18)] %>% 
+  data.frame(y = rep("hi", 3),
+             q = 1:3,
+             hi = 7:9) %>% 
+  .[2:3, ] -> 
+my_data
+"var1" ->
+  names(my_data)[1] ; my_data
+```
+
+`r apply_reveal("free_form")`
+
+---
+
+```{css, eval = TRUE, echo = F}
+.remark-code{line-height: 1.5; font-size: 60%}
+```
+
+
