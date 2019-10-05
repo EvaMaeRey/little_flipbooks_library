@@ -1,7 +1,7 @@
 ---
 title: "data cleaning flipbook"
 subtitle: "a flipbook with some data cleaning examples | made with Xaringan"
-author: "<br><br>Gina Reynolds, April 2019"
+author: "<br><br>Gina Reynolds, October 2019"
 date: "<br>"
 output:
   xaringan::moon_reader:
@@ -12,9 +12,11 @@ output:
       highlightLines: true
 ---
 
+
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-knitr::opts_chunk$set(fig.height = 6, out.width = "100%", comment = " ", cache = F)
+knitr::opts_chunk$set(fig.height = 6, out.width = "100%", comment = " ", cache = F, warning = F, message = F)
 
 source("https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/xaringan_reveal_parentheses_balanced.R")
 # options(tibble.print_max = 30) 
@@ -23,13 +25,9 @@ source("https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/mas
 
 # Introduction
 
-Data cleaning is the pits.  Or is it?  The cleaning tools of the tidyverse and other packages might help such tasks become less terrible.  Let's look at a couple of examples. 
+Data cleaning is the pits.  Or is it?  The cleaning tools of the `tidyverse` and other packages like `janitor` might help such tasks become less terrible -- and more of a delight! Let's look at a couple of examples. 
 
-<!-- Data transformation, visualization, and modeling are key steps of data analysis.  The incredibly popular collection of packages known as the *Tidyverse* have made these activities more fluid and intuitive in R. -->
 
-<!-- Still, the syntax and behavior of the functions must be learned and remembered; having references and examples at the ready may be helpful to newcomers taking on this task.  The "Tidyverse in Action" is aimed at providing such a reference alongside other invaluable resources.  [R for Data Science](https://r4ds.had.co.nz/index.html) and the [RStudio cheatsheets](https://www.rstudio.com/resources/cheatsheets/) are particularly useful.  -->
-
-<!-- Topics to be included are wrangling, plotting, and modeling.  The wrangling section is the most developed at this point, thought there is more to add.  In the first formulation of this book, I divided wrangling and plotting.  But no plots didn't feel very satisfying.  It's a bit more of a slog to follow the data transformation steps.  So there will be plotting throughout -- respite from looking at transforming tables of text -- even when plotting is not the emphasis of the section. I've included some ideas on plotting but there isn't much organization or explanation at this point.  There's nothing on modeling yet.  Someday.   -->
 
 
 ---
@@ -49,53 +47,200 @@ The tools demonstrated in this book are implemented in the statistical software,
 I'm grateful to the tidyverse team for their tireless work on developing and maintaining this wonderful toolkit and to RStudio for supporting the development.  Emi Tanaka (@statsgen) and Garrick Aden-Buie (@grrrck) helped by writing code to made the flipbook style possible. I'm *very* grateful to them for their work on this as well as to Yihui Xie and others for their work on the Xaringan package --- the extraordinary platform for creating the slides for this book.  I'm thankful too to my students who refresh my perspective on teaching and learning new tools.  Finally, thanks to David who is supportive of data cleaning and of me. 
 
 
+---
+
+#  Project structure
+
+Open your project with RStudio. 
+
+```
+final_project
+├── 01_data_cleaning.Rmd   <- work files
+├── 02_analysis.Rmd        <- work files
+├── final_project.Rproj    <- RStudio file - you declared your main folder to be the project space
+├── data_products   <- Folder
+├── figures         <- Folder
+├── literature      <- Folder
+└── raw_data        <- Folder
+```
 
 ---
 
 # Load the tidyverse
 
+  Functions from other packages come 
+
 ```{r, message = F, warning=F, eval = T}
 library(tidyverse)
 ```
 
-The date come from the second table on the Wikipedia page [Fishing Industry by Country](https://en.wikipedia.org/wiki/Fishing_industry_by_country).
+
+
+
 
 ---
 
-```{r clean_wikipedia_fisheries, eval = F, echo = F}
-url <- "https://en.wikipedia.org/wiki/Fishing_industry_by_country"
-htmltab::htmltab(doc = url, which = 2) %>% 
-  as_tibble() %>% 
-  janitor::clean_names(case = "snake") %>% 
+## Step 0: find data!
+
+You probably have this covered by now.  Nice!
+
+The date come from the second table on the Wikipedia page [Fishing Industry by Country](https://en.wikipedia.org/wiki/Fishing_industry_by_country).
+
+```{r, echo = F}
+knitr::include_url("https://en.wikipedia.org/wiki/Fishing_industry_by_country")
+```
+
+---
+
+## Step 1: get data
+
+The first step saving your file of interest manually to your raw data folder, or use download.file with a web address
+
+```{r, eval = F}
+download.file(url = "https://en.wikipedia.org/wiki/Fishing_industry_by_country", 
+              destfile = "raw_data/wikipedia_fisheries.html")
+```
+
+---
+
+## Step 2:  scan in data and create an object *like `fisheries_2015_raw`*
+
+
+Once you have saved your raw data, you need to scan/read the data into R.  There are a variety of functions to do this depending on your data type.  In this example, we are wanting to read in a table embedded in an html file.  We can read in the data with the htmltab function from the htmltab package. 
+
+---
+
+```{r read_in_fisheries, eval = T, echo = F}
+# using the htmltab package to scan html file
+htmltab::htmltab(doc = "raw_data/wikipedia_fisheries.html",
+                 # the second table object is what we want
+                 which = 2) ->
+# assign this to an object with the _raw suffix
+fisheries_2015_raw
+```
+
+
+`r apply_reveal("read_in_fisheries")`
+
+
+---
+
+## Step 3:  Load tidyverse, Clean data and create an cleaned object *like fisheries_2015*
+
+We'll do most of the manipulation with dplyr and tidyr which are subpackages of the tidyverse.
+
+---
+
+```{r clean_wikipedia_fisheries, eval = T, echo = F}
+fisheries_2015_raw %>% 
+  as_tibble() %>% # show data in "tidyverse" way, as_tibble
+  # you may need to install the janitor package for this next step
+  # if you have not already done so
+  janitor::clean_names(case = "snake") %>% # snake is the default too 
+  # converting columns to numeric 'dbl', which were character 'cha'
   mutate(capture = 
-           str_replace_all(string = capture, 
-                           pattern = ",", 
-                           replacement = "")) %>% 
-  mutate(capture = as.numeric(x = capture)) %>% 
+           readr::parse_number(x = capture)) %>% 
   mutate(aquaculture = 
-           str_replace_all(string = aquaculture, 
-                           pattern = ",", 
-                           replacement = "")) %>% 
-  mutate(aquaculture = as.numeric(x = aquaculture)) %>% 
-  mutate(total = str_replace_all(string = total, 
-                                 pattern = ",", 
-                                 replacement = "")) %>% 
-  mutate(total = as.numeric(x = total)) %>% 
-  mutate(country = str_trim(string = country)) %>% 
+           readr::parse_number(x = aquaculture)) %>% 
+  mutate(total = 
+           readr::parse_number(x = total)) %>%
+  # removing white spaces before and after a string
+  mutate(country = str_trim(string = country)) %>%
+  # creating region variable 
+  # using countrycode function from countrycode package
+  # if you haven't done so, 
+  mutate(region = 
+           countrycode::countrycode(
+             sourcevar = country,
+             origin = "country.name",
+             dest = "region")) %>% 
+  # country codes are useful for merging data
+  mutate(iso3c =   
+           countrycode::countrycode(
+             sourcevar = country,
+             origin = "country.name",
+             dest = "iso3c")) %>% 
+  # one row is an aggregation - deleting this
   filter(country != "Total (2015)") ->
 fisheries_2015
 ```
 
 `r apply_reveal("clean_wikipedia_fisheries")`
 
+---
+
+## Step 4: Saving out clean data:
+
+Now you can save out your work in your data_products folder.
+
+```{r}
+save(fisheries_2015, file = "data_products/fisheries_2015.Rdata")
+```
+
+Now your'll have some files in raw_data and data_products folders: 
+
+```r
+final_project
+├── 01_data_cleaning.Rmd   <- work files
+├── 02_analysis.Rmd        <- work files
+├── final_project.Rproj    <- you declared your project
+└── raw_data        <- Folder
+    └── wikipedia_fisheries.html  <- raw data, table in html file
+├── data_products   <- Folder
+│   └── fisheries_2015.Rdata      <- cleaned data
+├── figures         <- Folder
+├── literature      <- Folder
+```
+
+---
+
+## Step 5: Yay! Analysis!!!
+
+To get going with your analysis, you might start off your 02_analysis.Rmd file with the following code.
+
+```{r}
+library(tidyverse) # for wrangling (dplyr and tidyr) and plotting (ggplot)
+load("data_products/fisheries_2015.Rdata")
+```
 
 
-<!-- --- -->
 
-<!-- I get the UN Security Council data from the UN's website "Countries Elected Members of the Security Council". -->
+
+
+---
+
+# Key packages used
+
+Sam Firke (2019). janitor: Simple Tools for Examining and
+  Cleaning Dirty Data. R package version 1.2.0.
+  https://CRAN.R-project.org/package=janitor
+
+Hadley Wickham (2017). tidyverse: Easily Install and Load
+  the 'Tidyverse'. R package version 1.2.1.
+  https://CRAN.R-project.org/package=tidyverse
+
+Arel-Bundock et al., (2018). countrycode: An R package to
+  convert country names and country codes. Journal of Open
+  Source Software, 3(28), 848,
+  https://doi.org/10.21105/joss.00848
+
+Christian Rubba (2016). htmltab: Assemble Data Frames from
+  HTML Tables. R package version 0.7.1.
+  https://CRAN.R-project.org/package=htmltab
+
+---
+
+I get the UN Security Council data from the UN's website "Countries Elected Members of the Security Council".
+
+```{r, eval = F}
+url = "https://www.un.org/securitycouncil/content/countries-elected-members"
+download.file(url = url, "raw_data/unsc_countries_elected_members.Rdata")
+```
+
+
 
 ```{r, eval = F, echo = F}
-text <- readLines("https://www.un.org/securitycouncil/content/countries-elected-members", encoding = "windows-1252")
+text <- readLines(, encoding = "windows-1252")
 text
 ```
 
@@ -136,15 +281,41 @@ citation("janitor")
 
 ---
 
+```{r eval = F}
+citation("htmltab")
+```
+
+Sam Firke (2019). janitor: Simple Tools for Examining and
+  Cleaning Dirty Data. R package version 1.2.0.
+  https://CRAN.R-project.org/package=janitor
+
+Hadley Wickham (2017). tidyverse: Easily Install and Load
+  the 'Tidyverse'. R package version 1.2.1.
+  https://CRAN.R-project.org/package=tidyverse
+
+Arel-Bundock et al., (2018). countrycode: An R package to
+  convert country names and country codes. Journal of Open
+  Source Software, 3(28), 848,
+  https://doi.org/10.21105/joss.00848
+
+Christian Rubba (2016). htmltab: Assemble Data Frames from
+  HTML Tables. R package version 0.7.1.
+  https://CRAN.R-project.org/package=htmltab
+
+
+---
+
+
+
 ```{r}
-citation("tidyverse")
+
 ```
 
 
 
 
 ```{css, eval = TRUE, echo = F}
-.remark-code{line-height: 1.5; font-size: 70%}
+.remark-code{line-height: 1.5; font-size: 65%}
 ```
 
 

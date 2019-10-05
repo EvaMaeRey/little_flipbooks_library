@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
   <head>
     <title>data cleaning flipbook</title>
-    <meta charset="utf-8">
-    <meta name="author" content="  Gina Reynolds, April 2019" />
+    <meta charset="utf-8" />
+    <meta name="author" content="  Gina Reynolds, October 2019" />
     <link href="libs/remark-css-0.0.1/kunoichi.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
   </head>
@@ -13,7 +13,7 @@ class: center, middle, inverse, title-slide
 
 # data cleaning flipbook
 ## a flipbook with some data cleaning examples | made with Xaringan
-### <br><br>Gina Reynolds, April 2019
+### <br><br>Gina Reynolds, October 2019
 ### <br>
 
 ---
@@ -22,15 +22,13 @@ class: center, middle, inverse, title-slide
 
 
 
+
+
 # Introduction
 
-Data cleaning is the pits.  Or is it?  The cleaning tools of the tidyverse and other packages might help such tasks become less terrible.  Let's look at a couple of examples. 
+Data cleaning is the pits.  Or is it?  The cleaning tools of the `tidyverse` and other packages like `janitor` might help such tasks become less terrible -- and more of a delight! Let's look at a couple of examples. 
 
-&lt;!-- Data transformation, visualization, and modeling are key steps of data analysis.  The incredibly popular collection of packages known as the *Tidyverse* have made these activities more fluid and intuitive in R. --&gt;
 
-&lt;!-- Still, the syntax and behavior of the functions must be learned and remembered; having references and examples at the ready may be helpful to newcomers taking on this task.  The "Tidyverse in Action" is aimed at providing such a reference alongside other invaluable resources.  [R for Data Science](https://r4ds.had.co.nz/index.html) and the [RStudio cheatsheets](https://www.rstudio.com/resources/cheatsheets/) are particularly useful.  --&gt;
-
-&lt;!-- Topics to be included are wrangling, plotting, and modeling.  The wrangling section is the most developed at this point, thought there is more to add.  In the first formulation of this book, I divided wrangling and plotting.  But no plots didn't feel very satisfying.  It's a bit more of a slog to follow the data transformation steps.  So there will be plotting throughout -- respite from looking at transforming tables of text -- even when plotting is not the emphasis of the section. I've included some ideas on plotting but there isn't much organization or explanation at this point.  There's nothing on modeling yet.  Someday.   --&gt;
 
 
 ---
@@ -50,43 +48,81 @@ The tools demonstrated in this book are implemented in the statistical software,
 I'm grateful to the tidyverse team for their tireless work on developing and maintaining this wonderful toolkit and to RStudio for supporting the development.  Emi Tanaka (@statsgen) and Garrick Aden-Buie (@grrrck) helped by writing code to made the flipbook style possible. I'm *very* grateful to them for their work on this as well as to Yihui Xie and others for their work on the Xaringan package --- the extraordinary platform for creating the slides for this book.  I'm thankful too to my students who refresh my perspective on teaching and learning new tools.  Finally, thanks to David who is supportive of data cleaning and of me. 
 
 
+---
+
+#  Project structure
+
+Open your project with RStudio. 
+
+```
+final_project
+├── 01_data_cleaning.Rmd   &lt;- work files
+├── 02_analysis.Rmd        &lt;- work files
+├── final_project.Rproj    &lt;- RStudio file - you declared your main folder to be the project space
+├── data_products   &lt;- Folder
+├── figures         &lt;- Folder
+├── literature      &lt;- Folder
+└── raw_data        &lt;- Folder
+```
 
 ---
 
 # Load the tidyverse
+
+  Functions from other packages come 
 
 
 ```r
 library(tidyverse)
 ```
 
+
+
+
+
+---
+
+## Step 0: find data!
+
+You probably have this covered by now.  Nice!
+
 The date come from the second table on the Wikipedia page [Fishing Industry by Country](https://en.wikipedia.org/wiki/Fishing_industry_by_country).
 
+&lt;iframe src="https://en.wikipedia.org/wiki/Fishing_industry_by_country" width="100%" height="400px"&gt;&lt;/iframe&gt;
+
 ---
 
+## Step 1: get data
 
+The first step saving your file of interest manually to your raw data folder, or use download.file with a web address
 
-class: split-40
-count: false
-
-.column[.content[
 
 ```r
-*url &lt;- "https://en.wikipedia.org/wiki/Fishing_industry_by_country"
+download.file(url = "https://en.wikipedia.org/wiki/Fishing_industry_by_country", 
+              destfile = "raw_data/wikipedia_fisheries.html")
 ```
-]]
-.column[.content[
 
-]]
 ---
+
+## Step 2:  scan in data and create an object *like `fisheries_2015_raw`*
+
+
+Once you have saved your raw data, you need to scan/read the data into R.  There are a variety of functions to do this depending on your data type.  In this example, we are wanting to read in a table embedded in an html file.  We can read in the data with the htmltab function from the htmltab package. 
+
+---
+
+
+
+
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-url &lt;- "https://en.wikipedia.org/wiki/Fishing_industry_by_country"
-*htmltab::htmltab(doc = url, which = 2)
+* # using the htmltab package to scan html file
+*htmltab::htmltab(doc = "raw_data/wikipedia_fisheries.html",
+* # the second table object is what we want
+*                which = 2)
 ```
 ]]
 .column[.content[
@@ -315,13 +351,271 @@ url &lt;- "https://en.wikipedia.org/wiki/Fishing_industry_by_country"
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-url &lt;- "https://en.wikipedia.org/wiki/Fishing_industry_by_country"
-htmltab::htmltab(doc = url, which = 2) %&gt;%
-* as_tibble()
+  # using the htmltab package to scan html file
+htmltab::htmltab(doc = "raw_data/wikipedia_fisheries.html",  
+  # the second table object is what we want
+                 which = 2) -&gt;  
+* # assign this to an object with the _raw suffix
+*fisheries_2015_raw
+```
+]]
+.column[.content[
+
+]]
+
+
+---
+
+## Step 3:  Load tidyverse, Clean data and create an cleaned object *like fisheries_2015*
+
+We'll do most of the manipulation with dplyr and tidyr which are subpackages of the tidyverse.
+
+---
+
+
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*fisheries_2015_raw
+```
+]]
+.column[.content[
+
+```
+                               Country    Capture Aquaculture       Total
+  2                              China 17,800,000  63,700,000  81,500,000
+  3                          Indonesia  6,584,419  16,600,000  23,200,000
+  4                              India  5,082,332   5,703,002  10,800,000
+  5                            Vietnam  2,785,940   3,634,531   6,420,471
+  6                      United States  4,931,017     444,369   5,375,386
+  7                             Russia  4,773,413     173,840   4,947,253
+  8                              Japan  3,275,263   1,067,994   4,343,257
+  9                        Philippines  2,027,992   2,200,914   4,228,906
+  10                              Peru  3,811,802     100,187   3,911,989
+  11                        Bangladesh  1,674,770   2,203,554   3,878,324
+  12                            Norway  2,203,360   1,326,216   3,529,576
+  13                       South Korea  1,395,951   1,859,220   3,255,171
+  14                           Myanmar  2,072,390   1,017,644   3,090,034
+  15                             Chile  1,829,238   1,050,117   2,879,355
+  16                          Thailand  1,530,583     962,571   2,493,154
+  17                          Malaysia  1,584,371     407,887   1,992,258
+  18                            Mexico  1,524,467     221,328   1,745,795
+  19                             Egypt    335,614   1,370,660   1,706,274
+  20                           Morocco  1,454,105       1,142   1,455,247
+  21                            Brazil    705,000     581,230   1,286,230
+  22                             Spain    915,137     283,831   1,198,968
+  23                           Ecuador    715,495     451,090   1,166,585
+  24                           Iceland  1,085,176      15,129   1,100,305
+  25                              Iran    695,407     398,129   1,093,536
+  26                            Canada    874,727     200,765   1,075,492
+  27                           Nigeria    734,731     306,727   1,041,458
+  28                    United Kingdom    702,405     194,492     896,897
+  29                          Cambodia    629,950     172,500     802,450
+  30                       North Korea    209,000     554,100     763,100
+  31                         Argentina    755,226       3,673     758,900
+  32                            France    561,173     166,640     727,813
+  33                           Denmark    670,344      36,337     706,681
+  34                          Pakistan    513,156     156,430     669,586
+  35                     Faroe Islands    568,435      83,300     651,735
+  36                      South Africa    622,070       7,994     630,064
+  37                        Mauritania    609,754           0     609,754
+  38                            Turkey    335,326     250,331     585,657
+  39                         Sri Lanka    521,637      30,974     552,611
+  40                       New Zealand    424,791     109,016     533,807
+  41                            Uganda    389,244     118,051     507,295
+  42                           Namibia    503,878         591     504,469
+  43                            Angola    486,490         655     487,145
+  44                           Senegal    474,162       2,079     476,241
+  45                       Netherlands    370,274      62,940     433,214
+  46                          Tanzania    370,966      12,547     383,514
+  47                             Ghana    327,457      52,480     379,937
+  48                             Italy    198,130     157,109     355,239
+  49                  Papua New Guinea    309,245       6,200     315,445
+  50                           Germany    271,185      41,721     312,906
+  51                         Venezuela    284,175      25,998     310,173
+  52                        Mozambique    299,591       1,180     300,771
+  53                           Ireland    259,845      40,244     300,089
+  54                              Oman    279,606         103     279,709
+  55                         Greenland    273,175           0     273,175
+  56                         Australia    174,629      96,847     271,477
+  57                            Poland    218,115      38,300     256,415
+  58  Democratic Republic of the Congo    237,372       3,161     240,533
+  59                          Cameroon    233,190       2,315     235,505
+  60                            Sweden    208,783      15,747     224,530
+  61                           Finland    192,065      14,412     206,477
+  62                      Sierra Leone    202,100          75     202,175
+  63                            Greece     76,362     123,410     199,772
+  64                          Portugal    186,950       9,787     196,737
+  65                             Kenya    171,391      15,360     186,751
+  66                          Colombia     86,344      96,970     183,314
+  67                              Laos     70,915     109,835     180,750
+  68                          Kiribati    172,822       3,652     176,474
+  69                        Madagascar    142,333      25,998     168,331
+  70                            Malawi    152,852       7,646     160,498
+  71                             Yemen    154,450           0     154,450
+  72                            Panama    144,450       8,808     153,258
+  73                         Hong Kong    142,775       4,258     147,033
+  74                           Tunisia    115,064      16,165     131,229
+  75                          Maldives    129,191           0     129,191
+  76                            Guinea    128,000         250     128,250
+  77                        Seychelles    127,128           0     127,128
+  78                            Latvia    114,806         788     115,594
+  79                            Zambia     83,918      30,285     114,203
+  80                         Lithuania    106,945       4,393     111,338
+  81                              Chad    110,000          94     110,094
+  82                      Saudi Arabia     68,082      39,920     108,002
+  83                              Mali    102,486       4,194     106,680
+  84                           Ukraine     75,743      21,425      97,168
+  85                           Algeria     95,000       1,361      96,361
+  86                            Belize     91,432         953      92,385
+  87    Federated States of Micronesia     88,397           0      88,397
+  88                           Croatia     72,312      15,805      88,116
+  89             Republic of the Congo     86,748         177      86,925
+  90                   Solomon Islands     66,445      10,582      77,027
+  91                           Estonia     75,931         868      76,799
+  92              United Arab Emirates     73,000       1,241      74,241
+  93                       Ivory Coast     67,500       4,701      72,201
+  94                             Nepal     21,500      49,043      70,543
+  95                         Nicaragua     45,500      22,530      68,030
+  96             Saint Kitts and Nevis     65,734           1      65,735
+  97                        Uzbekistan     27,267      38,055      65,322
+  98                  Marshall Islands     64,795           5      64,800
+  99                          Honduras     10,600      53,100      63,700
+  100                      El Salvador     54,084       7,956      62,040
+  101                           Gambia     58,261           5      58,296
+  102                             Iraq     28,000      28,835      56,835
+  103                            Benin     49,806       3,080      52,886
+  104                             Cuba     23,574      29,185      52,759
+  105                          Uruguay     51,500          70      51,570
+  106                         Suriname     47,013         102      47,115
+  107                         Ethiopia     45,500          95      45,595
+  108                             Fiji     44,663         754      45,417
+  109                        Guatemala     19,011      26,268      45,279
+  110                          Vanuatu     44,002          16      44,018
+  111                       Kazakhstan     41,335       1,878      43,213
+  112                           Guyana     42,142         337      42,478
+  113                            Sudan     33,002       4,500      37,502
+  114                       Costa Rica     14,750      22,421      37,171
+  115                          Curaçao     35,534           0      35,534
+  116                      South Sudan     35,000          20      35,020
+  117                            Niger     34,592         300      34,892
+  118                             Togo     31,891          98      31,989
+  119                            Gabon     31,000          45      31,045
+  120                          Georgia     30,078         670      30,748
+  121                            Libya     30,002          10      30,012
+  122                          Somalia     30,000           0      30,000
+  123         Central African Republic     29,000         190      29,190
+  124                          Belgium     26,970          44      27,014
+  125                           Rwanda     25,013         580      26,593
+  126                         Zimbabwe     15,711      10,085      25,796
+  127                         Paraguay     17,000       8,500      25,500
+  128                          Romania     12,728      12,574      25,302
+  129                   Czech Republic      3,507      20,952      24,459
+  130                         Bulgaria      8,614      15,762      24,376
+  131                          Burundi     21,805       1,330      23,135
+  132 Saint Vincent and the Grenadines     23,077           0      23,077
+  133                     Burkina Faso     22,070         470      22,540
+  134                          Hungary      5,048      16,248      21,296
+  135                           Israel      1,758      18,914      20,672
+  136                          Armenia      3,758      16,381      20,139
+  137                       Cape Verde     19,900           0      19,900
+  138                        Mauritius     18,062       1,021      19,083
+  139                            Haiti     16,510       1,220      17,730
+  140                          Jamaica     16,800         620      17,420
+  141               Dominican Republic     14,640       2,285      16,925
+  142                          Comoros     16,407           0      16,407
+  143                 French Polynesia     13,754       1,343      15,097
+  144                     Turkmenistan     15,000          30      15,030
+  145                          Bahrain     15,000           6      15,006
+  146                          Liberia     14,700          40      14,740
+  147                            Qatar     14,516          10      14,526
+  148                           Brunei     13,292         948      14,240
+  149              Trinidad and Tobago     13,027          11      13,038
+  150                          Moldova         50      16,011      12,061
+  151                          Belarus        686      11,199      11,885
+  152            São Tomé and Príncipe     11,750           0      11,750
+  153                          Bahamas     11,625           8      11,633
+  154                          Bolivia      7,000       3,000      10,000
+  155                           Serbia      2,067       6,878       8,945
+  156                          Albania      7,886         950       8,836
+  157                            Samoa      8,801          10       8,811
+  158                            Malta      2,420       6,073       8,493
+  159                           Cyprus      1,507       6,625       8,132
+  160                Equatorial Guinea      8,000          15       8,015
+  161                           Tuvalu      7,684           3       7,687
+  162                        Singapore      1,234       6,112       7,346
+  163                      Isle of Man      7,040           0       7,040
+  164                            Syria      4,500       3,500       7,000
+  165                    Guinea-Bissau      6,700           0       6,700
+  166                           Kuwait      5,493         196       5,689
+  167                    New Caledonia      3,815       1,587       5,402
+  168                          Lebanon      4,291       1,015       5,306
+  169           Bosnia and Herzegovina        305       4,564       4,869
+  170                      Timor-Leste      3,200       1,560       4,760
+  171             Jersey and  Guernsey      2,985       1,499       4,483
+  172                          Eritrea      4,300           0       4,300
+  173                         Slovakia      1,866       2,169       4,035
+  174                          Austria        350       3,483       3,833
+  175                        Palestine      3,306         280       3,586
+  176                      Switzerland      1,851       1,733       3,584
+  177                   American Samoa      3,047          20       3,067
+  178              Antigua and Barbuda      3,000          10       3,010
+  179         Turks and Caicos Islands      2,780           0       2,780
+  180                          Grenada      2,550           0       2,550
+  181                       Montenegro      1,595         929       2,524
+  182                         Djibouti      2,220           0       2,220
+  183                      Afghanistan      1,000       1,200       2,200
+  184                         Slovenia        311       1,844       2,154
+  185                      Saint Lucia      2,097          32       2,129
+  186                       Kyrgyzstan         89       1,931       2,020
+  187                      Puerto Rico      1,901          20       1,921
+  188                         Barbados      1,735          26       1,761
+  189                           Jordan        873         885       1,758
+  190                            Tonga      1,697           3       1,700
+  191                       Tajikistan      1,100         450       1,550
+  192                             Guam      1,391         110       1,501
+  193                            Macao      1,500           0       1,500
+  194                       Azerbaijan        676         640       1,316
+  195                  North Macedonia        306         986       1,292
+  196           British Virgin Islands      1,200           0       1,200
+  197                          Lesotho         52       1,050       1,102
+  198         Northern Mariana Islands        950          42         992
+  199                            Palau        818          23         841
+  200                         Dominica        770           6         776
+  201                US Virgin Islands        551           8         559
+  202                            Nauru        530           0         530
+  203                          Bermuda        410           0         410
+  204                     Sint Maarten        253           0         253
+  205                         Eswatini         65         100         165
+  206                           Bhutan          7         150         157
+  207                            Aruba        142           0         142
+  208                   Cayman Islands        125           0         125
+  209                           France         90           0          90
+  210                         Botswana         38          15          53
+  211                         Mongolia         15           0          15
+  212                           Monaco          1           0           1
+  213                        Gibraltar          1           0           1
+  214                          Andorra          0           0           0
+  215                    Liechtenstein          0           0           0
+  216                       Luxembourg          0           0           0
+  217                       San Marino          0           0           0
+  218                     Total (2015) 93,736,944 101,084,799 199,741,129
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+fisheries_2015_raw %&gt;%  
+* as_tibble()   # show data in "tidyverse" way, as_tibble
 ```
 ]]
 .column[.content[
@@ -346,14 +640,14 @@ htmltab::htmltab(doc = url, which = 2) %&gt;%
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-url &lt;- "https://en.wikipedia.org/wiki/Fishing_industry_by_country"
-htmltab::htmltab(doc = url, which = 2) %&gt;%
-  as_tibble() %&gt;%
-* janitor::clean_names(case = "snake")
+fisheries_2015_raw %&gt;%  
+  as_tibble() %&gt;%  # show data in "tidyverse" way, as_tibble
+* # you may need to install the janitor package for this next step
+* # if you have not already done so
+* janitor::clean_names(case = "snake")   # snake is the default too
 ```
 ]]
 .column[.content[
@@ -378,55 +672,17 @@ htmltab::htmltab(doc = url, which = 2) %&gt;%
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-url &lt;- "https://en.wikipedia.org/wiki/Fishing_industry_by_country"
-htmltab::htmltab(doc = url, which = 2) %&gt;%
-  as_tibble() %&gt;%
-  janitor::clean_names(case = "snake") %&gt;%
+fisheries_2015_raw %&gt;%  
+  as_tibble() %&gt;%  # show data in "tidyverse" way, as_tibble
+  # you may need to install the janitor package for this next step
+  # if you have not already done so
+  janitor::clean_names(case = "snake") %&gt;%  # snake is the default too
+* # converting columns to numeric 'dbl', which were character 'cha'
 * mutate(capture =
-*          str_replace_all(string = capture,
-*                          pattern = ",",
-*                          replacement = ""))
-```
-]]
-.column[.content[
-
-```
-  # A tibble: 217 x 4
-     country       capture  aquaculture total     
-     &lt;chr&gt;         &lt;chr&gt;    &lt;chr&gt;       &lt;chr&gt;     
-   1 China         17800000 63,700,000  81,500,000
-   2 Indonesia     6584419  16,600,000  23,200,000
-   3 India         5082332  5,703,002   10,800,000
-   4 Vietnam       2785940  3,634,531   6,420,471 
-   5 United States 4931017  444,369     5,375,386 
-   6 Russia        4773413  173,840     4,947,253 
-   7 Japan         3275263  1,067,994   4,343,257 
-   8 Philippines   2027992  2,200,914   4,228,906 
-   9 Peru          3811802  100,187     3,911,989 
-  10 Bangladesh    1674770  2,203,554   3,878,324 
-  # … with 207 more rows
-```
-]]
----
-class: split-40
-count: false
-
-.column[.content[
-
-```r
-url &lt;- "https://en.wikipedia.org/wiki/Fishing_industry_by_country"
-htmltab::htmltab(doc = url, which = 2) %&gt;%
-  as_tibble() %&gt;%
-  janitor::clean_names(case = "snake") %&gt;%
-  mutate(capture =
-           str_replace_all(string = capture,
-                           pattern = ",",
-                           replacement = "")) %&gt;%
-* mutate(capture = as.numeric(x = capture))
+*          readr::parse_number(x = capture))
 ```
 ]]
 .column[.content[
@@ -451,65 +707,19 @@ htmltab::htmltab(doc = url, which = 2) %&gt;%
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-url &lt;- "https://en.wikipedia.org/wiki/Fishing_industry_by_country"
-htmltab::htmltab(doc = url, which = 2) %&gt;%
-  as_tibble() %&gt;%
-  janitor::clean_names(case = "snake") %&gt;%
-  mutate(capture =
-           str_replace_all(string = capture,
-                           pattern = ",",
-                           replacement = "")) %&gt;%
-  mutate(capture = as.numeric(x = capture)) %&gt;%
+fisheries_2015_raw %&gt;%  
+  as_tibble() %&gt;%  # show data in "tidyverse" way, as_tibble
+  # you may need to install the janitor package for this next step
+  # if you have not already done so
+  janitor::clean_names(case = "snake") %&gt;%  # snake is the default too
+  # converting columns to numeric 'dbl', which were character 'cha'
+  mutate(capture =  
+           readr::parse_number(x = capture)) %&gt;%  
 * mutate(aquaculture =
-*          str_replace_all(string = aquaculture,
-*                          pattern = ",",
-*                          replacement = ""))
-```
-]]
-.column[.content[
-
-```
-  # A tibble: 217 x 4
-     country        capture aquaculture total     
-     &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;     
-   1 China         17800000 63700000    81,500,000
-   2 Indonesia      6584419 16600000    23,200,000
-   3 India          5082332 5703002     10,800,000
-   4 Vietnam        2785940 3634531     6,420,471 
-   5 United States  4931017 444369      5,375,386 
-   6 Russia         4773413 173840      4,947,253 
-   7 Japan          3275263 1067994     4,343,257 
-   8 Philippines    2027992 2200914     4,228,906 
-   9 Peru           3811802 100187      3,911,989 
-  10 Bangladesh     1674770 2203554     3,878,324 
-  # … with 207 more rows
-```
-]]
----
-class: split-40
-count: false
-
-.column[.content[
-
-```r
-url &lt;- "https://en.wikipedia.org/wiki/Fishing_industry_by_country"
-htmltab::htmltab(doc = url, which = 2) %&gt;%
-  as_tibble() %&gt;%
-  janitor::clean_names(case = "snake") %&gt;%
-  mutate(capture =
-           str_replace_all(string = capture,
-                           pattern = ",",
-                           replacement = "")) %&gt;%
-  mutate(capture = as.numeric(x = capture)) %&gt;%
-  mutate(aquaculture =
-           str_replace_all(string = aquaculture,
-                           pattern = ",",
-                           replacement = "")) %&gt;%
-* mutate(aquaculture = as.numeric(x = aquaculture))
+*          readr::parse_number(x = aquaculture))
 ```
 ]]
 .column[.content[
@@ -534,73 +744,21 @@ htmltab::htmltab(doc = url, which = 2) %&gt;%
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-url &lt;- "https://en.wikipedia.org/wiki/Fishing_industry_by_country"
-htmltab::htmltab(doc = url, which = 2) %&gt;%
-  as_tibble() %&gt;%
-  janitor::clean_names(case = "snake") %&gt;%
-  mutate(capture =
-           str_replace_all(string = capture,
-                           pattern = ",",
-                           replacement = "")) %&gt;%
-  mutate(capture = as.numeric(x = capture)) %&gt;%
-  mutate(aquaculture =
-           str_replace_all(string = aquaculture,
-                           pattern = ",",
-                           replacement = "")) %&gt;%
-  mutate(aquaculture = as.numeric(x = aquaculture)) %&gt;%
-* mutate(total = str_replace_all(string = total,
-*                                pattern = ",",
-*                                replacement = ""))
-```
-]]
-.column[.content[
-
-```
-  # A tibble: 217 x 4
-     country        capture aquaculture total   
-     &lt;chr&gt;            &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt;   
-   1 China         17800000    63700000 81500000
-   2 Indonesia      6584419    16600000 23200000
-   3 India          5082332     5703002 10800000
-   4 Vietnam        2785940     3634531 6420471 
-   5 United States  4931017      444369 5375386 
-   6 Russia         4773413      173840 4947253 
-   7 Japan          3275263     1067994 4343257 
-   8 Philippines    2027992     2200914 4228906 
-   9 Peru           3811802      100187 3911989 
-  10 Bangladesh     1674770     2203554 3878324 
-  # … with 207 more rows
-```
-]]
----
-class: split-40
-count: false
-
-.column[.content[
-
-```r
-url &lt;- "https://en.wikipedia.org/wiki/Fishing_industry_by_country"
-htmltab::htmltab(doc = url, which = 2) %&gt;%
-  as_tibble() %&gt;%
-  janitor::clean_names(case = "snake") %&gt;%
-  mutate(capture =
-           str_replace_all(string = capture,
-                           pattern = ",",
-                           replacement = "")) %&gt;%
-  mutate(capture = as.numeric(x = capture)) %&gt;%
-  mutate(aquaculture =
-           str_replace_all(string = aquaculture,
-                           pattern = ",",
-                           replacement = "")) %&gt;%
-  mutate(aquaculture = as.numeric(x = aquaculture)) %&gt;%
-  mutate(total = str_replace_all(string = total,
-                                 pattern = ",",
-                                 replacement = "")) %&gt;%
-* mutate(total = as.numeric(x = total))
+fisheries_2015_raw %&gt;%  
+  as_tibble() %&gt;%  # show data in "tidyverse" way, as_tibble
+  # you may need to install the janitor package for this next step
+  # if you have not already done so
+  janitor::clean_names(case = "snake") %&gt;%  # snake is the default too
+  # converting columns to numeric 'dbl', which were character 'cha'
+  mutate(capture =  
+           readr::parse_number(x = capture)) %&gt;%  
+  mutate(aquaculture =  
+           readr::parse_number(x = aquaculture)) %&gt;%  
+* mutate(total =
+*          readr::parse_number(x = total))
 ```
 ]]
 .column[.content[
@@ -625,28 +783,22 @@ htmltab::htmltab(doc = url, which = 2) %&gt;%
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-url &lt;- "https://en.wikipedia.org/wiki/Fishing_industry_by_country"
-htmltab::htmltab(doc = url, which = 2) %&gt;%
-  as_tibble() %&gt;%
-  janitor::clean_names(case = "snake") %&gt;%
-  mutate(capture =
-           str_replace_all(string = capture,
-                           pattern = ",",
-                           replacement = "")) %&gt;%
-  mutate(capture = as.numeric(x = capture)) %&gt;%
-  mutate(aquaculture =
-           str_replace_all(string = aquaculture,
-                           pattern = ",",
-                           replacement = "")) %&gt;%
-  mutate(aquaculture = as.numeric(x = aquaculture)) %&gt;%
-  mutate(total = str_replace_all(string = total,
-                                 pattern = ",",
-                                 replacement = "")) %&gt;%
-  mutate(total = as.numeric(x = total)) %&gt;%
+fisheries_2015_raw %&gt;%  
+  as_tibble() %&gt;%  # show data in "tidyverse" way, as_tibble
+  # you may need to install the janitor package for this next step
+  # if you have not already done so
+  janitor::clean_names(case = "snake") %&gt;%  # snake is the default too
+  # converting columns to numeric 'dbl', which were character 'cha'
+  mutate(capture =  
+           readr::parse_number(x = capture)) %&gt;%  
+  mutate(aquaculture =  
+           readr::parse_number(x = aquaculture)) %&gt;%  
+  mutate(total =  
+           readr::parse_number(x = total)) %&gt;%  
+* # removing white spaces before and after a string
 * mutate(country = str_trim(string = country))
 ```
 ]]
@@ -672,78 +824,200 @@ htmltab::htmltab(doc = url, which = 2) %&gt;%
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-url &lt;- "https://en.wikipedia.org/wiki/Fishing_industry_by_country"
-htmltab::htmltab(doc = url, which = 2) %&gt;%
-  as_tibble() %&gt;%
-  janitor::clean_names(case = "snake") %&gt;%
-  mutate(capture =
-           str_replace_all(string = capture,
-                           pattern = ",",
-                           replacement = "")) %&gt;%
-  mutate(capture = as.numeric(x = capture)) %&gt;%
-  mutate(aquaculture =
-           str_replace_all(string = aquaculture,
-                           pattern = ",",
-                           replacement = "")) %&gt;%
-  mutate(aquaculture = as.numeric(x = aquaculture)) %&gt;%
-  mutate(total = str_replace_all(string = total,
-                                 pattern = ",",
-                                 replacement = "")) %&gt;%
-  mutate(total = as.numeric(x = total)) %&gt;%
-  mutate(country = str_trim(string = country)) %&gt;%
+fisheries_2015_raw %&gt;%  
+  as_tibble() %&gt;%  # show data in "tidyverse" way, as_tibble
+  # you may need to install the janitor package for this next step
+  # if you have not already done so
+  janitor::clean_names(case = "snake") %&gt;%  # snake is the default too
+  # converting columns to numeric 'dbl', which were character 'cha'
+  mutate(capture =  
+           readr::parse_number(x = capture)) %&gt;%  
+  mutate(aquaculture =  
+           readr::parse_number(x = aquaculture)) %&gt;%  
+  mutate(total =  
+           readr::parse_number(x = total)) %&gt;%  
+  # removing white spaces before and after a string
+  mutate(country = str_trim(string = country)) %&gt;%  
+* # creating region variable
+* # using countrycode function from countrycode package
+* # if you haven't done so,
+* mutate(region =
+*          countrycode::countrycode(
+*            sourcevar = country,
+*            origin = "country.name",
+*            dest = "region"))
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 217 x 5
+     country        capture aquaculture    total region            
+     &lt;chr&gt;            &lt;dbl&gt;       &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;             
+   1 China         17800000    63700000 81500000 Eastern Asia      
+   2 Indonesia      6584419    16600000 23200000 South-Eastern Asia
+   3 India          5082332     5703002 10800000 Southern Asia     
+   4 Vietnam        2785940     3634531  6420471 South-Eastern Asia
+   5 United States  4931017      444369  5375386 Northern America  
+   6 Russia         4773413      173840  4947253 Eastern Europe    
+   7 Japan          3275263     1067994  4343257 Eastern Asia      
+   8 Philippines    2027992     2200914  4228906 South-Eastern Asia
+   9 Peru           3811802      100187  3911989 South America     
+  10 Bangladesh     1674770     2203554  3878324 Southern Asia     
+  # … with 207 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+fisheries_2015_raw %&gt;%  
+  as_tibble() %&gt;%  # show data in "tidyverse" way, as_tibble
+  # you may need to install the janitor package for this next step
+  # if you have not already done so
+  janitor::clean_names(case = "snake") %&gt;%  # snake is the default too
+  # converting columns to numeric 'dbl', which were character 'cha'
+  mutate(capture =  
+           readr::parse_number(x = capture)) %&gt;%  
+  mutate(aquaculture =  
+           readr::parse_number(x = aquaculture)) %&gt;%  
+  mutate(total =  
+           readr::parse_number(x = total)) %&gt;%  
+  # removing white spaces before and after a string
+  mutate(country = str_trim(string = country)) %&gt;%  
+  # creating region variable
+  # using countrycode function from countrycode package
+  # if you haven't done so,
+  mutate(region =  
+           countrycode::countrycode(  
+             sourcevar = country,  
+             origin = "country.name",  
+             dest = "region")) %&gt;%  
+* # country codes are useful for merging data
+* mutate(iso3c =
+*          countrycode::countrycode(
+*            sourcevar = country,
+*            origin = "country.name",
+*            dest = "iso3c"))
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 217 x 6
+     country        capture aquaculture    total region             iso3c
+     &lt;chr&gt;            &lt;dbl&gt;       &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;              &lt;chr&gt;
+   1 China         17800000    63700000 81500000 Eastern Asia       CHN  
+   2 Indonesia      6584419    16600000 23200000 South-Eastern Asia IDN  
+   3 India          5082332     5703002 10800000 Southern Asia      IND  
+   4 Vietnam        2785940     3634531  6420471 South-Eastern Asia VNM  
+   5 United States  4931017      444369  5375386 Northern America   USA  
+   6 Russia         4773413      173840  4947253 Eastern Europe     RUS  
+   7 Japan          3275263     1067994  4343257 Eastern Asia       JPN  
+   8 Philippines    2027992     2200914  4228906 South-Eastern Asia PHL  
+   9 Peru           3811802      100187  3911989 South America      PER  
+  10 Bangladesh     1674770     2203554  3878324 Southern Asia      BGD  
+  # … with 207 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+fisheries_2015_raw %&gt;%  
+  as_tibble() %&gt;%  # show data in "tidyverse" way, as_tibble
+  # you may need to install the janitor package for this next step
+  # if you have not already done so
+  janitor::clean_names(case = "snake") %&gt;%  # snake is the default too
+  # converting columns to numeric 'dbl', which were character 'cha'
+  mutate(capture =  
+           readr::parse_number(x = capture)) %&gt;%  
+  mutate(aquaculture =  
+           readr::parse_number(x = aquaculture)) %&gt;%  
+  mutate(total =  
+           readr::parse_number(x = total)) %&gt;%  
+  # removing white spaces before and after a string
+  mutate(country = str_trim(string = country)) %&gt;%  
+  # creating region variable
+  # using countrycode function from countrycode package
+  # if you haven't done so,
+  mutate(region =  
+           countrycode::countrycode(  
+             sourcevar = country,  
+             origin = "country.name",  
+             dest = "region")) %&gt;%  
+  # country codes are useful for merging data
+  mutate(iso3c =  
+           countrycode::countrycode(  
+             sourcevar = country,  
+             origin = "country.name",  
+             dest = "iso3c")) %&gt;%  
+* # one row is an aggregation - deleting this
 * filter(country != "Total (2015)")
 ```
 ]]
 .column[.content[
 
 ```
-  # A tibble: 216 x 4
-     country        capture aquaculture    total
-     &lt;chr&gt;            &lt;dbl&gt;       &lt;dbl&gt;    &lt;dbl&gt;
-   1 China         17800000    63700000 81500000
-   2 Indonesia      6584419    16600000 23200000
-   3 India          5082332     5703002 10800000
-   4 Vietnam        2785940     3634531  6420471
-   5 United States  4931017      444369  5375386
-   6 Russia         4773413      173840  4947253
-   7 Japan          3275263     1067994  4343257
-   8 Philippines    2027992     2200914  4228906
-   9 Peru           3811802      100187  3911989
-  10 Bangladesh     1674770     2203554  3878324
+  # A tibble: 216 x 6
+     country        capture aquaculture    total region             iso3c
+     &lt;chr&gt;            &lt;dbl&gt;       &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;              &lt;chr&gt;
+   1 China         17800000    63700000 81500000 Eastern Asia       CHN  
+   2 Indonesia      6584419    16600000 23200000 South-Eastern Asia IDN  
+   3 India          5082332     5703002 10800000 Southern Asia      IND  
+   4 Vietnam        2785940     3634531  6420471 South-Eastern Asia VNM  
+   5 United States  4931017      444369  5375386 Northern America   USA  
+   6 Russia         4773413      173840  4947253 Eastern Europe     RUS  
+   7 Japan          3275263     1067994  4343257 Eastern Asia       JPN  
+   8 Philippines    2027992     2200914  4228906 South-Eastern Asia PHL  
+   9 Peru           3811802      100187  3911989 South America      PER  
+  10 Bangladesh     1674770     2203554  3878324 Southern Asia      BGD  
   # … with 206 more rows
 ```
 ]]
 ---
 class: split-40
 count: false
-
 .column[.content[
 
 ```r
-url &lt;- "https://en.wikipedia.org/wiki/Fishing_industry_by_country"
-htmltab::htmltab(doc = url, which = 2) %&gt;%
-  as_tibble() %&gt;%
-  janitor::clean_names(case = "snake") %&gt;%
-  mutate(capture =
-           str_replace_all(string = capture,
-                           pattern = ",",
-                           replacement = "")) %&gt;%
-  mutate(capture = as.numeric(x = capture)) %&gt;%
-  mutate(aquaculture =
-           str_replace_all(string = aquaculture,
-                           pattern = ",",
-                           replacement = "")) %&gt;%
-  mutate(aquaculture = as.numeric(x = aquaculture)) %&gt;%
-  mutate(total = str_replace_all(string = total,
-                                 pattern = ",",
-                                 replacement = "")) %&gt;%
-  mutate(total = as.numeric(x = total)) %&gt;%
-  mutate(country = str_trim(string = country)) %&gt;%
-  filter(country != "Total (2015)") -&gt;
+fisheries_2015_raw %&gt;%  
+  as_tibble() %&gt;%  # show data in "tidyverse" way, as_tibble
+  # you may need to install the janitor package for this next step
+  # if you have not already done so
+  janitor::clean_names(case = "snake") %&gt;%  # snake is the default too
+  # converting columns to numeric 'dbl', which were character 'cha'
+  mutate(capture =  
+           readr::parse_number(x = capture)) %&gt;%  
+  mutate(aquaculture =  
+           readr::parse_number(x = aquaculture)) %&gt;%  
+  mutate(total =  
+           readr::parse_number(x = total)) %&gt;%  
+  # removing white spaces before and after a string
+  mutate(country = str_trim(string = country)) %&gt;%  
+  # creating region variable
+  # using countrycode function from countrycode package
+  # if you haven't done so,
+  mutate(region =  
+           countrycode::countrycode(  
+             sourcevar = country,  
+             origin = "country.name",  
+             dest = "region")) %&gt;%  
+  # country codes are useful for merging data
+  mutate(iso3c =  
+           countrycode::countrycode(  
+             sourcevar = country,  
+             origin = "country.name",  
+             dest = "iso3c")) %&gt;%  
+  # one row is an aggregation - deleting this
+  filter(country != "Total (2015)") -&gt;  
 *fisheries_2015
 ```
 ]]
@@ -751,11 +1025,80 @@ htmltab::htmltab(doc = url, which = 2) %&gt;%
 
 ]]
 
+---
+
+## Step 4: Saving out clean data:
+
+Now you can save out your work in your data_products folder.
 
 
-&lt;!-- --- --&gt;
+```r
+save(fisheries_2015, file = "data_products/fisheries_2015.Rdata")
+```
 
-&lt;!-- I get the UN Security Council data from the UN's website "Countries Elected Members of the Security Council". --&gt;
+Now your'll have some files in raw_data and data_products folders: 
+
+```r
+final_project
+├── 01_data_cleaning.Rmd   &lt;- work files
+├── 02_analysis.Rmd        &lt;- work files
+├── final_project.Rproj    &lt;- you declared your project
+└── raw_data        &lt;- Folder
+    └── wikipedia_fisheries.html  &lt;- raw data, table in html file
+├── data_products   &lt;- Folder
+│   └── fisheries_2015.Rdata      &lt;- cleaned data
+├── figures         &lt;- Folder
+├── literature      &lt;- Folder
+```
+
+---
+
+## Step 5: Yay! Analysis!!!
+
+To get going with your analysis, you might start off your 02_analysis.Rmd file with the following code.
+
+
+```r
+library(tidyverse) # for wrangling (dplyr and tidyr) and plotting (ggplot)
+load("data_products/fisheries_2015.Rdata")
+```
+
+
+
+
+
+---
+
+# Key packages used
+
+Sam Firke (2019). janitor: Simple Tools for Examining and
+  Cleaning Dirty Data. R package version 1.2.0.
+  https://CRAN.R-project.org/package=janitor
+
+Hadley Wickham (2017). tidyverse: Easily Install and Load
+  the 'Tidyverse'. R package version 1.2.1.
+  https://CRAN.R-project.org/package=tidyverse
+
+Arel-Bundock et al., (2018). countrycode: An R package to
+  convert country names and country codes. Journal of Open
+  Source Software, 3(28), 848,
+  https://doi.org/10.21105/joss.00848
+
+Christian Rubba (2016). htmltab: Assemble Data Frames from
+  HTML Tables. R package version 0.7.1.
+  https://CRAN.R-project.org/package=htmltab
+
+---
+
+I get the UN Security Council data from the UN's website "Countries Elected Members of the Security Council".
+
+
+```r
+url = "https://www.un.org/securitycouncil/content/countries-elected-members"
+download.file(url = url, "raw_data/unsc_countries_elected_members.Rdata")
+```
+
+
 
 
 
@@ -776,8 +1119,8 @@ citation("janitor")
   
   To cite package 'janitor' in publications use:
   
-    Sam Firke (2018). janitor: Simple Tools for Examining and
-    Cleaning Dirty Data. R package version 1.1.1.
+    Sam Firke (2019). janitor: Simple Tools for Examining and
+    Cleaning Dirty Data. R package version 1.2.0.
     https://CRAN.R-project.org/package=janitor
   
   A BibTeX entry for LaTeX users is
@@ -785,8 +1128,8 @@ citation("janitor")
     @Manual{,
       title = {janitor: Simple Tools for Examining and Cleaning Dirty Data},
       author = {Sam Firke},
-      year = {2018},
-      note = {R package version 1.1.1},
+      year = {2019},
+      note = {R package version 1.2.0},
       url = {https://CRAN.R-project.org/package=janitor},
     }
 ```
@@ -795,35 +1138,41 @@ citation("janitor")
 
 
 ```r
-citation("tidyverse")
+citation("htmltab")
 ```
 
-```
-  
-  To cite package 'tidyverse' in publications use:
-  
-    Hadley Wickham (2017). tidyverse: Easily Install and Load the
-    'Tidyverse'. R package version 1.2.1.
-    https://CRAN.R-project.org/package=tidyverse
-  
-  A BibTeX entry for LaTeX users is
-  
-    @Manual{,
-      title = {tidyverse: Easily Install and Load the 'Tidyverse'},
-      author = {Hadley Wickham},
-      year = {2017},
-      note = {R package version 1.2.1},
-      url = {https://CRAN.R-project.org/package=tidyverse},
-    }
-```
+Sam Firke (2019). janitor: Simple Tools for Examining and
+  Cleaning Dirty Data. R package version 1.2.0.
+  https://CRAN.R-project.org/package=janitor
+
+Hadley Wickham (2017). tidyverse: Easily Install and Load
+  the 'Tidyverse'. R package version 1.2.1.
+  https://CRAN.R-project.org/package=tidyverse
+
+Arel-Bundock et al., (2018). countrycode: An R package to
+  convert country names and country codes. Journal of Open
+  Source Software, 3(28), 848,
+  https://doi.org/10.21105/joss.00848
+
+Christian Rubba (2016). htmltab: Assemble Data Frames from
+  HTML Tables. R package version 0.7.1.
+  https://CRAN.R-project.org/package=htmltab
+
+
+---
+
+
+
+
 
 
 
 
 &lt;style type="text/css"&gt;
-.remark-code{line-height: 1.5; font-size: 70%}
+.remark-code{line-height: 1.5; font-size: 65%}
 &lt;/style&gt;
     </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
 "ratio": "16:9",
@@ -832,16 +1181,57 @@ citation("tidyverse")
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
 });
-(function() {
-  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
   if (!r) return;
   s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
   d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
 })();</script>
 
 <script>
 (function() {
-  var i, text, code, codes = document.getElementsByTagName('code');
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
   for (i = 0; i < codes.length;) {
     code = codes[i];
     if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
@@ -855,7 +1245,8 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     }
     i++;
   }
-})();
+};
+slideshow._releaseMath(document);
 </script>
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
