@@ -50,32 +50,66 @@ I'm grateful to the tidyverse team for their tireless work on developing and mai
 
 ---
 
-#  Project structure
+# Preliminaries
 
-Open your project with RStudio. 
+This book covers some examples of getting data into R and cleaning it.  There are about 5 steps involved as follows:
+
+- Step 0: Identifying data of interest
+- Step 1: Saving this data to your raw_data folder
+- Step 2: Scanning the data into R and assigning an object like *the_data_raw*
+- Step 3: Cleaning the data and assigning to an object like *the_data*
+- Step 4: Saving out the clean data in a data_products folder
+- Step 5: Loading your clean data - ready for analysis! 
+
+This workflow assumes that you are using a project structure.  So let's make sure that you have that set up.
+
+
+---
+
+# Open your project in RStudio
+
+It's helpful to use RStudio projects. You should have a final_project created already.  In RStudio, you can navigate to it from the right hand corner icon.  In the example, here, I'm currently in a project called `flipbooks` but I need to navigate to the project in the list called `final_project`. You should navigate there too!
+
+![](figures/navigate_to_project.png)
+
+
+
+---
+
+# Project structure
+
+![](figures/project_file_structure.png)
+
+Steps 1-4 (maybe just 2-4) will happen in the 01_cleaning_data.Rmd, and Step 5 will happen in 02_analysis.Rmd.  
+
+---
+
+# Project structure
+
+Another way to show this is with a directory tree as shown here:    
 
 ```
 final_project
 ├── 01_data_cleaning.Rmd   &lt;- work files
 ├── 02_analysis.Rmd        &lt;- work files
-├── final_project.Rproj    &lt;- RStudio file - you declared your main folder to be the project space
+├── final_project.Rproj    &lt;- you declared your project
+├── raw_data        &lt;- Folder
 ├── data_products   &lt;- Folder
 ├── figures         &lt;- Folder
 ├── literature      &lt;- Folder
-└── raw_data        &lt;- Folder
 ```
+
+
 
 ---
 
-# Cleaning example 1: Fisheries data from wikipedia
+# Example 1: Fisheries data from Wikipedia
 
-This book will cover a few examples.
+This book will cover a few examples.  The first is about fisheries around the world.  A clean version of this data is used in a lab that we might do in the future about conflict over resources; the lab is adapted from a lab originally written by Angela Zoss and Eric Monson. 
 
 ---
 
 ## Step 0: find data!
-
-You probably have this covered by now.  Nice!
 
 The date for this first example comes from the second table on the Wikipedia page [Fishing Industry by Country](https://en.wikipedia.org/wiki/Fishing_industry_by_country).
 
@@ -85,7 +119,7 @@ The date for this first example comes from the second table on the Wikipedia pag
 
 ## Step 1: get data
 
-The first step saving your file of interest manually to your raw data folder, or use download.file with a web address
+The first step saving your file of interest  to your raw data folder.  You can do this manually or use *download.file()* with a web address, as we do here. 
 
 
 ```r
@@ -1020,34 +1054,20 @@ fisheries_2015_raw %&gt;%
 
 ## Step 4: Saving out clean data:
 
-Now you can save out your work in your data_products folder.
+Now you can save out your work in your data_products folder as follows:
 
 
 ```r
 save(fisheries_2015, file = "data_products/fisheries_2015.Rdata")
 ```
 
-Now your'll have some files in raw_data and data_products folders: 
-
-```r
-final_project
-├── 01_data_cleaning.Rmd   &lt;- work files
-├── 02_analysis.Rmd        &lt;- work files
-├── final_project.Rproj    &lt;- you declared your project
-└── raw_data        &lt;- Folder
-    └── wikipedia_fisheries.html  &lt;- raw data, table in html file
-├── data_products   &lt;- Folder
-│   └── fisheries_2015.Rdata      &lt;- cleaned data
-├── figures         &lt;- Folder
-├── literature      &lt;- Folder
-```
+This will typically be the last step in your 01_data_cleaning.Rmd file.  
 
 ---
 
-## Step 5: Yay! Analysis!!!
+## Step 5: Time for Analysis!!! Yay!
 
-To get going with your analysis, you might start off your 02_analysis.Rmd file with the following code.
-
+The first code chunk in 02_analysis.Rmd should look like this.  This makes the tidyverse and the cleaned data available at the start of your analysis. 
 
 
 ```r
@@ -1057,9 +1077,1574 @@ load("data_products/fisheries_2015.Rdata")
 
 ---
 
+## Project overview
+
+Now your'll have some files in raw_data and data_products folders: 
+
+```r
+final_project
+├── 01_data_cleaning.Rmd   &lt;- work files
+├── 02_analysis.Rmd        &lt;- work files
+├── final_project.Rproj    &lt;- you declared your project
+└── raw_data        &lt;- Folder
+    └── wikipedia_fisheries.html  &lt;- New! html file, containing table
+├── data_products   &lt;- Folder
+│   └── fisheries_2015.Rdata      &lt;- New! cleaned data
+├── figures         &lt;- Folder
+├── literature      &lt;- Folder
+```
+
+
+
+---
+
 # Example 2: 
 
-...
+## Step 0: find data! 
+
+You might be interested in % of land area in a country that is forest use.  This is an indicator available at worldbank.org.
+
+&lt;img src="figures/world_bank_url.png" width="90%" /&gt;
+
+---
+
+## Step 1: get data
+
+
+This time, I just downloaded the data from the website, saving it to my *raw_data* folder.
+
+
+---
+
+## Step 2: scan in the data and create `wb_percent_forest_raw`
+
+
+### Step 2a: Use RStudio importer tool
+
+Navigate to your raw_data folder in the "files" pane. Then click on data and then choose "Import Dataset"
+
+![](figures/import_dataset.png)
+
+---
+
+### Step 2b: Make adjustments if needed
+
+This is what I see initially. 
+
+&lt;img src="figures/world_bank_forest_area_importer.png" width="90%" /&gt;
+
+---
+
+### Step 2b: Make adjustments if needed
+
+There is 'meta data' in the first three rows.  The dataset doesn't really get start until row 4.  Therefore, in the **import options** section, I'll adjust the option for **Skip** to *3*.  I then click **update** in the righthand corner.  
+
+&lt;img src="figures/adjust_import.png" width="90%" /&gt;
+
+---
+
+### Step 2c: Copy everything **except** View() code from **Code Preview**
+
+Copy everything *but* View() code from **Code Preview** and paste this into a code chunk in the file `01_data_cleaning.Rmd`.
+
+![](figures/copy_code_from_import_tool.png)
+
+---
+
+### Step 2c: Change default name
+
+
+You'll paste code that looks like this: 
+
+```r
+library(readxl)
+API_AG_LND_FRST_ZS_DS2_en_excel_v2_248616 &lt;- read_excel("raw_data/API_AG.LND.FRST.ZS_DS2_en_excel_v2_248616.xls", 
+    skip = 3)
+```
+
+But this is a bit of a long object name that is automatically generated, so you might modify this to something simpler, with the '_raw' suffix.   
+
+
+```r
+library(readxl)
+wb_percent_forest_raw &lt;- read_excel("raw_data/API_AG.LND.FRST.ZS_DS2_en_excel_v2_248616.xls", 
+    skip = 3)
+```
+
+Execute the code!
+
+---
+
+## Step 3: Load tidyverse and clean the data
+
+Now, starting with the object you created by scanning in the data and assigning it to the object `wb_percent_forest_raw`, you are ready to perform cleaning steps.
+
+---
+
+
+
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*wb_percent_forest_raw
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 264 x 63
+     `Country Name` `Country Code` `Indicator Name` `Indicator Code` `1960`
+     &lt;chr&gt;          &lt;chr&gt;          &lt;chr&gt;            &lt;chr&gt;            &lt;lgl&gt; 
+   1 Aruba          ABW            Forest area (% … AG.LND.FRST.ZS   NA    
+   2 Afghanistan    AFG            Forest area (% … AG.LND.FRST.ZS   NA    
+   3 Angola         AGO            Forest area (% … AG.LND.FRST.ZS   NA    
+   4 Albania        ALB            Forest area (% … AG.LND.FRST.ZS   NA    
+   5 Andorra        AND            Forest area (% … AG.LND.FRST.ZS   NA    
+   6 Arab World     ARB            Forest area (% … AG.LND.FRST.ZS   NA    
+   7 United Arab E… ARE            Forest area (% … AG.LND.FRST.ZS   NA    
+   8 Argentina      ARG            Forest area (% … AG.LND.FRST.ZS   NA    
+   9 Armenia        ARM            Forest area (% … AG.LND.FRST.ZS   NA    
+  10 American Samoa ASM            Forest area (% … AG.LND.FRST.ZS   NA    
+  # … with 254 more rows, and 58 more variables: `1961` &lt;lgl&gt;, `1962` &lt;lgl&gt;,
+  #   `1963` &lt;lgl&gt;, `1964` &lt;lgl&gt;, `1965` &lt;lgl&gt;, `1966` &lt;lgl&gt;, `1967` &lt;lgl&gt;,
+  #   `1968` &lt;lgl&gt;, `1969` &lt;lgl&gt;, `1970` &lt;lgl&gt;, `1971` &lt;lgl&gt;, `1972` &lt;lgl&gt;,
+  #   `1973` &lt;lgl&gt;, `1974` &lt;lgl&gt;, `1975` &lt;lgl&gt;, `1976` &lt;lgl&gt;, `1977` &lt;lgl&gt;,
+  #   `1978` &lt;lgl&gt;, `1979` &lt;lgl&gt;, `1980` &lt;lgl&gt;, `1981` &lt;lgl&gt;, `1982` &lt;lgl&gt;,
+  #   `1983` &lt;lgl&gt;, `1984` &lt;lgl&gt;, `1985` &lt;lgl&gt;, `1986` &lt;lgl&gt;, `1987` &lt;lgl&gt;,
+  #   `1988` &lt;lgl&gt;, `1989` &lt;lgl&gt;, `1990` &lt;dbl&gt;, `1991` &lt;dbl&gt;, `1992` &lt;dbl&gt;,
+  #   `1993` &lt;dbl&gt;, `1994` &lt;dbl&gt;, `1995` &lt;dbl&gt;, `1996` &lt;dbl&gt;, `1997` &lt;dbl&gt;,
+  #   `1998` &lt;dbl&gt;, `1999` &lt;dbl&gt;, `2000` &lt;dbl&gt;, `2001` &lt;dbl&gt;, `2002` &lt;dbl&gt;,
+  #   `2003` &lt;dbl&gt;, `2004` &lt;dbl&gt;, `2005` &lt;dbl&gt;, `2006` &lt;dbl&gt;, `2007` &lt;dbl&gt;,
+  #   `2008` &lt;dbl&gt;, `2009` &lt;dbl&gt;, `2010` &lt;dbl&gt;, `2011` &lt;dbl&gt;, `2012` &lt;dbl&gt;,
+  #   `2013` &lt;dbl&gt;, `2014` &lt;dbl&gt;, `2015` &lt;dbl&gt;, `2016` &lt;dbl&gt;, `2017` &lt;lgl&gt;,
+  #   `2018` &lt;lgl&gt;
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+wb_percent_forest_raw %&gt;%  
+* # change names to snake case
+* janitor::clean_names()
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 264 x 63
+     country_name country_code indicator_name indicator_code x1960 x1961
+     &lt;chr&gt;        &lt;chr&gt;        &lt;chr&gt;          &lt;chr&gt;          &lt;lgl&gt; &lt;lgl&gt;
+   1 Aruba        ABW          Forest area (… AG.LND.FRST.ZS NA    NA   
+   2 Afghanistan  AFG          Forest area (… AG.LND.FRST.ZS NA    NA   
+   3 Angola       AGO          Forest area (… AG.LND.FRST.ZS NA    NA   
+   4 Albania      ALB          Forest area (… AG.LND.FRST.ZS NA    NA   
+   5 Andorra      AND          Forest area (… AG.LND.FRST.ZS NA    NA   
+   6 Arab World   ARB          Forest area (… AG.LND.FRST.ZS NA    NA   
+   7 United Arab… ARE          Forest area (… AG.LND.FRST.ZS NA    NA   
+   8 Argentina    ARG          Forest area (… AG.LND.FRST.ZS NA    NA   
+   9 Armenia      ARM          Forest area (… AG.LND.FRST.ZS NA    NA   
+  10 American Sa… ASM          Forest area (… AG.LND.FRST.ZS NA    NA   
+  # … with 254 more rows, and 57 more variables: x1962 &lt;lgl&gt;, x1963 &lt;lgl&gt;,
+  #   x1964 &lt;lgl&gt;, x1965 &lt;lgl&gt;, x1966 &lt;lgl&gt;, x1967 &lt;lgl&gt;, x1968 &lt;lgl&gt;,
+  #   x1969 &lt;lgl&gt;, x1970 &lt;lgl&gt;, x1971 &lt;lgl&gt;, x1972 &lt;lgl&gt;, x1973 &lt;lgl&gt;,
+  #   x1974 &lt;lgl&gt;, x1975 &lt;lgl&gt;, x1976 &lt;lgl&gt;, x1977 &lt;lgl&gt;, x1978 &lt;lgl&gt;,
+  #   x1979 &lt;lgl&gt;, x1980 &lt;lgl&gt;, x1981 &lt;lgl&gt;, x1982 &lt;lgl&gt;, x1983 &lt;lgl&gt;,
+  #   x1984 &lt;lgl&gt;, x1985 &lt;lgl&gt;, x1986 &lt;lgl&gt;, x1987 &lt;lgl&gt;, x1988 &lt;lgl&gt;,
+  #   x1989 &lt;lgl&gt;, x1990 &lt;dbl&gt;, x1991 &lt;dbl&gt;, x1992 &lt;dbl&gt;, x1993 &lt;dbl&gt;,
+  #   x1994 &lt;dbl&gt;, x1995 &lt;dbl&gt;, x1996 &lt;dbl&gt;, x1997 &lt;dbl&gt;, x1998 &lt;dbl&gt;,
+  #   x1999 &lt;dbl&gt;, x2000 &lt;dbl&gt;, x2001 &lt;dbl&gt;, x2002 &lt;dbl&gt;, x2003 &lt;dbl&gt;,
+  #   x2004 &lt;dbl&gt;, x2005 &lt;dbl&gt;, x2006 &lt;dbl&gt;, x2007 &lt;dbl&gt;, x2008 &lt;dbl&gt;,
+  #   x2009 &lt;dbl&gt;, x2010 &lt;dbl&gt;, x2011 &lt;dbl&gt;, x2012 &lt;dbl&gt;, x2013 &lt;dbl&gt;,
+  #   x2014 &lt;dbl&gt;, x2015 &lt;dbl&gt;, x2016 &lt;dbl&gt;, x2017 &lt;lgl&gt;, x2018 &lt;lgl&gt;
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+wb_percent_forest_raw %&gt;%  
+  # change names to snake case
+  janitor::clean_names() %&gt;%  
+* # get rid of columns that are not variables
+* # indicator name and indicator code
+* select(-indicator_name, -indicator_code)
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 264 x 61
+     country_name country_code x1960 x1961 x1962 x1963 x1964 x1965 x1966
+     &lt;chr&gt;        &lt;chr&gt;        &lt;lgl&gt; &lt;lgl&gt; &lt;lgl&gt; &lt;lgl&gt; &lt;lgl&gt; &lt;lgl&gt; &lt;lgl&gt;
+   1 Aruba        ABW          NA    NA    NA    NA    NA    NA    NA   
+   2 Afghanistan  AFG          NA    NA    NA    NA    NA    NA    NA   
+   3 Angola       AGO          NA    NA    NA    NA    NA    NA    NA   
+   4 Albania      ALB          NA    NA    NA    NA    NA    NA    NA   
+   5 Andorra      AND          NA    NA    NA    NA    NA    NA    NA   
+   6 Arab World   ARB          NA    NA    NA    NA    NA    NA    NA   
+   7 United Arab… ARE          NA    NA    NA    NA    NA    NA    NA   
+   8 Argentina    ARG          NA    NA    NA    NA    NA    NA    NA   
+   9 Armenia      ARM          NA    NA    NA    NA    NA    NA    NA   
+  10 American Sa… ASM          NA    NA    NA    NA    NA    NA    NA   
+  # … with 254 more rows, and 52 more variables: x1967 &lt;lgl&gt;, x1968 &lt;lgl&gt;,
+  #   x1969 &lt;lgl&gt;, x1970 &lt;lgl&gt;, x1971 &lt;lgl&gt;, x1972 &lt;lgl&gt;, x1973 &lt;lgl&gt;,
+  #   x1974 &lt;lgl&gt;, x1975 &lt;lgl&gt;, x1976 &lt;lgl&gt;, x1977 &lt;lgl&gt;, x1978 &lt;lgl&gt;,
+  #   x1979 &lt;lgl&gt;, x1980 &lt;lgl&gt;, x1981 &lt;lgl&gt;, x1982 &lt;lgl&gt;, x1983 &lt;lgl&gt;,
+  #   x1984 &lt;lgl&gt;, x1985 &lt;lgl&gt;, x1986 &lt;lgl&gt;, x1987 &lt;lgl&gt;, x1988 &lt;lgl&gt;,
+  #   x1989 &lt;lgl&gt;, x1990 &lt;dbl&gt;, x1991 &lt;dbl&gt;, x1992 &lt;dbl&gt;, x1993 &lt;dbl&gt;,
+  #   x1994 &lt;dbl&gt;, x1995 &lt;dbl&gt;, x1996 &lt;dbl&gt;, x1997 &lt;dbl&gt;, x1998 &lt;dbl&gt;,
+  #   x1999 &lt;dbl&gt;, x2000 &lt;dbl&gt;, x2001 &lt;dbl&gt;, x2002 &lt;dbl&gt;, x2003 &lt;dbl&gt;,
+  #   x2004 &lt;dbl&gt;, x2005 &lt;dbl&gt;, x2006 &lt;dbl&gt;, x2007 &lt;dbl&gt;, x2008 &lt;dbl&gt;,
+  #   x2009 &lt;dbl&gt;, x2010 &lt;dbl&gt;, x2011 &lt;dbl&gt;, x2012 &lt;dbl&gt;, x2013 &lt;dbl&gt;,
+  #   x2014 &lt;dbl&gt;, x2015 &lt;dbl&gt;, x2016 &lt;dbl&gt;, x2017 &lt;lgl&gt;, x2018 &lt;lgl&gt;
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+wb_percent_forest_raw %&gt;%  
+  # change names to snake case
+  janitor::clean_names() %&gt;%  
+  # get rid of columns that are not variables
+  # indicator name and indicator code
+  select(-indicator_name, -indicator_code) %&gt;%  
+* # suppose you are interested only in 2000 to 2005
+* select(country_name, country_code, x2000:x2005)
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 264 x 8
+     country_name         country_code x2000 x2001 x2002 x2003 x2004 x2005
+     &lt;chr&gt;                &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+   1 Aruba                ABW           2.33  2.33  2.33  2.33  2.33  2.33
+   2 Afghanistan          AFG           2.07  2.07  2.07  2.07  2.07  2.07
+   3 Angola               AGO          47.9  47.8  47.7  47.6  47.5  47.4 
+   4 Albania              ALB          28.1  28.2  28.3  28.4  28.5  28.6 
+   5 Andorra              AND          34.0  34.0  34.0  34.0  34.0  34.0 
+   6 Arab World           ARB           1.68  1.68  1.68  1.69  1.69  1.69
+   7 United Arab Emirates ARE           4.36  4.37  4.38  4.38  4.39  4.39
+   8 Argentina            ARG          11.6  11.5  11.4  11.3  11.2  11.0 
+   9 Armenia              ARM          11.7  11.7  11.7  11.7  11.7  11.7 
+  10 American Samoa       ASM          90.2  90.1  89.9  89.8  89.5  89.4 
+  # … with 254 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+wb_percent_forest_raw %&gt;%  
+  # change names to snake case
+  janitor::clean_names() %&gt;%  
+  # get rid of columns that are not variables
+  # indicator name and indicator code
+  select(-indicator_name, -indicator_code) %&gt;%  
+  # suppose you are interested only in 2000 to 2005
+  select(country_name, country_code, x2000:x2005) %&gt;%  
+* # data is "wide", but to use for analysis
+* # we transform it to "long"
+* gather(key = "year",
+*        value = "percent_forest",
+*        x2000:x2005)
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 1,584 x 4
+     country_name         country_code year  percent_forest
+     &lt;chr&gt;                &lt;chr&gt;        &lt;chr&gt;          &lt;dbl&gt;
+   1 Aruba                ABW          x2000           2.33
+   2 Afghanistan          AFG          x2000           2.07
+   3 Angola               AGO          x2000          47.9 
+   4 Albania              ALB          x2000          28.1 
+   5 Andorra              AND          x2000          34.0 
+   6 Arab World           ARB          x2000           1.68
+   7 United Arab Emirates ARE          x2000           4.36
+   8 Argentina            ARG          x2000          11.6 
+   9 Armenia              ARM          x2000          11.7 
+  10 American Samoa       ASM          x2000          90.2 
+  # … with 1,574 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+wb_percent_forest_raw %&gt;%  
+  # change names to snake case
+  janitor::clean_names() %&gt;%  
+  # get rid of columns that are not variables
+  # indicator name and indicator code
+  select(-indicator_name, -indicator_code) %&gt;%  
+  # suppose you are interested only in 2000 to 2005
+  select(country_name, country_code, x2000:x2005) %&gt;%  
+  # data is "wide", but to use for analysis
+  # we transform it to "long"
+  gather(key = "year",  
+         value = "percent_forest",  
+         x2000:x2005) %&gt;%  
+* mutate(year = str_remove(year, "x"))
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 1,584 x 4
+     country_name         country_code year  percent_forest
+     &lt;chr&gt;                &lt;chr&gt;        &lt;chr&gt;          &lt;dbl&gt;
+   1 Aruba                ABW          2000            2.33
+   2 Afghanistan          AFG          2000            2.07
+   3 Angola               AGO          2000           47.9 
+   4 Albania              ALB          2000           28.1 
+   5 Andorra              AND          2000           34.0 
+   6 Arab World           ARB          2000            1.68
+   7 United Arab Emirates ARE          2000            4.36
+   8 Argentina            ARG          2000           11.6 
+   9 Armenia              ARM          2000           11.7 
+  10 American Samoa       ASM          2000           90.2 
+  # … with 1,574 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+wb_percent_forest_raw %&gt;%  
+  # change names to snake case
+  janitor::clean_names() %&gt;%  
+  # get rid of columns that are not variables
+  # indicator name and indicator code
+  select(-indicator_name, -indicator_code) %&gt;%  
+  # suppose you are interested only in 2000 to 2005
+  select(country_name, country_code, x2000:x2005) %&gt;%  
+  # data is "wide", but to use for analysis
+  # we transform it to "long"
+  gather(key = "year",  
+         value = "percent_forest",  
+         x2000:x2005) %&gt;%  
+  mutate(year = str_remove(year, "x")) %&gt;%  
+* mutate(year = as.numeric(year))
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 1,584 x 4
+     country_name         country_code  year percent_forest
+     &lt;chr&gt;                &lt;chr&gt;        &lt;dbl&gt;          &lt;dbl&gt;
+   1 Aruba                ABW           2000           2.33
+   2 Afghanistan          AFG           2000           2.07
+   3 Angola               AGO           2000          47.9 
+   4 Albania              ALB           2000          28.1 
+   5 Andorra              AND           2000          34.0 
+   6 Arab World           ARB           2000           1.68
+   7 United Arab Emirates ARE           2000           4.36
+   8 Argentina            ARG           2000          11.6 
+   9 Armenia              ARM           2000          11.7 
+  10 American Samoa       ASM           2000          90.2 
+  # … with 1,574 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+wb_percent_forest_raw %&gt;%  
+  # change names to snake case
+  janitor::clean_names() %&gt;%  
+  # get rid of columns that are not variables
+  # indicator name and indicator code
+  select(-indicator_name, -indicator_code) %&gt;%  
+  # suppose you are interested only in 2000 to 2005
+  select(country_name, country_code, x2000:x2005) %&gt;%  
+  # data is "wide", but to use for analysis
+  # we transform it to "long"
+  gather(key = "year",  
+         value = "percent_forest",  
+         x2000:x2005) %&gt;%  
+  mutate(year = str_remove(year, "x")) %&gt;%  
+  mutate(year = as.numeric(year)) %&gt;%  
+* # reordering data if you like
+* arrange(-percent_forest)
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 1,584 x 4
+     country_name          country_code  year percent_forest
+     &lt;chr&gt;                 &lt;chr&gt;        &lt;dbl&gt;          &lt;dbl&gt;
+   1 Suriname              SUR           2000           98.7
+   2 Suriname              SUR           2001           98.6
+   3 Suriname              SUR           2002           98.6
+   4 Suriname              SUR           2003           98.6
+   5 Suriname              SUR           2004           98.6
+   6 Suriname              SUR           2005           98.5
+   7 Micronesia, Fed. Sts. FSM           2005           91.4
+   8 Micronesia, Fed. Sts. FSM           2004           91.4
+   9 Micronesia, Fed. Sts. FSM           2003           91.3
+  10 Micronesia, Fed. Sts. FSM           2002           91.3
+  # … with 1,574 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+wb_percent_forest_raw %&gt;%  
+  # change names to snake case
+  janitor::clean_names() %&gt;%  
+  # get rid of columns that are not variables
+  # indicator name and indicator code
+  select(-indicator_name, -indicator_code) %&gt;%  
+  # suppose you are interested only in 2000 to 2005
+  select(country_name, country_code, x2000:x2005) %&gt;%  
+  # data is "wide", but to use for analysis
+  # we transform it to "long"
+  gather(key = "year",  
+         value = "percent_forest",  
+         x2000:x2005) %&gt;%  
+  mutate(year = str_remove(year, "x")) %&gt;%  
+  mutate(year = as.numeric(year)) %&gt;%  
+  # reordering data if you like
+  arrange(-percent_forest) %&gt;%  
+* # rename variable
+* rename(wb_country_code = country_code)
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 1,584 x 4
+     country_name          wb_country_code  year percent_forest
+     &lt;chr&gt;                 &lt;chr&gt;           &lt;dbl&gt;          &lt;dbl&gt;
+   1 Suriname              SUR              2000           98.7
+   2 Suriname              SUR              2001           98.6
+   3 Suriname              SUR              2002           98.6
+   4 Suriname              SUR              2003           98.6
+   5 Suriname              SUR              2004           98.6
+   6 Suriname              SUR              2005           98.5
+   7 Micronesia, Fed. Sts. FSM              2005           91.4
+   8 Micronesia, Fed. Sts. FSM              2004           91.4
+   9 Micronesia, Fed. Sts. FSM              2003           91.3
+  10 Micronesia, Fed. Sts. FSM              2002           91.3
+  # … with 1,574 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+wb_percent_forest_raw %&gt;%  
+  # change names to snake case
+  janitor::clean_names() %&gt;%  
+  # get rid of columns that are not variables
+  # indicator name and indicator code
+  select(-indicator_name, -indicator_code) %&gt;%  
+  # suppose you are interested only in 2000 to 2005
+  select(country_name, country_code, x2000:x2005) %&gt;%  
+  # data is "wide", but to use for analysis
+  # we transform it to "long"
+  gather(key = "year",  
+         value = "percent_forest",  
+         x2000:x2005) %&gt;%  
+  mutate(year = str_remove(year, "x")) %&gt;%  
+  mutate(year = as.numeric(year)) %&gt;%  
+  # reordering data if you like
+  arrange(-percent_forest) %&gt;%  
+  # rename variable
+  rename(wb_country_code = country_code) %&gt;%  
+* mutate(continent =
+*          countrycode::countrycode(
+*            sourcevar = wb_country_code,
+*            origin = "wb",
+*            destination = "continent"
+*          ))
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 1,584 x 5
+     country_name          wb_country_code  year percent_forest continent
+     &lt;chr&gt;                 &lt;chr&gt;           &lt;dbl&gt;          &lt;dbl&gt; &lt;chr&gt;    
+   1 Suriname              SUR              2000           98.7 Americas 
+   2 Suriname              SUR              2001           98.6 Americas 
+   3 Suriname              SUR              2002           98.6 Americas 
+   4 Suriname              SUR              2003           98.6 Americas 
+   5 Suriname              SUR              2004           98.6 Americas 
+   6 Suriname              SUR              2005           98.5 Americas 
+   7 Micronesia, Fed. Sts. FSM              2005           91.4 Oceania  
+   8 Micronesia, Fed. Sts. FSM              2004           91.4 Oceania  
+   9 Micronesia, Fed. Sts. FSM              2003           91.3 Oceania  
+  10 Micronesia, Fed. Sts. FSM              2002           91.3 Oceania  
+  # … with 1,574 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+wb_percent_forest_raw %&gt;%  
+  # change names to snake case
+  janitor::clean_names() %&gt;%  
+  # get rid of columns that are not variables
+  # indicator name and indicator code
+  select(-indicator_name, -indicator_code) %&gt;%  
+  # suppose you are interested only in 2000 to 2005
+  select(country_name, country_code, x2000:x2005) %&gt;%  
+  # data is "wide", but to use for analysis
+  # we transform it to "long"
+  gather(key = "year",  
+         value = "percent_forest",  
+         x2000:x2005) %&gt;%  
+  mutate(year = str_remove(year, "x")) %&gt;%  
+  mutate(year = as.numeric(year)) %&gt;%  
+  # reordering data if you like
+  arrange(-percent_forest) %&gt;%  
+  # rename variable
+  rename(wb_country_code = country_code) %&gt;%  
+  mutate(continent =  
+           countrycode::countrycode(  
+             sourcevar = wb_country_code,  
+             origin = "wb",  
+             destination = "continent"  
+           )) -&gt;  
+*wb_percent_forest
+```
+]]
+.column[.content[
+
+]]
+
+---
+
+## Step 4: Save Clean Data
+
+
+```r
+save(wb_percent_forest, file = "data_products/wb_percent_forest.Rdata")
+```
+
+
+
+---
+
+## Step 5: Time for Analysis! 
+
+The first code chunk in 02_analysis.Rmd should look like this.  This makes the tidyverse and the cleaned data available at the start of your analysis. 
+
+
+```r
+library(tidyverse)
+load(file = "data_products/wb_percent_forest.Rdata")
+```
+
+
+
+---
+
+# Deeper Dives: country codes, dates, string manipulation
+
+The examples above should give you some intuition for the look and feel of some real data cleaning pipelines.  But they of course are not very comprehensive. In this section, let's focus manipulation using a few packages. 
+
+- countrycode - translates between one name or id for a country to another
+- lubridate - working with dates
+- stringr - character manipulation
+
+
+---
+
+## Country Code
+
+Countries can have many names.  Consider the United States.  You can call it the US, the USA, the United States of America and so on.  The package countrycode can be helpful in translating between different ways to refer to a specific country. Let's see how you might use it. 
+
+
+
+---
+
+
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*library(gapminder)
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(gapminder)  
+*library(countrycode)
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(gapminder)  
+library(countrycode)  
+*gapminder
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 1,704 x 6
+     country     continent  year lifeExp      pop gdpPercap
+     &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+   1 Afghanistan Asia       1952    28.8  8425333      779.
+   2 Afghanistan Asia       1957    30.3  9240934      821.
+   3 Afghanistan Asia       1962    32.0 10267083      853.
+   4 Afghanistan Asia       1967    34.0 11537966      836.
+   5 Afghanistan Asia       1972    36.1 13079460      740.
+   6 Afghanistan Asia       1977    38.4 14880372      786.
+   7 Afghanistan Asia       1982    39.9 12881816      978.
+   8 Afghanistan Asia       1987    40.8 13867957      852.
+   9 Afghanistan Asia       1992    41.7 16317921      649.
+  10 Afghanistan Asia       1997    41.8 22227415      635.
+  # … with 1,694 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(gapminder)  
+library(countrycode)  
+gapminder %&gt;%  
+* distinct(country)
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 142 x 1
+     country    
+     &lt;fct&gt;      
+   1 Afghanistan
+   2 Albania    
+   3 Algeria    
+   4 Angola     
+   5 Argentina  
+   6 Australia  
+   7 Austria    
+   8 Bahrain    
+   9 Bangladesh 
+  10 Belgium    
+  # … with 132 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(gapminder)  
+library(countrycode)  
+gapminder %&gt;%  
+  distinct(country) %&gt;%  
+* mutate(iso3c = countrycode(
+*   sourcevar = country,
+*   origin = "country.name",
+*   destination = "iso3c"
+*          ))
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 142 x 2
+     country     iso3c
+     &lt;fct&gt;       &lt;chr&gt;
+   1 Afghanistan AFG  
+   2 Albania     ALB  
+   3 Algeria     DZA  
+   4 Angola      AGO  
+   5 Argentina   ARG  
+   6 Australia   AUS  
+   7 Austria     AUT  
+   8 Bahrain     BHR  
+   9 Bangladesh  BGD  
+  10 Belgium     BEL  
+  # … with 132 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(gapminder)  
+library(countrycode)  
+gapminder %&gt;%  
+  distinct(country) %&gt;%  
+  mutate(iso3c = countrycode(  
+    sourcevar = country,  
+    origin = "country.name",  
+    destination = "iso3c"  
+           )) %&gt;%  
+* mutate(cowc = countrycode(
+*   s = country,
+*   origin = "country.name",
+*   d = "cowc")
+*   )
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 142 x 3
+     country     iso3c cowc 
+     &lt;fct&gt;       &lt;chr&gt; &lt;chr&gt;
+   1 Afghanistan AFG   AFG  
+   2 Albania     ALB   ALB  
+   3 Algeria     DZA   ALG  
+   4 Angola      AGO   ANG  
+   5 Argentina   ARG   ARG  
+   6 Australia   AUS   AUL  
+   7 Austria     AUT   AUS  
+   8 Bahrain     BHR   BAH  
+   9 Bangladesh  BGD   BNG  
+  10 Belgium     BEL   BEL  
+  # … with 132 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(gapminder)  
+library(countrycode)  
+gapminder %&gt;%  
+  distinct(country) %&gt;%  
+  mutate(iso3c = countrycode(  
+    sourcevar = country,  
+    origin = "country.name",  
+    destination = "iso3c"  
+           )) %&gt;%  
+  mutate(cowc = countrycode(  
+    s = country,  
+    origin = "country.name",  
+    d = "cowc")  
+    ) %&gt;%  
+* mutate(cown = countrycode(
+*   s = cowc,
+*   origin = "cowc",
+*   d = "cown")
+*   )
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 142 x 4
+     country     iso3c cowc   cown
+     &lt;fct&gt;       &lt;chr&gt; &lt;chr&gt; &lt;int&gt;
+   1 Afghanistan AFG   AFG     700
+   2 Albania     ALB   ALB     339
+   3 Algeria     DZA   ALG     615
+   4 Angola      AGO   ANG     540
+   5 Argentina   ARG   ARG     160
+   6 Australia   AUS   AUL     900
+   7 Austria     AUT   AUS     305
+   8 Bahrain     BHR   BAH     692
+   9 Bangladesh  BGD   BNG     771
+  10 Belgium     BEL   BEL     211
+  # … with 132 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(gapminder)  
+library(countrycode)  
+gapminder %&gt;%  
+  distinct(country) %&gt;%  
+  mutate(iso3c = countrycode(  
+    sourcevar = country,  
+    origin = "country.name",  
+    destination = "iso3c"  
+           )) %&gt;%  
+  mutate(cowc = countrycode(  
+    s = country,  
+    origin = "country.name",  
+    d = "cowc")  
+    ) %&gt;%  
+  mutate(cown = countrycode(  
+    s = cowc,  
+    origin = "cowc",  
+    d = "cown")  
+    ) %&gt;%  
+* mutate(eu28 = countrycode(
+*   s = country,
+*   origin = "country.name",
+*   d = "eu28")
+*   )
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 142 x 5
+     country     iso3c cowc   cown eu28 
+     &lt;fct&gt;       &lt;chr&gt; &lt;chr&gt; &lt;int&gt; &lt;chr&gt;
+   1 Afghanistan AFG   AFG     700 &lt;NA&gt; 
+   2 Albania     ALB   ALB     339 &lt;NA&gt; 
+   3 Algeria     DZA   ALG     615 &lt;NA&gt; 
+   4 Angola      AGO   ANG     540 &lt;NA&gt; 
+   5 Argentina   ARG   ARG     160 &lt;NA&gt; 
+   6 Australia   AUS   AUL     900 &lt;NA&gt; 
+   7 Austria     AUT   AUS     305 EU   
+   8 Bahrain     BHR   BAH     692 &lt;NA&gt; 
+   9 Bangladesh  BGD   BNG     771 &lt;NA&gt; 
+  10 Belgium     BEL   BEL     211 EU   
+  # … with 132 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(gapminder)  
+library(countrycode)  
+gapminder %&gt;%  
+  distinct(country) %&gt;%  
+  mutate(iso3c = countrycode(  
+    sourcevar = country,  
+    origin = "country.name",  
+    destination = "iso3c"  
+           )) %&gt;%  
+  mutate(cowc = countrycode(  
+    s = country,  
+    origin = "country.name",  
+    d = "cowc")  
+    ) %&gt;%  
+  mutate(cown = countrycode(  
+    s = cowc,  
+    origin = "cowc",  
+    d = "cown")  
+    ) %&gt;%  
+  mutate(eu28 = countrycode(  
+    s = country,  
+    origin = "country.name",  
+    d = "eu28")  
+    ) %&gt;%  
+* mutate(eu28 = ifelse(
+*   is.na(eu28), "Not EU", "EU")
+*   )
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 142 x 5
+     country     iso3c cowc   cown eu28  
+     &lt;fct&gt;       &lt;chr&gt; &lt;chr&gt; &lt;int&gt; &lt;chr&gt; 
+   1 Afghanistan AFG   AFG     700 Not EU
+   2 Albania     ALB   ALB     339 Not EU
+   3 Algeria     DZA   ALG     615 Not EU
+   4 Angola      AGO   ANG     540 Not EU
+   5 Argentina   ARG   ARG     160 Not EU
+   6 Australia   AUS   AUL     900 Not EU
+   7 Austria     AUT   AUS     305 EU    
+   8 Bahrain     BHR   BAH     692 Not EU
+   9 Bangladesh  BGD   BNG     771 Not EU
+  10 Belgium     BEL   BEL     211 EU    
+  # … with 132 more rows
+```
+]]
+
+---
+
+## Lubridate
+
+Dates are a special class of data, and there are many ways to express dates.  Let's have a look at how to use the lubridate package to "move around" between dates. We'll look at a very small dataset of four US holidays. 
+
+
+
+
+```r
+holidays_2019
+```
+
+```
+  # A tibble: 4 x 2
+    date       holiday               
+    &lt;chr&gt;      &lt;chr&gt;                 
+  1 January 1  New Year's Day        
+  2 January 21 Martin Luther King Day
+  3 January 24 Belly Laugh Day       
+  4 February 2 Groundhog Day
+```
+
+
+---
+
+
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*library(lubridate)
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(lubridate)  
+*holidays_2019
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 4 x 2
+    date       holiday               
+    &lt;chr&gt;      &lt;chr&gt;                 
+  1 January 1  New Year's Day        
+  2 January 21 Martin Luther King Day
+  3 January 24 Belly Laugh Day       
+  4 February 2 Groundhog Day
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(lubridate)  
+holidays_2019 %&gt;%  
+* mutate(date = paste0(date, ", 2019"))
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 4 x 2
+    date             holiday               
+    &lt;chr&gt;            &lt;chr&gt;                 
+  1 January 1, 2019  New Year's Day        
+  2 January 21, 2019 Martin Luther King Day
+  3 January 24, 2019 Belly Laugh Day       
+  4 February 2, 2019 Groundhog Day
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(lubridate)  
+holidays_2019 %&gt;%  
+  mutate(date = paste0(date, ", 2019")) %&gt;%  
+* mutate(date = mdy(date))
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 4 x 2
+    date       holiday               
+    &lt;date&gt;     &lt;chr&gt;                 
+  1 2019-01-01 New Year's Day        
+  2 2019-01-21 Martin Luther King Day
+  3 2019-01-24 Belly Laugh Day       
+  4 2019-02-02 Groundhog Day
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(lubridate)  
+holidays_2019 %&gt;%  
+  mutate(date = paste0(date, ", 2019")) %&gt;%  
+  mutate(date = mdy(date)) %&gt;%  
+* mutate(day = day(date))
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 4 x 3
+    date       holiday                  day
+    &lt;date&gt;     &lt;chr&gt;                  &lt;int&gt;
+  1 2019-01-01 New Year's Day             1
+  2 2019-01-21 Martin Luther King Day    21
+  3 2019-01-24 Belly Laugh Day           24
+  4 2019-02-02 Groundhog Day              2
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(lubridate)  
+holidays_2019 %&gt;%  
+  mutate(date = paste0(date, ", 2019")) %&gt;%  
+  mutate(date = mdy(date)) %&gt;%  
+  mutate(day = day(date)) %&gt;%  
+* mutate(month = month(date))
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 4 x 4
+    date       holiday                  day month
+    &lt;date&gt;     &lt;chr&gt;                  &lt;int&gt; &lt;dbl&gt;
+  1 2019-01-01 New Year's Day             1     1
+  2 2019-01-21 Martin Luther King Day    21     1
+  3 2019-01-24 Belly Laugh Day           24     1
+  4 2019-02-02 Groundhog Day              2     2
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(lubridate)  
+holidays_2019 %&gt;%  
+  mutate(date = paste0(date, ", 2019")) %&gt;%  
+  mutate(date = mdy(date)) %&gt;%  
+  mutate(day = day(date)) %&gt;%  
+  mutate(month = month(date)) %&gt;%  
+* mutate(year = year(date))
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 4 x 5
+    date       holiday                  day month  year
+    &lt;date&gt;     &lt;chr&gt;                  &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;
+  1 2019-01-01 New Year's Day             1     1  2019
+  2 2019-01-21 Martin Luther King Day    21     1  2019
+  3 2019-01-24 Belly Laugh Day           24     1  2019
+  4 2019-02-02 Groundhog Day              2     2  2019
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(lubridate)  
+holidays_2019 %&gt;%  
+  mutate(date = paste0(date, ", 2019")) %&gt;%  
+  mutate(date = mdy(date)) %&gt;%  
+  mutate(day = day(date)) %&gt;%  
+  mutate(month = month(date)) %&gt;%  
+  mutate(year = year(date)) %&gt;%  
+* mutate(day_of_week = weekdays(date))
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 4 x 6
+    date       holiday                  day month  year day_of_week
+    &lt;date&gt;     &lt;chr&gt;                  &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;      
+  1 2019-01-01 New Year's Day             1     1  2019 Tuesday    
+  2 2019-01-21 Martin Luther King Day    21     1  2019 Monday     
+  3 2019-01-24 Belly Laugh Day           24     1  2019 Thursday   
+  4 2019-02-02 Groundhog Day              2     2  2019 Saturday
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(lubridate)  
+holidays_2019 %&gt;%  
+  mutate(date = paste0(date, ", 2019")) %&gt;%  
+  mutate(date = mdy(date)) %&gt;%  
+  mutate(day = day(date)) %&gt;%  
+  mutate(month = month(date)) %&gt;%  
+  mutate(year = year(date)) %&gt;%  
+  mutate(day_of_week = weekdays(date)) %&gt;%  
+* # making space for more manipulation
+* select(-holiday, -day_of_week)
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 4 x 4
+    date         day month  year
+    &lt;date&gt;     &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;
+  1 2019-01-01     1     1  2019
+  2 2019-01-21    21     1  2019
+  3 2019-01-24    24     1  2019
+  4 2019-02-02     2     2  2019
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(lubridate)  
+holidays_2019 %&gt;%  
+  mutate(date = paste0(date, ", 2019")) %&gt;%  
+  mutate(date = mdy(date)) %&gt;%  
+  mutate(day = day(date)) %&gt;%  
+  mutate(month = month(date)) %&gt;%  
+  mutate(year = year(date)) %&gt;%  
+  mutate(day_of_week = weekdays(date)) %&gt;%  
+  # making space for more manipulation
+  select(-holiday, -day_of_week) %&gt;%  
+* mutate(euro_ordering = paste(day, month, year, sep = "/"))
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 4 x 5
+    date         day month  year euro_ordering
+    &lt;date&gt;     &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;        
+  1 2019-01-01     1     1  2019 1/1/2019     
+  2 2019-01-21    21     1  2019 21/1/2019    
+  3 2019-01-24    24     1  2019 24/1/2019    
+  4 2019-02-02     2     2  2019 2/2/2019
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(lubridate)  
+holidays_2019 %&gt;%  
+  mutate(date = paste0(date, ", 2019")) %&gt;%  
+  mutate(date = mdy(date)) %&gt;%  
+  mutate(day = day(date)) %&gt;%  
+  mutate(month = month(date)) %&gt;%  
+  mutate(year = year(date)) %&gt;%  
+  mutate(day_of_week = weekdays(date)) %&gt;%  
+  # making space for more manipulation
+  select(-holiday, -day_of_week) %&gt;%  
+  mutate(euro_ordering = paste(day, month, year, sep = "/")) %&gt;%  
+* mutate(date_0 = dmy(euro_ordering))
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 4 x 6
+    date         day month  year euro_ordering date_0    
+    &lt;date&gt;     &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;         &lt;date&gt;    
+  1 2019-01-01     1     1  2019 1/1/2019      2019-01-01
+  2 2019-01-21    21     1  2019 21/1/2019     2019-01-21
+  3 2019-01-24    24     1  2019 24/1/2019     2019-01-24
+  4 2019-02-02     2     2  2019 2/2/2019      2019-02-02
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(lubridate)  
+holidays_2019 %&gt;%  
+  mutate(date = paste0(date, ", 2019")) %&gt;%  
+  mutate(date = mdy(date)) %&gt;%  
+  mutate(day = day(date)) %&gt;%  
+  mutate(month = month(date)) %&gt;%  
+  mutate(year = year(date)) %&gt;%  
+  mutate(day_of_week = weekdays(date)) %&gt;%  
+  # making space for more manipulation
+  select(-holiday, -day_of_week) %&gt;%  
+  mutate(euro_ordering = paste(day, month, year, sep = "/")) %&gt;%  
+  mutate(date_0 = dmy(euro_ordering)) %&gt;%  
+* mutate(since_jan_1 = date - ymd("2019-01-01"))
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 4 x 7
+    date         day month  year euro_ordering date_0     since_jan_1
+    &lt;date&gt;     &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;         &lt;date&gt;     &lt;drtn&gt;     
+  1 2019-01-01     1     1  2019 1/1/2019      2019-01-01  0 days    
+  2 2019-01-21    21     1  2019 21/1/2019     2019-01-21 20 days    
+  3 2019-01-24    24     1  2019 24/1/2019     2019-01-24 23 days    
+  4 2019-02-02     2     2  2019 2/2/2019      2019-02-02 32 days
+```
+]]
+
+
+---
+
+## String (character) manipulation 
+
+Character manipulation is also referred to as "regular expressions", or "Regex".  The package stringr seeks to provide a unified framework for string manipulation. Let's get a taste, using the holidays_2019 dataset again.  (The section is not particularly inspired - sorry!)
+
+---
+
+
+
+
+
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*library(stringr)
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(stringr)  
+*holidays_2019
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 4 x 2
+    date       holiday               
+    &lt;chr&gt;      &lt;chr&gt;                 
+  1 January 1  New Year's Day        
+  2 January 21 Martin Luther King Day
+  3 January 24 Belly Laugh Day       
+  4 February 2 Groundhog Day
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(stringr)  
+holidays_2019 %&gt;%  
+* mutate(var_1 =
+*          str_detect(holiday, "u"))
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 4 x 3
+    date       holiday                var_1
+    &lt;chr&gt;      &lt;chr&gt;                  &lt;lgl&gt;
+  1 January 1  New Year's Day         FALSE
+  2 January 21 Martin Luther King Day TRUE 
+  3 January 24 Belly Laugh Day        TRUE 
+  4 February 2 Groundhog Day          TRUE
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(stringr)  
+holidays_2019 %&gt;%  
+  mutate(var_1 =  
+           str_detect(holiday, "u")) %&gt;%  
+* mutate(var_1 =
+*          tolower(holiday))
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 4 x 3
+    date       holiday                var_1                 
+    &lt;chr&gt;      &lt;chr&gt;                  &lt;chr&gt;                 
+  1 January 1  New Year's Day         new year's day        
+  2 January 21 Martin Luther King Day martin luther king day
+  3 January 24 Belly Laugh Day        belly laugh day       
+  4 February 2 Groundhog Day          groundhog day
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(stringr)  
+holidays_2019 %&gt;%  
+  mutate(var_1 =  
+           str_detect(holiday, "u")) %&gt;%  
+  mutate(var_1 =  
+           tolower(holiday)) %&gt;%  
+* mutate(var_1 =
+*          str_replace(holiday, "u", "REPLACED"))
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 4 x 3
+    date       holiday                var_1                        
+    &lt;chr&gt;      &lt;chr&gt;                  &lt;chr&gt;                        
+  1 January 1  New Year's Day         New Year's Day               
+  2 January 21 Martin Luther King Day Martin LREPLACEDther King Day
+  3 January 24 Belly Laugh Day        Belly LaREPLACEDgh Day       
+  4 February 2 Groundhog Day          GroREPLACEDndhog Day
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(stringr)  
+holidays_2019 %&gt;%  
+  mutate(var_1 =  
+           str_detect(holiday, "u")) %&gt;%  
+  mutate(var_1 =  
+           tolower(holiday)) %&gt;%  
+  mutate(var_1 =  
+           str_replace(holiday, "u", "REPLACED")) %&gt;%  
+* mutate(var_1 =
+*          str_replace(holiday, "^.", "REPLACED"))
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 4 x 3
+    date       holiday                var_1                        
+    &lt;chr&gt;      &lt;chr&gt;                  &lt;chr&gt;                        
+  1 January 1  New Year's Day         REPLACEDew Year's Day        
+  2 January 21 Martin Luther King Day REPLACEDartin Luther King Day
+  3 January 24 Belly Laugh Day        REPLACEDelly Laugh Day       
+  4 February 2 Groundhog Day          REPLACEDroundhog Day
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(stringr)  
+holidays_2019 %&gt;%  
+  mutate(var_1 =  
+           str_detect(holiday, "u")) %&gt;%  
+  mutate(var_1 =  
+           tolower(holiday)) %&gt;%  
+  mutate(var_1 =  
+           str_replace(holiday, "u", "REPLACED")) %&gt;%  
+  mutate(var_1 =  
+           str_replace(holiday, "^.", "REPLACED")) %&gt;%  
+* mutate(var_1 =
+*          str_replace(holiday, ".$", "REPLACED"))
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 4 x 3
+    date       holiday                var_1                        
+    &lt;chr&gt;      &lt;chr&gt;                  &lt;chr&gt;                        
+  1 January 1  New Year's Day         New Year's DaREPLACED        
+  2 January 21 Martin Luther King Day Martin Luther King DaREPLACED
+  3 January 24 Belly Laugh Day        Belly Laugh DaREPLACED       
+  4 February 2 Groundhog Day          Groundhog DaREPLACED
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(stringr)  
+holidays_2019 %&gt;%  
+  mutate(var_1 =  
+           str_detect(holiday, "u")) %&gt;%  
+  mutate(var_1 =  
+           tolower(holiday)) %&gt;%  
+  mutate(var_1 =  
+           str_replace(holiday, "u", "REPLACED")) %&gt;%  
+  mutate(var_1 =  
+           str_replace(holiday, "^.", "REPLACED")) %&gt;%  
+  mutate(var_1 =  
+           str_replace(holiday, ".$", "REPLACED")) %&gt;%  
+* mutate(var_1 =
+*          str_count(holiday, "a"))
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 4 x 3
+    date       holiday                var_1
+    &lt;chr&gt;      &lt;chr&gt;                  &lt;int&gt;
+  1 January 1  New Year's Day             2
+  2 January 21 Martin Luther King Day     2
+  3 January 24 Belly Laugh Day            2
+  4 February 2 Groundhog Day              1
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(stringr)  
+holidays_2019 %&gt;%  
+  mutate(var_1 =  
+           str_detect(holiday, "u")) %&gt;%  
+  mutate(var_1 =  
+           tolower(holiday)) %&gt;%  
+  mutate(var_1 =  
+           str_replace(holiday, "u", "REPLACED")) %&gt;%  
+  mutate(var_1 =  
+           str_replace(holiday, "^.", "REPLACED")) %&gt;%  
+  mutate(var_1 =  
+           str_replace(holiday, ".$", "REPLACED")) %&gt;%  
+  mutate(var_1 =  
+           str_count(holiday, "a")) %&gt;%  
+* mutate(var_1 =
+*          str_extract(holiday, ".....Day"))
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 4 x 3
+    date       holiday                var_1   
+    &lt;chr&gt;      &lt;chr&gt;                  &lt;chr&gt;   
+  1 January 1  New Year's Day         ar's Day
+  2 January 21 Martin Luther King Day King Day
+  3 January 24 Belly Laugh Day        augh Day
+  4 February 2 Groundhog Day          dhog Day
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+library(stringr)  
+holidays_2019 %&gt;%  
+  mutate(var_1 =  
+           str_detect(holiday, "u")) %&gt;%  
+  mutate(var_1 =  
+           tolower(holiday)) %&gt;%  
+  mutate(var_1 =  
+           str_replace(holiday, "u", "REPLACED")) %&gt;%  
+  mutate(var_1 =  
+           str_replace(holiday, "^.", "REPLACED")) %&gt;%  
+  mutate(var_1 =  
+           str_replace(holiday, ".$", "REPLACED")) %&gt;%  
+  mutate(var_1 =  
+           str_count(holiday, "a")) %&gt;%  
+  mutate(var_1 =  
+           str_extract(holiday, ".....Day")) %&gt;%  
+* mutate(var_1 =
+*          str_extract(holiday, "[[:PUNCT:]]"))
+```
+]]
+.column[.content[
+
+```
+  # A tibble: 4 x 3
+    date       holiday                var_1
+    &lt;chr&gt;      &lt;chr&gt;                  &lt;chr&gt;
+  1 January 1  New Year's Day         '    
+  2 January 21 Martin Luther King Day &lt;NA&gt; 
+  3 January 24 Belly Laugh Day        &lt;NA&gt; 
+  4 February 2 Groundhog Day          &lt;NA&gt;
+```
+]]
+
+
 
 ---
 
@@ -1087,12 +2672,7 @@ Christian Rubba (2016). htmltab: Assemble Data Frames from
 I get the UN Security Council data from the UN's website "Countries Elected Members of the Security Council".
 
 
-```r
-url = "https://www.un.org/securitycouncil/content/countries-elected-members"
-download.file(url = url, "raw_data/unsc_countries_elected_members.Rdata")
-```
 
-hello
 
 
 
@@ -1104,35 +2684,11 @@ hello
 
 ---
 
-
-```r
-citation("janitor")
-```
-
-```
-  
-  To cite package 'janitor' in publications use:
-  
-    Sam Firke (2019). janitor: Simple Tools for Examining and
-    Cleaning Dirty Data. R package version 1.2.0.
-    https://CRAN.R-project.org/package=janitor
-  
-  A BibTeX entry for LaTeX users is
-  
-    @Manual{,
-      title = {janitor: Simple Tools for Examining and Cleaning Dirty Data},
-      author = {Sam Firke},
-      year = {2019},
-      note = {R package version 1.2.0},
-      url = {https://CRAN.R-project.org/package=janitor},
-    }
-```
-
 ---
 
 
 ```r
-citation("htmltab")
+citation("lubridate")
 ```
 
 Sam Firke (2019). janitor: Simple Tools for Examining and
@@ -1152,13 +2708,12 @@ Christian Rubba (2016). htmltab: Assemble Data Frames from
   HTML Tables. R package version 0.7.1.
   https://CRAN.R-project.org/package=htmltab
 
+Garrett Grolemund, Hadley Wickham (2011). Dates
+  and Times Made Easy with lubridate. Journal of
+  Statistical Software, 40(3), 1-25. URL
+  http://www.jstatsoft.org/v40/i03/.
 
 ---
-
-
-
-
-
 
 
 
