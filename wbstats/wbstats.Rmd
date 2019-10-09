@@ -1,0 +1,252 @@
+---
+title: "wdstats flipbook"
+subtitle: "⚔<br/>made with xaringan"
+author: "Gina Reynolds"
+date: "2019/03/05"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: ["kunoichi", "ninjutsu"]
+    nature:
+      ratio: "20:10"
+      highlightLines: true
+---
+
+
+# Introduction
+
+A package for accessing data via the World Bank's API (application programming interface) is [wbstats](https://cran.r-project.org/web/packages/wbstats/wbstats.pdf).  
+
+This can actually give you cleaner data faster than downloading indicators one by one and then cleaning and merging all the indicator data.  With the wbstats package you can request a number of indicators at once, and also ask for rather detailed description about the source of the indicator. 
+
+The result below shows the result of requesting several indicators.  This returns a dataframe with rows defined by country and year, with three variables that are WB indicators.  Moreover, the package allows you to access fairly detailed information about the source for each indicator. 
+
+---
+
+```{r, echo = F, message = F, warning = F}
+source("../xaringan_reveal_parentheses_balanced.R")
+knitr::opts_chunk$set(cache = T, message = F, warning = F)
+```
+
+
+---
+
+# We load wbstats and the tidyverse
+
+```{r}
+library(wbstats)
+library(tidyverse)
+```
+
+---
+
+# Search data.worldbank.org for indicators of interest
+
+Once you navigate to an indicator of interest, you will see its ID code in the web address (URL).
+
+In the example below, the id is 
+
+```{r, echo = F}
+knitr::include_graphics("figures/world_bank_website.png")
+```
+
+
+
+---
+
+# Requesting data
+
+We use the function wb() to request the indicators.
+
+---
+
+# Create an object that contains the all the names of the indicators of interest.
+
+---
+
+```{r indicators, eval = T, echo = F}
+c("SP.POP.GROW", "NY.GDP.PCAP.PP.CD", "AG.LND.AGRI.ZS") ->
+my_indicators 
+```
+
+`r apply_reveal("indicators")`
+
+
+---
+
+```{r request_data, eval = T, echo = F}
+wb(country = "countries_only", # not regional aggregates
+   # using the vector you just created set to indicator
+   indicator = my_indicators,  
+   mrv = 30, # 30 most recent values (mrv)
+   return_wide = TRUE) %>%
+  # just using as_tibble to clean up the look of the data
+  as_tibble() %>%    
+  # replace current names to something more intelligable
+  rename(pop_grow = SP.POP.GROW) %>% 
+  rename(gdp_per_capita = NY.GDP.PCAP.PP.CD) %>% 
+  rename(percent_ag_land = AG.LND.AGRI.ZS) ->
+wb_data
+```
+
+
+`r apply_reveal("request_data")`
+
+
+---
+
+# Searching indicators
+
+Another way of searching for indicators is using the wbsearch() `function`. 
+
+
+```{r, eval = F}
+wbsearch("population growth") 
+wbsearch("food") 
+```
+
+
+---
+
+# more detailed information...
+
+
+```{r get_meta}
+# requesting data on all the indicators, in English
+wbindicators(lang = "en") %>% 
+  # narrow to only cases where indicatorID 
+  # is among (%in%) my_indicators 
+  filter(indicatorID %in% my_indicators) ->
+meta_data_wbindicators
+```
+
+
+---
+
+# Indicator short description
+
+We can have the short description of the 
+
+
+```{r short}
+# short description.
+meta_data_wbindicators %>% 
+  pull(indicator)
+```
+
+---
+
+# More complete description
+
+
+
+```{r complete, return = "asis"}
+# long description
+meta_data_wbindicators %>% 
+  pull(indicatorDesc)
+```
+
+
+
+---
+
+```{r}
+knitr::opts_chunk$set(eval = F)
+```
+
+
+```{r, include = F, eval = F}
+library(countrycode)
+library(ggrepel)
+options(scipen = 10) # sci. notation turns on later
+```
+
+```{r gg_scatterplot, include = F, eval = F}
+wb_data %>%
+  filter(date == 2014) %>%
+  mutate(continent =
+           countrycode(sourcevar = iso3c,
+                       origin = "iso3c",
+                       destination = "continent")) %>%
+  ggplot() +
+  aes(x = pop_grow) +
+  aes(y = malnutrition) +
+  geom_point() +
+  scale_x_log10() +
+  aes(color = continent) +
+  geom_smooth(method = "lm") +
+  facet_wrap(~ continent) +
+  scale_color_discrete(guide = F) +
+  aes(label = country) +
+  ggpmisc::stat_dens2d_filter(geom = "text_repel",
+                              keep.fraction = 1/5,
+                              size = 3)
+```
+
+---
+
+
+```{r, include = F, eval = F}
+map_data("world") %>% 
+  ggplot() +
+  aes(x = long) +
+  aes(y = lat) +
+  geom_point(size = .001) +
+  coord_map("mollweide") + # area preserving projection
+  theme_void()
+```
+
+
+---
+
+```{r, include = F, eval = F}
+map_data("world") %>% 
+  ggplot() +
+  aes(x = long) +
+  aes(y = lat) +
+  geom_polygon(fill = "blue", alpha = .5) +
+  aes(group = group)
+```
+
+
+
+
+```{r world_map_data, include = F, eval = F}
+map_data("world") %>%
+  mutate(iso3c = countrycode(sourcevar = region, "country.name", "iso3c")) %>%
+  rename(polygon_regions = region) ->
+  world_map
+```
+
+---
+
+
+```{r joined_data, include = F, eval = F}
+world_map %>%
+  full_join(wb_data %>% filter(date == 2014)) ->
+  world_map_wb_2014
+```
+
+
+
+
+
+```{r plot_maps, include = F, eval = F}
+world_map_wb_2014 %>%
+  filter(polygon_regions != "Antarctica") %>%
+  ggplot() +
+  aes(x = long, y = lat) +
+  geom_polygon() + 
+  aes(group = group) + 
+  aes(fill = malnutrition) +
+  coord_equal() +
+  theme_void() +
+  scale_fill_viridis_c(option = "magma")
+```
+
+---
+
+```{css, eval = TRUE, echo = F}
+.remark-code{line-height: 1.5; font-size: 50%}
+```
+
