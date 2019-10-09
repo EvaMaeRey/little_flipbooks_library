@@ -188,7 +188,7 @@ wb_data %>%
 
 ```{r, include = F, eval = F}
 map_data("world") %>% 
-  ggplot() +
+  ggplot() + 
   aes(x = long) +
   aes(y = lat) +
   geom_point(size = .001) +
