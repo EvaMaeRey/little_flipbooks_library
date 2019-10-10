@@ -194,7 +194,11 @@ map_data("world") %>%
   geom_point(size = .001) +
   coord_map("mollweide") + # area preserving projection
   theme_void()
+
+
 ```
+
+
 
 
 ---
