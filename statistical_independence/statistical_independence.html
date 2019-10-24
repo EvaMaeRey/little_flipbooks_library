@@ -23,11 +23,11 @@ class: center, middle, inverse, title-slide
 
 
 ```r
-source("../../2019_directed_research/flipbooks/xaringan_reveal_parentheses_balanced.R")
+source("../xaringan_reveal_parentheses_balanced.R")
 ```
 
 ```
-## ── Attaching packages ───────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
+## ── Attaching packages ──────────────────────────────────────── tidyverse 1.2.1 ──
 ```
 
 ```
@@ -38,7 +38,7 @@ source("../../2019_directed_research/flipbooks/xaringan_reveal_parentheses_balan
 ```
 
 ```
-## ── Conflicts ──────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## ── Conflicts ─────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()
 ```
@@ -185,7 +185,7 @@ my_data; my_data
 ## # … with 40 more rows
 ```
 
-![](06_statistical_independence_p_values_files/figure-html/output_continuous0_10-1.png)&lt;!-- --&gt;
+![](statistical_independence_files/figure-html/output_continuous0_10-1.png)&lt;!-- --&gt;
 ]]
 ---
 class: split-40
@@ -226,7 +226,7 @@ ggplot(data = my_data) +
 ## # … with 40 more rows
 ```
 
-![](06_statistical_independence_p_values_files/figure-html/output_continuous0_12-1.png)&lt;!-- --&gt;
+![](statistical_independence_files/figure-html/output_continuous0_12-1.png)&lt;!-- --&gt;
 
 ```
 ## 
@@ -328,7 +328,7 @@ cor.test(x = my_data$tail_length,
     # … with 40 more rows
 ```
 
-![](06_statistical_independence_p_values_files/figure-html/output_continuous_1908-1.png)&lt;!-- --&gt;
+![](statistical_independence_files/figure-html/output_continuous_1908-1.png)&lt;!-- --&gt;
 
 ```
     
@@ -420,7 +420,7 @@ cor.test(x = my_data$tail_length,
     # … with 40 more rows
 ```
 
-![](06_statistical_independence_p_values_files/figure-html/output_continuous_1828-1.png)&lt;!-- --&gt;
+![](statistical_independence_files/figure-html/output_continuous_1828-1.png)&lt;!-- --&gt;
 
 ```
     
@@ -513,7 +513,7 @@ cor.test(x = my_data$tail_length,
     # … with 40 more rows
 ```
 
-![](06_statistical_independence_p_values_files/figure-html/output_continuous_1079-1.png)&lt;!-- --&gt;
+![](statistical_independence_files/figure-html/output_continuous_1079-1.png)&lt;!-- --&gt;
 
 ```
     
@@ -605,7 +605,7 @@ cor.test(x = my_data$tail_length,
     # … with 40 more rows
 ```
 
-![](06_statistical_independence_p_values_files/figure-html/output_continuous_1604-1.png)&lt;!-- --&gt;
+![](statistical_independence_files/figure-html/output_continuous_1604-1.png)&lt;!-- --&gt;
 
 ```
     
@@ -697,7 +697,7 @@ cor.test(x = my_data$tail_length,
     # … with 40 more rows
 ```
 
-![](06_statistical_independence_p_values_files/figure-html/output_continuous_1823-1.png)&lt;!-- --&gt;
+![](statistical_independence_files/figure-html/output_continuous_1823-1.png)&lt;!-- --&gt;
 
 ```
     
@@ -789,7 +789,7 @@ cor.test(x = my_data$tail_length,
     # … with 40 more rows
 ```
 
-![](06_statistical_independence_p_values_files/figure-html/output_continuous_1372-1.png)&lt;!-- --&gt;
+![](statistical_independence_files/figure-html/output_continuous_1372-1.png)&lt;!-- --&gt;
 
 ```
     
@@ -881,7 +881,7 @@ cor.test(x = my_data$tail_length,
     # … with 40 more rows
 ```
 
-![](06_statistical_independence_p_values_files/figure-html/output_continuous_1054-1.png)&lt;!-- --&gt;
+![](statistical_independence_files/figure-html/output_continuous_1054-1.png)&lt;!-- --&gt;
 
 ```
     
@@ -992,7 +992,7 @@ t.test(height_data$height ~ # the continuous variable by (~)
     # … with 40 more rows
 ```
 
-![](06_statistical_independence_p_values_files/figure-html/output_c_and_d2_1677-1.png)&lt;!-- --&gt;
+![](statistical_independence_files/figure-html/output_c_and_d2_1677-1.png)&lt;!-- --&gt;
 
 ```
     
@@ -1092,7 +1092,7 @@ t.test(height_data$height ~ # the continuous variable by (~)
     # … with 40 more rows
 ```
 
-![](06_statistical_independence_p_values_files/figure-html/output_c_and_d2_1705-1.png)&lt;!-- --&gt;
+![](statistical_independence_files/figure-html/output_c_and_d2_1705-1.png)&lt;!-- --&gt;
 
 ```
     
@@ -1192,7 +1192,7 @@ t.test(height_data$height ~ # the continuous variable by (~)
     # … with 40 more rows
 ```
 
-![](06_statistical_independence_p_values_files/figure-html/output_c_and_d2_1336-1.png)&lt;!-- --&gt;
+![](statistical_independence_files/figure-html/output_c_and_d2_1336-1.png)&lt;!-- --&gt;
 
 ```
     
@@ -1292,7 +1292,7 @@ t.test(height_data$height ~ # the continuous variable by (~)
     # … with 40 more rows
 ```
 
-![](06_statistical_independence_p_values_files/figure-html/output_c_and_d2_1901-1.png)&lt;!-- --&gt;
+![](statistical_independence_files/figure-html/output_c_and_d2_1901-1.png)&lt;!-- --&gt;
 
 ```
     
@@ -1403,7 +1403,7 @@ TukeyHSD(aov(height_data$height ~ # the continuous variable by (~)
     # … with 40 more rows
 ```
 
-![](06_statistical_independence_p_values_files/figure-html/output_c_and_d3_1822-1.png)&lt;!-- --&gt;
+![](statistical_independence_files/figure-html/output_c_and_d3_1822-1.png)&lt;!-- --&gt;
 
 ```
       Tukey multiple comparisons of means
@@ -1506,7 +1506,7 @@ TukeyHSD(aov(height_data$height ~ # the continuous variable by (~)
     # … with 40 more rows
 ```
 
-![](06_statistical_independence_p_values_files/figure-html/output_c_and_d3_1756-1.png)&lt;!-- --&gt;
+![](statistical_independence_files/figure-html/output_c_and_d3_1756-1.png)&lt;!-- --&gt;
 
 ```
       Tukey multiple comparisons of means
@@ -1608,7 +1608,7 @@ TukeyHSD(aov(height_data$height ~ # the continuous variable by (~)
     # … with 40 more rows
 ```
 
-![](06_statistical_independence_p_values_files/figure-html/output_c_and_d3_1253-1.png)&lt;!-- --&gt;
+![](statistical_independence_files/figure-html/output_c_and_d3_1253-1.png)&lt;!-- --&gt;
 
 ```
       Tukey multiple comparisons of means
@@ -1710,7 +1710,7 @@ TukeyHSD(aov(height_data$height ~ # the continuous variable by (~)
     # … with 40 more rows
 ```
 
-![](06_statistical_independence_p_values_files/figure-html/output_c_and_d3_1075-1.png)&lt;!-- --&gt;
+![](statistical_independence_files/figure-html/output_c_and_d3_1075-1.png)&lt;!-- --&gt;
 
 ```
       Tukey multiple comparisons of means
@@ -1812,7 +1812,7 @@ TukeyHSD(aov(height_data$height ~ # the continuous variable by (~)
     # … with 40 more rows
 ```
 
-![](06_statistical_independence_p_values_files/figure-html/output_c_and_d3_1775-1.png)&lt;!-- --&gt;
+![](statistical_independence_files/figure-html/output_c_and_d3_1775-1.png)&lt;!-- --&gt;
 
 ```
       Tukey multiple comparisons of means
@@ -1926,7 +1926,7 @@ chisq.test(x = my_data$sex,
     # … with 90 more rows
 ```
 
-![](06_statistical_independence_p_values_files/figure-html/output_d_and_d_1640-1.png)&lt;!-- --&gt;
+![](statistical_independence_files/figure-html/output_d_and_d_1640-1.png)&lt;!-- --&gt;
 
 ```
             y
@@ -2025,7 +2025,7 @@ chisq.test(x = my_data$sex,
     # … with 90 more rows
 ```
 
-![](06_statistical_independence_p_values_files/figure-html/output_d_and_d_1886-1.png)&lt;!-- --&gt;
+![](statistical_independence_files/figure-html/output_d_and_d_1886-1.png)&lt;!-- --&gt;
 
 ```
             y
@@ -2124,7 +2124,7 @@ chisq.test(x = my_data$sex,
     # … with 90 more rows
 ```
 
-![](06_statistical_independence_p_values_files/figure-html/output_d_and_d_1493-1.png)&lt;!-- --&gt;
+![](statistical_independence_files/figure-html/output_d_and_d_1493-1.png)&lt;!-- --&gt;
 
 ```
             y
@@ -2224,7 +2224,7 @@ chisq.test(x = my_data$sex,
     # … with 90 more rows
 ```
 
-![](06_statistical_independence_p_values_files/figure-html/output_d_and_d_1875-1.png)&lt;!-- --&gt;
+![](statistical_independence_files/figure-html/output_d_and_d_1875-1.png)&lt;!-- --&gt;
 
 ```
             y
@@ -2323,7 +2323,7 @@ chisq.test(x = my_data$sex,
     # … with 90 more rows
 ```
 
-![](06_statistical_independence_p_values_files/figure-html/output_d_and_d_1518-1.png)&lt;!-- --&gt;
+![](statistical_independence_files/figure-html/output_d_and_d_1518-1.png)&lt;!-- --&gt;
 
 ```
             y
@@ -2422,7 +2422,7 @@ chisq.test(x = my_data$sex,
     # … with 90 more rows
 ```
 
-![](06_statistical_independence_p_values_files/figure-html/output_d_and_d_1094-1.png)&lt;!-- --&gt;
+![](statistical_independence_files/figure-html/output_d_and_d_1094-1.png)&lt;!-- --&gt;
 
 ```
             y
@@ -2521,7 +2521,7 @@ chisq.test(x = my_data$sex,
     # … with 90 more rows
 ```
 
-![](06_statistical_independence_p_values_files/figure-html/output_d_and_d_1219-1.png)&lt;!-- --&gt;
+![](statistical_independence_files/figure-html/output_d_and_d_1219-1.png)&lt;!-- --&gt;
 
 ```
             y
@@ -2621,7 +2621,7 @@ chisq.test(x = my_data$sex,
     # … with 90 more rows
 ```
 
-![](06_statistical_independence_p_values_files/figure-html/output_d_and_d_1870-1.png)&lt;!-- --&gt;
+![](statistical_independence_files/figure-html/output_d_and_d_1870-1.png)&lt;!-- --&gt;
 
 ```
             y
@@ -2724,7 +2724,7 @@ chisq.test(x = tea_data$truth,
     8 tea   tea
 ```
 
-![](06_statistical_independence_p_values_files/figure-html/output_lady_tea_1824-1.png)&lt;!-- --&gt;
+![](statistical_independence_files/figure-html/output_lady_tea_1824-1.png)&lt;!-- --&gt;
 
 ```
     Warning in chisq.test(x = tea_data$truth, y = tea_data$guess): Chi-squared
@@ -2813,7 +2813,7 @@ chisq.test(x = tea_data$truth,
     8 milk  tea
 ```
 
-![](06_statistical_independence_p_values_files/figure-html/output_lady_tea_1228-1.png)&lt;!-- --&gt;
+![](statistical_independence_files/figure-html/output_lady_tea_1228-1.png)&lt;!-- --&gt;
 
 ```
     Warning in chisq.test(x = tea_data$truth, y = tea_data$guess): Chi-squared
@@ -2902,7 +2902,7 @@ chisq.test(x = tea_data$truth,
     8 milk  milk
 ```
 
-![](06_statistical_independence_p_values_files/figure-html/output_lady_tea_1105-1.png)&lt;!-- --&gt;
+![](statistical_independence_files/figure-html/output_lady_tea_1105-1.png)&lt;!-- --&gt;
 
 ```
     Warning in chisq.test(x = tea_data$truth, y = tea_data$guess): Chi-squared
@@ -2992,7 +2992,7 @@ chisq.test(x = tea_data$truth,
     8 milk  tea
 ```
 
-![](06_statistical_independence_p_values_files/figure-html/output_lady_tea_1667-1.png)&lt;!-- --&gt;
+![](statistical_independence_files/figure-html/output_lady_tea_1667-1.png)&lt;!-- --&gt;
 
 ```
     Warning in chisq.test(x = tea_data$truth, y = tea_data$guess): Chi-squared
@@ -3081,7 +3081,7 @@ chisq.test(x = tea_data$truth,
     8 milk  tea
 ```
 
-![](06_statistical_independence_p_values_files/figure-html/output_lady_tea_1668-1.png)&lt;!-- --&gt;
+![](statistical_independence_files/figure-html/output_lady_tea_1668-1.png)&lt;!-- --&gt;
 
 ```
     Warning in chisq.test(x = tea_data$truth, y = tea_data$guess): Chi-squared
@@ -3170,7 +3170,7 @@ chisq.test(x = tea_data$truth,
     8 tea   milk
 ```
 
-![](06_statistical_independence_p_values_files/figure-html/output_lady_tea_1309-1.png)&lt;!-- --&gt;
+![](statistical_independence_files/figure-html/output_lady_tea_1309-1.png)&lt;!-- --&gt;
 
 ```
     Warning in chisq.test(x = tea_data$truth, y = tea_data$guess): Chi-squared
@@ -3259,7 +3259,7 @@ chisq.test(x = tea_data$truth,
     8 tea   milk
 ```
 
-![](06_statistical_independence_p_values_files/figure-html/output_lady_tea_1554-1.png)&lt;!-- --&gt;
+![](statistical_independence_files/figure-html/output_lady_tea_1554-1.png)&lt;!-- --&gt;
 
 ```
     Warning in chisq.test(x = tea_data$truth, y = tea_data$guess): Chi-squared
@@ -3349,7 +3349,7 @@ chisq.test(x = tea_data$truth,
     8 tea   tea
 ```
 
-![](06_statistical_independence_p_values_files/figure-html/output_lady_tea_1190-1.png)&lt;!-- --&gt;
+![](statistical_independence_files/figure-html/output_lady_tea_1190-1.png)&lt;!-- --&gt;
 
 ```
     Warning in chisq.test(x = tea_data$truth, y = tea_data$guess): Chi-squared
@@ -3454,7 +3454,7 @@ chisq.test(x = fake_titanic$class,
     # … with 40 more rows
 ```
 
-![](06_statistical_independence_p_values_files/figure-html/output_d4_d2_1526-1.png)&lt;!-- --&gt;
+![](statistical_independence_files/figure-html/output_d4_d2_1526-1.png)&lt;!-- --&gt;
 
 ```
     Warning in chisq.test(x = fake_titanic$class, y = fake_titanic$survive):
@@ -3552,7 +3552,7 @@ chisq.test(x = fake_titanic$class,
     # … with 40 more rows
 ```
 
-![](06_statistical_independence_p_values_files/figure-html/output_d4_d2_1633-1.png)&lt;!-- --&gt;
+![](statistical_independence_files/figure-html/output_d4_d2_1633-1.png)&lt;!-- --&gt;
 
 ```
     Warning in chisq.test(x = fake_titanic$class, y = fake_titanic$survive):
@@ -3651,7 +3651,7 @@ chisq.test(x = fake_titanic$class,
     # … with 40 more rows
 ```
 
-![](06_statistical_independence_p_values_files/figure-html/output_d4_d2_1296-1.png)&lt;!-- --&gt;
+![](statistical_independence_files/figure-html/output_d4_d2_1296-1.png)&lt;!-- --&gt;
 
 ```
     Warning in chisq.test(x = fake_titanic$class, y = fake_titanic$survive):
@@ -3750,7 +3750,7 @@ chisq.test(x = fake_titanic$class,
     # … with 40 more rows
 ```
 
-![](06_statistical_independence_p_values_files/figure-html/output_d4_d2_1839-1.png)&lt;!-- --&gt;
+![](statistical_independence_files/figure-html/output_d4_d2_1839-1.png)&lt;!-- --&gt;
 
 ```
     Warning in chisq.test(x = fake_titanic$class, y = fake_titanic$survive):
@@ -3848,7 +3848,7 @@ chisq.test(x = fake_titanic$class,
     # … with 40 more rows
 ```
 
-![](06_statistical_independence_p_values_files/figure-html/output_d4_d2_1231-1.png)&lt;!-- --&gt;
+![](statistical_independence_files/figure-html/output_d4_d2_1231-1.png)&lt;!-- --&gt;
 
 ```
     Warning in chisq.test(x = fake_titanic$class, y = fake_titanic$survive):
