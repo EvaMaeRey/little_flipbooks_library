@@ -1,0 +1,14 @@
+---
+title: "Untitled"
+author: "Evangeline Reynolds"
+date: "12/17/2019"
+output: html_document
+---
+
+```{r}
+url <- "https://raw.githubusercontent.com/EvaMaeRey/flipbookr/master/inst/rmarkdown/templates/template-name/skeleton/skeleton.Rmd"
+download.file(url = url, "skeleton.Rmd")
+# seems not to quiet work from code below... So just knitting from Rstudio for now.
+# rmarkdown::render("skeleton.Rmd")
+# knitr::knit("skeleton.Rmd")
+```
