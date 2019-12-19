@@ -55,11 +55,11 @@ And once you install the package, a template for making the flipbook that you ar
 
 The flipbook you will be building here uses the [rmarkdown](https://rmarkdown.rstudio.com/lesson-1.html) and [Xaringan](https://github.com/yihui/xaringan) (html slideshow) infrastructure.  
 
-Dynamic documents like `rmarkdown` documents allow you to comingle code and prose in a single document.  Flipbooks walk through code by spawning new *partial* code chunks from a single, user-input code chunk.  The partial code chunks build up and are displayed consecutively in a slide show --- along side it's output --- which yeilds a movie-like experience, and allows for easier understanding of each step.
+Dynamic documents like `rmarkdown` documents allow you to comingle code and prose in a single document.  Flipbooks walk through code by spawning new *partial* code chunks from a single, user-input code chunk.  The partial code chunks build up and are displayed consecutively in a slide show --- alongside its output --- which yields a movie-like experience, and allows for easier understanding of each step.
 
 ---
 
-We use the flipbookr package, of course! This does the work of disassembling a single code chuck and creating the "build" of multiple partial-code chunks.  
+We use the flipbookr package, of course! This does the work of disassembling a single code chunk and creating the "build" of multiple partial-code chunks.  
 
 ```{r, cache = F}
 library(flipbookr)
@@ -86,7 +86,7 @@ knitr::opts_chunk$set(fig.width = 6, message = F, warning = F, comment = "", cac
 
 ## Change slide show look and feel
 
-To quickly change the look and feel of your xaringan slide show, I'd recommend that you use the [xaringanthemer](https://github.com/gadenbuie/xaringanthemer) package.  The code below creates a css file for you that will be used to style your slide show; you can see it referenced at the beginning of this document in the "YMAL" --- the introductory materials that you see at the top of this document.   
+To quickly change the look and feel of your xaringan slide show, I'd recommend that you use the [xaringanthemer](https://github.com/gadenbuie/xaringanthemer) package.  The code below creates a css file for you that will be used to style your slide show; you can see it referenced at the beginning of this document in the "YAML" --- the introductory materials that you see at the top of this document.   
 
 ```{r xaringan_look}
 xaringanthemer::mono_accent(
