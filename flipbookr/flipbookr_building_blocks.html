@@ -63,7 +63,7 @@ xaringanthemer::mono_accent(
 
 
 
-
+We'll use the tidyverse packages to create a pipeline, and flipbookr to walk through the steps in this pipeline.
 
 
 ```r
@@ -71,16 +71,152 @@ library(tidyverse)
 library(flipbookr)
 ```
 
+The input code to be "flipbookified" is below:
+
 
 ```r
 cars %&gt;%  #REVEAL          
   ggplot() +  
-  aes(x = speed) + #REVEAL
+  aes(x = speed) + 
   aes(color = speed) + #REVEAL2
   geom_rug() #REVEAL
 ```
 
 
+---
+
+Let's first look at the result of using flipbookr to bring this code.
+
+---
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*cars
+```
+]]
+.column[.content[
+
+```
+   speed dist
+1      4    2
+2      4   10
+3      7    4
+4      7   22
+5      8   16
+6      9   10
+7     10   18
+8     10   26
+9     10   34
+10    11   17
+11    11   28
+12    12   14
+13    12   20
+14    12   24
+15    12   28
+16    13   26
+17    13   34
+18    13   34
+19    13   46
+20    14   26
+21    14   36
+22    14   60
+23    14   80
+24    15   20
+25    15   26
+26    15   54
+27    16   32
+28    16   40
+29    17   32
+30    17   40
+31    17   50
+32    18   42
+33    18   56
+34    18   76
+35    18   84
+36    19   36
+37    19   46
+38    19   68
+39    20   32
+40    20   48
+41    20   52
+42    20   56
+43    20   64
+44    22   66
+45    23   54
+46    24   70
+47    24   92
+48    24   93
+49    24  120
+50    25   85
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars %&gt;%  
+* ggplot()
+```
+]]
+.column[.content[
+![](flipbookr_building_blocks_files/figure-html/cars_plot_auto_2_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars %&gt;%  
+  ggplot() +  
+* aes(x = speed)
+```
+]]
+.column[.content[
+![](flipbookr_building_blocks_files/figure-html/cars_plot_auto_3_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars %&gt;%  
+  ggplot() +  
+  aes(x = speed) +  
+* aes(color = speed)
+```
+]]
+.column[.content[
+![](flipbookr_building_blocks_files/figure-html/cars_plot_auto_4_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars %&gt;%  
+  ggplot() +  
+  aes(x = speed) +  
+  aes(color = speed) +  
+* geom_rug()
+```
+]]
+.column[.content[
+![](flipbookr_building_blocks_files/figure-html/cars_plot_auto_5_output-1.png)&lt;!-- --&gt;
+]]
+
+
+
+---
+
+Now, lets look at some of the functions working in the background.
 
 
 ---
@@ -90,13 +226,14 @@ count: false
 .column[.content[
 
 ```r
-*"cars"
+* # The name of the code chunk containing code to be flipped
+*"cars_plot"
 ```
 ]]
 .column[.content[
 
 ```
-[1] "cars"
+[1] "cars_plot"
 ```
 ]]
 ---
@@ -105,14 +242,16 @@ count: false
 .column[.content[
 
 ```r
-"cars" %&gt;%  
+  # The name of the code chunk containing code to be flipped
+"cars_plot" %&gt;%  
+* # return the code as text
 * chunk_code_get()
 ```
 ]]
 .column[.content[
 
 ```
-[1] "cars %&gt;%  #REVEAL          \n  ggplot() +  \n  aes(x = speed) + #REVEAL\n  aes(color = speed) + #REVEAL2\n  geom_rug() #REVEAL"
+[1] "cars %&gt;%  #REVEAL          \n  ggplot() +  \n  aes(x = speed) + \n  aes(color = speed) + #REVEAL2\n  geom_rug() #REVEAL"
 ```
 ]]
 ---
@@ -121,8 +260,11 @@ count: false
 .column[.content[
 
 ```r
-"cars" %&gt;%  
+  # The name of the code chunk containing code to be flipped
+"cars_plot" %&gt;%  
+  # return the code as text
   chunk_code_get() %&gt;%  
+* # parse that code into code, pipes, comments, etc
 * code_parse()
 ```
 ]]
@@ -134,7 +276,7 @@ count: false
   &lt;int&gt; &lt;chr&gt;                &lt;chr&gt;         &lt;chr&gt;     &lt;chr&gt;   &lt;lgl&gt; &lt;lgl&gt;   &lt;dbl&gt;
 1     1 "cars %&gt;%  #REVEAL … "cars "       %&gt;%       ""      TRUE  TRUE        1
 2     2 "  ggplot() +  "     "  ggplot() " +         ""      TRUE  FALSE       1
-3     3 "  aes(x = speed) +… "  aes(x = s… +         ""      TRUE  TRUE        1
+3     3 "  aes(x = speed) +… "  aes(x = s… +         ""      TRUE  FALSE       1
 4     4 "  aes(color = spee… "  aes(color… +         ""      TRUE  FALSE       2
 5     5 "  geom_rug() #REVE… "  geom_rug(… ""        ""      TRUE  TRUE        1
 ```
@@ -145,10 +287,14 @@ count: false
 .column[.content[
 
 ```r
-"cars" %&gt;%  
+  # The name of the code chunk containing code to be flipped
+"cars_plot" %&gt;%  
+  # return the code as text
   chunk_code_get() %&gt;%  
+  # parse that code into code, pipes, comments, etc
   code_parse() %&gt;%  
-* parsed_calc_show()
+* # calculate which lines to show for each frame
+* parsed_calc_show(break_type = "user")
 ```
 ]]
 .column[.content[
@@ -158,9 +304,6 @@ count: false
 [1] 1
 
 [[2]]
-[1] 1 2 3
-
-[[3]]
 [1] 1 2 3 4 5
 ```
 ]]
@@ -170,10 +313,15 @@ count: false
 .column[.content[
 
 ```r
-"cars" %&gt;%  
+  # The name of the code chunk containing code to be flipped
+"cars_plot" %&gt;%  
+  # return the code as text
   chunk_code_get() %&gt;%  
+  # parse that code into code, pipes, comments, etc
   code_parse() %&gt;%  
-  parsed_calc_show() %&gt;%  
+  # calculate which lines to show for each frame
+  parsed_calc_show(break_type = "user") %&gt;%  
+* # calculate highlighting that is needed for each frame
 * shown_lines_calc_highlight(break_type = "user")
 ```
 ]]
@@ -184,10 +332,7 @@ count: false
 [1] 1
 
 [[2]]
-[1] 2 3
-
-[[3]]
-[1] 4 5
+[1] 2 3 4 5
 ```
 ]]
 
@@ -202,13 +347,15 @@ count: false
 .column[.content[
 
 ```r
-*"cars"
+* # from the parsed code
+* # and using calc for which lines to display ...
+*"cars_plot"
 ```
 ]]
 .column[.content[
 
 ```
-[1] "cars"
+[1] "cars_plot"
 ```
 ]]
 ---
@@ -217,14 +364,16 @@ count: false
 .column[.content[
 
 ```r
-"cars" %&gt;%  
+  # from the parsed code
+  # and using calc for which lines to display ...
+"cars_plot" %&gt;%  
 * chunk_code_get()
 ```
 ]]
 .column[.content[
 
 ```
-[1] "cars %&gt;%  #REVEAL          \n  ggplot() +  \n  aes(x = speed) + #REVEAL\n  aes(color = speed) + #REVEAL2\n  geom_rug() #REVEAL"
+[1] "cars %&gt;%  #REVEAL          \n  ggplot() +  \n  aes(x = speed) + \n  aes(color = speed) + #REVEAL2\n  geom_rug() #REVEAL"
 ```
 ]]
 ---
@@ -233,7 +382,9 @@ count: false
 .column[.content[
 
 ```r
-"cars" %&gt;%  
+  # from the parsed code
+  # and using calc for which lines to display ...
+"cars_plot" %&gt;%  
   chunk_code_get() %&gt;%  
 * code_parse()
 ```
@@ -246,7 +397,7 @@ count: false
   &lt;int&gt; &lt;chr&gt;                &lt;chr&gt;         &lt;chr&gt;     &lt;chr&gt;   &lt;lgl&gt; &lt;lgl&gt;   &lt;dbl&gt;
 1     1 "cars %&gt;%  #REVEAL … "cars "       %&gt;%       ""      TRUE  TRUE        1
 2     2 "  ggplot() +  "     "  ggplot() " +         ""      TRUE  FALSE       1
-3     3 "  aes(x = speed) +… "  aes(x = s… +         ""      TRUE  TRUE        1
+3     3 "  aes(x = speed) +… "  aes(x = s… +         ""      TRUE  FALSE       1
 4     4 "  aes(color = spee… "  aes(color… +         ""      TRUE  FALSE       2
 5     5 "  geom_rug() #REVE… "  geom_rug(… ""        ""      TRUE  TRUE        1
 ```
@@ -257,9 +408,12 @@ count: false
 .column[.content[
 
 ```r
-"cars" %&gt;%  
+  # from the parsed code
+  # and using calc for which lines to display ...
+"cars_plot" %&gt;%  
   chunk_code_get() %&gt;%  
   code_parse() %&gt;%  
+* # ... return the code needed for each slide ...
 * parsed_return_partial_code_sequence()
 ```
 ]]
@@ -285,6 +439,26 @@ count: false
 [5] "  geom_rug()  #&lt;&lt;"       
 ```
 ]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+  # from the parsed code
+  # and using calc for which lines to display ...
+"cars_plot" %&gt;%  
+  chunk_code_get() %&gt;%  
+  code_parse() %&gt;%  
+  # ... return the code needed for each slide ...
+  parsed_return_partial_code_sequence() -&gt;  
+* # ... save this list
+*code_seq
+```
+]]
+.column[.content[
+
+]]
 
 
 
@@ -295,6 +469,10 @@ count: false
 
 ---
 
+
+# Deliver the code into a presentation tool.  
+
+We are using Xaringan, so we create a template for code chunks.
 
 
 ```r
@@ -302,69 +480,72 @@ return_partial_chunks_template()
 ```
 
 ````
-```{r {{chunk_name}}_auto_{{breaks}}_output, eval=TRUE, echo = FALSE, code = the_code[[{{breaks}}]]}
+```{r {{chunk_name}}_auto_{{breaks}}_output, eval=TRUE, echo = FALSE, code = code_seq[[{{breaks}}]]}
 ```
 ````
 
 ---
+
+# The generic template above...
+
+
+
+---
+
+## ... is used to create chunks of code and output displayed side-by-side
 
 
 ```r
-return_partial_code_or_output_chunks(chunk_name = "cars", breaks = 1:5)
-```
-
-````
-count: false
-```{r cars_auto_1_output, eval=TRUE, echo = FALSE, code = the_code[[1]]}
-```
----
-count: false
-```{r cars_auto_2_output, eval=TRUE, echo = FALSE, code = the_code[[2]]}
-```
----
-count: false
-```{r cars_auto_3_output, eval=TRUE, echo = FALSE, code = the_code[[3]]}
-```
----
-count: false
-```{r cars_auto_4_output, eval=TRUE, echo = FALSE, code = the_code[[4]]}
-```
----
-count: false
-```{r cars_auto_5_output, eval=TRUE, echo = FALSE, code = the_code[[5]]}
-```
-````
-
----
-
-
-```r
-return_partial_side_by_side_code_output_chunks(chunk_name = "cars", breaks = 1:2)
+return_partial_side_by_side_code_output_chunks(chunk_name = "cars_plot", num_breaks = 2)
 ```
 
 ````
 class: split-40
 count: false
 .column[.content[
-```{r cars_auto_1_code, eval=FALSE, echo = TRUE, code = the_code[[1]]}
+```{r cars_plot_auto_1_code, eval=FALSE, echo = TRUE, code = code_seq[[1]]}
 ```
 ]]
 .column[.content[
-```{r cars_auto_1_output, eval=TRUE, echo = FALSE, code = the_code[[1]]}
+```{r cars_plot_auto_1_output, eval=TRUE, echo = FALSE, code = code_seq[[1]]}
 ```
 ]]
 ---
 class: split-40
 count: false
 .column[.content[
-```{r cars_auto_2_code, eval=FALSE, echo = TRUE, code = the_code[[2]]}
+```{r cars_plot_auto_2_code, eval=FALSE, echo = TRUE, code = code_seq[[2]]}
 ```
 ]]
 .column[.content[
-```{r cars_auto_2_output, eval=TRUE, echo = FALSE, code = the_code[[2]]}
+```{r cars_plot_auto_2_output, eval=TRUE, echo = FALSE, code = code_seq[[2]]}
 ```
 ]]
 ````
+
+
+---
+
+## ... or a series of slides that just display output or just code 
+
+Is used to create 
+
+
+```r
+return_partial_code_or_output_chunks(chunk_name = "cars_plot", num_breaks = 2)
+```
+
+````
+count: false
+```{r cars_plot_auto_1_output, eval=TRUE, echo = FALSE, code = code_seq[[1]]}
+```
+---
+count: false
+```{r cars_plot_auto_2_output, eval=TRUE, echo = FALSE, code = code_seq[[2]]}
+```
+````
+
+
 
 
 

@@ -32,22 +32,37 @@ xaringanthemer::mono_accent(
 
 
 
-
+We'll use the tidyverse packages to create a pipeline, and flipbookr to walk through the steps in this pipeline.
 
 ```{r}
 library(tidyverse)
 library(flipbookr)
 ```
 
-```{r cars, echo = T, eval = F, fig.height=5}
+The input code to be "flipbookified" is below:
+
+```{r cars_plot, echo = T, eval = F, fig.height=5}
 cars %>%  #REVEAL          
   ggplot() +  
-  aes(x = speed) + #REVEAL
+  aes(x = speed) + 
   aes(color = speed) + #REVEAL2
   geom_rug() #REVEAL
 ```
 
 
+---
+
+Let's first look at the result of using flipbookr to bring this code.
+
+---
+
+`r reveal("cars_plot")`
+
+
+
+---
+
+Now, lets look at some of the functions working in the background.
 
 
 ---
@@ -56,10 +71,15 @@ cars %>%  #REVEAL
 
 
 ```{r, code_parsing_and_calculations, echo = F, eval = F}
-"cars" %>% 
+# The name of the code chunk containing code to be flipped
+"cars_plot" %>% 
+  # return the code as text
   chunk_code_get() %>% 
+  # parse that code into code, pipes, comments, etc
   code_parse() %>% 
-  parsed_calc_show() %>% 
+  # calculate which lines to show for each frame
+  parsed_calc_show(break_type = "user") %>% 
+  # calculate highlighting that is needed for each frame
   shown_lines_calc_highlight(break_type = "user")
 ```
 
@@ -70,10 +90,15 @@ cars %>%  #REVEAL
 
 
 ```{r partial_code, echo = F, eval = F}
-"cars" %>% 
+# from the parsed code 
+# and using calc for which lines to display ...
+"cars_plot" %>% 
   chunk_code_get() %>% 
-  code_parse() %>% 
-  parsed_return_partial_code_sequence()
+  code_parse() %>% #REVEAL
+  # ... return the code needed for each slide ...
+  parsed_return_partial_code_sequence() -> #REVEAL
+# ... save this list
+code_seq #REVEAL
 ```
 
 
@@ -82,6 +107,10 @@ cars %>%  #REVEAL
 
 ---
 
+
+# Deliver the code into a presentation tool.  
+
+We are using Xaringan, so we create a template for code chunks.
 
 ```{r xaringan_slides}
 return_partial_chunks_template()
@@ -89,15 +118,31 @@ return_partial_chunks_template()
 
 ---
 
-```{r}
-return_partial_code_or_output_chunks(chunk_name = "cars", breaks = 1:5)
-```
+# The generic template above...
+
+
 
 ---
 
+## ... is used to create chunks of code and output displayed side-by-side
+
 ```{r}
-return_partial_side_by_side_code_output_chunks(chunk_name = "cars", breaks = 1:2)
+return_partial_side_by_side_code_output_chunks(chunk_name = "cars_plot", num_breaks = 2)
 ```
+
+
+---
+
+## ... or a series of slides that *just* display output or *just* code 
+
+
+```{r}
+return_partial_code_or_output_chunks(chunk_name = "cars_plot", num_breaks = 2)
+```
+
+
+---
+
 
 
 
