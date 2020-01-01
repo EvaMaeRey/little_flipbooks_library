@@ -143,6 +143,9 @@ return_partial_code_or_output_chunks(chunk_name = "cars_plot", num_breaks = 2)
 
 ---
 
+# Go to code [**here**](https://github.com/EvaMaeRey/flipbookr/blob/master/R/base_parse_reveal_xaringan.R)
+
+https://github.com/EvaMaeRey/flipbookr/blob/master/R/base_parse_reveal_xaringan.R
 
 
 
