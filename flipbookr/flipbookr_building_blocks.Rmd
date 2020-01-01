@@ -1,0 +1,106 @@
+---
+title: "flipbookr building blocks"
+subtitle: "what lies beneath"
+author: "Gina Reynolds, December 2019"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: ["xaringan-themer.css", ninjutsu]
+    nature:
+      ratio: 16:10
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup}
+library(flipbookr)
+library(tidyverse)
+knitr::opts_chunk$set(fig.width = 6, message = F, warning = F, comment = "", cache = F)
+```
+
+```{r xaringan_look}
+xaringanthemer::mono_accent(
+  code_highlight_color = "rgba(255, 211, 0, .35)",
+  base_color = "#03418A")
+```
+
+
+
+
+---
+
+
+
+
+
+```{r}
+library(tidyverse)
+library(flipbookr)
+```
+
+```{r cars, echo = T, eval = F, fig.height=5}
+cars %>%  #REVEAL          
+  ggplot() +  
+  aes(x = speed) + #REVEAL
+  aes(color = speed) + #REVEAL2
+  geom_rug() #REVEAL
+```
+
+
+
+
+---
+
+`r reveal("code_parsing_and_calculations")`
+
+
+```{r, code_parsing_and_calculations, echo = F, eval = F}
+"cars" %>% 
+  chunk_code_get() %>% 
+  code_parse() %>% 
+  parsed_calc_show() %>% 
+  shown_lines_calc_highlight(break_type = "user")
+```
+
+
+---
+
+`r reveal("partial_code")`
+
+
+```{r partial_code, echo = F, eval = F}
+"cars" %>% 
+  chunk_code_get() %>% 
+  code_parse() %>% 
+  parsed_return_partial_code_sequence()
+```
+
+
+
+
+
+---
+
+
+```{r xaringan_slides}
+return_partial_chunks_template()
+```
+
+---
+
+```{r}
+return_partial_code_or_output_chunks(chunk_name = "cars", breaks = 1:5)
+```
+
+---
+
+```{r}
+return_partial_side_by_side_code_output_chunks(chunk_name = "cars", breaks = 1:2)
+```
+
+
+
+```{css, eval = TRUE, echo = F}
+.remark-code{line-height: 1.5; font-size: 60%}
+```
