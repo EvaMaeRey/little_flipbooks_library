@@ -25,7 +25,7 @@ library(tidyverse)
 ```
 
 ```
-## ── Attaching packages ────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
+## ── Attaching packages ──────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
 ```
 
 ```
@@ -36,7 +36,7 @@ library(tidyverse)
 ```
 
 ```
-## ── Conflicts ───────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## ── Conflicts ─────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()
 ```
@@ -274,10 +274,10 @@ count: false
 # A tibble: 5 x 8
    line raw_code             code          connector comment auto  user  non_seq
   &lt;int&gt; &lt;chr&gt;                &lt;chr&gt;         &lt;chr&gt;     &lt;chr&gt;   &lt;lgl&gt; &lt;lgl&gt;   &lt;dbl&gt;
-1     1 "cars %&gt;%  #REVEAL … "cars "       %&gt;%       ""      TRUE  TRUE        1
-2     2 "  ggplot() +  "     "  ggplot() " +         ""      TRUE  FALSE       1
-3     3 "  aes(x = speed) +… "  aes(x = s… +         ""      TRUE  FALSE       1
-4     4 "  aes(color = spee… "  aes(color… +         ""      TRUE  FALSE       2
+1     1 "cars %&gt;%  #REVEAL … "cars "       "%&gt;%"     ""      TRUE  TRUE        1
+2     2 "  ggplot() +  "     "  ggplot() " "+"       ""      TRUE  FALSE       1
+3     3 "  aes(x = speed) +… "  aes(x = s… "+"       ""      TRUE  FALSE       1
+4     4 "  aes(color = spee… "  aes(color… "+"       ""      TRUE  FALSE       2
 5     5 "  geom_rug() #REVE… "  geom_rug(… ""        ""      TRUE  TRUE        1
 ```
 ]]
@@ -395,10 +395,10 @@ count: false
 # A tibble: 5 x 8
    line raw_code             code          connector comment auto  user  non_seq
   &lt;int&gt; &lt;chr&gt;                &lt;chr&gt;         &lt;chr&gt;     &lt;chr&gt;   &lt;lgl&gt; &lt;lgl&gt;   &lt;dbl&gt;
-1     1 "cars %&gt;%  #REVEAL … "cars "       %&gt;%       ""      TRUE  TRUE        1
-2     2 "  ggplot() +  "     "  ggplot() " +         ""      TRUE  FALSE       1
-3     3 "  aes(x = speed) +… "  aes(x = s… +         ""      TRUE  FALSE       1
-4     4 "  aes(color = spee… "  aes(color… +         ""      TRUE  FALSE       2
+1     1 "cars %&gt;%  #REVEAL … "cars "       "%&gt;%"     ""      TRUE  TRUE        1
+2     2 "  ggplot() +  "     "  ggplot() " "+"       ""      TRUE  FALSE       1
+3     3 "  aes(x = speed) +… "  aes(x = s… "+"       ""      TRUE  FALSE       1
+4     4 "  aes(color = spee… "  aes(color… "+"       ""      TRUE  FALSE       2
 5     5 "  geom_rug() #REVE… "  geom_rug(… ""        ""      TRUE  TRUE        1
 ```
 ]]
@@ -476,49 +476,56 @@ We are using Xaringan, so we create a template for code chunks.
 
 
 ```r
-return_partial_chunks_template()
+return_partial_chunks_template_code()
 ```
 
-````
-```{r {{chunk_name}}_auto_{{breaks}}_output, eval=TRUE, echo = FALSE, code = code_seq[[{{breaks}}]]}
 ```
-````
+[1] "```{r {{{chunk_name}}}_{{{break_type}}}_{{{breaks}}}_code, eval = FALSE, echo = TRUE, code = code_seq[[{{{breaks}}}]]}\n```"
+```
+
+```r
+return_partial_chunks_template_output()
+```
+
+```
+[1] "```{r {{{chunk_name}}}_{{{break_type}}}_{{{breaks}}}_output, eval = TRUE, echo = FALSE, code = code_seq[[{{{breaks}}}]]}\n```"
+```
 
 ---
 
-# The generic template above...
+# The generic templates above...
 
 
 
 ---
 
-## ... is used to create chunks of code and output displayed side-by-side
+## ... are used to create chunks of code and output displayed side-by-side
 
 
 ```r
-return_partial_side_by_side_code_output_chunks(chunk_name = "cars_plot", num_breaks = 2)
+chunk_expand(chunk_name = "cars_plot")
 ```
 
 ````
 class: split-40
 count: false
 .column[.content[
-```{r cars_plot_auto_1_code, eval=FALSE, echo = TRUE, code = code_seq[[1]]}
+```{r cars_plot_auto_1_code, eval = FALSE, echo = TRUE, code = code_seq[[1]]}
 ```
 ]]
 .column[.content[
-```{r cars_plot_auto_1_output, eval=TRUE, echo = FALSE, code = code_seq[[1]]}
+```{r cars_plot_auto_1_output, eval = TRUE, echo = FALSE, code = code_seq[[1]]}
 ```
 ]]
 ---
 class: split-40
 count: false
 .column[.content[
-```{r cars_plot_auto_2_code, eval=FALSE, echo = TRUE, code = code_seq[[2]]}
+```{r cars_plot_auto_2_code, eval = FALSE, echo = TRUE, code = code_seq[[2]]}
 ```
 ]]
 .column[.content[
-```{r cars_plot_auto_2_output, eval=TRUE, echo = FALSE, code = code_seq[[2]]}
+```{r cars_plot_auto_2_output, eval = TRUE, echo = FALSE, code = code_seq[[2]]}
 ```
 ]]
 ````
@@ -526,23 +533,80 @@ count: false
 
 ---
 
-## ... or a series of slides that *just* display output or *just* code 
+## ... or a series of slides that *just* display output or *just* display code 
 
 
 
 ```r
-return_partial_code_or_output_chunks(chunk_name = "cars_plot", num_breaks = 2)
+chunk_expand(num_breaks = 2, display_type = "code")
 ```
 
 ````
 count: false
-```{r cars_plot_auto_1_output, eval=TRUE, echo = FALSE, code = code_seq[[1]]}
+```{r example_auto_1_code, eval = FALSE, echo = TRUE, code = code_seq[[1]]}
 ```
 ---
 count: false
-```{r cars_plot_auto_2_output, eval=TRUE, echo = FALSE, code = code_seq[[2]]}
+```{r example_auto_2_code, eval = FALSE, echo = TRUE, code = code_seq[[2]]}
 ```
 ````
+
+```r
+chunk_expand(num_breaks = 2, display_type = "output")
+```
+
+````
+count: false
+```{r example_auto_1_output, eval = TRUE, echo = FALSE, code = code_seq[[1]]}
+```
+---
+count: false
+```{r example_auto_2_output, eval = TRUE, echo = FALSE, code = code_seq[[2]]}
+```
+````
+
+
+
+
+---
+
+# The reveal asks for the chunks we've created to be evaluated, by using the knitr::knit() function. 
+
+We've applied it above.  Let's just look at the function itself.  
+
+
+```r
+reveal
+```
+
+```
+function (chunk_name = "example_name", break_type = "auto", reg_assign = F, 
+    code_seq = chunk_name_return_code_sequence(chunk_name, break_type, 
+        reg_assign), num_breaks = length(code_seq), display_type = "both", 
+    split = 40) 
+{
+    text &lt;- chunk_expand(chunk_name = chunk_name, break_type = break_type, 
+        num_breaks = num_breaks, display_type = display_type, 
+        split = split)
+    paste(knitr::knit(text = text), collapse = "\n")
+}
+&lt;bytecode: 0x7ff7c2de62a8&gt;
+&lt;environment: namespace:flipbookr&gt;
+```
+
+---
+
+# Notes (points of vacillation)
+
+I'm vacillating on the public function name still.  I thought about chunk_reveal, reveal, flipbookify, flipify.
+Most recently, I was most excited about chunk_reveal, but the function will also work with the parsed and expanded code as an input, which I think is really cool, and makes the code nice and flexible a la Yihui here:  https://yihui.org/en/2018/11/two-roads/
+
+Related, I'm a little nervous about code_seq argument.  What if code_seq is defined in the global environment? 
+There is this interesting warning about this formulation: https://adv-r.hadley.nz/functions.html#default-arguments  
+
+Probably the right (worry free) way is to set the default to NULL, and then do an if.null() inside the function where code_seq is defined. The one downside is that this is a little verbose, right?  num_breaks would also need to be adjusted in this way. 
+
+Another point of waffling was the argument order.  What's really the main input, is it the expanded code, or is it the chunk name?  Which ever (I'm not sure) should be the first thing. It probably must be the chunk name, as this is the way people will most likely use the code, else there would be a lot of confusion for the user.  Still, I found it unsatisfying that you, can't then somehow pipe code into this final function. 
 
 
 ---
