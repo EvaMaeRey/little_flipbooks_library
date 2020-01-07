@@ -1,0 +1,62 @@
+---
+title: "a pie chart, with labels"
+subtitle: "With flipbookr and xaringan"
+author: "Gina Reynolds, January 2019"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: ["xaringan-themer.css", ninjutsu]
+    nature:
+      ratio: 16:10
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+```{r}
+library(gapminder)
+library(tidyverse)
+library(flipbookr)
+```
+
+---
+
+
+
+`r reveal("my_pie")`
+
+```{r my_pie, echo = F, eval = F}
+gapminder %>% 
+  filter(year == 2002) %>% 
+  count(continent) %>% 
+  mutate(text_pos_y = sum(n) - cumsum(n)) %>% 
+  mutate(text_pos_y = (lag(text_pos_y, 
+                           default = sum(n)) + 
+                       text_pos_y) / 2) %>% 
+  ggplot() +
+  aes(x = 1) +
+  aes(y = n) +
+  geom_col(width = 2, col = "grey", ) + 
+  aes(fill = continent) +
+  geom_point(aes(y = text_pos_y), 
+             x = 2.3, color = "pink") +
+  aes(label = continent) +
+  geom_text(aes(y = text_pos_y), 
+            x = 2.3, color = "navy") +
+  geom_vline(xintercept = 0:2, lty = "dashed") +
+  geom_vline(xintercept = 2.3, lty = "dotted") +
+  geom_hline(yintercept = 0, color = "green") +
+  geom_hline(yintercept = 50, color = "orange") +
+  coord_polar(theta = "y") +
+  scale_x_continuous(limits = c(-1, 3)) +
+  theme_void() +
+  theme(legend.position = "none")
+```
+
+
+
+
+```{css, eval = TRUE, echo = F}
+.remark-code{line-height: 1.5; font-size: 70%}
+```

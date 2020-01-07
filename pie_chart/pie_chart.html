@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>a pie chart, with labels</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gina Reynolds, January 2019" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# a pie chart, with labels
+## With flipbookr and xaringan
+### Gina Reynolds, January 2019
+
+---
+
+
+
+
+```r
+library(gapminder)
+library(tidyverse)
+```
+
+```
+## ── Attaching packages ────────────────────────── tidyverse 1.2.1 ──
+```
+
+```
+## ✓ ggplot2 3.2.1     ✓ purrr   0.3.3
+## ✓ tibble  2.1.3     ✓ dplyr   0.8.3
+## ✓ tidyr   1.0.0     ✓ stringr 1.4.0
+## ✓ readr   1.3.1     ✓ forcats 0.4.0
+```
+
+```
+## ── Conflicts ───────────────────────────── tidyverse_conflicts() ──
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()
+```
+
+```r
+library(flipbookr)
+```
+
+---
+
+
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*gapminder
+```
+]]
+.column[.content[
+
+```
+## # A tibble: 1,704 x 6
+##    country     continent  year lifeExp      pop gdpPercap
+##    &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+##  1 Afghanistan Asia       1952    28.8  8425333      779.
+##  2 Afghanistan Asia       1957    30.3  9240934      821.
+##  3 Afghanistan Asia       1962    32.0 10267083      853.
+##  4 Afghanistan Asia       1967    34.0 11537966      836.
+##  5 Afghanistan Asia       1972    36.1 13079460      740.
+##  6 Afghanistan Asia       1977    38.4 14880372      786.
+##  7 Afghanistan Asia       1982    39.9 12881816      978.
+##  8 Afghanistan Asia       1987    40.8 13867957      852.
+##  9 Afghanistan Asia       1992    41.7 16317921      649.
+## 10 Afghanistan Asia       1997    41.8 22227415      635.
+## # … with 1,694 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+gapminder %&gt;%  
+* filter(year == 2002)
+```
+]]
+.column[.content[
+
+```
+## # A tibble: 142 x 6
+##    country     continent  year lifeExp       pop gdpPercap
+##    &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;     &lt;int&gt;     &lt;dbl&gt;
+##  1 Afghanistan Asia       2002    42.1  25268405      727.
+##  2 Albania     Europe     2002    75.7   3508512     4604.
+##  3 Algeria     Africa     2002    71.0  31287142     5288.
+##  4 Angola      Africa     2002    41.0  10866106     2773.
+##  5 Argentina   Americas   2002    74.3  38331121     8798.
+##  6 Australia   Oceania    2002    80.4  19546792    30688.
+##  7 Austria     Europe     2002    79.0   8148312    32418.
+##  8 Bahrain     Asia       2002    74.8    656397    23404.
+##  9 Bangladesh  Asia       2002    62.0 135656790     1136.
+## 10 Belgium     Europe     2002    78.3  10311970    30486.
+## # … with 132 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+gapminder %&gt;%  
+  filter(year == 2002) %&gt;%  
+* count(continent)
+```
+]]
+.column[.content[
+
+```
+## # A tibble: 5 x 2
+##   continent     n
+##   &lt;fct&gt;     &lt;int&gt;
+## 1 Africa       52
+## 2 Americas     25
+## 3 Asia         33
+## 4 Europe       30
+## 5 Oceania       2
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+gapminder %&gt;%  
+  filter(year == 2002) %&gt;%  
+  count(continent) %&gt;%  
+* mutate(text_pos_y = sum(n) - cumsum(n))
+```
+]]
+.column[.content[
+
+```
+## # A tibble: 5 x 3
+##   continent     n text_pos_y
+##   &lt;fct&gt;     &lt;int&gt;      &lt;int&gt;
+## 1 Africa       52         90
+## 2 Americas     25         65
+## 3 Asia         33         32
+## 4 Europe       30          2
+## 5 Oceania       2          0
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+gapminder %&gt;%  
+  filter(year == 2002) %&gt;%  
+  count(continent) %&gt;%  
+  mutate(text_pos_y = sum(n) - cumsum(n)) %&gt;%  
+* mutate(text_pos_y = (lag(text_pos_y,
+*                          default = sum(n)) +
+*                      text_pos_y) / 2)
+```
+]]
+.column[.content[
+
+```
+## # A tibble: 5 x 3
+##   continent     n text_pos_y
+##   &lt;fct&gt;     &lt;int&gt;      &lt;dbl&gt;
+## 1 Africa       52      116  
+## 2 Americas     25       77.5
+## 3 Asia         33       48.5
+## 4 Europe       30       17  
+## 5 Oceania       2        1
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+gapminder %&gt;%  
+  filter(year == 2002) %&gt;%  
+  count(continent) %&gt;%  
+  mutate(text_pos_y = sum(n) - cumsum(n)) %&gt;%  
+  mutate(text_pos_y = (lag(text_pos_y,  
+                           default = sum(n)) +  
+                       text_pos_y) / 2) %&gt;%  
+* ggplot()
+```
+]]
+.column[.content[
+![](pie_chart_files/figure-html/my_pie_auto_6_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+gapminder %&gt;%  
+  filter(year == 2002) %&gt;%  
+  count(continent) %&gt;%  
+  mutate(text_pos_y = sum(n) - cumsum(n)) %&gt;%  
+  mutate(text_pos_y = (lag(text_pos_y,  
+                           default = sum(n)) +  
+                       text_pos_y) / 2) %&gt;%  
+  ggplot() +  
+* aes(x = 1)
+```
+]]
+.column[.content[
+![](pie_chart_files/figure-html/my_pie_auto_7_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+gapminder %&gt;%  
+  filter(year == 2002) %&gt;%  
+  count(continent) %&gt;%  
+  mutate(text_pos_y = sum(n) - cumsum(n)) %&gt;%  
+  mutate(text_pos_y = (lag(text_pos_y,  
+                           default = sum(n)) +  
+                       text_pos_y) / 2) %&gt;%  
+  ggplot() +  
+  aes(x = 1) +  
+* aes(y = n)
+```
+]]
+.column[.content[
+![](pie_chart_files/figure-html/my_pie_auto_8_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+gapminder %&gt;%  
+  filter(year == 2002) %&gt;%  
+  count(continent) %&gt;%  
+  mutate(text_pos_y = sum(n) - cumsum(n)) %&gt;%  
+  mutate(text_pos_y = (lag(text_pos_y,  
+                           default = sum(n)) +  
+                       text_pos_y) / 2) %&gt;%  
+  ggplot() +  
+  aes(x = 1) +  
+  aes(y = n) +  
+* geom_col(width = 2, col = "grey", )
+```
+]]
+.column[.content[
+![](pie_chart_files/figure-html/my_pie_auto_9_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+gapminder %&gt;%  
+  filter(year == 2002) %&gt;%  
+  count(continent) %&gt;%  
+  mutate(text_pos_y = sum(n) - cumsum(n)) %&gt;%  
+  mutate(text_pos_y = (lag(text_pos_y,  
+                           default = sum(n)) +  
+                       text_pos_y) / 2) %&gt;%  
+  ggplot() +  
+  aes(x = 1) +  
+  aes(y = n) +  
+  geom_col(width = 2, col = "grey", ) +  
+* aes(fill = continent)
+```
+]]
+.column[.content[
+![](pie_chart_files/figure-html/my_pie_auto_10_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+gapminder %&gt;%  
+  filter(year == 2002) %&gt;%  
+  count(continent) %&gt;%  
+  mutate(text_pos_y = sum(n) - cumsum(n)) %&gt;%  
+  mutate(text_pos_y = (lag(text_pos_y,  
+                           default = sum(n)) +  
+                       text_pos_y) / 2) %&gt;%  
+  ggplot() +  
+  aes(x = 1) +  
+  aes(y = n) +  
+  geom_col(width = 2, col = "grey", ) +  
+  aes(fill = continent) +  
+* geom_point(aes(y = text_pos_y),
+*            x = 2.3, color = "pink")
+```
+]]
+.column[.content[
+![](pie_chart_files/figure-html/my_pie_auto_11_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+gapminder %&gt;%  
+  filter(year == 2002) %&gt;%  
+  count(continent) %&gt;%  
+  mutate(text_pos_y = sum(n) - cumsum(n)) %&gt;%  
+  mutate(text_pos_y = (lag(text_pos_y,  
+                           default = sum(n)) +  
+                       text_pos_y) / 2) %&gt;%  
+  ggplot() +  
+  aes(x = 1) +  
+  aes(y = n) +  
+  geom_col(width = 2, col = "grey", ) +  
+  aes(fill = continent) +  
+  geom_point(aes(y = text_pos_y),  
+             x = 2.3, color = "pink") +  
+* aes(label = continent)
+```
+]]
+.column[.content[
+![](pie_chart_files/figure-html/my_pie_auto_12_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+gapminder %&gt;%  
+  filter(year == 2002) %&gt;%  
+  count(continent) %&gt;%  
+  mutate(text_pos_y = sum(n) - cumsum(n)) %&gt;%  
+  mutate(text_pos_y = (lag(text_pos_y,  
+                           default = sum(n)) +  
+                       text_pos_y) / 2) %&gt;%  
+  ggplot() +  
+  aes(x = 1) +  
+  aes(y = n) +  
+  geom_col(width = 2, col = "grey", ) +  
+  aes(fill = continent) +  
+  geom_point(aes(y = text_pos_y),  
+             x = 2.3, color = "pink") +  
+  aes(label = continent) +  
+* geom_text(aes(y = text_pos_y),
+*           x = 2.3, color = "navy")
+```
+]]
+.column[.content[
+![](pie_chart_files/figure-html/my_pie_auto_13_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+gapminder %&gt;%  
+  filter(year == 2002) %&gt;%  
+  count(continent) %&gt;%  
+  mutate(text_pos_y = sum(n) - cumsum(n)) %&gt;%  
+  mutate(text_pos_y = (lag(text_pos_y,  
+                           default = sum(n)) +  
+                       text_pos_y) / 2) %&gt;%  
+  ggplot() +  
+  aes(x = 1) +  
+  aes(y = n) +  
+  geom_col(width = 2, col = "grey", ) +  
+  aes(fill = continent) +  
+  geom_point(aes(y = text_pos_y),  
+             x = 2.3, color = "pink") +  
+  aes(label = continent) +  
+  geom_text(aes(y = text_pos_y),  
+            x = 2.3, color = "navy") +  
+* geom_vline(xintercept = 0:2, lty = "dashed")
+```
+]]
+.column[.content[
+![](pie_chart_files/figure-html/my_pie_auto_14_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+gapminder %&gt;%  
+  filter(year == 2002) %&gt;%  
+  count(continent) %&gt;%  
+  mutate(text_pos_y = sum(n) - cumsum(n)) %&gt;%  
+  mutate(text_pos_y = (lag(text_pos_y,  
+                           default = sum(n)) +  
+                       text_pos_y) / 2) %&gt;%  
+  ggplot() +  
+  aes(x = 1) +  
+  aes(y = n) +  
+  geom_col(width = 2, col = "grey", ) +  
+  aes(fill = continent) +  
+  geom_point(aes(y = text_pos_y),  
+             x = 2.3, color = "pink") +  
+  aes(label = continent) +  
+  geom_text(aes(y = text_pos_y),  
+            x = 2.3, color = "navy") +  
+  geom_vline(xintercept = 0:2, lty = "dashed") +  
+* geom_vline(xintercept = 2.3, lty = "dotted")
+```
+]]
+.column[.content[
+![](pie_chart_files/figure-html/my_pie_auto_15_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+gapminder %&gt;%  
+  filter(year == 2002) %&gt;%  
+  count(continent) %&gt;%  
+  mutate(text_pos_y = sum(n) - cumsum(n)) %&gt;%  
+  mutate(text_pos_y = (lag(text_pos_y,  
+                           default = sum(n)) +  
+                       text_pos_y) / 2) %&gt;%  
+  ggplot() +  
+  aes(x = 1) +  
+  aes(y = n) +  
+  geom_col(width = 2, col = "grey", ) +  
+  aes(fill = continent) +  
+  geom_point(aes(y = text_pos_y),  
+             x = 2.3, color = "pink") +  
+  aes(label = continent) +  
+  geom_text(aes(y = text_pos_y),  
+            x = 2.3, color = "navy") +  
+  geom_vline(xintercept = 0:2, lty = "dashed") +  
+  geom_vline(xintercept = 2.3, lty = "dotted") +  
+* geom_hline(yintercept = 0, color = "green")
+```
+]]
+.column[.content[
+![](pie_chart_files/figure-html/my_pie_auto_16_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+gapminder %&gt;%  
+  filter(year == 2002) %&gt;%  
+  count(continent) %&gt;%  
+  mutate(text_pos_y = sum(n) - cumsum(n)) %&gt;%  
+  mutate(text_pos_y = (lag(text_pos_y,  
+                           default = sum(n)) +  
+                       text_pos_y) / 2) %&gt;%  
+  ggplot() +  
+  aes(x = 1) +  
+  aes(y = n) +  
+  geom_col(width = 2, col = "grey", ) +  
+  aes(fill = continent) +  
+  geom_point(aes(y = text_pos_y),  
+             x = 2.3, color = "pink") +  
+  aes(label = continent) +  
+  geom_text(aes(y = text_pos_y),  
+            x = 2.3, color = "navy") +  
+  geom_vline(xintercept = 0:2, lty = "dashed") +  
+  geom_vline(xintercept = 2.3, lty = "dotted") +  
+  geom_hline(yintercept = 0, color = "green") +  
+* geom_hline(yintercept = 50, color = "orange")
+```
+]]
+.column[.content[
+![](pie_chart_files/figure-html/my_pie_auto_17_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+gapminder %&gt;%  
+  filter(year == 2002) %&gt;%  
+  count(continent) %&gt;%  
+  mutate(text_pos_y = sum(n) - cumsum(n)) %&gt;%  
+  mutate(text_pos_y = (lag(text_pos_y,  
+                           default = sum(n)) +  
+                       text_pos_y) / 2) %&gt;%  
+  ggplot() +  
+  aes(x = 1) +  
+  aes(y = n) +  
+  geom_col(width = 2, col = "grey", ) +  
+  aes(fill = continent) +  
+  geom_point(aes(y = text_pos_y),  
+             x = 2.3, color = "pink") +  
+  aes(label = continent) +  
+  geom_text(aes(y = text_pos_y),  
+            x = 2.3, color = "navy") +  
+  geom_vline(xintercept = 0:2, lty = "dashed") +  
+  geom_vline(xintercept = 2.3, lty = "dotted") +  
+  geom_hline(yintercept = 0, color = "green") +  
+  geom_hline(yintercept = 50, color = "orange") +  
+* coord_polar(theta = "y")
+```
+]]
+.column[.content[
+![](pie_chart_files/figure-html/my_pie_auto_18_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+gapminder %&gt;%  
+  filter(year == 2002) %&gt;%  
+  count(continent) %&gt;%  
+  mutate(text_pos_y = sum(n) - cumsum(n)) %&gt;%  
+  mutate(text_pos_y = (lag(text_pos_y,  
+                           default = sum(n)) +  
+                       text_pos_y) / 2) %&gt;%  
+  ggplot() +  
+  aes(x = 1) +  
+  aes(y = n) +  
+  geom_col(width = 2, col = "grey", ) +  
+  aes(fill = continent) +  
+  geom_point(aes(y = text_pos_y),  
+             x = 2.3, color = "pink") +  
+  aes(label = continent) +  
+  geom_text(aes(y = text_pos_y),  
+            x = 2.3, color = "navy") +  
+  geom_vline(xintercept = 0:2, lty = "dashed") +  
+  geom_vline(xintercept = 2.3, lty = "dotted") +  
+  geom_hline(yintercept = 0, color = "green") +  
+  geom_hline(yintercept = 50, color = "orange") +  
+  coord_polar(theta = "y") +  
+* scale_x_continuous(limits = c(-1, 3))
+```
+]]
+.column[.content[
+![](pie_chart_files/figure-html/my_pie_auto_19_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+gapminder %&gt;%  
+  filter(year == 2002) %&gt;%  
+  count(continent) %&gt;%  
+  mutate(text_pos_y = sum(n) - cumsum(n)) %&gt;%  
+  mutate(text_pos_y = (lag(text_pos_y,  
+                           default = sum(n)) +  
+                       text_pos_y) / 2) %&gt;%  
+  ggplot() +  
+  aes(x = 1) +  
+  aes(y = n) +  
+  geom_col(width = 2, col = "grey", ) +  
+  aes(fill = continent) +  
+  geom_point(aes(y = text_pos_y),  
+             x = 2.3, color = "pink") +  
+  aes(label = continent) +  
+  geom_text(aes(y = text_pos_y),  
+            x = 2.3, color = "navy") +  
+  geom_vline(xintercept = 0:2, lty = "dashed") +  
+  geom_vline(xintercept = 2.3, lty = "dotted") +  
+  geom_hline(yintercept = 0, color = "green") +  
+  geom_hline(yintercept = 50, color = "orange") +  
+  coord_polar(theta = "y") +  
+  scale_x_continuous(limits = c(-1, 3)) +  
+* theme_void()
+```
+]]
+.column[.content[
+![](pie_chart_files/figure-html/my_pie_auto_20_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+gapminder %&gt;%  
+  filter(year == 2002) %&gt;%  
+  count(continent) %&gt;%  
+  mutate(text_pos_y = sum(n) - cumsum(n)) %&gt;%  
+  mutate(text_pos_y = (lag(text_pos_y,  
+                           default = sum(n)) +  
+                       text_pos_y) / 2) %&gt;%  
+  ggplot() +  
+  aes(x = 1) +  
+  aes(y = n) +  
+  geom_col(width = 2, col = "grey", ) +  
+  aes(fill = continent) +  
+  geom_point(aes(y = text_pos_y),  
+             x = 2.3, color = "pink") +  
+  aes(label = continent) +  
+  geom_text(aes(y = text_pos_y),  
+            x = 2.3, color = "navy") +  
+  geom_vline(xintercept = 0:2, lty = "dashed") +  
+  geom_vline(xintercept = 2.3, lty = "dotted") +  
+  geom_hline(yintercept = 0, color = "green") +  
+  geom_hline(yintercept = 50, color = "orange") +  
+  coord_polar(theta = "y") +  
+  scale_x_continuous(limits = c(-1, 3)) +  
+  theme_void() +  
+* theme(legend.position = "none")
+```
+]]
+.column[.content[
+![](pie_chart_files/figure-html/my_pie_auto_21_output-1.png)&lt;!-- --&gt;
+]]
+
+
+
+
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 70%}
+&lt;/style&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:10",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
