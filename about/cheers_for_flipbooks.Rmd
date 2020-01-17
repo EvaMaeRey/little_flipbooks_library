@@ -29,6 +29,9 @@ for (i in 1:nrow(df)) {
 
 Additionally, it has been linked to from other resources including blogs:
 
+https://huygens.science.uva.nl/ggPlotteR/
+https://ggplot2tutor.com/howitworks
+https://bookdown.org/martin_monkman/DataScienceResources_book/datavisualization.html
 https://medium.com/open-data-delaware/moving-outside-the-box-for-data-visualization-efcda44ce7ec
 https://datascience.blog.wzb.eu/2019/03/01/linkdump-105/
 https://bookdown.org/martin_monkman/DataScienceResources_book/datavisualization.html
@@ -37,3 +40,15 @@ http://bryklab.net/compbioftw/
 http://stefanorodighiero.net/links.html
 https://www.facebook.com/1673798376000921/posts/2035217649858990/
 https://tidytuesday.fireside.fm/2
+https://bookdown.org/martin_monkman/DataScienceResources_book/datavisualization.html
+https://rworkshop.uni.lu/lectures/lecture06_plotting.html#46
+http://mribeirodantas.xyz/blog/index.php/tag/biology/
+https://www.williamrchase.com/slides/ggplot_intro.html#1
+https://github.com/zhiiiyang/XaringanTutorial
+https://libguides.kaust.edu.sa/ReproducibilityWS/materials
+https://threadreaderapp.com/thread/1100663931192963072.html
+https://bookdown.org/oscar_baruffa/Book-Twitter-for-R/follow-some-more-folks.html
+https://stackoverflow.com/questions/55912039/building-up-a-ggplot-one-line-at-a-time-for-a-presentation
+http://www.rpubs.com/dgolicher/ggplots
+https://www.quora.com/What-data-visualization-software-can-handle-large-amounts-of-data-in-the-order-of-hundreds-of-millions-I-have-had-trouble-with-Tableau
+
