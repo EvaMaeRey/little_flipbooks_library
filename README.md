@@ -2,12 +2,6 @@
 # Little flipbooks library
 
 <img width="13%" src="figures/linnet_kineograph_1886.jpg"/>
-<img width="13%" src="figures/linnet_kineograph_1886.jpg"/>
-<img width="13%" src="figures/linnet_kineograph_1886.jpg"/>
-<img width="13%" src="figures/linnet_kineograph_1886.jpg"/>
-<img width="13%" src="figures/linnet_kineograph_1886.jpg"/>
-<img width="13%" src="figures/linnet_kineograph_1886.jpg"/>
-<img width="13%" src="figures/linnet_kineograph_1886.jpg"/>
 <!-- Original author is de:John Barnes Linnet - Zeitgenössische Illustration (1886), via de.wikipedia -->
 
 The incremental code/result reveal provided by flipbooks may help you
