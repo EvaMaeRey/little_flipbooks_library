@@ -1,0 +1,326 @@
+---
+title: "ols"
+subtitle: "made with flipbookr and xaringan"
+author: "Gina Reynolds, Jan 2020"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: ["xaringan-themer.css", ninjutsu]
+    nature:
+      ratio: 16:10
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+
+```{r xaringan_look, include = F}
+xaringanthemer::mono_accent(
+  code_highlight_color = "rgba(255, 211, 0, .35)",
+  base_color = "#03418A")
+knitr::opts_chunk$set(warning = F, message = F)
+```
+
+```{r, include = F}
+library(tidyverse)
+library(flipbookr)
+```
+
+---
+
+`r flipbookr::chunk_reveal("basic", break_type = 1)`
+
+
+```{r basic, include = F}
+cars %>% 
+  ggplot() +
+  labs(title = "Fitting an OLS model to data in ggplot2") +
+  aes(x = speed) +
+  aes(y = dist) +
+  geom_point(color = "steelblue",
+             size = 2) +
+  geom_smooth(method = lm, se = F)
+```
+
+---
+
+OLS in base R
+
+
+---
+
+`r flipbookr::chunk_reveal("base_ols")`
+
+```{r base_ols, include = F}
+# fitting a model
+lm(formula = dist ~ speed,
+   data = cars) ->
+cars_model
+# using summary() to
+# to pull out more info
+cars_model %>% 
+  summary() %>% 
+  .$residuals
+```
+
+---
+
+# But {broom} is cool ...
+
+--
+
+...anticipating that we might want lots of this info pulled out systematically as data frames
+
+
+--
+
+Broom returns dataframes at 3 levels
+
+- broom::glance(), overall model statistics
+- broom::tidy(), covariate level model statistics
+- broom::augment(), observation level statistics
+
+---
+
+# *Model* level stats
+
+```{r}
+cars_model %>% 
+  broom::glance()
+```
+
+
+---
+
+# *Covariate* level stats
+
+
+```{r}
+cars_model %>% 
+  broom::tidy()
+```
+
+---
+
+# *Observation* level
+
+
+```{r}
+cars_model %>% 
+  broom::augment() 
+```
+
+---
+
+`broom::augment()` is good for plotting those residuals and fitted values, and checking model assumptions.
+
+---
+
+`r flipbookr::chunk_reveal("augment")`
+
+
+```{r augment, include = F}
+cars_model %>% 
+  broom::augment() %>% 
+  ggplot() +
+  labs(title = "Plot of model fit") +
+  aes(x = speed) +
+  aes(y = dist) +
+  geom_point(col = "steelblue") +
+  geom_smooth(method = lm, se = F) +
+  geom_point(aes(y = .fitted)) +
+  aes(xend = speed) +
+  aes(yend = .fitted) +
+  geom_segment(color = "red", 
+               linetype = "dashed") +
+  # input value of 21 miles per hour
+  geom_vline(xintercept = 21,
+             linetype = "dotted") +
+  # yields predicted for y, stopping distance
+  geom_hline(yintercept = 
+               predict(cars_model, 
+                       data.frame(speed = 21)),
+             linetype = "dotted")
+```
+
+---
+
+Checking assumption:
+
+residuals not correlated with predictions...
+
+---
+
+`r flipbookr::chunk_reveal("residuals_plot")`
+
+
+```{r residuals_plot, include = F}
+cars_model %>% 
+  broom::augment() %>%
+  ggplot() +
+  labs(title = "Residuals v. Fitted") +
+  aes(x = .fitted) +
+  aes(y = .resid) +
+  geom_point(col = "steelblue") +
+  geom_hline(yintercept = 0,
+             lty = "dashed") +
+  geom_smooth(se = F, span = 1, 
+              color = "red")
+```
+
+
+---
+
+# Checking for outliers with Cook's distance
+
+
+---
+
+`r flipbookr::chunk_reveal("cooks")`
+
+```{r cooks, include = F}
+cars_model %>% 
+  broom::augment() %>%
+  mutate(id = row_number()) %>% 
+  ggplot() +
+  labs(title = "Cook's Distance, by ID (row number)") +
+  labs(subtitle = "Cook's Distance, a measure of influence via a leave one out procedure") +
+  aes(x = id) +
+  aes(y = .cooksd) +
+  geom_point() +
+  aes(label = id) +
+  geom_text(check_overlap = T, 
+            nudge_y = .015)
+```
+
+---
+
+
+```{r, echo = F, eval = F}
+cars_model %>% 
+  broom::augment() %>%
+  mutate(id = row_number()) %>% 
+  ggplot() +
+  labs(title = "Cook's Distance v. standardized residual") +
+  labs(subtitle = "Cook's Distance, a measure of influence via a leave one out procedure") +
+  aes(x = id) +
+  labs(x = "id (dataframe row number)") +
+  aes(y = .cooksd) +
+  geom_point() +
+  aes(label = id) +
+  geom_text(check_overlap = T, 
+            nudge_y = .015)
+```
+
+---
+
+Are the residuals normally distributed? 
+
+
+---
+
+`r flipbookr::chunk_reveal("qqplot")`
+
+```{r qqplot, include = F}
+cars_model %>% 
+  broom::augment() %>% 
+  mutate(expected = qnorm((1:n() - .5)/n())) %>% 
+  ggplot() +
+  labs(title = "Normal q-q plot") +
+  aes(y = sort(.std.resid)) +
+  aes(x = expected) +
+  geom_rug() +
+  geom_point() +
+  coord_equal(ratio = 1, 
+              xlim = c(-4, 4),
+              ylim = c(-4, 4)) +
+  # add line of equivilance
+  geom_abline(intercept = 0, 
+              slope = 1, 
+              linetype = "dotted")
+```
+
+
+---
+
+# 
+
+
+```{r}
+cars_model
+```
+
+
+
+
+---
+
+
+
+```{r, eval = F, echo = F}
+cars_model %>% 
+  plot()
+```
+
+---
+
+# multiple regression
+
+--
+and multiple models in a single table
+
+---
+
+# subsetting to 2002
+
+```{r}
+library(gapminder)
+gapminder %>% 
+  filter(year == 2002) ->
+gapminder_2002
+```
+
+---
+
+`r flipbookr::chunk_reveal("multi_model")`
+
+
+```{r multi_model, include = F}
+lm(lifeExp ~ gdpPercap, 
+   data = gapminder_2002) ->
+model1
+lm(lifeExp ~ gdpPercap + pop, 
+   data = gapminder_2002) ->
+model2
+lm(lifeExp ~ gdpPercap + 
+     continent, 
+   data = gapminder_2002) ->
+model3
+```
+
+
+---
+
+```{r, results = "asis"}
+stargazer::stargazer(
+  model1, model2, model3,
+  # if you want to work interactivevly, change "html" to "text" 
+  # note, chunk results option is "asis"
+  type = "html",  
+  dep.var.labels = "Life Expectancy (years)", 
+  covariate.labels = c("GDP per cap (Thousands $US)", 
+                       "Population (Millions)"), 
+  style = "qje", 
+  font.size = "small",
+  title = "Models of Life Expectancy in 2002")
+```
+
+
+
+
+
+```{css, eval = TRUE, echo = F}
+.remark-code{line-height: 1.5; font-size: 80%}
+```

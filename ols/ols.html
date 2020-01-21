@@ -1,0 +1,1612 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>ols</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gina Reynolds, Jan 2020" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# ols
+## made with flipbookr and xaringan
+### Gina Reynolds, Jan 2020
+
+---
+
+
+
+
+
+
+
+
+
+---
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars %&gt;%  
+  ggplot() +  
+  labs(title = "Fitting an OLS model to data in ggplot2") +  
+  aes(x = speed) +  
+  aes(y = dist) +  
+  geom_point(color = "steelblue",  
+             size = 2) +  
+  geom_smooth(method = lm, se = F)  
+```
+]]
+.column[.content[
+![](ols_files/figure-html/basic_1_1_output-1.png)&lt;!-- --&gt;
+]]
+
+
+
+
+---
+
+OLS in base R
+
+
+---
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+* # fitting a model
+*lm(formula = dist ~ speed,
+*  data = cars)
+```
+]]
+.column[.content[
+
+```
+## 
+## Call:
+## lm(formula = dist ~ speed, data = cars)
+## 
+## Coefficients:
+## (Intercept)        speed  
+##     -17.579        3.932
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+  # fitting a model
+lm(formula = dist ~ speed,  
+   data = cars) -&gt;  
+*cars_model
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+  # fitting a model
+lm(formula = dist ~ speed,  
+   data = cars) -&gt;  
+cars_model  
+*# using summary() to  # using summary() to
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+  # fitting a model
+lm(formula = dist ~ speed,  
+   data = cars) -&gt;  
+cars_model  
+# using summary() to  # using summary() to
+* # to pull out more info
+*cars_model
+```
+]]
+.column[.content[
+
+```
+## 
+## Call:
+## lm(formula = dist ~ speed, data = cars)
+## 
+## Coefficients:
+## (Intercept)        speed  
+##     -17.579        3.932
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+  # fitting a model
+lm(formula = dist ~ speed,  
+   data = cars) -&gt;  
+cars_model  
+# using summary() to  # using summary() to
+  # to pull out more info
+cars_model %&gt;%  
+* summary()
+```
+]]
+.column[.content[
+
+```
+## 
+## Call:
+## lm(formula = dist ~ speed, data = cars)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -29.069  -9.525  -2.272   9.215  43.201 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -17.5791     6.7584  -2.601   0.0123 *  
+## speed         3.9324     0.4155   9.464 1.49e-12 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 15.38 on 48 degrees of freedom
+## Multiple R-squared:  0.6511,	Adjusted R-squared:  0.6438 
+## F-statistic: 89.57 on 1 and 48 DF,  p-value: 1.49e-12
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+  # fitting a model
+lm(formula = dist ~ speed,  
+   data = cars) -&gt;  
+cars_model  
+# using summary() to  # using summary() to
+  # to pull out more info
+cars_model %&gt;%  
+  summary() %&gt;%  
+* .$residuals
+```
+]]
+.column[.content[
+
+```
+##          1          2          3          4          5          6          7 
+##   3.849460  11.849460  -5.947766  12.052234   2.119825  -7.812584  -3.744993 
+##          8          9         10         11         12         13         14 
+##   4.255007  12.255007  -8.677401   2.322599 -15.609810  -9.609810  -5.609810 
+##         15         16         17         18         19         20         21 
+##  -1.609810  -7.542219   0.457781   0.457781  12.457781 -11.474628  -1.474628 
+##         22         23         24         25         26         27         28 
+##  22.525372  42.525372 -21.407036 -15.407036  12.592964 -13.339445  -5.339445 
+##         29         30         31         32         33         34         35 
+## -17.271854  -9.271854   0.728146 -11.204263   2.795737  22.795737  30.795737 
+##         36         37         38         39         40         41         42 
+## -21.136672 -11.136672  10.863328 -29.069080 -13.069080  -9.069080  -5.069080 
+##         43         44         45         46         47         48         49 
+##   2.930920  -2.933898 -18.866307  -6.798715  15.201285  16.201285  43.201285 
+##         50 
+##   4.268876
+```
+]]
+
+
+
+---
+
+# But {broom} is cool ...
+
+--
+
+...anticipating that we might want lots of this info pulled out systematically as data frames
+
+
+--
+
+Broom returns dataframes at 3 levels
+
+- broom::glance(), overall model statistics
+- broom::tidy(), covariate level model statistics
+- broom::augment(), observation level statistics
+
+---
+
+# *Model* level stats
+
+
+```r
+cars_model %&gt;% 
+  broom::glance()
+```
+
+```
+## # A tibble: 1 x 11
+##   r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC
+##       &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1     0.651         0.644  15.4      89.6 1.49e-12     2  -207.  419.  425.
+## # … with 2 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;
+```
+
+
+---
+
+# *Covariate* level stats
+
+
+
+```r
+cars_model %&gt;% 
+  broom::tidy()
+```
+
+```
+## # A tibble: 2 x 5
+##   term        estimate std.error statistic  p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept)   -17.6      6.76      -2.60 1.23e- 2
+## 2 speed           3.93     0.416      9.46 1.49e-12
+```
+
+---
+
+# *Observation* level
+
+
+
+```r
+cars_model %&gt;% 
+  broom::augment() 
+```
+
+```
+## # A tibble: 50 x 9
+##     dist speed .fitted .se.fit .resid   .hat .sigma  .cooksd .std.resid
+##    &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;
+##  1     2     4   -1.85    5.21   3.85 0.115    15.5 0.00459       0.266
+##  2    10     4   -1.85    5.21  11.8  0.115    15.4 0.0435        0.819
+##  3     4     7    9.95    4.11  -5.95 0.0715   15.5 0.00620      -0.401
+##  4    22     7    9.95    4.11  12.1  0.0715   15.4 0.0255        0.813
+##  5    16     8   13.9     3.77   2.12 0.0600   15.5 0.000645      0.142
+##  6    10     9   17.8     3.44  -7.81 0.0499   15.5 0.00713      -0.521
+##  7    18    10   21.7     3.12  -3.74 0.0413   15.5 0.00133      -0.249
+##  8    26    10   21.7     3.12   4.26 0.0413   15.5 0.00172       0.283
+##  9    34    10   21.7     3.12  12.3  0.0413   15.4 0.0143        0.814
+## 10    17    11   25.7     2.84  -8.68 0.0341   15.5 0.00582      -0.574
+## # … with 40 more rows
+```
+
+---
+
+`broom::augment()` is good for plotting those residuals and fitted values, and checking model assumptions.
+
+---
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*cars_model
+```
+]]
+.column[.content[
+
+```
+## 
+## Call:
+## lm(formula = dist ~ speed, data = cars)
+## 
+## Coefficients:
+## (Intercept)        speed  
+##     -17.579        3.932
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars_model %&gt;%  
+* broom::augment()
+```
+]]
+.column[.content[
+
+```
+## # A tibble: 50 x 9
+##     dist speed .fitted .se.fit .resid   .hat .sigma  .cooksd .std.resid
+##    &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;
+##  1     2     4   -1.85    5.21   3.85 0.115    15.5 0.00459       0.266
+##  2    10     4   -1.85    5.21  11.8  0.115    15.4 0.0435        0.819
+##  3     4     7    9.95    4.11  -5.95 0.0715   15.5 0.00620      -0.401
+##  4    22     7    9.95    4.11  12.1  0.0715   15.4 0.0255        0.813
+##  5    16     8   13.9     3.77   2.12 0.0600   15.5 0.000645      0.142
+##  6    10     9   17.8     3.44  -7.81 0.0499   15.5 0.00713      -0.521
+##  7    18    10   21.7     3.12  -3.74 0.0413   15.5 0.00133      -0.249
+##  8    26    10   21.7     3.12   4.26 0.0413   15.5 0.00172       0.283
+##  9    34    10   21.7     3.12  12.3  0.0413   15.4 0.0143        0.814
+## 10    17    11   25.7     2.84  -8.68 0.0341   15.5 0.00582      -0.574
+## # … with 40 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars_model %&gt;%  
+  broom::augment() %&gt;%  
+* ggplot()
+```
+]]
+.column[.content[
+![](ols_files/figure-html/augment_auto_3_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars_model %&gt;%  
+  broom::augment() %&gt;%  
+  ggplot() +  
+* labs(title = "Plot of model fit")
+```
+]]
+.column[.content[
+![](ols_files/figure-html/augment_auto_4_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars_model %&gt;%  
+  broom::augment() %&gt;%  
+  ggplot() +  
+  labs(title = "Plot of model fit") +  
+* aes(x = speed)
+```
+]]
+.column[.content[
+![](ols_files/figure-html/augment_auto_5_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars_model %&gt;%  
+  broom::augment() %&gt;%  
+  ggplot() +  
+  labs(title = "Plot of model fit") +  
+  aes(x = speed) +  
+* aes(y = dist)
+```
+]]
+.column[.content[
+![](ols_files/figure-html/augment_auto_6_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars_model %&gt;%  
+  broom::augment() %&gt;%  
+  ggplot() +  
+  labs(title = "Plot of model fit") +  
+  aes(x = speed) +  
+  aes(y = dist) +  
+* geom_point(col = "steelblue")
+```
+]]
+.column[.content[
+![](ols_files/figure-html/augment_auto_7_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars_model %&gt;%  
+  broom::augment() %&gt;%  
+  ggplot() +  
+  labs(title = "Plot of model fit") +  
+  aes(x = speed) +  
+  aes(y = dist) +  
+  geom_point(col = "steelblue") +  
+* geom_smooth(method = lm, se = F)
+```
+]]
+.column[.content[
+![](ols_files/figure-html/augment_auto_8_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars_model %&gt;%  
+  broom::augment() %&gt;%  
+  ggplot() +  
+  labs(title = "Plot of model fit") +  
+  aes(x = speed) +  
+  aes(y = dist) +  
+  geom_point(col = "steelblue") +  
+  geom_smooth(method = lm, se = F) +  
+* geom_point(aes(y = .fitted))
+```
+]]
+.column[.content[
+![](ols_files/figure-html/augment_auto_9_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars_model %&gt;%  
+  broom::augment() %&gt;%  
+  ggplot() +  
+  labs(title = "Plot of model fit") +  
+  aes(x = speed) +  
+  aes(y = dist) +  
+  geom_point(col = "steelblue") +  
+  geom_smooth(method = lm, se = F) +  
+  geom_point(aes(y = .fitted)) +  
+* aes(xend = speed)
+```
+]]
+.column[.content[
+![](ols_files/figure-html/augment_auto_10_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars_model %&gt;%  
+  broom::augment() %&gt;%  
+  ggplot() +  
+  labs(title = "Plot of model fit") +  
+  aes(x = speed) +  
+  aes(y = dist) +  
+  geom_point(col = "steelblue") +  
+  geom_smooth(method = lm, se = F) +  
+  geom_point(aes(y = .fitted)) +  
+  aes(xend = speed) +  
+* aes(yend = .fitted)
+```
+]]
+.column[.content[
+![](ols_files/figure-html/augment_auto_11_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars_model %&gt;%  
+  broom::augment() %&gt;%  
+  ggplot() +  
+  labs(title = "Plot of model fit") +  
+  aes(x = speed) +  
+  aes(y = dist) +  
+  geom_point(col = "steelblue") +  
+  geom_smooth(method = lm, se = F) +  
+  geom_point(aes(y = .fitted)) +  
+  aes(xend = speed) +  
+  aes(yend = .fitted) +  
+* geom_segment(color = "red",
+*              linetype = "dashed")
+```
+]]
+.column[.content[
+![](ols_files/figure-html/augment_auto_12_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars_model %&gt;%  
+  broom::augment() %&gt;%  
+  ggplot() +  
+  labs(title = "Plot of model fit") +  
+  aes(x = speed) +  
+  aes(y = dist) +  
+  geom_point(col = "steelblue") +  
+  geom_smooth(method = lm, se = F) +  
+  geom_point(aes(y = .fitted)) +  
+  aes(xend = speed) +  
+  aes(yend = .fitted) +  
+  geom_segment(color = "red",  
+               linetype = "dashed") +  
+* # input value of 21 miles per hour
+* geom_vline(xintercept = 21,
+*            linetype = "dotted")
+```
+]]
+.column[.content[
+![](ols_files/figure-html/augment_auto_13_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars_model %&gt;%  
+  broom::augment() %&gt;%  
+  ggplot() +  
+  labs(title = "Plot of model fit") +  
+  aes(x = speed) +  
+  aes(y = dist) +  
+  geom_point(col = "steelblue") +  
+  geom_smooth(method = lm, se = F) +  
+  geom_point(aes(y = .fitted)) +  
+  aes(xend = speed) +  
+  aes(yend = .fitted) +  
+  geom_segment(color = "red",  
+               linetype = "dashed") +  
+  # input value of 21 miles per hour
+  geom_vline(xintercept = 21,  
+             linetype = "dotted") +  
+* # yields predicted for y, stopping distance
+* geom_hline(yintercept =
+*              predict(cars_model,
+*                      data.frame(speed = 21)),
+*            linetype = "dotted")
+```
+]]
+.column[.content[
+![](ols_files/figure-html/augment_auto_14_output-1.png)&lt;!-- --&gt;
+]]
+
+
+
+
+---
+
+Checking assumption:
+
+residuals not correlated with predictions...
+
+---
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*cars_model
+```
+]]
+.column[.content[
+
+```
+## 
+## Call:
+## lm(formula = dist ~ speed, data = cars)
+## 
+## Coefficients:
+## (Intercept)        speed  
+##     -17.579        3.932
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars_model %&gt;%  
+* broom::augment()
+```
+]]
+.column[.content[
+
+```
+## # A tibble: 50 x 9
+##     dist speed .fitted .se.fit .resid   .hat .sigma  .cooksd .std.resid
+##    &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;
+##  1     2     4   -1.85    5.21   3.85 0.115    15.5 0.00459       0.266
+##  2    10     4   -1.85    5.21  11.8  0.115    15.4 0.0435        0.819
+##  3     4     7    9.95    4.11  -5.95 0.0715   15.5 0.00620      -0.401
+##  4    22     7    9.95    4.11  12.1  0.0715   15.4 0.0255        0.813
+##  5    16     8   13.9     3.77   2.12 0.0600   15.5 0.000645      0.142
+##  6    10     9   17.8     3.44  -7.81 0.0499   15.5 0.00713      -0.521
+##  7    18    10   21.7     3.12  -3.74 0.0413   15.5 0.00133      -0.249
+##  8    26    10   21.7     3.12   4.26 0.0413   15.5 0.00172       0.283
+##  9    34    10   21.7     3.12  12.3  0.0413   15.4 0.0143        0.814
+## 10    17    11   25.7     2.84  -8.68 0.0341   15.5 0.00582      -0.574
+## # … with 40 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars_model %&gt;%  
+  broom::augment() %&gt;%  
+* ggplot()
+```
+]]
+.column[.content[
+![](ols_files/figure-html/residuals_plot_auto_3_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars_model %&gt;%  
+  broom::augment() %&gt;%  
+  ggplot() +  
+* labs(title = "Residuals v. Fitted")
+```
+]]
+.column[.content[
+![](ols_files/figure-html/residuals_plot_auto_4_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars_model %&gt;%  
+  broom::augment() %&gt;%  
+  ggplot() +  
+  labs(title = "Residuals v. Fitted") +  
+* aes(x = .fitted)
+```
+]]
+.column[.content[
+![](ols_files/figure-html/residuals_plot_auto_5_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars_model %&gt;%  
+  broom::augment() %&gt;%  
+  ggplot() +  
+  labs(title = "Residuals v. Fitted") +  
+  aes(x = .fitted) +  
+* aes(y = .resid)
+```
+]]
+.column[.content[
+![](ols_files/figure-html/residuals_plot_auto_6_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars_model %&gt;%  
+  broom::augment() %&gt;%  
+  ggplot() +  
+  labs(title = "Residuals v. Fitted") +  
+  aes(x = .fitted) +  
+  aes(y = .resid) +  
+* geom_point(col = "steelblue")
+```
+]]
+.column[.content[
+![](ols_files/figure-html/residuals_plot_auto_7_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars_model %&gt;%  
+  broom::augment() %&gt;%  
+  ggplot() +  
+  labs(title = "Residuals v. Fitted") +  
+  aes(x = .fitted) +  
+  aes(y = .resid) +  
+  geom_point(col = "steelblue") +  
+* geom_hline(yintercept = 0,
+*            lty = "dashed")
+```
+]]
+.column[.content[
+![](ols_files/figure-html/residuals_plot_auto_8_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars_model %&gt;%  
+  broom::augment() %&gt;%  
+  ggplot() +  
+  labs(title = "Residuals v. Fitted") +  
+  aes(x = .fitted) +  
+  aes(y = .resid) +  
+  geom_point(col = "steelblue") +  
+  geom_hline(yintercept = 0,  
+             lty = "dashed") +  
+* geom_smooth(se = F, span = 1,
+*             color = "red")
+```
+]]
+.column[.content[
+![](ols_files/figure-html/residuals_plot_auto_9_output-1.png)&lt;!-- --&gt;
+]]
+
+
+
+
+
+---
+
+# checking for outliers with Cook's distance
+
+
+---
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*cars_model
+```
+]]
+.column[.content[
+
+```
+## 
+## Call:
+## lm(formula = dist ~ speed, data = cars)
+## 
+## Coefficients:
+## (Intercept)        speed  
+##     -17.579        3.932
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars_model %&gt;%  
+* broom::augment()
+```
+]]
+.column[.content[
+
+```
+## # A tibble: 50 x 9
+##     dist speed .fitted .se.fit .resid   .hat .sigma  .cooksd .std.resid
+##    &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;
+##  1     2     4   -1.85    5.21   3.85 0.115    15.5 0.00459       0.266
+##  2    10     4   -1.85    5.21  11.8  0.115    15.4 0.0435        0.819
+##  3     4     7    9.95    4.11  -5.95 0.0715   15.5 0.00620      -0.401
+##  4    22     7    9.95    4.11  12.1  0.0715   15.4 0.0255        0.813
+##  5    16     8   13.9     3.77   2.12 0.0600   15.5 0.000645      0.142
+##  6    10     9   17.8     3.44  -7.81 0.0499   15.5 0.00713      -0.521
+##  7    18    10   21.7     3.12  -3.74 0.0413   15.5 0.00133      -0.249
+##  8    26    10   21.7     3.12   4.26 0.0413   15.5 0.00172       0.283
+##  9    34    10   21.7     3.12  12.3  0.0413   15.4 0.0143        0.814
+## 10    17    11   25.7     2.84  -8.68 0.0341   15.5 0.00582      -0.574
+## # … with 40 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars_model %&gt;%  
+  broom::augment() %&gt;%  
+* mutate(id = row_number())
+```
+]]
+.column[.content[
+
+```
+## # A tibble: 50 x 10
+##     dist speed .fitted .se.fit .resid   .hat .sigma  .cooksd .std.resid    id
+##    &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt; &lt;int&gt;
+##  1     2     4   -1.85    5.21   3.85 0.115    15.5 0.00459       0.266     1
+##  2    10     4   -1.85    5.21  11.8  0.115    15.4 0.0435        0.819     2
+##  3     4     7    9.95    4.11  -5.95 0.0715   15.5 0.00620      -0.401     3
+##  4    22     7    9.95    4.11  12.1  0.0715   15.4 0.0255        0.813     4
+##  5    16     8   13.9     3.77   2.12 0.0600   15.5 0.000645      0.142     5
+##  6    10     9   17.8     3.44  -7.81 0.0499   15.5 0.00713      -0.521     6
+##  7    18    10   21.7     3.12  -3.74 0.0413   15.5 0.00133      -0.249     7
+##  8    26    10   21.7     3.12   4.26 0.0413   15.5 0.00172       0.283     8
+##  9    34    10   21.7     3.12  12.3  0.0413   15.4 0.0143        0.814     9
+## 10    17    11   25.7     2.84  -8.68 0.0341   15.5 0.00582      -0.574    10
+## # … with 40 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars_model %&gt;%  
+  broom::augment() %&gt;%  
+  mutate(id = row_number()) %&gt;%  
+* ggplot()
+```
+]]
+.column[.content[
+![](ols_files/figure-html/cooks_auto_4_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars_model %&gt;%  
+  broom::augment() %&gt;%  
+  mutate(id = row_number()) %&gt;%  
+  ggplot() +  
+* labs(title = "Cook's Distance, by ID (row number)")
+```
+]]
+.column[.content[
+![](ols_files/figure-html/cooks_auto_5_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars_model %&gt;%  
+  broom::augment() %&gt;%  
+  mutate(id = row_number()) %&gt;%  
+  ggplot() +  
+  labs(title = "Cook's Distance, by ID (row number)") +  
+* labs(subtitle = "Cook's Distance, a measure of influence via a leave one out procedure")
+```
+]]
+.column[.content[
+![](ols_files/figure-html/cooks_auto_6_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars_model %&gt;%  
+  broom::augment() %&gt;%  
+  mutate(id = row_number()) %&gt;%  
+  ggplot() +  
+  labs(title = "Cook's Distance, by ID (row number)") +  
+  labs(subtitle = "Cook's Distance, a measure of influence via a leave one out procedure") +  
+* aes(x = id)
+```
+]]
+.column[.content[
+![](ols_files/figure-html/cooks_auto_7_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars_model %&gt;%  
+  broom::augment() %&gt;%  
+  mutate(id = row_number()) %&gt;%  
+  ggplot() +  
+  labs(title = "Cook's Distance, by ID (row number)") +  
+  labs(subtitle = "Cook's Distance, a measure of influence via a leave one out procedure") +  
+  aes(x = id) +  
+* aes(y = .cooksd)
+```
+]]
+.column[.content[
+![](ols_files/figure-html/cooks_auto_8_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars_model %&gt;%  
+  broom::augment() %&gt;%  
+  mutate(id = row_number()) %&gt;%  
+  ggplot() +  
+  labs(title = "Cook's Distance, by ID (row number)") +  
+  labs(subtitle = "Cook's Distance, a measure of influence via a leave one out procedure") +  
+  aes(x = id) +  
+  aes(y = .cooksd) +  
+* geom_point()
+```
+]]
+.column[.content[
+![](ols_files/figure-html/cooks_auto_9_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars_model %&gt;%  
+  broom::augment() %&gt;%  
+  mutate(id = row_number()) %&gt;%  
+  ggplot() +  
+  labs(title = "Cook's Distance, by ID (row number)") +  
+  labs(subtitle = "Cook's Distance, a measure of influence via a leave one out procedure") +  
+  aes(x = id) +  
+  aes(y = .cooksd) +  
+  geom_point() +  
+* aes(label = id)
+```
+]]
+.column[.content[
+![](ols_files/figure-html/cooks_auto_10_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars_model %&gt;%  
+  broom::augment() %&gt;%  
+  mutate(id = row_number()) %&gt;%  
+  ggplot() +  
+  labs(title = "Cook's Distance, by ID (row number)") +  
+  labs(subtitle = "Cook's Distance, a measure of influence via a leave one out procedure") +  
+  aes(x = id) +  
+  aes(y = .cooksd) +  
+  geom_point() +  
+  aes(label = id) +  
+* geom_text(check_overlap = T,
+*           nudge_y = .015)
+```
+]]
+.column[.content[
+![](ols_files/figure-html/cooks_auto_11_output-1.png)&lt;!-- --&gt;
+]]
+
+
+
+---
+
+
+
+
+---
+
+Are the residuals normally distributed? 
+
+
+---
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*cars_model
+```
+]]
+.column[.content[
+
+```
+## 
+## Call:
+## lm(formula = dist ~ speed, data = cars)
+## 
+## Coefficients:
+## (Intercept)        speed  
+##     -17.579        3.932
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars_model %&gt;%  
+* broom::augment()
+```
+]]
+.column[.content[
+
+```
+## # A tibble: 50 x 9
+##     dist speed .fitted .se.fit .resid   .hat .sigma  .cooksd .std.resid
+##    &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;
+##  1     2     4   -1.85    5.21   3.85 0.115    15.5 0.00459       0.266
+##  2    10     4   -1.85    5.21  11.8  0.115    15.4 0.0435        0.819
+##  3     4     7    9.95    4.11  -5.95 0.0715   15.5 0.00620      -0.401
+##  4    22     7    9.95    4.11  12.1  0.0715   15.4 0.0255        0.813
+##  5    16     8   13.9     3.77   2.12 0.0600   15.5 0.000645      0.142
+##  6    10     9   17.8     3.44  -7.81 0.0499   15.5 0.00713      -0.521
+##  7    18    10   21.7     3.12  -3.74 0.0413   15.5 0.00133      -0.249
+##  8    26    10   21.7     3.12   4.26 0.0413   15.5 0.00172       0.283
+##  9    34    10   21.7     3.12  12.3  0.0413   15.4 0.0143        0.814
+## 10    17    11   25.7     2.84  -8.68 0.0341   15.5 0.00582      -0.574
+## # … with 40 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars_model %&gt;%  
+  broom::augment() %&gt;%  
+* mutate(expected = qnorm((1:n() - .5)/n()))
+```
+]]
+.column[.content[
+
+```
+## # A tibble: 50 x 10
+##     dist speed .fitted .se.fit .resid   .hat .sigma  .cooksd .std.resid expected
+##    &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;
+##  1     2     4   -1.85    5.21   3.85 0.115    15.5 0.00459       0.266   -2.33 
+##  2    10     4   -1.85    5.21  11.8  0.115    15.4 0.0435        0.819   -1.88 
+##  3     4     7    9.95    4.11  -5.95 0.0715   15.5 0.00620      -0.401   -1.64 
+##  4    22     7    9.95    4.11  12.1  0.0715   15.4 0.0255        0.813   -1.48 
+##  5    16     8   13.9     3.77   2.12 0.0600   15.5 0.000645      0.142   -1.34 
+##  6    10     9   17.8     3.44  -7.81 0.0499   15.5 0.00713      -0.521   -1.23 
+##  7    18    10   21.7     3.12  -3.74 0.0413   15.5 0.00133      -0.249   -1.13 
+##  8    26    10   21.7     3.12   4.26 0.0413   15.5 0.00172       0.283   -1.04 
+##  9    34    10   21.7     3.12  12.3  0.0413   15.4 0.0143        0.814   -0.954
+## 10    17    11   25.7     2.84  -8.68 0.0341   15.5 0.00582      -0.574   -0.878
+## # … with 40 more rows
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars_model %&gt;%  
+  broom::augment() %&gt;%  
+  mutate(expected = qnorm((1:n() - .5)/n())) %&gt;%  
+* ggplot()
+```
+]]
+.column[.content[
+![](ols_files/figure-html/qqplot_auto_4_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars_model %&gt;%  
+  broom::augment() %&gt;%  
+  mutate(expected = qnorm((1:n() - .5)/n())) %&gt;%  
+  ggplot() +  
+* labs(title = "Normal q-q plot")
+```
+]]
+.column[.content[
+![](ols_files/figure-html/qqplot_auto_5_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars_model %&gt;%  
+  broom::augment() %&gt;%  
+  mutate(expected = qnorm((1:n() - .5)/n())) %&gt;%  
+  ggplot() +  
+  labs(title = "Normal q-q plot") +  
+* aes(y = sort(.std.resid))
+```
+]]
+.column[.content[
+![](ols_files/figure-html/qqplot_auto_6_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars_model %&gt;%  
+  broom::augment() %&gt;%  
+  mutate(expected = qnorm((1:n() - .5)/n())) %&gt;%  
+  ggplot() +  
+  labs(title = "Normal q-q plot") +  
+  aes(y = sort(.std.resid)) +  
+* aes(x = expected)
+```
+]]
+.column[.content[
+![](ols_files/figure-html/qqplot_auto_7_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars_model %&gt;%  
+  broom::augment() %&gt;%  
+  mutate(expected = qnorm((1:n() - .5)/n())) %&gt;%  
+  ggplot() +  
+  labs(title = "Normal q-q plot") +  
+  aes(y = sort(.std.resid)) +  
+  aes(x = expected) +  
+* geom_rug()
+```
+]]
+.column[.content[
+![](ols_files/figure-html/qqplot_auto_8_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars_model %&gt;%  
+  broom::augment() %&gt;%  
+  mutate(expected = qnorm((1:n() - .5)/n())) %&gt;%  
+  ggplot() +  
+  labs(title = "Normal q-q plot") +  
+  aes(y = sort(.std.resid)) +  
+  aes(x = expected) +  
+  geom_rug() +  
+* geom_point()
+```
+]]
+.column[.content[
+![](ols_files/figure-html/qqplot_auto_9_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars_model %&gt;%  
+  broom::augment() %&gt;%  
+  mutate(expected = qnorm((1:n() - .5)/n())) %&gt;%  
+  ggplot() +  
+  labs(title = "Normal q-q plot") +  
+  aes(y = sort(.std.resid)) +  
+  aes(x = expected) +  
+  geom_rug() +  
+  geom_point() +  
+* coord_equal(ratio = 1,
+*             xlim = c(-4, 4),
+*             ylim = c(-4, 4))
+```
+]]
+.column[.content[
+![](ols_files/figure-html/qqplot_auto_10_output-1.png)&lt;!-- --&gt;
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+cars_model %&gt;%  
+  broom::augment() %&gt;%  
+  mutate(expected = qnorm((1:n() - .5)/n())) %&gt;%  
+  ggplot() +  
+  labs(title = "Normal q-q plot") +  
+  aes(y = sort(.std.resid)) +  
+  aes(x = expected) +  
+  geom_rug() +  
+  geom_point() +  
+  coord_equal(ratio = 1,  
+              xlim = c(-4, 4),  
+              ylim = c(-4, 4)) +  
+* # add line of equivilance
+* geom_abline(intercept = 0,
+*             slope = 1,
+*             linetype = "dotted")
+```
+]]
+.column[.content[
+![](ols_files/figure-html/qqplot_auto_11_output-1.png)&lt;!-- --&gt;
+]]
+
+
+
+
+---
+
+# 
+
+
+
+```r
+cars_model
+```
+
+```
+## 
+## Call:
+## lm(formula = dist ~ speed, data = cars)
+## 
+## Coefficients:
+## (Intercept)        speed  
+##     -17.579        3.932
+```
+
+
+
+
+---
+
+
+
+
+
+---
+
+# multiple regression
+
+--
+and multiple models in a single table
+
+---
+
+# subsetting to 2002
+
+
+```r
+library(gapminder)
+gapminder %&gt;% 
+  filter(year == 2002) -&gt;
+gapminder_2002
+```
+
+---
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+*lm(lifeExp ~ gdpPercap,
+*  data = gapminder_2002)
+```
+]]
+.column[.content[
+
+```
+## 
+## Call:
+## lm(formula = lifeExp ~ gdpPercap, data = gapminder_2002)
+## 
+## Coefficients:
+## (Intercept)    gdpPercap  
+##   5.825e+01    7.507e-04
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+lm(lifeExp ~ gdpPercap,  
+   data = gapminder_2002) -&gt;  
+*model1
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+lm(lifeExp ~ gdpPercap,  
+   data = gapminder_2002) -&gt;  
+model1  
+*lm(lifeExp ~ gdpPercap + pop,
+*  data = gapminder_2002)
+```
+]]
+.column[.content[
+
+```
+## 
+## Call:
+## lm(formula = lifeExp ~ gdpPercap + pop, data = gapminder_2002)
+## 
+## Coefficients:
+## (Intercept)    gdpPercap          pop  
+##   5.789e+01    7.554e-04    7.516e-09
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+lm(lifeExp ~ gdpPercap,  
+   data = gapminder_2002) -&gt;  
+model1  
+lm(lifeExp ~ gdpPercap + pop,  
+   data = gapminder_2002) -&gt;  
+*model2
+```
+]]
+.column[.content[
+
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+lm(lifeExp ~ gdpPercap,  
+   data = gapminder_2002) -&gt;  
+model1  
+lm(lifeExp ~ gdpPercap + pop,  
+   data = gapminder_2002) -&gt;  
+model2  
+*lm(lifeExp ~ gdpPercap +
+*    continent,
+*  data = gapminder_2002)
+```
+]]
+.column[.content[
+
+```
+## 
+## Call:
+## lm(formula = lifeExp ~ gdpPercap + continent, data = gapminder_2002)
+## 
+## Coefficients:
+##       (Intercept)          gdpPercap  continentAmericas      continentAsia  
+##         5.224e+01          4.168e-04          1.631e+01          1.275e+01  
+##   continentEurope   continentOceania  
+##         1.541e+01          1.627e+01
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+lm(lifeExp ~ gdpPercap,  
+   data = gapminder_2002) -&gt;  
+model1  
+lm(lifeExp ~ gdpPercap + pop,  
+   data = gapminder_2002) -&gt;  
+model2  
+lm(lifeExp ~ gdpPercap +  
+     continent,  
+   data = gapminder_2002) -&gt;  
+*model3
+```
+]]
+.column[.content[
+
+]]
+
+
+
+
+
+---
+
+
+```r
+stargazer::stargazer(
+  model1, model2, model3,
+  # if you want to work interactivevly, change "html" to "text" 
+  # note, chunk results option is "asis"
+  type = "html",  
+  dep.var.labels = "Life Expectancy (years)", 
+  covariate.labels = c("GDP per cap (Thousands $US)", 
+                       "Population (Millions)"), 
+  style = "qje", 
+  font.size = "small",
+  title = "Models of Life Expectancy in 2002")
+```
+
+
+&lt;table style="text-align:center"&gt;&lt;caption&gt;&lt;strong&gt;Models of Life Expectancy in 2002&lt;/strong&gt;&lt;/caption&gt;
+&lt;tr&gt;&lt;td colspan="4" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td colspan="3"&gt;Life Expectancy (years)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;(1)&lt;/td&gt;&lt;td&gt;(2)&lt;/td&gt;&lt;td&gt;(3)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="4" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;GDP per cap (Thousands US)&lt;/td&gt;&lt;td&gt;0.001&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;0.001&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;0.0004&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;(0.0001)&lt;/td&gt;&lt;td&gt;(0.0001)&lt;/td&gt;&lt;td&gt;(0.0001)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;Population (Millions)&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;0.000&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;(0.000)&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;continentAmericas&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;16.309&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;(1.676)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;continentAsia&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;12.751&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;(1.561)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;continentEurope&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;15.409&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;(1.982)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;continentOceania&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;16.270&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;(5.051)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;Constant&lt;/td&gt;&lt;td&gt;58.250&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;57.891&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;52.242&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;(1.014)&lt;/td&gt;&lt;td&gt;(1.043)&lt;/td&gt;&lt;td&gt;(0.937)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;em&gt;N&lt;/em&gt;&lt;/td&gt;&lt;td&gt;142&lt;/td&gt;&lt;td&gt;142&lt;/td&gt;&lt;td&gt;142&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;R&lt;sup&gt;2&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;0.465&lt;/td&gt;&lt;td&gt;0.472&lt;/td&gt;&lt;td&gt;0.718&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;Adjusted R&lt;sup&gt;2&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;0.461&lt;/td&gt;&lt;td&gt;0.465&lt;/td&gt;&lt;td&gt;0.708&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;Residual Std. Error&lt;/td&gt;&lt;td&gt;9.015 (df = 140)&lt;/td&gt;&lt;td&gt;8.984 (df = 139)&lt;/td&gt;&lt;td&gt;6.640 (df = 136)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;F Statistic&lt;/td&gt;&lt;td&gt;121.648&lt;sup&gt;***&lt;/sup&gt; (df = 1; 140)&lt;/td&gt;&lt;td&gt;62.214&lt;sup&gt;***&lt;/sup&gt; (df = 2; 139)&lt;/td&gt;&lt;td&gt;69.244&lt;sup&gt;***&lt;/sup&gt; (df = 5; 136)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="4" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;em&gt;Notes:&lt;/em&gt;&lt;/td&gt;&lt;td colspan="3" style="text-align:right"&gt;&lt;sup&gt;***&lt;/sup&gt;Significant at the 1 percent level.&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td colspan="3" style="text-align:right"&gt;&lt;sup&gt;**&lt;/sup&gt;Significant at the 5 percent level.&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td colspan="3" style="text-align:right"&gt;&lt;sup&gt;*&lt;/sup&gt;Significant at the 10 percent level.&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+
+
+
+
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 80%}
+&lt;/style&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:10",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
