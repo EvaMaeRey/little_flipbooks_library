@@ -42,11 +42,11 @@ library(flipbookr)
 The input code to be "flipbookified" is below:
 
 ```{r cars_plot, echo = T, eval = F, fig.height=5}
-cars %>%  #REVEAL          
+cars %>%  #BREAK          
   ggplot() +  
   aes(x = speed) + 
-  aes(color = speed) + #REVEAL2
-  geom_rug() #REVEAL
+  aes(color = speed) + #BREAK2
+  geom_rug() #BREAK
 ```
 
 
@@ -56,7 +56,7 @@ Let's first look at the result of using flipbookr to bring this code.
 
 ---
 
-`r reveal("cars_plot")`
+`r chunk_reveal("cars_plot")`
 
 
 
@@ -67,7 +67,7 @@ Now, lets look at some of the functions working in the background.
 
 ---
 
-`r reveal("code_parsing_and_calculations")`
+`r chunk_reveal("code_parsing_and_calculations")`
 
 
 ```{r, code_parsing_and_calculations, echo = F, eval = F}
@@ -86,7 +86,7 @@ Now, lets look at some of the functions working in the background.
 
 ---
 
-`r reveal("partial_code")`
+`r chunk_reveal("partial_code")`
 
 
 ```{r partial_code, echo = F, eval = F}
@@ -152,7 +152,7 @@ chunk_expand(num_breaks = 2, display_type = "output")
 We've applied it above.  Let's just look at the function itself.  
 
 ```{r}
-reveal
+chunk_reveal
 ```
 
 ---
@@ -172,9 +172,12 @@ Another point of waffling was the argument order.  What's really the main input,
 
 ---
 
+
 # Go to code [**here**](https://github.com/EvaMaeRey/flipbookr/blob/master/R/base_parse_reveal_xaringan.R)
 
 https://github.com/EvaMaeRey/flipbookr/blob/master/R/base_parse_reveal_xaringan.R
+
+
 
 
 

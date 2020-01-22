@@ -25,7 +25,7 @@ library(tidyverse)
 ```
 
 ```
-## ── Attaching packages ──────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
+## ── Attaching packages ──────────────────────────────────────────── tidyverse 1.2.1 ──
 ```
 
 ```
@@ -36,7 +36,7 @@ library(tidyverse)
 ```
 
 ```
-## ── Conflicts ─────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## ── Conflicts ─────────────────────────────────────────────── tidyverse_conflicts() ──
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()
 ```
@@ -75,11 +75,11 @@ The input code to be "flipbookified" is below:
 
 
 ```r
-cars %&gt;%  #REVEAL          
+cars %&gt;%  #BREAK          
   ggplot() +  
   aes(x = speed) + 
-  aes(color = speed) + #REVEAL2
-  geom_rug() #REVEAL
+  aes(color = speed) + #BREAK2
+  geom_rug() #BREAK
 ```
 
 
@@ -251,7 +251,7 @@ count: false
 .column[.content[
 
 ```
-[1] "cars %&gt;%  #REVEAL          \n  ggplot() +  \n  aes(x = speed) + \n  aes(color = speed) + #REVEAL2\n  geom_rug() #REVEAL"
+[1] "cars %&gt;%  #BREAK          \n  ggplot() +  \n  aes(x = speed) + \n  aes(color = speed) + #BREAK2\n  geom_rug() #BREAK"
 ```
 ]]
 ---
@@ -274,11 +274,11 @@ count: false
 # A tibble: 5 x 8
    line raw_code             code          connector comment auto  user  non_seq
   &lt;int&gt; &lt;chr&gt;                &lt;chr&gt;         &lt;chr&gt;     &lt;chr&gt;   &lt;lgl&gt; &lt;lgl&gt;   &lt;dbl&gt;
-1     1 "cars %&gt;%  #REVEAL … "cars "       "%&gt;%"     ""      TRUE  TRUE        1
+1     1 "cars %&gt;%  #BREAK  … "cars "       "%&gt;%"     ""      TRUE  TRUE        1
 2     2 "  ggplot() +  "     "  ggplot() " "+"       ""      TRUE  FALSE       1
 3     3 "  aes(x = speed) +… "  aes(x = s… "+"       ""      TRUE  FALSE       1
 4     4 "  aes(color = spee… "  aes(color… "+"       ""      TRUE  FALSE       2
-5     5 "  geom_rug() #REVE… "  geom_rug(… ""        ""      TRUE  TRUE        1
+5     5 "  geom_rug() #BREA… "  geom_rug(… ""        ""      TRUE  TRUE        1
 ```
 ]]
 ---
@@ -373,7 +373,7 @@ count: false
 .column[.content[
 
 ```
-[1] "cars %&gt;%  #REVEAL          \n  ggplot() +  \n  aes(x = speed) + \n  aes(color = speed) + #REVEAL2\n  geom_rug() #REVEAL"
+[1] "cars %&gt;%  #BREAK          \n  ggplot() +  \n  aes(x = speed) + \n  aes(color = speed) + #BREAK2\n  geom_rug() #BREAK"
 ```
 ]]
 ---
@@ -386,7 +386,7 @@ count: false
   # and using calc for which lines to display ...
 "cars_plot" %&gt;%  
   chunk_code_get() %&gt;%  
-* code_parse()
+* code_parse()   #REVEAL
 ```
 ]]
 .column[.content[
@@ -395,11 +395,11 @@ count: false
 # A tibble: 5 x 8
    line raw_code             code          connector comment auto  user  non_seq
   &lt;int&gt; &lt;chr&gt;                &lt;chr&gt;         &lt;chr&gt;     &lt;chr&gt;   &lt;lgl&gt; &lt;lgl&gt;   &lt;dbl&gt;
-1     1 "cars %&gt;%  #REVEAL … "cars "       "%&gt;%"     ""      TRUE  TRUE        1
+1     1 "cars %&gt;%  #BREAK  … "cars "       "%&gt;%"     ""      TRUE  TRUE        1
 2     2 "  ggplot() +  "     "  ggplot() " "+"       ""      TRUE  FALSE       1
 3     3 "  aes(x = speed) +… "  aes(x = s… "+"       ""      TRUE  FALSE       1
 4     4 "  aes(color = spee… "  aes(color… "+"       ""      TRUE  FALSE       2
-5     5 "  geom_rug() #REVE… "  geom_rug(… ""        ""      TRUE  TRUE        1
+5     5 "  geom_rug() #BREA… "  geom_rug(… ""        ""      TRUE  TRUE        1
 ```
 ]]
 ---
@@ -412,9 +412,9 @@ count: false
   # and using calc for which lines to display ...
 "cars_plot" %&gt;%  
   chunk_code_get() %&gt;%  
-  code_parse() %&gt;%  
+  code_parse() %&gt;%  #REVEAL
 * # ... return the code needed for each slide ...
-* parsed_return_partial_code_sequence()
+* parsed_return_partial_code_sequence()   #REVEAL
 ```
 ]]
 .column[.content[
@@ -449,11 +449,11 @@ count: false
   # and using calc for which lines to display ...
 "cars_plot" %&gt;%  
   chunk_code_get() %&gt;%  
-  code_parse() %&gt;%  
+  code_parse() %&gt;%  #REVEAL
   # ... return the code needed for each slide ...
-  parsed_return_partial_code_sequence() -&gt;  
+  parsed_return_partial_code_sequence() -&gt;  #REVEAL
 * # ... save this list
-*code_seq
+*code_seq  #REVEAL
 ```
 ]]
 .column[.content[
@@ -480,7 +480,7 @@ return_partial_chunks_template_code()
 ```
 
 ```
-[1] "```{r {{{chunk_name}}}_{{{break_type}}}_{{{breaks}}}_code, eval = FALSE, echo = TRUE, code = code_seq[[{{{breaks}}}]]}\n```"
+[1] "```{r {{{chunk_name}}}_{{{break_type}}}_{{{breaks}}}_code, eval = FALSE, echo = TRUE, code = code_seq[[{{{breaks}}}]]}\n  ```"
 ```
 
 ```r
@@ -511,7 +511,7 @@ class: split-40
 count: false
 .column[.content[
 ```{r cars_plot_auto_1_code, eval = FALSE, echo = TRUE, code = code_seq[[1]]}
-```
+  ```
 ]]
 .column[.content[
 ```{r cars_plot_auto_1_output, eval = TRUE, echo = FALSE, code = code_seq[[1]]}
@@ -522,7 +522,7 @@ class: split-40
 count: false
 .column[.content[
 ```{r cars_plot_auto_2_code, eval = FALSE, echo = TRUE, code = code_seq[[2]]}
-```
+  ```
 ]]
 .column[.content[
 ```{r cars_plot_auto_2_output, eval = TRUE, echo = FALSE, code = code_seq[[2]]}
@@ -544,11 +544,11 @@ chunk_expand(num_breaks = 2, display_type = "code")
 ````
 count: false
 ```{r example_auto_1_code, eval = FALSE, echo = TRUE, code = code_seq[[1]]}
-```
+  ```
 ---
 count: false
 ```{r example_auto_2_code, eval = FALSE, echo = TRUE, code = code_seq[[2]]}
-```
+  ```
 ````
 
 ```r
@@ -576,13 +576,13 @@ We've applied it above.  Let's just look at the function itself.
 
 
 ```r
-reveal
+chunk_reveal
 ```
 
 ```
-function (chunk_name = "example_name", break_type = "auto", reg_assign = F, 
+function (chunk_name = "example_name", break_type = "auto", left_assign = F, 
     code_seq = chunk_name_return_code_sequence(chunk_name, break_type, 
-        reg_assign), num_breaks = length(code_seq), display_type = "both", 
+        left_assign), num_breaks = length(code_seq), display_type = "both", 
     split = 40) 
 {
     text &lt;- chunk_expand(chunk_name = chunk_name, break_type = break_type, 
@@ -590,7 +590,7 @@ function (chunk_name = "example_name", break_type = "auto", reg_assign = F,
         split = split)
     paste(knitr::knit(text = text), collapse = "\n")
 }
-&lt;bytecode: 0x7ff7c2de62a8&gt;
+&lt;bytecode: 0x7fd47b3cc2e8&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 
@@ -611,9 +611,12 @@ Another point of waffling was the argument order.  What's really the main input,
 
 ---
 
+
 # Go to code [**here**](https://github.com/EvaMaeRey/flipbookr/blob/master/R/base_parse_reveal_xaringan.R)
 
 https://github.com/EvaMaeRey/flipbookr/blob/master/R/base_parse_reveal_xaringan.R
+
+
 
 
 

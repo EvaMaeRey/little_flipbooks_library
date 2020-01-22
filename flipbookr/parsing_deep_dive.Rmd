@@ -1,0 +1,113 @@
+---
+title: "flipbookr building blocks"
+subtitle: "what lies beneath"
+author: "Gina Reynolds, December 2019"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: ["xaringan-themer.css", ninjutsu]
+    nature:
+      ratio: 16:10
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup}
+library(flipbookr)
+library(tidyverse)
+knitr::opts_chunk$set(fig.width = 6, message = F, warning = F, comment = "", cache = F)
+```
+
+```{r xaringan_look}
+xaringanthemer::mono_accent(
+  code_highlight_color = "rgba(255, 211, 0, .35)",
+  base_color = "#03418A")
+```
+
+
+
+
+---
+
+
+
+We'll use the tidyverse packages to create a pipeline, and flipbookr to walk through the steps in this pipeline.
+
+```{r}
+library(tidyverse)
+```
+
+
+```{r}
+flipbookr::code_parse
+```
+
+---
+
+r chunk_reveal("raw_code_table")`
+
+```{r raw_code_table, include=FALSE}
+flipbookr:::create_code() %>%
+  stringr::str_split(pattern = "\n") %>% 
+  .[[1]] %>% 
+  tibble::tibble() %>%
+  dplyr::rename(raw_code = 1) %>% 
+  dplyr::mutate(line = 1:dplyr::n()) ->
+  raw_code_table
+```
+
+---
+
+`r chunk_reveal("parsing_pipeline")`
+
+```{r, parsing_pipeline, include=FALSE}
+code <- flipbookr:::create_code()
+  sf <- srcfile(code)
+  # try(parse(text = code, srcfile = sf))
+  utils::getParseData(sf) %>%
+    dplyr::rename(line = line1) %>%
+    dplyr::mutate(open_par = text == "(") %>%
+    dplyr::mutate(closed_par = text == ")") %>%
+    dplyr::mutate(open_curly = text == "{") %>%
+    dplyr::mutate(closed_curly = text == "}") %>%
+    dplyr::mutate(open_square = text == "[") %>%
+    dplyr::mutate(open_square = ifelse(text == "[[", 2, open_square)) %>%
+    dplyr::mutate(closed_square = text == "]") %>%
+    dplyr::group_by(line) %>%
+    dplyr::summarise(
+      full_line = paste0(text, collapse = ""),
+      comment = stringr::str_trim(paste0(ifelse(token == "COMMENT", text, ""),
+                                         collapse = " ")),
+      num_open_par = sum(open_par),
+      num_closed_par = sum(closed_par),
+      num_open_curly = sum(open_curly),
+      num_closed_curly = sum(closed_curly),
+      num_open_square = sum(open_square),
+      num_closed_square = sum(closed_square)
+              ) %>%
+    dplyr::left_join(raw_code_table) %>%
+    dplyr::mutate(code = ifelse(comment != "", stringr::str_remove(raw_code, comment), raw_code)) %>%
+    dplyr::mutate(connector = stringr::str_extract(stringr::str_trim(code), "%>%$|\\+$|->$|%\\+%")) %>%
+    dplyr::mutate(connector = tidyr::replace_na(connector, "")) %>%
+    dplyr::mutate(non_seq = stringr::str_extract(comment, "#REVEAL-?\\d+")) %>%
+    dplyr::mutate(non_seq = stringr::str_extract(non_seq, "-?\\d+")) %>%
+    dplyr::mutate(non_seq = as.numeric(non_seq)) %>%
+    dplyr::mutate(non_seq = tidyr::replace_na(non_seq, 1)) %>%
+    dplyr::mutate(comment = stringr::str_remove(comment, "#REVEAL\\d+")) %>%
+    dplyr::mutate(user = stringr::str_detect(comment, "#REVEAL")) %>%
+    dplyr::mutate(comment = stringr::str_remove(comment, "#REVEAL")) %>%
+    dplyr::mutate(code = stringr::str_remove(stringi::stri_trim_right(code), "%>%$|\\+$|->$|%\\+%")) %>%
+    dplyr::mutate(balanced_paren = (cumsum(num_open_par) - cumsum(num_closed_par)) == 0) %>%
+    dplyr::mutate(balanced_curly = (cumsum(num_open_curly) - cumsum(num_closed_curly)) == 0) %>%
+    dplyr::mutate(balanced_square = (cumsum(num_open_square) - cumsum(num_closed_square)) == 0) %>%
+    dplyr::mutate(auto = balanced_paren & balanced_curly & balanced_square &
+             code != "") %>%
+    dplyr::select(line, raw_code, code, connector, comment, auto, user, non_seq)
+```
+
+
+
+```{css, eval = TRUE, echo = F}
+.remark-code{line-height: 1.5; font-size: 60%}
+```
