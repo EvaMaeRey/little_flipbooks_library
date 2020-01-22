@@ -1,0 +1,74 @@
+---
+title: "mini wrangle"
+subtitle: "made with flipbookr and xaringan"
+author: "Gina Reynolds, January 2020"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:10
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r}
+library(gapminder)
+library(tidyverse)
+knitr::opts_chunk$set(cache = F, comment = "")
+```
+
+---
+
+`r flipbookr::chunk_reveal("mini")`
+
+
+```{r mini, include = F}
+gapminder %>% 
+  filter(year == 2002) %>% 
+  select(-lifeExp) %>% 
+  mutate(gdp = gdpPercap * pop) %>% 
+  mutate(europe = continent == "Europe") %>% 
+  select(country, year, gdp, europe, pop) %>% 
+  mutate(europe_cat = 
+           case_when(europe == T ~ "Europe",
+                     europe == F ~ "Not Europe")) %>% 
+  group_by(europe_cat) %>% 
+  summarize(gdp = sum(gdp),
+            pop = sum(pop, na.rm = T)) %>%
+  mutate(gdp_billions = gdp/1000000000) ->
+europe_or_not_2002
+# plot
+ggplot(data = europe_or_not_2002) +
+  aes(x = europe_cat) +
+  aes(y = gdp_billions) +
+  geom_col() + 
+  aes(fill = europe_cat)
+```
+
+---
+
+`r flipbookr::chunk_reveal("a_few_more")`
+
+```{r a_few_more, include = F}
+gapminder %>%
+  select(country, continent) %>% 
+  distinct() %>% 
+  count(continent) %>% 
+  rename(count = n) %>% 
+  # piping data into ggplot - oh!
+  ggplot() +
+  aes(x = continent) +
+  aes(y = count) +
+  geom_col() +
+  aes(fill = continent) +
+  scale_fill_viridis_d(option = "magma", 
+                       guide = F)
+```
+
+
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 1.5; font-size: 70%}
+```
