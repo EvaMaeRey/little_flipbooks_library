@@ -31,7 +31,6 @@ xaringanthemer::mono_accent(
 ---
 
 
-
 We'll use the tidyverse packages to create a pipeline, and flipbookr to walk through the steps in this pipeline.
 
 ```{r}
@@ -58,6 +57,22 @@ Let's first look at the result of using flipbookr to bring this code.
 
 `r chunk_reveal("cars_plot")`
 
+---
+
+
+# Move to automate
+
+
+## 1. *Automatically* parsing a block of input code 
+
+--
+
+## 2. *Automatically* reconstructing code into partial builds
+
+--
+
+## 3. *Automatically* delivered on a presentation platform (here Xaringan)
+
 
 
 ---
@@ -67,22 +82,67 @@ Now, lets look at some of the functions working in the background.
 
 ---
 
-`r chunk_reveal("code_parsing_and_calculations")`
+## 1.  *Automatically* parsing a block of input code 
+
+---
+
+`r chunk_reveal("code_parsing")`
 
 
-```{r, code_parsing_and_calculations, echo = F, eval = F}
+```{r, code_parsing, echo = F, eval = F}
 # The name of the code chunk containing code to be flipped
-"cars_plot" %>% 
-  # return the code as text
-  chunk_code_get() %>% 
+flipbookr:::create_code() %>% 
   # parse that code into code, pipes, comments, etc
-  code_parse() %>% 
-  # calculate which lines to show for each frame
-  parsed_calc_show(break_type = "user") %>% 
-  # calculate highlighting that is needed for each frame
-  shown_lines_calc_highlight(break_type = "user")
+  flipbookr:::code_parse() 
 ```
 
+---
+
+## 2. *Automatically* reconstructing code into partial builds
+
+---
+
+## First calculate which lines need to be shown and highlighted in each frame of the mini flipbook.
+
+--
+
+A list is returned where each frame corresponds to the element in the list.  
+
+--
+
+Within the list numbers of the lines of code for each frame is returned.
+
+--
+
+This is dependent on what the user has set for the break_type. 
+--
+
+Appropriate highlighting is calculated based on what appears in previous frame and what is new in current frame. 
+
+
+---
+
+`r chunk_reveal("calc_lines_for_show_and_highlight")`
+
+
+```{r calc_lines_for_show_and_highlight, echo = F, eval = F}
+# The name of the code chunk containing code to be flipped
+flipbookr:::create_code() %>% 
+  # parse that code into code, pipes, comments, etc
+  flipbookr:::code_parse() %>% 
+  # calculate which lines to show for each frame
+  flipbookr:::parsed_calc_show(break_type = "non_seq") %>% 
+  # calculate highlighting that is needed for each frame
+  flipbookr:::shown_lines_calc_highlight(break_type = "non_seq")
+```
+
+---
+
+## Based on the calculation, return partial code builds for each frame of the flipbook.
+
+--
+
+We create a list of strings of the partial builds, which can be saved as an object `code_seq`.
 
 ---
 
@@ -92,13 +152,12 @@ Now, lets look at some of the functions working in the background.
 ```{r partial_code, echo = F, eval = F}
 # from the parsed code 
 # and using calc for which lines to display ...
-"cars_plot" %>% 
-  chunk_code_get() %>% 
-  code_parse() %>% #REVEAL
+flipbookr:::create_code() %>% 
+  flipbookr:::code_parse() %>% #BREAK
   # ... return the code needed for each slide ...
-  parsed_return_partial_code_sequence() -> #REVEAL
+  flipbookr:::parsed_return_partial_code_sequence() -> #BREAK
 # ... save this list
-code_seq #REVEAL
+code_seq #BREAK
 ```
 
 
@@ -107,10 +166,8 @@ code_seq #REVEAL
 
 ---
 
+## 3. *Automatically* delivered on a presentation platform (here Xaringan)
 
-# Deliver the code into a presentation tool.  
-
-We are using Xaringan, so we create a template for code chunks.
 
 ```{r xaringan_slides}
 return_partial_chunks_template_code()

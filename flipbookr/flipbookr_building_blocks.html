@@ -25,7 +25,7 @@ library(tidyverse)
 ```
 
 ```
-## ── Attaching packages ──────────────────────────────────────────── tidyverse 1.2.1 ──
+## ── Attaching packages ────────────────────────────────────── tidyverse 1.2.1 ──
 ```
 
 ```
@@ -36,7 +36,7 @@ library(tidyverse)
 ```
 
 ```
-## ── Conflicts ─────────────────────────────────────────────── tidyverse_conflicts() ──
+## ── Conflicts ───────────────────────────────────────── tidyverse_conflicts() ──
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()
 ```
@@ -60,7 +60,6 @@ xaringanthemer::mono_accent(
 
 
 ---
-
 
 
 We'll use the tidyverse packages to create a pipeline, and flipbookr to walk through the steps in this pipeline.
@@ -212,11 +211,110 @@ cars %&gt;%
 ![](flipbookr_building_blocks_files/figure-html/cars_plot_auto_5_output-1.png)&lt;!-- --&gt;
 ]]
 
+---
+
+
+# Move to automate
+
+
+## 1. *Automatically* parsing a block of input code 
+
+--
+
+## 2. *Automatically* reconstructing code into partial builds
+
+--
+
+## 3. *Automatically* delivered on a presentation platform (here Xaringan)
+
 
 
 ---
 
 Now, lets look at some of the functions working in the background.
+
+
+---
+
+## 1.  *Automatically* parsing a block of input code 
+
+---
+
+class: split-40
+count: false
+.column[.content[
+
+```r
+* # The name of the code chunk containing code to be flipped
+*flipbookr:::create_code()
+```
+]]
+.column[.content[
+
+```
+[1] "cars %&gt;%             # the data  #REVEAL\n  filter(speed &gt; 4) %&gt;%  # subset\n  ggplot() +              # pipe to ggplot\n  aes(x = speed) +\n  aes(y = dist) +\n  # Describing what follows\n  geom_point(alpha = .3) + #REVEAL\n  geom_point(alpha = 1) + #BREAK2\n  geom_jitter(alpha = .5) + #BREAK3\n  aes(color =\n  speed &gt; 14\n  ) %+%\n  cars -&gt;\n  my_plot  #BREAK"
+```
+]]
+---
+class: split-40
+count: false
+.column[.content[
+
+```r
+  # The name of the code chunk containing code to be flipped
+flipbookr:::create_code() %&gt;%  
+* # parse that code into code, pipes, comments, etc
+* flipbookr:::code_parse()
+```
+]]
+.column[.content[
+
+```
+# A tibble: 14 x 8
+    line raw_code          code        connector comment     auto  user  non_seq
+   &lt;int&gt; &lt;chr&gt;             &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt;       &lt;lgl&gt; &lt;lgl&gt;   &lt;dbl&gt;
+ 1     1 "cars %&gt;%       … "cars "     "%&gt;%"     "# the dat… TRUE  FALSE       1
+ 2     2 "  filter(speed … "  filter(… "%&gt;%"     "# subset"  TRUE  FALSE       1
+ 3     3 "  ggplot() +   … "  ggplot(… "+"       "# pipe to… TRUE  FALSE       1
+ 4     4 "  aes(x = speed… "  aes(x =… "+"       ""          TRUE  FALSE       1
+ 5     5 "  aes(y = dist)… "  aes(y =… "+"       ""          TRUE  FALSE       1
+ 6     6 "  # Describing … ""          ""        "# Describ… FALSE FALSE       1
+ 7     7 "  geom_point(al… "  geom_po… "+"       "#REVEAL"   TRUE  FALSE       1
+ 8     8 "  geom_point(al… "  geom_po… "+"       ""          TRUE  FALSE       2
+ 9     9 "  geom_jitter(a… "  geom_ji… "+"       ""          TRUE  FALSE       3
+10    10 "  aes(color ="   "  aes(col… ""        ""          FALSE FALSE       1
+11    11 "  speed &gt; 14"    "  speed &gt;… ""        ""          FALSE FALSE       1
+12    12 "  ) %+%"         "  ) "      "%+%"     ""          TRUE  FALSE       1
+13    13 "  cars -&gt;"       "  cars "   "-&gt;"      ""          TRUE  FALSE       1
+14    14 "  my_plot  #BRE… "  my_plot" ""        ""          TRUE  TRUE        1
+```
+]]
+
+
+
+
+---
+
+## 2. *Automatically* reconstructing code into partial builds
+
+---
+
+## First calculate which lines need to be shown and highlighted in each frame of the mini flipbook.
+
+--
+
+A list is returned where each frame corresponds to the element in the list.  
+
+--
+
+Within the list numbers of the lines of code for each frame is returned.
+
+--
+
+This is dependent on what the user has set for the break_type. 
+--
+
+Appropriate highlighting is calculated based on what appears in previous frame and what is new in current frame. 
 
 
 ---
@@ -227,31 +325,13 @@ count: false
 
 ```r
 * # The name of the code chunk containing code to be flipped
-*"cars_plot"
+*flipbookr:::create_code()
 ```
 ]]
 .column[.content[
 
 ```
-[1] "cars_plot"
-```
-]]
----
-class: split-40
-count: false
-.column[.content[
-
-```r
-  # The name of the code chunk containing code to be flipped
-"cars_plot" %&gt;%  
-* # return the code as text
-* chunk_code_get()
-```
-]]
-.column[.content[
-
-```
-[1] "cars %&gt;%  #BREAK          \n  ggplot() +  \n  aes(x = speed) + \n  aes(color = speed) + #BREAK2\n  geom_rug() #BREAK"
+[1] "cars %&gt;%             # the data  #REVEAL\n  filter(speed &gt; 4) %&gt;%  # subset\n  ggplot() +              # pipe to ggplot\n  aes(x = speed) +\n  aes(y = dist) +\n  # Describing what follows\n  geom_point(alpha = .3) + #REVEAL\n  geom_point(alpha = 1) + #BREAK2\n  geom_jitter(alpha = .5) + #BREAK3\n  aes(color =\n  speed &gt; 14\n  ) %+%\n  cars -&gt;\n  my_plot  #BREAK"
 ```
 ]]
 ---
@@ -261,24 +341,31 @@ count: false
 
 ```r
   # The name of the code chunk containing code to be flipped
-"cars_plot" %&gt;%  
-  # return the code as text
-  chunk_code_get() %&gt;%  
+flipbookr:::create_code() %&gt;%  
 * # parse that code into code, pipes, comments, etc
-* code_parse()
+* flipbookr:::code_parse()
 ```
 ]]
 .column[.content[
 
 ```
-# A tibble: 5 x 8
-   line raw_code             code          connector comment auto  user  non_seq
-  &lt;int&gt; &lt;chr&gt;                &lt;chr&gt;         &lt;chr&gt;     &lt;chr&gt;   &lt;lgl&gt; &lt;lgl&gt;   &lt;dbl&gt;
-1     1 "cars %&gt;%  #BREAK  … "cars "       "%&gt;%"     ""      TRUE  TRUE        1
-2     2 "  ggplot() +  "     "  ggplot() " "+"       ""      TRUE  FALSE       1
-3     3 "  aes(x = speed) +… "  aes(x = s… "+"       ""      TRUE  FALSE       1
-4     4 "  aes(color = spee… "  aes(color… "+"       ""      TRUE  FALSE       2
-5     5 "  geom_rug() #BREA… "  geom_rug(… ""        ""      TRUE  TRUE        1
+# A tibble: 14 x 8
+    line raw_code          code        connector comment     auto  user  non_seq
+   &lt;int&gt; &lt;chr&gt;             &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt;       &lt;lgl&gt; &lt;lgl&gt;   &lt;dbl&gt;
+ 1     1 "cars %&gt;%       … "cars "     "%&gt;%"     "# the dat… TRUE  FALSE       1
+ 2     2 "  filter(speed … "  filter(… "%&gt;%"     "# subset"  TRUE  FALSE       1
+ 3     3 "  ggplot() +   … "  ggplot(… "+"       "# pipe to… TRUE  FALSE       1
+ 4     4 "  aes(x = speed… "  aes(x =… "+"       ""          TRUE  FALSE       1
+ 5     5 "  aes(y = dist)… "  aes(y =… "+"       ""          TRUE  FALSE       1
+ 6     6 "  # Describing … ""          ""        "# Describ… FALSE FALSE       1
+ 7     7 "  geom_point(al… "  geom_po… "+"       "#REVEAL"   TRUE  FALSE       1
+ 8     8 "  geom_point(al… "  geom_po… "+"       ""          TRUE  FALSE       2
+ 9     9 "  geom_jitter(a… "  geom_ji… "+"       ""          TRUE  FALSE       3
+10    10 "  aes(color ="   "  aes(col… ""        ""          FALSE FALSE       1
+11    11 "  speed &gt; 14"    "  speed &gt;… ""        ""          FALSE FALSE       1
+12    12 "  ) %+%"         "  ) "      "%+%"     ""          TRUE  FALSE       1
+13    13 "  cars -&gt;"       "  cars "   "-&gt;"      ""          TRUE  FALSE       1
+14    14 "  my_plot  #BRE… "  my_plot" ""        ""          TRUE  TRUE        1
 ```
 ]]
 ---
@@ -288,23 +375,24 @@ count: false
 
 ```r
   # The name of the code chunk containing code to be flipped
-"cars_plot" %&gt;%  
-  # return the code as text
-  chunk_code_get() %&gt;%  
+flipbookr:::create_code() %&gt;%  
   # parse that code into code, pipes, comments, etc
-  code_parse() %&gt;%  
+  flipbookr:::code_parse() %&gt;%  
 * # calculate which lines to show for each frame
-* parsed_calc_show(break_type = "user")
+* flipbookr:::parsed_calc_show(break_type = "non_seq")
 ```
 ]]
 .column[.content[
 
 ```
 [[1]]
-[1] 1
+ [1]  1  2  3  4  5  6  7 10 11 12 13 14
 
 [[2]]
-[1] 1 2 3 4 5
+ [1]  1  2  3  4  5  6  7  8 10 11 12 13 14
+
+[[3]]
+ [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14
 ```
 ]]
 ---
@@ -314,31 +402,39 @@ count: false
 
 ```r
   # The name of the code chunk containing code to be flipped
-"cars_plot" %&gt;%  
-  # return the code as text
-  chunk_code_get() %&gt;%  
+flipbookr:::create_code() %&gt;%  
   # parse that code into code, pipes, comments, etc
-  code_parse() %&gt;%  
+  flipbookr:::code_parse() %&gt;%  
   # calculate which lines to show for each frame
-  parsed_calc_show(break_type = "user") %&gt;%  
+  flipbookr:::parsed_calc_show(break_type = "non_seq") %&gt;%  
 * # calculate highlighting that is needed for each frame
-* shown_lines_calc_highlight(break_type = "user")
+* flipbookr:::shown_lines_calc_highlight(break_type = "non_seq")
 ```
 ]]
 .column[.content[
 
 ```
 [[1]]
-[1] 1
+integer(0)
 
 [[2]]
-[1] 2 3 4 5
+[1] 8
+
+[[3]]
+[1] 9
 ```
 ]]
 
 
 
 
+---
+
+## Based on the calculation, return partial code builds for each frame of the flipbook.
+
+--
+
+We create a list of strings of the partial builds, which can be saved as an object `code_seq`.
 
 ---
 
@@ -349,31 +445,13 @@ count: false
 ```r
 * # from the parsed code
 * # and using calc for which lines to display ...
-*"cars_plot"
+*flipbookr:::create_code()
 ```
 ]]
 .column[.content[
 
 ```
-[1] "cars_plot"
-```
-]]
----
-class: split-40
-count: false
-.column[.content[
-
-```r
-  # from the parsed code
-  # and using calc for which lines to display ...
-"cars_plot" %&gt;%  
-* chunk_code_get()
-```
-]]
-.column[.content[
-
-```
-[1] "cars %&gt;%  #BREAK          \n  ggplot() +  \n  aes(x = speed) + \n  aes(color = speed) + #BREAK2\n  geom_rug() #BREAK"
+[1] "cars %&gt;%             # the data  #REVEAL\n  filter(speed &gt; 4) %&gt;%  # subset\n  ggplot() +              # pipe to ggplot\n  aes(x = speed) +\n  aes(y = dist) +\n  # Describing what follows\n  geom_point(alpha = .3) + #REVEAL\n  geom_point(alpha = 1) + #BREAK2\n  geom_jitter(alpha = .5) + #BREAK3\n  aes(color =\n  speed &gt; 14\n  ) %+%\n  cars -&gt;\n  my_plot  #BREAK"
 ```
 ]]
 ---
@@ -384,22 +462,30 @@ count: false
 ```r
   # from the parsed code
   # and using calc for which lines to display ...
-"cars_plot" %&gt;%  
-  chunk_code_get() %&gt;%  
-* code_parse()   #REVEAL
+flipbookr:::create_code() %&gt;%  
+* flipbookr:::code_parse()
 ```
 ]]
 .column[.content[
 
 ```
-# A tibble: 5 x 8
-   line raw_code             code          connector comment auto  user  non_seq
-  &lt;int&gt; &lt;chr&gt;                &lt;chr&gt;         &lt;chr&gt;     &lt;chr&gt;   &lt;lgl&gt; &lt;lgl&gt;   &lt;dbl&gt;
-1     1 "cars %&gt;%  #BREAK  … "cars "       "%&gt;%"     ""      TRUE  TRUE        1
-2     2 "  ggplot() +  "     "  ggplot() " "+"       ""      TRUE  FALSE       1
-3     3 "  aes(x = speed) +… "  aes(x = s… "+"       ""      TRUE  FALSE       1
-4     4 "  aes(color = spee… "  aes(color… "+"       ""      TRUE  FALSE       2
-5     5 "  geom_rug() #BREA… "  geom_rug(… ""        ""      TRUE  TRUE        1
+# A tibble: 14 x 8
+    line raw_code          code        connector comment     auto  user  non_seq
+   &lt;int&gt; &lt;chr&gt;             &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt;       &lt;lgl&gt; &lt;lgl&gt;   &lt;dbl&gt;
+ 1     1 "cars %&gt;%       … "cars "     "%&gt;%"     "# the dat… TRUE  FALSE       1
+ 2     2 "  filter(speed … "  filter(… "%&gt;%"     "# subset"  TRUE  FALSE       1
+ 3     3 "  ggplot() +   … "  ggplot(… "+"       "# pipe to… TRUE  FALSE       1
+ 4     4 "  aes(x = speed… "  aes(x =… "+"       ""          TRUE  FALSE       1
+ 5     5 "  aes(y = dist)… "  aes(y =… "+"       ""          TRUE  FALSE       1
+ 6     6 "  # Describing … ""          ""        "# Describ… FALSE FALSE       1
+ 7     7 "  geom_point(al… "  geom_po… "+"       "#REVEAL"   TRUE  FALSE       1
+ 8     8 "  geom_point(al… "  geom_po… "+"       ""          TRUE  FALSE       2
+ 9     9 "  geom_jitter(a… "  geom_ji… "+"       ""          TRUE  FALSE       3
+10    10 "  aes(color ="   "  aes(col… ""        ""          FALSE FALSE       1
+11    11 "  speed &gt; 14"    "  speed &gt;… ""        ""          FALSE FALSE       1
+12    12 "  ) %+%"         "  ) "      "%+%"     ""          TRUE  FALSE       1
+13    13 "  cars -&gt;"       "  cars "   "-&gt;"      ""          TRUE  FALSE       1
+14    14 "  my_plot  #BRE… "  my_plot" ""        ""          TRUE  TRUE        1
 ```
 ]]
 ---
@@ -410,33 +496,81 @@ count: false
 ```r
   # from the parsed code
   # and using calc for which lines to display ...
-"cars_plot" %&gt;%  
-  chunk_code_get() %&gt;%  
-  code_parse() %&gt;%  #REVEAL
+flipbookr:::create_code() %&gt;%  
+  flipbookr:::code_parse() %&gt;%  
 * # ... return the code needed for each slide ...
-* parsed_return_partial_code_sequence()   #REVEAL
+* flipbookr:::parsed_return_partial_code_sequence()
 ```
 ]]
 .column[.content[
 
 ```
 [[1]]
-[1] "cars   #&lt;&lt;"
+[1] "cars   # the data  #REVEAL#&lt;&lt;"
 
 [[2]]
-[1] "cars %&gt;%  "       "  ggplot()   #&lt;&lt;"
+[1] "cars %&gt;%  # the data  #REVEAL"     "  filter(speed &gt; 4)   # subset#&lt;&lt;"
 
 [[3]]
-[1] "cars %&gt;%  "             "  ggplot() +  "         "  aes(x = speed)   #&lt;&lt;"
+[1] "cars %&gt;%  # the data  #REVEAL"     "  filter(speed &gt; 4) %&gt;%  # subset"
+[3] "  ggplot()   # pipe to ggplot#&lt;&lt;" 
 
 [[4]]
-[1] "cars %&gt;%  "                 "  ggplot() +  "            
-[3] "  aes(x = speed) +  "       "  aes(color = speed)   #&lt;&lt;"
+[1] "cars %&gt;%  # the data  #REVEAL"     "  filter(speed &gt; 4) %&gt;%  # subset"
+[3] "  ggplot() +  # pipe to ggplot"    "  aes(x = speed)   #&lt;&lt;"           
 
 [[5]]
-[1] "cars %&gt;%  "               "  ggplot() +  "          
-[3] "  aes(x = speed) +  "     "  aes(color = speed) +  "
-[5] "  geom_rug()  #&lt;&lt;"       
+[1] "cars %&gt;%  # the data  #REVEAL"     "  filter(speed &gt; 4) %&gt;%  # subset"
+[3] "  ggplot() +  # pipe to ggplot"    "  aes(x = speed) +  "             
+[5] "  aes(y = dist)   #&lt;&lt;"            
+
+[[6]]
+[1] "cars %&gt;%  # the data  #REVEAL"        
+[2] "  filter(speed &gt; 4) %&gt;%  # subset"    
+[3] "  ggplot() +  # pipe to ggplot"       
+[4] "  aes(x = speed) +  "                 
+[5] "  aes(y = dist) +  "                  
+[6] "  # Describing what follows#&lt;&lt;"       
+[7] "  geom_point(alpha = .3)   #REVEAL#&lt;&lt;"
+
+[[7]]
+[1] "cars %&gt;%  # the data  #REVEAL"       "  filter(speed &gt; 4) %&gt;%  # subset"  
+[3] "  ggplot() +  # pipe to ggplot"      "  aes(x = speed) +  "               
+[5] "  aes(y = dist) +  "                 "  # Describing what follows"        
+[7] "  geom_point(alpha = .3) +  #REVEAL" "  geom_point(alpha = 1)   #&lt;&lt;"      
+
+[[8]]
+[1] "cars %&gt;%  # the data  #REVEAL"       "  filter(speed &gt; 4) %&gt;%  # subset"  
+[3] "  ggplot() +  # pipe to ggplot"      "  aes(x = speed) +  "               
+[5] "  aes(y = dist) +  "                 "  # Describing what follows"        
+[7] "  geom_point(alpha = .3) +  #REVEAL" "  geom_point(alpha = 1) +  "        
+[9] "  geom_jitter(alpha = .5)   #&lt;&lt;"    
+
+[[9]]
+ [1] "cars %&gt;%  # the data  #REVEAL"       "  filter(speed &gt; 4) %&gt;%  # subset"  
+ [3] "  ggplot() +  # pipe to ggplot"      "  aes(x = speed) +  "               
+ [5] "  aes(y = dist) +  "                 "  # Describing what follows"        
+ [7] "  geom_point(alpha = .3) +  #REVEAL" "  geom_point(alpha = 1) +  "        
+ [9] "  geom_jitter(alpha = .5) +  "       "  aes(color =  #&lt;&lt;"                 
+[11] "  speed &gt; 14  #&lt;&lt;"                   "  )   #&lt;&lt;"                          
+
+[[10]]
+ [1] "cars %&gt;%  # the data  #REVEAL"       "  filter(speed &gt; 4) %&gt;%  # subset"  
+ [3] "  ggplot() +  # pipe to ggplot"      "  aes(x = speed) +  "               
+ [5] "  aes(y = dist) +  "                 "  # Describing what follows"        
+ [7] "  geom_point(alpha = .3) +  #REVEAL" "  geom_point(alpha = 1) +  "        
+ [9] "  geom_jitter(alpha = .5) +  "       "  aes(color =  "                    
+[11] "  speed &gt; 14  "                      "  ) %+%  "                          
+[13] "  cars   #&lt;&lt;"                       
+
+[[11]]
+ [1] "cars %&gt;%  # the data  #REVEAL"       "  filter(speed &gt; 4) %&gt;%  # subset"  
+ [3] "  ggplot() +  # pipe to ggplot"      "  aes(x = speed) +  "               
+ [5] "  aes(y = dist) +  "                 "  # Describing what follows"        
+ [7] "  geom_point(alpha = .3) +  #REVEAL" "  geom_point(alpha = 1) +  "        
+ [9] "  geom_jitter(alpha = .5) +  "       "  aes(color =  "                    
+[11] "  speed &gt; 14  "                      "  ) %+%  "                          
+[13] "  cars -&gt;  "                         "  my_plot  #&lt;&lt;"                     
 ```
 ]]
 ---
@@ -447,13 +581,12 @@ count: false
 ```r
   # from the parsed code
   # and using calc for which lines to display ...
-"cars_plot" %&gt;%  
-  chunk_code_get() %&gt;%  
-  code_parse() %&gt;%  #REVEAL
+flipbookr:::create_code() %&gt;%  
+  flipbookr:::code_parse() %&gt;%  
   # ... return the code needed for each slide ...
-  parsed_return_partial_code_sequence() -&gt;  #REVEAL
+  flipbookr:::parsed_return_partial_code_sequence() -&gt;  
 * # ... save this list
-*code_seq  #REVEAL
+*code_seq
 ```
 ]]
 .column[.content[
@@ -469,10 +602,8 @@ count: false
 
 ---
 
+## 3. *Automatically* delivered on a presentation platform (here Xaringan)
 
-# Deliver the code into a presentation tool.  
-
-We are using Xaringan, so we create a template for code chunks.
 
 
 ```r
@@ -590,7 +721,7 @@ function (chunk_name = "example_name", break_type = "auto", left_assign = F,
         split = split)
     paste(knitr::knit(text = text), collapse = "\n")
 }
-&lt;bytecode: 0x7fd47b3cc2e8&gt;
+&lt;bytecode: 0x7fdebb5b06d0&gt;
 &lt;environment: namespace:flipbookr&gt;
 ```
 
