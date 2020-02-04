@@ -4,13 +4,21 @@ author: "Evangeline Reynolds"
 date: "5/18/2018"
 output:
   xaringan::moon_reader:
-    chakra: libs/remark-latest.min.js
     lib_dir: libs
     css: ["kunoichi", "ninjutsu"]
+    chakra: libs/remark-latest.min.js
     nature:
       ratio: "16:9"
       highlightLines: true
 ---
+
+
+```{r}
+knitr::opts_chunk$set(warning = F, message = F)
+xaringan::summon_remark()
+```
+
+
 
 Using a difference-in-difference framework to look at the effect of policy interventions is a popular research design.  A binary exlanatory variable that turns on and stays on lends itself to ease of interpretation!
 
@@ -33,72 +41,94 @@ Another option for visualizing such data is using the new package [panelView](ht
 ```{r}
 library(tidyverse)
 library(gapminder)
-source("../xaringan_reveal_parenthetical.R")
+source("https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/xaringan_reveal_parentheses_balanced.R")
 ```
 
 
+# Simulating interventions
+
+We'll just use 
+
+
+---
 
 
 ```{r}
 min_year <- min(gapminder$year)
 max_year <- max(gapminder$year)
-span <- max_year- min_year
-
+span <- max_year - min_year
 gapminder %>% 
   select(country) %>% 
   distinct() %>% 
   sample_frac(.5) %>% 
+  mutate(intervention_year = runif(n = n(), 
+                 min = min_year, 
+                 max = max_year + span)) %>% 
+  mutate(intervention_year = ifelse(max_year < intervention_year, 
+                                    NA, 
+                                    intervention_year)) %>% 
   mutate(intervention_year = 
-           runif(n = n(), min = min_year - span, 
-                 max = max_year)) %>% 
-  mutate(intervention_year = round(intervention_year)) ->
+           round(intervention_year)) %>% 
+  sample_n(16) ->
 synthetic_interventions
 ```
 
+---
+
+
 ```{r}
 synthetic_interventions %>% 
-  full_join(gapminder) %>% 
-  mutate(treatment = case_when(year >= intervention_year ~ "treated",
-                             year < intervention_year ~ "not treated",
-                             is.na(intervention_year) ~ "not treated")) %>%
+  inner_join(gapminder) %>% 
+  mutate(treatment = 
+           case_when(
+             year >= intervention_year ~ "treated",
+             year < intervention_year ~ "not treated",
+             is.na(intervention_year) ~ "not treated")) %>%
   group_by(country) %>% 
   mutate(mean_treated = mean(treatment == "treated")) %>% 
   arrange(mean_treated) %>% 
   ungroup() %>% 
-  mutate(country = fct_inorder(country)) -> 
+  mutate(country = forcats::fct_inorder(as.character(country))) -> 
 panel_prepped
 ```
 
 
-```{r essential_plots}
-ggplot(panel_prepped) +
-  aes(x = year, y = country, group = country, col = treatment) +
-  labs(caption = "Four essential plots for diff-in-diff | Gina Reynolds") +
-  geom_line(alpha = .5) +
-  geom_point(size = 1.5) +
-  theme_minimal() +
-  scale_color_manual(values = c("lightgrey", "steelblue4" )) +
-  labs(y = "country") +
-  labs(title = "Plot 1: Treatment-control summary") +
-  labs(title = "") +
+---
+
+```{r essential_plots, echo = F, eval = F}
+ggplot(panel_prepped) + #REVEAL
+  aes(x = year) + #REVEAL
+  aes(y = country) +  #REVEAL
+  aes(group = country) +  #REVEAL
+  labs(caption = "Four essential plots for diff-in-diff | Gina Reynolds") + #REVEAL
+  geom_line(alpha = .5) + #REVEAL
+  geom_point(size = 1.5) + #REVEAL
+  aes(color = treatment) + #REVEAL
+  theme_minimal() + #REVEAL
+  scale_color_manual(values = c("lightgrey", "steelblue4")) + #REVEAL
+  labs(color = NULL) + #REVEAL
+  labs(x = NULL) + #REVEAL
+  labs(y = "country") + #REVEAL
+  labs(title = "Plot 1: Treatment-control summary") + #REVEAL
+  # overwriting y position mapping
   aes(y = gdpPercap) + 
   scale_y_log10() +
   labs(y = "GDP per cap") +
-  labs(title = "Plot 2: Treatment-control response overlaid summary") +
-  labs(title = "") +
+  labs(title = "Plot 2: Treatment-control response overlaid summary") + #REVEAL
+  # overwriting x position mapping
   aes(x = year - intervention_year) +
-  labs(title = "Plot 3: Treatment-control response overlaid summary, aligned intervention") +
-  labs(title = "")  +
+  labs(x = "year from intervention year") +
+  labs(title = "Plot 3: Treatment-control response overlaid summary, aligned intervention") + #REVEAL
+  # overwriting x position mapping again
   aes(x = year) + 
+  labs(x = NULL) +
   scale_y_continuous() +
-  labs(title = "Plot 4: Treatment-Response faceted")# %+%
-  # (panel_prepped %>%
-  #    inner_join(panel_prepped %>% select(country) %>% distinct %>% sample_n(5))) +
-  # facet_wrap(~ as.character(country), scales = "free_y")
+  labs(title = "Plot 4: Treatment-Response faceted") + 
+  facet_wrap(~ country) #REVEAL
 ```
 
 
-`r apply_reveal("essential_plots")`
+`r apply_reveal("essential_plots", user_reveal_defined = T)`
 
 
 ```{css, eval = TRUE, echo = F}
